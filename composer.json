@@ -1,0 +1,29 @@
+{
+  "name": "processout/processout-php-server",
+  "description": "ProcessOut PHP Library [server]",
+  "keywords": [
+    "processout",
+    "payment processing",
+    "api"
+  ],
+  "homepage": "https://processout.com/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "ProcessOut",
+      "homepage": "https://github.com/processout/processout-php-server/contributors"
+    }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "ext-curl": "*",
+    "ext-mbstring": "*",
+
+	"anlutro/curl": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+		"ProcessOut\\": "src/"
+	}
+  }
+}
