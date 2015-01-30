@@ -64,7 +64,7 @@ class ProcessOut
 	{
 		return $data['hmac_signature'] == hash_hmac(
 			'sha256',
-			md5($data['transaction_id']),
+			$data['transaction_id'],
 			$this->ProjectKey,
 			true);
 	}
