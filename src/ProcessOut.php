@@ -62,11 +62,11 @@ class ProcessOut
 	 */
 	public function checkCallbackData($data)
 	{
-		return $data['hmac_signature'] == hash_hmac(
+		return hash_equals(base64_decode($data['hmac_signature']), hash_hmac(
 			'sha256',
 			$data['transaction_id'],
 			$this->ProjectKey,
-			true);
+			true));
 	}
 
 }
