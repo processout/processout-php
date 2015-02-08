@@ -9,6 +9,6 @@ class Constants
 	 * ProcessOut's main host
 	 * @var string
 	 */
-	protected $HOST = 'https://processout.com/api/v1';
+	protected $HOST = 'https://api.processout.com/v1';
 
 }
