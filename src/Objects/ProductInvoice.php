@@ -37,7 +37,7 @@ class ProductInvoice extends InvoiceBase
 	 * Set the current product ID
 	 * @param string $ProductId
 	 */
-	public function setProductid($ProductId)
+	public function setProductId($ProductId)
 	{
 		$this->ProductId = $ProductId;
 		return $this;
