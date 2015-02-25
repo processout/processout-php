@@ -10,15 +10,20 @@ require 'vendor/autoload.php';
  * @var ProcessOut
  */
 $processout = new ProcessOut\ProcessOut(
-	'5257b50803a87750875a12fcbbf75e73',
-	'934c34c315cd041d31358c36a1bf53d6b2323e0de95b1adef739cfdaa4b7bd36'
+	'4d65cebe-c2f0-4803-9eab-3f9e190aaeb5',
+	'key-9db060c19281bb39656df61c63ddecff674d80b1178533db0ceffb29b87ce40a'
 );
 
 /**
- * Create a new invoice out of a product id
- * @var ProductInvoice
+ * Create a new invoice, with custom name, price and currency
+ * @var Invoice
  */
-$invoice = $processout->newProductInvoice('f7dec519feb3106efa1ee96189a222c3');
+$invoice = $processout->newInvoice(
+	'1 copy of a wonderful product at $4.99 USD',
+	4.99,
+	1,
+	'USD'
+);
 
 /**
  * And get its invoice link
@@ -31,17 +36,12 @@ echo '<br />';
 
 
 /**
- * Create a new common invoice, with custom name, price and currency
- * @var Invoice
+ * Create a new invoice thanks to a product id
+ * @var ProductInvoice
  */
-$invoice = $processout->newInvoice(
-	'1 copy of a wonderful product at $4.99 USD',
-	4.99,
-	1,
-	'USD'
-);
+$productInvoice = $processout->newProductInvoice('2fac6a3a-b5da-4067-a694-67373de3283d');
 
 /**
  * And get its invoice link again!
  */
-echo $invoice->getLink();
+echo $productInvoice->getLink();

@@ -40,7 +40,7 @@ switch($input['action'])
 		break;
 
 	case 'invoice.pending':
-		// Transaction still need some time to be processed
+		// Transaction still needs some time to be processed
 		break;
 
 	case 'invoice.failed':
