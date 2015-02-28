@@ -194,7 +194,7 @@ class Invoice extends InvoiceBase
 	{
 		$this->lastResponse = $this->cURL->newRequest(
 			'post',
-			$this->HOST . '/invoices/create',
+			$this->HOST . '/invoices',
 			$this->_generateData()
 		)->setOptions(array(
 			CURLOPT_USERPWD  => $this->ProjectId . ':' .
