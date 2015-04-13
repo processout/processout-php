@@ -55,6 +55,12 @@ class InvoiceBase extends Constants
 	 */
 	protected $Custom = NULL;
 
+    /**
+     * Sandbox mode
+     * @var boolean
+     */
+    protected $Sandbox = false;
+
 	/**
 	 * Contains the latest response from ProcessOut
 	 * @var array
@@ -78,33 +84,53 @@ class InvoiceBase extends Constants
 	 * Returns true if coupons are allowed, false otherwise
 	 * @return boolean
 	 */
-	public function getEnableCoupon() {
+	public function getEnableCoupon()
+    {
 	    return $this->EnableCoupon;
 	}
 
 	/**
 	 * Determine if the coupons are allowed (true) or not (false)
-	 * @param boolean $EnableCoupon
+	 * @param boolean $enableCoupon
 	 */
-	public function setEnableCoupon($EnableCoupon) {
-	    $this->EnableCoupon = $EnableCoupon;
+	public function setEnableCoupon($enableCoupon)
+    {
+	    $this->EnableCoupon = $enableCoupon;
 	    return $this;
 	}
+
+    /**
+     * Enable coupons
+     */
+    public function enableCoupon()
+    {
+        return $this->setEnableCoupon(true);
+    }
+
+    /**
+     * Disable coupons
+     */
+    public function disableCoupon()
+    {
+        return $this->setEnableCoupon(false);
+    }
 
 	/**
 	 * Get the URL where the user will be redirected upon purchase
 	 * @return string
 	 */
-	public function getReturnUrl() {
+	public function getReturnUrl()
+    {
 	    return $this->ReturnUrl;
 	}
 
 	/**
 	 * Set the URL where the user will be redirected upon purchase
-	 * @param string $ReturnUrl
+	 * @param string $returnUrl
 	 */
-	public function setReturnUrl($ReturnUrl) {
-	    $this->ReturnUrl = $ReturnUrl;
+	public function setReturnUrl($returnUrl)
+    {
+	    $this->ReturnUrl = $returnUrl;
 	    return $this;
 	}
 
@@ -113,17 +139,19 @@ class InvoiceBase extends Constants
 	 * 	canceled
 	 * @return string
 	 */
-	public function getCancelUrl() {
+	public function getCancelUrl()
+    {
 	    return $this->CancelUrl;
 	}
 
 	/**
 	 * Set the URL where the user will be redirected when the transaction gets
 	 * 	canceled
-	 * @param string $CancelUrl
+	 * @param string $cancelUrl
 	 */
-	public function setCancelUrl($CancelUrl) {
-	    $this->CancelUrl = $CancelUrl;
+	public function setCancelUrl($cancelUrl)
+    {
+	    $this->CancelUrl = $cancelUrl;
 	    return $this;
 	}
 
@@ -131,16 +159,18 @@ class InvoiceBase extends Constants
 	 * Get the URL called by the callback
 	 * @return string
 	 */
-	public function getNotifyUrl() {
+	public function getNotifyUrl()
+    {
 	    return $this->NotifyUrl;
 	}
 
 	/**
 	 * Set the URL called by the callback
-	 * @param string $NotifyUrl
+	 * @param string $notifyUrl
 	 */
-	public function setNotifyUrl($NotifyUrl) {
-	    $this->NotifyUrl = $NotifyUrl;
+	public function setNotifyUrl($notifyUrl)
+    {
+	    $this->NotifyUrl = $notifyUrl;
 	    return $this;
 	}
 
@@ -148,18 +178,55 @@ class InvoiceBase extends Constants
 	 * Get the custom value sent in the callback
 	 * @return string
 	 */
-	public function getCustom() {
+	public function getCustom()
+    {
 	    return $this->Custom;
 	}
 
 	/**
 	 * Set the custom value sent in the callback
-	 * @param string $Custom
+	 * @param string $custom
 	 */
-	public function setCustom($Custom) {
-	    $this->Custom = $Custom;
+	public function setCustom($custom)
+    {
+	    $this->Custom = $custom;
 	    return $this;
 	}
+
+    /**
+     * Get the status of the sandbox mode
+     * @return boolean
+     */
+    public function getSandbox()
+    {
+        return $this->Sandbox;
+    }
+
+    /**
+     * Set the sandbox mode
+     * @param boolean $sandbox
+     */
+    public function setSandbox($sandbox)
+    {
+        $this->Sandbox = $sandbox;
+        return $this;
+    }
+
+    /**
+     * Enable the sandbox mode
+     */
+    public function enableSandbox()
+    {
+        return $this->setSandbox(true);
+    }
+
+    /**
+     * Disable the sandbox mode
+     */
+    public function disableSandbox()
+    {
+        return $this->setSandbox(false);
+    }
 
 	/**
 	 * Returns the latest response from ProcessOut

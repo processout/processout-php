@@ -12,10 +12,10 @@ class Invoice extends InvoiceBase
 	protected $ItemName;
 
 	/**
-	 * Item amount
+	 * Item price
 	 * @var double
 	 */
-	protected $ItemAmount;
+	protected $ItemPrice;
 
 	/**
 	 * Item quantity
@@ -33,7 +33,7 @@ class Invoice extends InvoiceBase
 	 * Taxes charged
 	 * @var double
 	 */
-	protected $Taxes    = 0;
+	protected $Taxes = 0;
 
 	/**
 	 * Shipping fees charged
@@ -52,15 +52,15 @@ class Invoice extends InvoiceBase
 	 * @param string $projectId
 	 * @param string $projectSecret
 	 * @param string $itemName
-	 * @param double $itemAmount
+	 * @param double $itemPrice
 	 * @param integer $itemQuantity
 	 * @param string $currency
 	 */
 	public function __construct($projectId, $projectSecret, $itemName,
-		$itemAmount, $itemQuantity, $currency)
+		$itemPrice, $itemQuantity, $currency)
 	{
         $this->ItemName     = $itemName;
-        $this->ItemAmount   = $itemAmount;
+        $this->ItemPrice    = $itemPrice;
         $this->ItemQuantity = $itemQuantity;
         $this->Currency     = $currency;
 
@@ -71,33 +71,37 @@ class Invoice extends InvoiceBase
 	 * Get the item name
 	 * @return string
 	 */
-	public function getItemName() {
+	public function getItemName()
+    {
 	    return $this->ItemName;
 	}
 
 	/**
 	 * Set the item name
-	 * @param string $ItemName
+	 * @param string $itemName
 	 */
-	public function setItemName($ItemName) {
-	    $this->ItemName = $ItemName;
+	public function setItemName($itemName)
+    {
+	    $this->ItemName = $itemName;
 	    return $this;
 	}
 
 	/**
-	 * Get the item amount
+	 * Get the item price
 	 * @return double
 	 */
-	public function getItemAmount() {
-	    return $this->ItemAmount;
+	public function getItemPrice()
+    {
+	    return $this->ItemPrice;
 	}
 
 	/**
-	 * Set the item amount
-	 * @param double $ItemAmount
+	 * Set the item price
+	 * @param double $itemPrice
 	 */
-	public function setItemAmount($ItemAmount) {
-	    $this->ItemAmount = $ItemAmount;
+	public function setItemAmount($itemPrice)
+    {
+	    $this->ItemPrice = $itemPrice;
 	    return $this;
 	}
 
@@ -105,16 +109,18 @@ class Invoice extends InvoiceBase
 	 * Get the item quantity
 	 * @return integer
 	 */
-	public function getItemQuantity() {
+	public function getItemQuantity()
+    {
 	    return $this->ItemQuantity;
 	}
 
 	/**
 	 * Set the item quantity
-	 * @param integer $ItemQuantity
+	 * @param integer $itemQuantity
 	 */
-	public function setItemQuantity($ItemQuantity) {
-	    $this->ItemQuantity = $ItemQuantity;
+	public function setItemQuantity($itemQuantity)
+    {
+	    $this->ItemQuantity = $itemQuantity;
 	    return $this;
 	}
 
@@ -122,16 +128,18 @@ class Invoice extends InvoiceBase
 	 * Get the currency (USD, EUR...)
 	 * @return string
 	 */
-	public function getCurrency() {
+	public function getCurrency()
+    {
 	    return $this->Currency;
 	}
 
 	/**
 	 * Set the currency (USD, EUR...)
-	 * @param string $Currency
+	 * @param string $currency
 	 */
-	public function setCurrency($Currency) {
-	    $this->Currency = $Currency;
+	public function setCurrency($currency)
+    {
+	    $this->Currency = $currency;
 	    return $this;
 	}
 
@@ -139,7 +147,8 @@ class Invoice extends InvoiceBase
 	 * Get the taxes applied to the invoice
 	 * @return double
 	 */
-	public function getTaxes() {
+	public function getTaxes()
+    {
 	    return $this->Taxes;
 	}
 
@@ -147,7 +156,8 @@ class Invoice extends InvoiceBase
 	 * Set the taxes applied to the invoice
 	 * @param double $Taxes
 	 */
-	public function setTaxes($Taxes) {
+	public function setTaxes($Taxes)
+    {
 	    $this->Taxes = $Taxes;
 	    return $this;
 	}
@@ -155,7 +165,8 @@ class Invoice extends InvoiceBase
 	/**
 	 * Get the shipping fees applied to the invoice
 	 */
-	public function getShipping() {
+	public function getShipping()
+    {
 	    return $this->Shipping;
 	}
 
@@ -163,7 +174,8 @@ class Invoice extends InvoiceBase
 	 * Set the shipping fees applied to the invoice
 	 * @param double $Shipping
 	 */
-	public function setShipping($Shipping) {
+	public function setShipping($Shipping)
+    {
 	    $this->Shipping = $Shipping;
 	    return $this;
 	}
@@ -172,7 +184,8 @@ class Invoice extends InvoiceBase
 	 * Get the discount percentage (has no impact to the invoice amount)
 	 * @return integer
 	 */
-	public function getDiscount() {
+	public function getDiscount()
+    {
 	    return $this->Discount;
 	}
 
@@ -180,7 +193,8 @@ class Invoice extends InvoiceBase
 	 * Set the discount percentage (has no impact to the invoice amount)
 	 * @param integer $Discount
 	 */
-	public function setDiscount($Discount) {
+	public function setDiscount($Discount)
+    {
 	    $this->Discount = $Discount;
 	    return $this;
 	}
@@ -221,7 +235,7 @@ class Invoice extends InvoiceBase
 	{
 		return array_merge(array(
             'item_name'     => $this->ItemName,
-            'item_amount'   => $this->ItemAmount,
+            'item_price'    => $this->ItemPrice,
             'item_quantity' => $this->ItemQuantity,
             'currency'      => $this->Currency,
             'taxes'         => $this->Taxes,

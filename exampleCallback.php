@@ -63,6 +63,17 @@ switch($input['action'])
 		// You refunded the transaction
 		break;
 
+    case 'recurring-invoice.started':
+        // A new recurring payment has been created
+        break;
+
+    case 'recurring-invoice.ended':
+        // A recurring payment has ended. It could be because the customer
+        // simply didn't paid for the new period, or because he disputed the
+        // transaction. In the later case, another callback invoice.disputed
+        // is also sent.
+        break;
+
 	default:
 		header($_SERVER['SERVER_PROTOCOL'] . ' Bad Request', true, 400);
 		echo 'Unknown callback action'; exit();

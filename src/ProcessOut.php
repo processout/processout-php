@@ -3,7 +3,7 @@
 namespace ProcessOut;
 
 use ProcessOut\Objects\Invoice;
-use ProcessOut\Objects\ProductInvoice;
+use ProcessOut\Objects\TailoredInvoice;
 
 class ProcessOut
 {
@@ -46,13 +46,14 @@ class ProcessOut
 	}
 
 	/**
-	 * Create a new invoice out of a product
-	 * @param string $productId ID of the product
-	 * @return ProductInvoice
+	 * Create a new invoice out of a tailored invoice
+	 * @param string $tailoredInvoiceId ID of the tailored invoice
+	 * @return TailoredInvoice
 	 */
-	public function newProductInvoice($productId)
+	public function newTailoredInvoice($tailoredInvoiceId)
 	{
-		return new ProductInvoice($this->ProjectId, $this->ProjectKey, $productId);
+		return new TailoredInvoice($this->ProjectId, $this->ProjectKey,
+            $tailoredInvoiceId);
 	}
 
 	/**

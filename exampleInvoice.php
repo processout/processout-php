@@ -15,7 +15,7 @@ $processout = new ProcessOut\ProcessOut(
 );
 
 /**
- * Create a new invoice, with custom name, price and currency
+ * Create a new invoice, with custom name, price, quantity and currency
  * @var Invoice
  */
 $invoice = $processout->newInvoice(
@@ -36,12 +36,12 @@ echo '<br />';
 
 
 /**
- * Create a new invoice thanks to a product id
- * @var ProductInvoice
+ * Create a new invoice thanks to a tailored invoice id
+ * @var TailoredInvoice
  */
-$productInvoice = $processout->newProductInvoice('2fac6a3a-b5da-4067-a694-67373de3283d');
+$tailoredInvoice = $processout->newTailoredInvoice('2fac6a3a-b5da-4067-a694-67373de3283d');
 
 /**
  * And get its invoice link again!
  */
-echo $productInvoice->getLink();
+echo $tailoredInvoice->getLink();
