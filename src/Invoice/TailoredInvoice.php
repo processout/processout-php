@@ -59,7 +59,6 @@ class TailoredInvoice extends InvoiceAbstract
             CURLOPT_USERPWD  => $this->ProcessOut->getProjectId() . ':' .
                 $this->ProcessOut->getProjectKey()
         ))->send();
-        echo $this->lastResponse->body;
         if($this->lastResponse->statusCode != '200')
         {
             throw new \Exception("Processout returned an error code,
