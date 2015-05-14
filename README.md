@@ -1,7 +1,8 @@
 ProcessOut PHP Server
 =====================
 
-This package manages invoices for the server-side of an application that uses the ProcessOut SDK.
+This package provides bindings to the ProcessOut API. Manage your callbacks, create new invoices,
+redirect your users to a newly generated checkout page and more.
 
 ProcessOut makes you able to manage a bunch of payment gateways - such as PayPal, Crypto currencies, Payza or Dwolla, with no efforts. Learn more on the [ProcessOut's website](https://www.processout.com).
 
@@ -19,7 +20,7 @@ The package's installation is done using composer. Simply add this lines to your
 ``` json
 {
 	"require": {
-		"processout/processout-php-server": "dev-master"
+		"processout/processout-php": "dev-master"
 	}
 }
 ```
@@ -54,7 +55,8 @@ Usage
 ``` php
 <?php
 
-$invoice = $processout->newInvoice(
+$invoice = new \ProcessOut\Invoice\Invoice(
+    $processout,                                  // ProcessOut instance
 	'1 copy of a wonderful product at $4.99 USD', // Title
 	4.99,                                         // Price
 	1,                                            // Quantity
@@ -78,7 +80,10 @@ $invoice = $processout->newInvoice(
 ``` php
 <?php
 
-$invoice = $processout->newTailoredInvoice('f7dec519feb3106efa1ee96189a222c3');
+$invoice = new \ProcessOut\Invoice\TailoredInvoice(
+    $processout,                           // ProcessOut instance
+    '1ca570ac-0cb4-4c54-8ff2-f7c82f4fb12b' // Tailored invoice id
+);
 ```
 
 
@@ -111,7 +116,7 @@ public function setCustom($custom)
 }
 ```
 
-### Getting the link to an invoice
+### Getting the link to an invoice, from an invoice object
 
 ``` php
 <?php

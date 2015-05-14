@@ -9,6 +9,11 @@ class ProcessOut
 {
 
     /**
+     * ProcessOut host url
+     */
+    const HOST = 'https://api.processout.com/v1';
+
+    /**
      * ProcesOut's project ID
      * @var string
      */
@@ -32,28 +37,21 @@ class ProcessOut
     }
 
     /**
-     * Create a new invoice
-     * @param  $itemName      Item name
-     * @param  $itemPrice     Item price
-     * @param  $itemQuantity  Item quantity
-     * @param  $currency      Currency of the invoice (USD, EUR...)
-     * @return Invoice
+     * Get current project ID
+     * @return string
      */
-    public function newInvoice($itemName, $itemPrice, $itemQuantity, $currency)
+    public function getProjectId()
     {
-        return new Invoice($this->ProjectId, $this->ProjectKey, $itemName,
-            $itemPrice, $itemQuantity, $currency);
+        return $this->ProjectId;
     }
 
     /**
-     * Create a new invoice out of a tailored invoice
-     * @param string $tailoredInvoiceId ID of the tailored invoice
-     * @return TailoredInvoice
+     * Get current project secret key
+     * @return string
      */
-    public function newTailoredInvoice($tailoredInvoiceId)
+    public function getProjectKey()
     {
-        return new TailoredInvoice($this->ProjectId, $this->ProjectKey,
-            $tailoredInvoiceId);
+        return $this->ProjectKey;
     }
 
     /**

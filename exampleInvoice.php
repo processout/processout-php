@@ -10,15 +10,16 @@ require 'vendor/autoload.php';
  * @var ProcessOut
  */
 $processout = new ProcessOut\ProcessOut(
-    'a0731980-dac2-4602-9255-f57a341376ef',
-    'key-a8e862bee6bf5205ceab6d88a95dd7a0df86de75fa66a150cacf9ea8dd7d767a'
+    '8722fce8-f8c0-44be-997e-d4954cf32fc0',
+    'key-3022bbac0a88514dff79c0d95f5b8486ba0884bb665834ea9ad79610ac31ab43'
 );
 
 /**
  * Create a new invoice, with custom name, price, quantity and currency
  * @var Invoice
  */
-$invoice = $processout->newInvoice(
+$invoice = new \ProcessOut\Invoice\Invoice(
+    $processout,
     '1 copy of a wonderful product at $4.99 USD',
     4.99,
     1,
@@ -39,8 +40,9 @@ echo '<br />';
  * Create a new invoice thanks to a tailored invoice id
  * @var TailoredInvoice
  */
-$tailoredInvoice = $processout->newTailoredInvoice(
-    'b45b76ba-42e5-4389-9255-e78202846bd3');
+$tailoredInvoice = new \ProcessOut\Invoice\TailoredInvoice(
+    $processout,
+    '1ca570ac-0cb4-4c54-8ff2-f7c82f4fb12b');
 
 /**
  * And get its invoice link again!

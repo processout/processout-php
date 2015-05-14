@@ -1,10 +1,11 @@
 <?php
 
-namespace ProcessOut\Objects;
+namespace ProcessOut\Invoice;
 
+use ProcessOut\ProcessOut;
 use anlutro\cURL\cURL;
 
-class InvoiceBase extends Constants
+abstract class InvoiceAbstract
 {
 
     /**
@@ -14,16 +15,10 @@ class InvoiceBase extends Constants
     protected $cURL;
 
     /**
-     * ProcessOut's project id
-     * @var string
+     * ProcessOut instanciated object
+     * @var ProcessOut
      */
-    protected $ProjectId;
-
-    /**
-     * ProcessOut's project secret
-     * @var string
-     */
-    protected $ProjectSecret;
+    protected $ProcessOut;
 
     /**
      * Determines if coupons will be allowed
@@ -69,15 +64,13 @@ class InvoiceBase extends Constants
 
     /**
      * InvoiceBase constructor
-     * @param string $projectId
-     * @param string $projectSecret
+     * @param ProcessOut $processOut
      */
-    public function __construct($projectId, $projectSecret)
+    public function __construct(ProcessOut $processOut)
     {
         $this->cURL = new cURL;
 
-        $this->ProjectId     = $projectId;
-        $this->ProjectSecret = $projectSecret;
+        $this->ProcessOut = $processOut;
     }
 
     /**

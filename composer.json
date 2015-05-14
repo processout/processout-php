@@ -1,17 +1,17 @@
 {
-  "name": "processout/processout-php-server",
-  "description": "ProcessOut PHP Library [server]",
+  "name": "processout/processout-php",
+  "description": "ProcessOut PHP Library",
   "keywords": [
     "processout",
     "payment processing",
     "api"
   ],
-  "homepage": "https://processout.com/",
+  "homepage": "https://www.processout.com/",
   "license": "MIT",
   "authors": [
     {
       "name": "ProcessOut",
-      "homepage": "https://github.com/processout/processout-php-server/contributors"
+      "homepage": "https://github.com/processout/processout-php/contributors"
     }
   ],
   "require": {

@@ -1,8 +1,10 @@
 <?php
 
-namespace ProcessOut\Objects;
+namespace ProcessOut\Invoice;
 
-class Invoice extends InvoiceBase
+use ProcessOut\ProcessOut;
+
+class Invoice extends InvoiceAbstract
 {
 
     /**
@@ -49,22 +51,21 @@ class Invoice extends InvoiceBase
 
     /**
      * Invoice constructor
-     * @param string $projectId
-     * @param string $projectSecret
+     * @param ProcessOut $processOut
      * @param string $itemName
      * @param double $itemPrice
      * @param integer $itemQuantity
      * @param string $currency
      */
-    public function __construct($projectId, $projectSecret, $itemName,
-        $itemPrice, $itemQuantity, $currency)
+    public function __construct(ProcessOut $processOut, $itemName, $itemPrice,
+        $itemQuantity, $currency)
     {
         $this->ItemName     = $itemName;
         $this->ItemPrice    = $itemPrice;
         $this->ItemQuantity = $itemQuantity;
         $this->Currency     = $currency;
 
-        parent::__construct($projectId, $projectSecret);
+        parent::__construct($processOut);
     }
 
     /**
@@ -207,12 +208,12 @@ class Invoice extends InvoiceBase
     public function getLink()
     {
         $this->lastResponse = $this->cURL->newRequest(
-            'post',
-            $this->HOST . '/invoices',
+            'POST',
+            ProcessOut::HOST . '/invoices',
             $this->_generateData()
         )->setOptions(array(
-            CURLOPT_USERPWD  => $this->ProjectId . ':' .
-                $this->ProjectSecret
+            CURLOPT_USERPWD  => $this->ProcessOut->getProjectId() . ':' .
+                $this->ProcessOut->getProjectKey()
         ))->send();
 
         if($this->lastResponse->statusCode != '200')
