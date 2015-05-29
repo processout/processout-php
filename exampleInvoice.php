@@ -31,6 +31,11 @@ $invoice = new \ProcessOut\Invoice\Invoice(
  */
 echo $invoice->getLink();
 
+/**
+ * Or get its invoice id
+ */
+echo $invoice->getId();
+
 
 // Let's put up some space in here
 echo '<br />';
@@ -45,6 +50,11 @@ $tailoredInvoice = new \ProcessOut\Invoice\TailoredInvoice(
     '1ca570ac-0cb4-4c54-8ff2-f7c82f4fb12b');
 
 /**
- * And get its invoice link again!
+ * And get its invoice link again
  */
 echo $tailoredInvoice->getLink();
+
+/**
+ * Or invoice id!
+ */
+echo $tailoredInvoice->getId();

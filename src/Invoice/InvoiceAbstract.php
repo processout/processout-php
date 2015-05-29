@@ -60,7 +60,13 @@ abstract class InvoiceAbstract
      * Contains the latest response from ProcessOut
      * @var array
      */
-    protected $lastResponse = NULL;
+    protected $lastResponse = array();
+
+    /**
+     * Contains the latest response data from ProcessOut
+     * @var array
+     */
+    protected $lastData = array();
 
     /**
      * InvoiceBase constructor

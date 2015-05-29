@@ -201,11 +201,10 @@ class Invoice extends InvoiceAbstract
     }
 
     /**
-     * Perform the ProcessOut's request to generate the invoice, and return the
-     * URL to that invoice
-     * @return string
+     * Perform the ProcessOut's request to create the invoice
+     * @return array
      */
-    public function getLink()
+    protected function create()
     {
         $this->lastResponse = $this->cURL->newRequest(
             'POST',
@@ -223,9 +222,27 @@ class Invoice extends InvoiceAbstract
                 $this->lastResponse->code);
         }
 
-        $data = json_decode($this->lastResponse->body);
+        $this->lastData = json_decode($this->lastResponse->body);
 
-        return $data->url;
+        return $this->lastData;
+    }
+
+    /**
+     * Return the URL to the created invoice
+     * @return string
+     */
+    public function getLink()
+    {
+        return $this->create()->url;
+    }
+
+    /**
+     * Return the ID of the created invoice
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->create()->id;
     }
 
     /**

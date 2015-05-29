@@ -44,11 +44,10 @@ class TailoredInvoice extends InvoiceAbstract
     }
 
     /**
-     * Perform the ProcessOut's request to generate the invoice, and return the
-     * URL to that invoice
-     * @return string
+     * Perform the ProcessOut's request to generate the invoice
+     * @return array
      */
-    public function getLink()
+    protected function create()
     {
         $this->lastResponse = $this->cURL->newRequest(
             'POST',
@@ -59,14 +58,35 @@ class TailoredInvoice extends InvoiceAbstract
             CURLOPT_USERPWD  => $this->ProcessOut->getProjectId() . ':' .
                 $this->ProcessOut->getProjectKey()
         ))->send();
+
         if($this->lastResponse->statusCode != '200')
         {
             throw new \Exception("Processout returned an error code,
                 please verify your inputs. Error: " .
                 $this->lastResponse->code);
         }
-        $data = json_decode($this->lastResponse->body, true);
-        return $data['url'];
+
+        $this->lastData = json_decode($this->lastResponse->body);
+
+        return $this->lastData;
+    }
+
+    /**
+     * Return the URL to the created invoice
+     * @return string
+     */
+    public function getLink()
+    {
+        return $this->create()->url;
+    }
+
+    /**
+     * Return the ID of the created invoice
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->create()->id;
     }
 
     /**
