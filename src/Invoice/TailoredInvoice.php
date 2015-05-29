@@ -47,7 +47,7 @@ class TailoredInvoice extends InvoiceAbstract
      * Perform the ProcessOut's request to generate the invoice
      * @return array
      */
-    protected function create()
+    public function create()
     {
         $this->lastResponse = $this->cURL->newRequest(
             'POST',
@@ -77,7 +77,10 @@ class TailoredInvoice extends InvoiceAbstract
      */
     public function getLink()
     {
-        return $this->create()->url;
+        if(empty($this->lastData))
+            $this->create();
+
+        return $this->lastData->url;
     }
 
     /**
@@ -86,7 +89,10 @@ class TailoredInvoice extends InvoiceAbstract
      */
     public function getId()
     {
-        return $this->create()->id;
+        if(empty($this->lastData))
+            $this->create();
+
+        return $this->lastData->id;
     }
 
     /**

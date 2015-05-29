@@ -204,7 +204,7 @@ class Invoice extends InvoiceAbstract
      * Perform the ProcessOut's request to create the invoice
      * @return array
      */
-    protected function create()
+    public function create()
     {
         $this->lastResponse = $this->cURL->newRequest(
             'POST',
@@ -233,7 +233,10 @@ class Invoice extends InvoiceAbstract
      */
     public function getLink()
     {
-        return $this->create()->url;
+        if(empty($this->lastData))
+            $this->create();
+
+        return $this->lastData->url;
     }
 
     /**
@@ -242,7 +245,10 @@ class Invoice extends InvoiceAbstract
      */
     public function getId()
     {
-        return $this->create()->id;
+        if(empty($this->lastData))
+            $this->create();
+
+        return $this->lastData->id;
     }
 
     /**
