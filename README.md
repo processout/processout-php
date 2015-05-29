@@ -138,9 +138,10 @@ Once a callback has been sent to your server, you need to check its authenticity
 ``` php
 <?php
 
-$input = json_decode(file_get_contents('php://input'), true);
+$input    = json_decode(file_get_contents('php://input'), true);
 
-if(!$processout->checkCallbackData($input))
+$callback = new \ProcessOut\Callback\Callback($processout);
+if(!$callback->validate($input))
 {
 	header($_SERVER['SERVER_PROTOCOL'] . ' Unauthorized', true, 401);
 	echo 'Bad callback'; exit();
