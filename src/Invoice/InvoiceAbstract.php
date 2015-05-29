@@ -21,12 +21,6 @@ abstract class InvoiceAbstract
     protected $ProcessOut;
 
     /**
-     * Determines if coupons will be allowed
-     * @var boolean
-     */
-    protected $EnableCoupon = true;
-
-    /**
      * URL where the customer will be returned upon purchase
      * @var string
      */
@@ -77,41 +71,6 @@ abstract class InvoiceAbstract
         $this->cURL = new cURL;
 
         $this->ProcessOut = $processOut;
-    }
-
-    /**
-     * Returns true if coupons are allowed, false otherwise
-     * @return boolean
-     */
-    public function getEnableCoupon()
-    {
-        return $this->EnableCoupon;
-    }
-
-    /**
-     * Determine if the coupons are allowed (true) or not (false)
-     * @param boolean $enableCoupon
-     */
-    public function setEnableCoupon($enableCoupon)
-    {
-        $this->EnableCoupon = $enableCoupon;
-        return $this;
-    }
-
-    /**
-     * Enable coupons
-     */
-    public function enableCoupon()
-    {
-        return $this->setEnableCoupon(true);
-    }
-
-    /**
-     * Disable coupons
-     */
-    public function disableCoupon()
-    {
-        return $this->setEnableCoupon(false);
     }
 
     /**
@@ -242,7 +201,6 @@ abstract class InvoiceAbstract
     protected function _generateData()
     {
         return array(
-            'enable_coupon' => $this->EnableCoupon,
             'return_url'    => $this->ReturnUrl,
             'cancel_url'    => $this->CancelUrl,
             'notify_url'    => $this->NotifyUrl,
