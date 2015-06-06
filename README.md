@@ -1,6 +1,8 @@
 ProcessOut PHP
 ==============
 
+[![Code Climate](https://codeclimate.com/github/ProcessOut/processout-php/badges/gpa.svg)](https://codeclimate.com/github/ProcessOut/processout-php)
+
 This package provides bindings to the ProcessOut API. Manage your callbacks, create new invoices,
 redirect your users to a newly generated checkout page and more.
 
