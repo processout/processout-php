@@ -23,7 +23,7 @@ class Invoice extends InvoiceAbstract
      * Item quantity
      * @var integer
      */
-    protected $ItemQuantity;
+    protected $ItemQuantity = 1;
 
     /**
      * Currency of the invoice (USD, EUR...)
@@ -54,15 +54,13 @@ class Invoice extends InvoiceAbstract
      * @param ProcessOut $processOut
      * @param string $itemName
      * @param double $itemPrice
-     * @param integer $itemQuantity
      * @param string $currency
      */
     public function __construct(ProcessOut $processOut, $itemName, $itemPrice,
-        $itemQuantity, $currency)
+        $currency)
     {
         $this->ItemName     = $itemName;
         $this->ItemPrice    = $itemPrice;
-        $this->ItemQuantity = $itemQuantity;
         $this->Currency     = $currency;
 
         parent::__construct($processOut);

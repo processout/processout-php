@@ -20,9 +20,8 @@ $processout = new ProcessOut\ProcessOut(
  */
 $invoice = new \ProcessOut\Invoice\Invoice(
     $processout,
-    '1 copy of a wonderful product at $4.99 USD',
+    'Wonderful product at $4.99 USD',
     4.99,
-    1,
     'USD'
 );
 
