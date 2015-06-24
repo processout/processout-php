@@ -17,7 +17,7 @@ Dependencies
 Installation
 ------------
 
-The package's installation is done using composer. Simply add this lines to your composer.json
+The package's installation is done using composer. Simply add these lines to your composer.json
 
 ``` json
 {
@@ -75,7 +75,7 @@ $invoice = new \ProcessOut\Invoice\Invoice(
 - Currency     - **USD**
 - Taxes        - **4.20**
 - Shipping     - **4.20**
-- Discount     - **10** *Note: percentage, not taken into account in the total price*
+- Discount     - **10** *Note: percentage*
 
 ### Create a new invoice from a tailored invoice
 
@@ -99,9 +99,9 @@ The following attributes are shared between Invoice and TailoredInvoice instance
 - Custom       - *A custom field containing anything you want, sent back within all callbacks*
 - Sandbox      - *Decide weither or not to activate the sandbox mode*
 
-#### Attributes getters and setters
+#### Attribute getters and setters
 
-Every attributes has its own getter and setter, as such:
+Every attribute has its own getter and setter, as such:
 
 ``` php
 // Getter
@@ -131,9 +131,9 @@ echo $invoice->getId();
 
 ### Receiving callbacks / Web hooks
 
-Callbacks can be used to automate transaction management once a payment has been placed by one of your customers. One example could be adding credit to an account once the user has paid his subscription.
+Callbacks can be used to automate transaction management once a payment has been placed by one of your customers. One example could be adding credit to an account once the user has paid their subscription.
 
-However, it doesn't stop there. ProcessOut also supports chargebacks handling, and much more. Please refer to the [API documentation](http://docs.processout.apiary.io/#) to learn what data is sent through callbacks.
+However, it doesn't stop there. ProcessOut also supports chargeback handling, and much more. Please refer to the [API documentation](http://docs.processout.apiary.io/#) to learn what data is sent through callbacks.
 
 Once a callback has been sent to your server, you need to check its authenticity, as such:
 
@@ -160,4 +160,4 @@ Full API documentation
 
 ### Apiary
 
-The ProcessOut's full API documentation can be found on [Apiary](http://docs.processout.apiary.io). It contains all the needed information, including the callbacks data, and much more.
+ProcessOut's full API documentation can be found on [Apiary](http://docs.processout.apiary.io). It contains all the needed information, including callback data, and much more.
