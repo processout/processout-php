@@ -3,238 +3,102 @@
 namespace ProcessOut\Invoice;
 
 use ProcessOut\ProcessOut;
+use ProcessOut\Networking\Response;
+use ProcessOut\Invoice\TailoredInvoice;
 
 class Invoice extends InvoiceAbstract
 {
 
     /**
-     * Item name
+     * Unique id of the invoice
      * @var string
      */
-    protected $ItemName;
+    protected $id;
 
     /**
-     * Item price
-     * @var double
-     */
-    protected $ItemPrice;
-
-    /**
-     * Item quantity
-     * @var integer
-     */
-    protected $ItemQuantity = 1;
-
-    /**
-     * Currency of the invoice (USD, EUR...)
+     * Link to the invoice
      * @var string
      */
-    protected $Currency;
+    protected $url;
 
     /**
-     * Taxes charged
-     * @var double
+     * Tailored invoice id from which this invoice is herited from
+     * @var ProcessOut\Invoice\TailoredInvoice
      */
-    protected $Taxes = 0;
-
-    /**
-     * Shipping fees charged
-     * @var double
-     */
-    protected $Shipping = 0;
-
-    /**
-     * Discount percentage (no impact on the invoice's final price)
-     * @var integer
-     */
-    protected $Discount = 0;
+    protected $tailoredInvoiceId;
 
     /**
      * Invoice constructor
-     * @param ProcessOut $processOut
-     * @param string $itemName
-     * @param double $itemPrice
-     * @param string $currency
+     * @param ProcessOut|null $processOut
      */
-    public function __construct(ProcessOut $processOut, $itemName, $itemPrice,
-        $currency)
+    public function __construct(ProcessOut $processOut = null)
     {
-        $this->ItemName     = $itemName;
-        $this->ItemPrice    = $itemPrice;
-        $this->Currency     = $currency;
+        if(is_null($processOut))
+            $processOut = ProcessOut::getDefault();
 
         parent::__construct($processOut);
     }
 
     /**
-     * Get the item name
-     * @return string
+     * Create a new invoice from a tailored invoice
+     * @param  TailoredInvoice $tailoredInvoice
+     * @return Invoice
      */
-    public function getItemName()
+    public function fromTailored(TailoredInvoice $tailoredInvoice)
     {
-        return $this->ItemName;
-    }
+        $this->tailoredInvoiceId = $tailoredInvoice->getId();
 
-    /**
-     * Set the item name
-     * @param string $itemName
-     */
-    public function setItemName($itemName)
-    {
-        $this->ItemName = $itemName;
-        return $this;
-    }
-
-    /**
-     * Get the item price
-     * @return double
-     */
-    public function getItemPrice()
-    {
-        return $this->ItemPrice;
-    }
-
-    /**
-     * Set the item price
-     * @param double $itemPrice
-     */
-    public function setItemPrice($itemPrice)
-    {
-        $this->ItemPrice = $itemPrice;
-        return $this;
-    }
-
-    /**
-     * Get the item quantity
-     * @return integer
-     */
-    public function getItemQuantity()
-    {
-        return $this->ItemQuantity;
-    }
-
-    /**
-     * Set the item quantity
-     * @param integer $itemQuantity
-     */
-    public function setItemQuantity($itemQuantity)
-    {
-        $this->ItemQuantity = $itemQuantity;
-        return $this;
-    }
-
-    /**
-     * Get the currency (USD, EUR...)
-     * @return string
-     */
-    public function getCurrency()
-    {
-        return $this->Currency;
-    }
-
-    /**
-     * Set the currency (USD, EUR...)
-     * @param string $currency
-     */
-    public function setCurrency($currency)
-    {
-        $this->Currency = $currency;
-        return $this;
-    }
-
-    /**
-     * Get the taxes applied to the invoice
-     * @return double
-     */
-    public function getTaxes()
-    {
-        return $this->Taxes;
-    }
-
-    /**
-     * Set the taxes applied to the invoice
-     * @param double $Taxes
-     */
-    public function setTaxes($Taxes)
-    {
-        $this->Taxes = $Taxes;
-        return $this;
-    }
-
-    /**
-     * Get the shipping fees applied to the invoice
-     */
-    public function getShipping()
-    {
-        return $this->Shipping;
-    }
-
-    /**
-     * Set the shipping fees applied to the invoice
-     * @param double $Shipping
-     */
-    public function setShipping($Shipping)
-    {
-        $this->Shipping = $Shipping;
-        return $this;
-    }
-
-    /**
-     * Get the discount percentage (has no impact to the invoice final price)
-     * @return integer
-     */
-    public function getDiscount()
-    {
-        return $this->Discount;
-    }
-
-    /**
-     * Set the discount percentage (has no impact to the invoice final price)
-     * @param integer $Discount
-     */
-    public function setDiscount($Discount)
-    {
-        $this->Discount = $Discount;
         return $this;
     }
 
     /**
      * Perform the ProcessOut's request to create the invoice
-     * @return array
+     * @return ProcessOut\Invoice\Invoice
      */
-    public function create()
+    public function save()
     {
-        $this->lastResponse = $this->cURL->newRequest(
-            'POST',
-            ProcessOut::HOST . '/invoices',
-            $this->_generateData()
-        )->setOptions(array(
-            CURLOPT_USERPWD  => $this->ProcessOut->getProjectId() . ':' .
-                $this->ProcessOut->getProjectKey()
-        ))->send();
+        if(empty($this->getTailoredInvoiceId()))
+            $this->saveNew();
+        else
+            $this->saveFromTailored();
 
-        if($this->lastResponse->statusCode != '200')
-        {
-            throw new \Exception("Processout returned an error code,
-                please verify your inputs. Error: " .
-                $this->lastResponse->code);
-        }
+        $this->id  = $this->lastResponse->getBody()->id;
+        $this->url = $this->lastResponse->getBody()->url;
 
-        $this->lastData = json_decode($this->lastResponse->body);
-
-        return $this->lastData;
+        return $this;
     }
 
     /**
-     * Return the URL to the created invoice
-     * @return string
+     * Create a new invoice
+     * @return void
      */
-    public function getLink()
+    protected function saveNew()
     {
-        if(empty($this->lastData))
-            $this->create();
+        $this->lastResponse = new Response($this->ProcessOut->getCurl()
+            ->newRequest('POST',
+                ProcessOut::HOST . '/invoices',
+                $this->_generateData()
+            )->setOptions(array(
+                CURLOPT_USERPWD  => $this->ProcessOut->getProjectId() . ':' .
+                    $this->ProcessOut->getProjectKey()
+            ))->send());
+    }
 
-        return $this->lastData->url;
+    /**
+     * Create a new invoice from a tailored invoice
+     * @return void
+     */
+    protected function saveFromTailored()
+    {
+        $this->lastResponse = new Response($this->ProcessOut->getCurl()
+            ->newRequest('POST',
+                ProcessOut::HOST . '/invoices/from-tailored/' .
+                    $this->getTailoredInvoiceId(),
+                $this->_generateData()
+            )->setOptions(array(
+                CURLOPT_USERPWD => $this->ProcessOut->getProjectId() . ':' .
+                    $this->ProcessOut->getProjectKey()
+            ))->send());
     }
 
     /**
@@ -243,27 +107,25 @@ class Invoice extends InvoiceAbstract
      */
     public function getId()
     {
-        if(empty($this->lastData))
-            $this->create();
-
-        return $this->lastData->id;
+        return $this->id;
     }
 
     /**
-     * Generate the data used during the ProcessOut's request
-     * @return array
+     * Return the URL to the created invoice
+     * @return string
      */
-    protected function _generateData()
+    public function getUrl()
     {
-        return array_merge(array(
-            'item_name'     => $this->ItemName,
-            'item_price'    => $this->ItemPrice,
-            'item_quantity' => $this->ItemQuantity,
-            'currency'      => $this->Currency,
-            'taxes'         => $this->Taxes,
-            'shipping'      => $this->Shipping,
-            'discount'      => $this->Discount
-        ), parent::_generateData());
+        return $this->url;
+    }
+
+    /**
+     * Get the tailored invoice id
+     * @return string
+     */
+    public function getTailoredInvoiceId()
+    {
+        return $this->tailoredInvoiceId;
     }
 
 }

@@ -27,7 +27,7 @@ The package's installation is done using composer. Simply add this lines to your
 }
 ```
 
-And run the composer update command to install the package.
+And run the composer update command to install/update the package.
 
 ``` sh
 composer update
@@ -75,7 +75,6 @@ $invoice = new \ProcessOut\Invoice\Invoice(
 - Currency     - **USD**
 - Taxes        - **4.20**
 - Shipping     - **4.20**
-- Discount     - **10** *Note: percentage, not taken into account in the total price*
 
 ### Create a new invoice from a tailored invoice
 

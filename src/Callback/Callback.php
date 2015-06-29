@@ -15,20 +15,25 @@ class Callback
 
     /**
      * Callback constructor
-     * @param ProcessOut $processOut
+     * @param ProcessOut|null $processOut
      */
-    public function __construct(ProcessOut $processOut)
+    public function __construct(ProcessOut $processOut = null)
     {
+        if(is_null($processOut))
+            $processOut = ProcessOut::getDefault();
+
         $this->ProcessOut = $processOut;
     }
 
     public function validate($data)
     {
-        return hash_equals(base64_decode($data['hmac_signature']), hash_hmac(
+        //TODO: Use hash_equals with forward compatibility, to avoid timing
+        // based attacks.
+        return base64_decode($data['hmac_signature']) == hash_hmac(
             'sha256',
             $data['transaction_id'],
             $this->ProcessOut->getProjectKey(),
-            true));
+            true);
     }
 
 }

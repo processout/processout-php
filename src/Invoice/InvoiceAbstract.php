@@ -3,22 +3,57 @@
 namespace ProcessOut\Invoice;
 
 use ProcessOut\ProcessOut;
-use anlutro\cURL\cURL;
 
 abstract class InvoiceAbstract
 {
-
-    /**
-     * Contains cURL instance
-     * @var cURL
-     */
-    protected $cURL;
 
     /**
      * ProcessOut instanciated object
      * @var ProcessOut
      */
     protected $ProcessOut;
+
+    /**
+     * Item name
+     * @var string
+     */
+    protected $ItemName;
+
+    /**
+     * Item price
+     * @var double
+     */
+    protected $ItemPrice;
+
+    /**
+     * Item quantity
+     * @var integer
+     */
+    protected $ItemQuantity = 1;
+
+    /**
+     * Currency of the invoice (USD, EUR...)
+     * @var string
+     */
+    protected $Currency;
+
+    /**
+     * Taxes charged
+     * @var double
+     */
+    protected $Taxes = 0;
+
+    /**
+     * Shipping fees charged
+     * @var double
+     */
+    protected $Shipping = 0;
+
+    /**
+     * Recurring days
+     * @var integer
+     */
+    protected $RecurringDays = 0;
 
     /**
      * URL where the customer will be returned upon purchase
@@ -57,20 +92,143 @@ abstract class InvoiceAbstract
     protected $lastResponse = array();
 
     /**
-     * Contains the latest response data from ProcessOut
-     * @var array
-     */
-    protected $lastData = array();
-
-    /**
      * InvoiceBase constructor
      * @param ProcessOut $processOut
      */
     public function __construct(ProcessOut $processOut)
     {
-        $this->cURL = new cURL;
-
         $this->ProcessOut = $processOut;
+    }
+
+    /**
+     * Get the item name
+     * @return string
+     */
+    public function getItemName()
+    {
+        return $this->ItemName;
+    }
+
+    /**
+     * Set the item name
+     * @param string $itemName
+     */
+    public function setItemName($itemName)
+    {
+        $this->ItemName = $itemName;
+        return $this;
+    }
+
+    /**
+     * Get the item price
+     * @return double
+     */
+    public function getItemPrice()
+    {
+        return $this->ItemPrice;
+    }
+
+    /**
+     * Set the item price
+     * @param double $itemPrice
+     */
+    public function setItemPrice($itemPrice)
+    {
+        $this->ItemPrice = $itemPrice;
+        return $this;
+    }
+
+    /**
+     * Get the item quantity
+     * @return integer
+     */
+    public function getItemQuantity()
+    {
+        return $this->ItemQuantity;
+    }
+
+    /**
+     * Set the item quantity
+     * @param integer $itemQuantity
+     */
+    public function setItemQuantity($itemQuantity)
+    {
+        $this->ItemQuantity = $itemQuantity;
+        return $this;
+    }
+
+    /**
+     * Get the currency (USD, EUR...)
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->Currency;
+    }
+
+    /**
+     * Set the currency (USD, EUR...)
+     * @param string $currency
+     */
+    public function setCurrency($currency)
+    {
+        $this->Currency = $currency;
+        return $this;
+    }
+
+    /**
+     * Get the taxes applied to the invoice
+     * @return double
+     */
+    public function getTaxes()
+    {
+        return $this->Taxes;
+    }
+
+    /**
+     * Set the taxes applied to the invoice
+     * @param double $Taxes
+     */
+    public function setTaxes($Taxes)
+    {
+        $this->Taxes = $Taxes;
+        return $this;
+    }
+
+    /**
+     * Get the shipping fees applied to the invoice
+     */
+    public function getShipping()
+    {
+        return $this->Shipping;
+    }
+
+    /**
+     * Set the shipping fees applied to the invoice
+     * @param double $Shipping
+     */
+    public function setShipping($Shipping)
+    {
+        $this->Shipping = $Shipping;
+        return $this;
+    }
+
+    /**
+     * Get the recurring days
+     */
+    public function getRecurringDays()
+    {
+        return $this->RecurringDays;
+    }
+
+    /**
+     * Set the recurring days
+     * @param double $RecurringDays
+     */
+    public function setRecurringDays($RecurringDays)
+    {
+        $this->RecurringDays = $RecurringDays;
+        return $this;
     }
 
     /**
@@ -201,10 +359,17 @@ abstract class InvoiceAbstract
     protected function _generateData()
     {
         return array(
-            'return_url'    => $this->ReturnUrl,
-            'cancel_url'    => $this->CancelUrl,
-            'notify_url'    => $this->NotifyUrl,
-            'custom'        => $this->Custom
+            'item_name'      => $this->ItemName,
+            'item_quantity'  => $this->ItemQuantity,
+            'item_price'     => $this->ItemPrice,
+            'currency'       => $this->Currency,
+            'taxes'          => $this->Taxes,
+            'shipping'       => $this->Shipping,
+            'recurring_days' => $this->RecurringDays,
+            'return_url'     => $this->ReturnUrl,
+            'cancel_url'     => $this->CancelUrl,
+            'notify_url'     => $this->NotifyUrl,
+            'custom'         => $this->Custom
         );
     }
 

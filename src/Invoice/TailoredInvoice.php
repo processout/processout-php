@@ -3,6 +3,7 @@
 namespace ProcessOut\Invoice;
 
 use ProcessOut\ProcessOut;
+use ProcessOut\Networking\Response;
 
 class TailoredInvoice extends InvoiceAbstract
 {
@@ -11,97 +12,91 @@ class TailoredInvoice extends InvoiceAbstract
      * ProcessOut's tailored invoice ID
      * @var string
      */
-    protected $TailoredInvoiceId;
+    protected $id;
 
     /**
      * TailoredInvoice constructor
-     * @param ProcessOut $processOut
-     * @param string $tailoredInvoiceId
+     * @param ProcessOut|null $processOut
      */
-    public function __construct(ProcessOut $processOut, $tailoredInvoiceId)
+    public function __construct(ProcessOut $processOut = null)
     {
-        $this->TailoredInvoiceId = $tailoredInvoiceId;
+        if(is_null($processOut))
+            $processOut = ProcessOut::getDefault();
+
         parent::__construct($processOut);
+    }
+
+    protected function setFields(Response $response)
+    {
+        $body = $response->getBody();
+
+        $this->ItemName      = $body->item_name;
+        $this->ItemPrice     = $body->item_price;
+        $this->ItemQuantity  = $body->item_quantity;
+        $this->Taxes         = $body->taxes;
+        $this->Shipping      = $body->shipping;
+        $this->RecurringDays = $body->recurring_days;
+        $this->Currency      = $body->currency;
+        $this->ReturnUrl     = $body->return_url;
+        $this->CancelUrl     = $body->cancel_url;
+        $this->NotifyUrl     = $body->notify_url;
+    }
+
+    /**
+     * Set the tailored invoice id and fetch its data from ProcessOut
+     * @param string $tailoredInvoiceId
+     * @return TailoredInvoice $this
+     */
+    public function from($tailoredInvoiceId)
+    {
+        if(! empty($this->id))
+            throw new \Exception('You may not set the tailored invoice id again.');
+
+        $this->id = $tailoredInvoiceId;
+
+        $this->lastResponse = new Response($this->ProcessOut->getCurl()
+            ->newRequest('GET',
+                ProcessOut::HOST . '/tailored-invoices/' .
+                    $this->getId()
+            )->setOptions(array(
+                CURLOPT_USERPWD => $this->ProcessOut->getProjectId() . ':' .
+                    $this->ProcessOut->getProjectKey()
+            ))->send());
+
+        $this->setFields($this->lastResponse);
+
+        return $this;
     }
 
     /**
      * Get the current tailored invoice id
      * @return string
      */
-    public function getTailoredInvoiceId()
+    public function getId()
     {
-        return $this->TailoredInvoiceId;
-    }
-
-    /**
-     * Set the current tailored invoice id
-     * @param string $tailoredInvoiceId
-     */
-    public function setTailoredInvoiceId($tailoredInvoiceId)
-    {
-        $this->TailoredInvoiceId = $tailoredInvoiceId;
-        return $this;
+        return $this->id;
     }
 
     /**
      * Perform the ProcessOut's request to generate the invoice
      * @return array
      */
-    public function create()
+    public function invoice()
     {
-        $this->lastResponse = $this->cURL->newRequest(
-            'POST',
-            ProcessOut::HOST . '/invoices/from-tailored/' .
-                $this->getTailoredInvoiceId(),
-            $this->_generateData()
-        )->setOptions(array(
-            CURLOPT_USERPWD  => $this->ProcessOut->getProjectId() . ':' .
-                $this->ProcessOut->getProjectKey()
-        ))->send();
+        $invoice = new Invoice($this->ProcessOut);
 
-        if($this->lastResponse->statusCode != '200')
-        {
-            throw new \Exception("Processout returned an error code,
-                please verify your inputs. Error: " .
-                $this->lastResponse->code);
-        }
+        $invoice->setItemName($this->ItemName);
+        $invoice->setItemPrice($this->ItemPrice);
+        $invoice->setItemQuantity($this->ItemQuantity);
+        $invoice->setTaxes($this->Taxes);
+        $invoice->setShipping($this->Shipping);
+        $invoice->setRecurringDays($this->RecurringDays);
+        $invoice->setCurrency($this->Currency);
+        $invoice->setReturnUrl($this->ReturnUrl);
+        $invoice->setCancelUrl($this->CancelUrl);
+        $invoice->setNotifyUrl($this->NotifyUrl);
 
-        $this->lastData = json_decode($this->lastResponse->body);
-
-        return $this->lastData;
-    }
-
-    /**
-     * Return the URL to the created invoice
-     * @return string
-     */
-    public function getLink()
-    {
-        if(empty($this->lastData))
-            $this->create();
-
-        return $this->lastData->url;
-    }
-
-    /**
-     * Return the ID of the created invoice
-     * @return string
-     */
-    public function getId()
-    {
-        if(empty($this->lastData))
-            $this->create();
-
-        return $this->lastData->id;
-    }
-
-    /**
-     * Generate the data used during the ProcessOut's request
-     * @return array
-     */
-    protected function _generateData()
-    {
-        return array_merge(parent::_generateData());
+        return $invoice;
     }
 
 }

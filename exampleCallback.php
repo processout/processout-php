@@ -25,7 +25,7 @@ $input = json_decode(file_get_contents('php://input'), true);
  */
 if(!(new \ProcessOut\Callback\Callback($processout))->validate($input))
 {
-    header($_SERVER['SERVER_PROTOCOL'] . ' Unauthorized', true, 401);
+    header('Unauthorized', true, 401);
     echo 'Bad callback'; exit();
 }
 

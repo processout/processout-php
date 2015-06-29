@@ -2,8 +2,8 @@
 
 namespace ProcessOut;
 
-use ProcessOut\Objects\Invoice;
-use ProcessOut\Objects\TailoredInvoice;
+use anlutro\cURL\cURL;
+use ProcessOut\Exceptions\ApiAuthenticationException;
 
 class ProcessOut
 {
@@ -12,6 +12,12 @@ class ProcessOut
      * ProcessOut host url
      */
     const HOST = 'https://api.processout.com/v1';
+
+    /**
+     * Contains cURL instance
+     * @var anlutro\cURL\cURL
+     */
+    protected $cURL;
 
     /**
      * ProcesOut's project ID
@@ -26,6 +32,12 @@ class ProcessOut
     protected $ProjectKey;
 
     /**
+     * Default ProcessOut's instance
+     * @var ProcessOut
+     */
+    protected static $default;
+
+    /**
      * ProcessOut constructor
      * @param string $projectId
      * @param string $projectKey
@@ -34,6 +46,17 @@ class ProcessOut
     {
         $this->ProjectId  = $projectId;
         $this->ProjectKey = $projectKey;
+
+        $this->cURL = new cURL;
+    }
+
+    /**
+     * Get the cURL instance
+     * @return anlutro\cURL\cURL
+     */
+    public function getCurl()
+    {
+        return $this->cURL;
     }
 
     /**
@@ -55,17 +78,28 @@ class ProcessOut
     }
 
     /**
-     * Perform basic checks on the callback to make sure it's legit
-     * @param array $data Input data (ex: php://input)
-     * @return boolean
+     * Set the default ProcessOut's instance
+     * @param  ProcessOut $processOut
+     * @return ProcessOut
      */
-    public function checkCallbackData($data)
+    public static function setDefault(ProcessOut $processOut)
     {
-        return hash_equals(base64_decode($data['hmac_signature']), hash_hmac(
-            'sha256',
-            $data['transaction_id'],
-            $this->ProjectKey,
-            true));
+        self::$default = $processOut;
+
+        return $processOut;
+    }
+
+    /**
+     * Get the default ProcessOut's instance
+     * @return ProcessOut
+     */
+    public static function getDefault()
+    {
+        if(! (self::$default instanceof ProcessOut))
+            throw new ApiAuthenticationException(
+                'You need to define a default ProcessOut object (ProcessOut::setDefault()).');
+
+        return self::$default;
     }
 
 }
