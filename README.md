@@ -6,7 +6,7 @@ ProcessOut PHP
 This package provides bindings to the ProcessOut API. Manage your callbacks, create new invoices,
 redirect your users to a newly generated checkout page and more.
 
-ProcessOut makes you able to manage a bunch of payment gateways - such as PayPal, Crypto currencies, Payza or Dwolla, with no efforts. Learn more on the [ProcessOut's website](https://www.processout.com).
+ProcessOut makes you able to manage a bunch of payment gateways - such as PayPal, Crypto currencies, Payza or Dwolla, with no efforts. Learn more on the [ProcessOut website](https://www.processout.com).
 
 Dependencies
 ------------
@@ -17,7 +17,7 @@ Dependencies
 Installation
 ------------
 
-The package's installation is done using composer. Simply add this lines to your composer.json
+The package's installation is done using composer. Simply add these lines to your composer.json
 
 ``` json
 {
@@ -52,21 +52,33 @@ $processout = new ProcessOut\ProcessOut($projectId, $projectSecret);
 Usage
 -----
 
-### Create a new invoice from scratch
+### Create a new invoice and push it to the server
 
 ``` php
 <?php
 
-$invoice = new \ProcessOut\Invoice\Invoice(
-    $processout,                                  // ProcessOut instance
-	'1 copy of a wonderful product at $4.99 USD', // Title
-	4.99,                                         // Price
-	1,                                            // Quantity
-	'USD'                                         // Currency
-);
+$invoice = new \ProcessOut\Invoice\Invoice($processout);
+$invoice->setItemName('Amazing item');
+// Set more attributes here
+$invoice->save();
 ```
 
-##### Available attributes:
+### Create a new invoice from a tailored invoice and push it to the server
+
+``` php
+<?php
+
+$tailored = new \ProcessOut\Invoice\TailoredInvoice($processout);
+$invoice  = $tailored->from('1ca570ac-0cb4-4c54-8ff2-f7c82f4fb12b')->invoice()
+);
+// You can set more attributes here too, $invoice is an instance of Invoice
+$invoice->save();
+```
+
+
+##### Shared invoice attributes
+
+The following attributes are shared between Invoice and TailoredInvoice instances
 
 - *attribute*  - *example*
 - ItemName     - **Amazing product**
@@ -75,32 +87,15 @@ $invoice = new \ProcessOut\Invoice\Invoice(
 - Currency     - **USD**
 - Taxes        - **4.20**
 - Shipping     - **4.20**
-
-### Create a new invoice from a tailored invoice
-
-``` php
-<?php
-
-$invoice = new \ProcessOut\Invoice\TailoredInvoice(
-    $processout,                           // ProcessOut instance
-    '1ca570ac-0cb4-4c54-8ff2-f7c82f4fb12b' // Tailored invoice id
-);
-```
-
-
-##### Shared invoice attributes
-
-The following attributes are shared between Invoice and TailoredInvoice instances
-
 - ReturnUrl    - *URL to which the customer will be redirected upon purchase*
 - CancelUrl    - *URL to which the customer will be redirected upon cancellation*
 - NotifyUrl    - *URL being called by ProcessOut to send callbacks upon transaction updates*
 - Custom       - *A custom field containing anything you want, sent back within all callbacks*
 - Sandbox      - *Decide weither or not to activate the sandbox mode*
 
-#### Attributes getters and setters
+#### Attribute getters and setters
 
-Every attributes has its own getter and setter, as such:
+Every attribute has its own getter and setter, as such:
 
 ``` php
 // Getter
@@ -130,27 +125,28 @@ echo $invoice->getId();
 
 ### Receiving callbacks / Web hooks
 
-Callbacks can be used to automate transaction management once a payment has been placed by one of your customers. One example could be adding credit to an account once the user has paid his subscription.
+Callbacks can be used to automate transaction management once a payment has been placed by one of your customers. One example could be adding credit to an account once the user has paid their subscription.
 
-However, it doesn't stop there. ProcessOut also supports chargebacks handling, and much more. Please refer to the [API documentation](http://docs.processout.apiary.io/#) to learn what data is sent through callbacks.
+However, it doesn't stop there. ProcessOut also supports chargeback handling, and much more. Please refer to the [API documentation](http://docs.processout.apiary.io/#) to learn what data is sent through callbacks.
 
 Once a callback has been sent to your server, you need to check its authenticity, as such:
 
 ``` php
 <?php
 
-$input    = json_decode(file_get_contents('php://input'), true);
+$input = json_decode(file_get_contents('php://input'), true);
 
 $callback = new \ProcessOut\Callback\Callback($processout);
 if(!$callback->validate($input))
 {
-	header($_SERVER['SERVER_PROTOCOL'] . ' Unauthorized', true, 401);
+	header('Unauthorized', true, 401);
 	echo 'Bad callback'; exit();
 }
 
 // Continue normally here, the callback is verified
 // One common thing to do would be to check the price, currency, etc...
 ```
+
 
 -------------------------
 
@@ -159,4 +155,4 @@ Full API documentation
 
 ### Apiary
 
-The ProcessOut's full API documentation can be found on [Apiary](http://docs.processout.apiary.io). It contains all the needed information, including the callbacks data, and much more.
+ProcessOut's full API documentation can be found on [Apiary](http://docs.processout.apiary.io). It contains all the needed information, including callback data, and much more.
