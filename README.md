@@ -116,7 +116,7 @@ public function setCustom($custom)
 ``` php
 <?php
 
-echo $invoice->getLink();
+echo $invoice->getUrl();
 
 // You may also get the id of the invoice (which can be used with the modal)
 echo $invoice->getId();
