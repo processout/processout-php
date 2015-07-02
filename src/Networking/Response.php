@@ -146,7 +146,7 @@ class Response
                     $this->getMessage());
         }
 
-        if($this->getStatusCode() != 200)
+        if($this->getStatusCode() != 200 || !$this->isSuccess())
         {
             throw new ApiException(
                 'ProcessOut returned an error which couldn\'t be identified. Status code: ' .
