@@ -359,17 +359,18 @@ abstract class InvoiceAbstract
     protected function _generateData()
     {
         return array(
-            'item_name'      => $this->ItemName,
-            'item_quantity'  => $this->ItemQuantity,
-            'item_price'     => $this->ItemPrice,
-            'currency'       => $this->Currency,
-            'taxes'          => $this->Taxes,
-            'shipping'       => $this->Shipping,
-            'recurring_days' => $this->RecurringDays,
-            'return_url'     => $this->ReturnUrl,
-            'cancel_url'     => $this->CancelUrl,
-            'notify_url'     => $this->NotifyUrl,
-            'custom'         => $this->Custom
+            'item_name'      => $this->getItemName(),
+            'item_quantity'  => $this->getItemQuantity(),
+            'item_price'     => $this->getItemPrice(),
+            'currency'       => $this->getCurrency(),
+            'taxes'          => $this->getTaxes(),
+            'shipping'       => $this->getShipping(),
+            'recurring_days' => $this->getRecurringDays(),
+            'return_url'     => $this->getReturnUrl(),
+            'cancel_url'     => $this->getCancelUrl(),
+            'notify_url'     => $this->getNotifyUrl(),
+            'custom'         => $this->getCustom(),
+            'sandbox'        => $this->getSandbox()
         );
     }
 
