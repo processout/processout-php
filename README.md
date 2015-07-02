@@ -69,8 +69,7 @@ $invoice->save();
 <?php
 
 $tailored = new \ProcessOut\Invoice\TailoredInvoice($processout);
-$invoice  = $tailored->from('1ca570ac-0cb4-4c54-8ff2-f7c82f4fb12b')->invoice()
-);
+$invoice  = $tailored->from('1ca570ac-0cb4-4c54-8ff2-f7c82f4fb12b')->invoice();
 // You can set more attributes here too, $invoice is an instance of Invoice
 $invoice->save();
 ```
@@ -147,6 +146,20 @@ if(!$callback->validate($input))
 // One common thing to do would be to check the price, currency, etc...
 ```
 
+### Error and exception handling
+
+The library will throw different kind of exception when errors happen.
+This can be extremely useful to see what part of the application crashed,
+and why.
+Currently, the library supports 3 kind of exceptions, each verbose-friendly.
+
+``` php
+<?php
+
+throw new ProcessOut\Exceptions\APIAuthenticationException();
+throw new ProcessOut\Exceptions\ApiException();
+throw new ProcessOut\Exceptions\NotFoundException();
+```
 
 -------------------------
 
