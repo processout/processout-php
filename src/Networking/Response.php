@@ -150,8 +150,8 @@ class Response
             !$this->isSuccess())
         {
             throw new ApiException(
-                'ProcessOut returned an error which couldn\'t be identified. Status code: ' .
-                    $this->getStatusCode());
+                'ProcessOut returned an error which couldn\'t be identified (' .
+                    $this->getStatusCode() . '): ' . $this->getMessage());
         }
     }
 }
