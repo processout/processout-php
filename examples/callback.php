@@ -3,7 +3,7 @@
 /**
  * Let's load the dependencies
  */
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
 /**
  * Create a new ProcessOut's instance
