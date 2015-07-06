@@ -56,6 +56,24 @@ abstract class InvoiceAbstract
     protected $RecurringDays = 0;
 
     /**
+     * Request the customer email during the checkout
+     * @var boolean
+     */
+    protected $RequestEmail = false;
+
+    /**
+     * Request the customer shipping address during the checkout
+     * @var boolean
+     */
+    protected $RequestShipping = false;
+
+    /**
+     * Meta data shown during the checkout
+     * @var array
+     */
+    protected $Metas = array();
+
+    /**
      * URL where the customer will be returned upon purchase
      * @var string
      */
@@ -232,6 +250,74 @@ abstract class InvoiceAbstract
     }
 
     /**
+     * Get the request email boolean value
+     * @return boolean $RequestEmail
+     */
+    public function getRequestEmail()
+    {
+        return $this->RequestEmail;
+    }
+
+    /**
+     * Set the request email booleam value
+     * @param boolean $RequestEmail
+     */
+    public function setRequestEmail($RequestEmail)
+    {
+        $this->RequestEmail = $RequestEmail;
+        return $this;
+    }
+
+    /**
+     * Get the request shipping boolean value
+     * @return boolean $RequestShipping
+     */
+    public function getRequestShipping()
+    {
+        return $this->RequestShipping;
+    }
+
+    /**
+     * Set the request shipping boolean value
+     * @param boolean $RequestShipping
+     */
+    public function setRequestShipping($RequestShipping)
+    {
+        $this->RequestShipping = $RequestShipping;
+        return $this;
+    }
+
+    /**
+     * Get the meta data values
+     * @return array
+     */
+    public function getMetas()
+    {
+        return $this->Metas;
+    }
+
+    /**
+     * Set the meta data values
+     * @param array $Metas
+     */
+    public function setMetas($Metas)
+    {
+        $this->Metas = $Metas;
+        return $this;
+    }
+
+    /**
+     * Add a meta to the meta data valeus
+     * @param string $key
+     * @param string $value
+     */
+    public function addMeta($key, $value)
+    {
+        $this->Metas[$key] = $value;
+        return $this;
+    }
+
+    /**
      * Get the URL where the user will be redirected upon purchase
      * @return string
      */
@@ -366,11 +452,17 @@ abstract class InvoiceAbstract
             'taxes'          => $this->getTaxes(),
             'shipping'       => $this->getShipping(),
             'recurring_days' => $this->getRecurringDays(),
-            'return_url'     => $this->getReturnUrl(),
-            'cancel_url'     => $this->getCancelUrl(),
-            'notify_url'     => $this->getNotifyUrl(),
-            'custom'         => $this->getCustom(),
-            'sandbox'        => $this->getSandbox()
+
+            'request_email'    => $this->getRequestEmail(),
+            'request_shipping' => $this->getRequestShipping(),
+
+            'metas' => $this->getMetas(),
+
+            'return_url' => $this->getReturnUrl(),
+            'cancel_url' => $this->getCancelUrl(),
+            'notify_url' => $this->getNotifyUrl(),
+            'custom'     => $this->getCustom(),
+            'sandbox'    => $this->getSandbox()
         );
     }
 
