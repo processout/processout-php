@@ -2,6 +2,8 @@ ProcessOut PHP
 ==============
 
 [![Code Climate](https://codeclimate.com/github/ProcessOut/processout-php/badges/gpa.svg)](https://codeclimate.com/github/ProcessOut/processout-php)
+[![Latest Stable Version](https://poser.pugx.org/processout/processout-php/v/stable)](https://packagist.org/packages/processout/processout-php)
+[![License](https://poser.pugx.org/processout/processout-php/license)](https://packagist.org/packages/processout/processout-php)
 
 This package provides bindings to the ProcessOut API. Manage your callbacks, create new invoices,
 redirect your users to a newly generated checkout page and more.
