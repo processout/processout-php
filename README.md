@@ -81,22 +81,23 @@ $invoice->save();
 
 The following attributes are shared between Invoice and TailoredInvoice instances
 
-- *attribute*     - *example*
-- ItemName        - **Amazing product**
-- ItemPrice       - **4.20**
-- ItemQuantity    - *2*
-- Currency        - **USD**
-- Taxes           - *4.20*
-- Shipping        - *4.20*
-- RecurringDays   - *7*
-- RequestEmail    - *false*
-- RequestShipping - *false*
-- Metas           - *array('key 1' => 'value 1', 'key 2' => 'value 2')*
-- ReturnUrl       - *URL to which the customer will be redirected upon purchase*
-- CancelUrl       - *URL to which the customer will be redirected upon cancellation*
-- NotifyUrl       - *URL being called by ProcessOut to send callbacks upon transaction updates*
-- Custom          - *A custom field containing anything you want, sent back within all callbacks*
-- Sandbox         - *Decide weither or not to activate the sandbox mode*
+|  Attribute  | Example |
+| ------------:|:---------- |
+| ItemName | **Amazing product** |
+| ItemPrice | **4.20** |
+| ItemQuantity | *2* |
+| Currency  | **USD** |
+| Taxes | *4.20* |
+| Shipping  | *4.20* |
+| RecurringDays | *7* |
+| RequestEmail | *false* |
+| RequestShipping | *false* |
+| Metas | *array('key 1' => 'value 1', 'key 2' => 'value 2')* |
+| ReturnUrl | *URL to which the customer will be redirected upon purchase* |
+| CancelUrl | *URL to which the customer will be redirected upon cancellation* |
+| NotifyUrl | *URL being called by ProcessOut to send callbacks upon transaction updates* |
+| Custom   | *A custom field containing anything you want, sent back within all callbacks* |
+| Sandbox  | *Decide weither or not to activate the sandbox mode* |
 
 #### Attribute getters and setters
 
