@@ -97,7 +97,6 @@ The following attributes are shared between Invoice and TailoredInvoice instance
 | CancelUrl | *URL to which the customer will be redirected upon cancellation* |
 | NotifyUrl | *URL being called by ProcessOut to send callbacks upon transaction updates* |
 | Custom   | *A custom field containing anything you want, sent back within all callbacks* |
-| Sandbox  | *Decide weither or not to activate the sandbox mode* |
 
 #### Attribute getters and setters
 
