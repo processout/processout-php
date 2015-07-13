@@ -98,12 +98,6 @@ abstract class InvoiceAbstract
     protected $Custom = NULL;
 
     /**
-     * Sandbox mode
-     * @var boolean
-     */
-    protected $Sandbox = false;
-
-    /**
      * Contains the latest response from ProcessOut
      * @var array
      */
@@ -396,41 +390,6 @@ abstract class InvoiceAbstract
     }
 
     /**
-     * Get the status of the sandbox mode
-     * @return boolean
-     */
-    public function getSandbox()
-    {
-        return $this->Sandbox;
-    }
-
-    /**
-     * Set the sandbox mode
-     * @param boolean $sandbox
-     */
-    public function setSandbox($sandbox)
-    {
-        $this->Sandbox = $sandbox;
-        return $this;
-    }
-
-    /**
-     * Enable the sandbox mode
-     */
-    public function enableSandbox()
-    {
-        return $this->setSandbox(true);
-    }
-
-    /**
-     * Disable the sandbox mode
-     */
-    public function disableSandbox()
-    {
-        return $this->setSandbox(false);
-    }
-
-    /**
      * Returns the latest response from ProcessOut
      * @return array
      */
@@ -461,8 +420,7 @@ abstract class InvoiceAbstract
             'return_url' => $this->getReturnUrl(),
             'cancel_url' => $this->getCancelUrl(),
             'notify_url' => $this->getNotifyUrl(),
-            'custom'     => $this->getCustom(),
-            'sandbox'    => $this->getSandbox()
+            'custom'     => $this->getCustom()
         );
     }
 

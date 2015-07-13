@@ -96,7 +96,6 @@ The following attributes are shared between Invoice and TailoredInvoice instance
 - CancelUrl       - *URL to which the customer will be redirected upon cancellation*
 - NotifyUrl       - *URL being called by ProcessOut to send callbacks upon transaction updates*
 - Custom          - *A custom field containing anything you want, sent back within all callbacks*
-- Sandbox         - *Decide weither or not to activate the sandbox mode*
 
 #### Attribute getters and setters
 
@@ -165,6 +164,19 @@ Currently, the library supports 3 kind of exceptions, each verbose-friendly.
 throw new ProcessOut\Exceptions\APIAuthenticationException();
 throw new ProcessOut\Exceptions\ApiException();
 throw new ProcessOut\Exceptions\NotFoundException();
+```
+
+### Sandbox
+
+To enable the sandbox on ProcessOut, simply prepend `sandbox-` to your project id:
+
+``` php
+<?php
+
+$projectId     = 'public-21184268-76fa-4b33-99a0-63fb15f9041a';
+$projectSecret = 'key-24a2061d0fd2853b75728073d5406de437d525b2ff941fe34ca061cb2180d0f8';
+
+$processout = new ProcessOut\ProcessOut($projectId, $projectSecret);
 ```
 
 -------------------------
