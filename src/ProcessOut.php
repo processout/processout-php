@@ -19,17 +19,19 @@ class ProcessOut
      */
     protected $cURL;
 
+    
     /**
-     * ProcesOut's project ID
+     * ProcessOut's project id
      * @var string
      */
-    protected $ProjectId;
-
+    protected $projectId;
+    
     /**
-     * ProcessOut's project secret
+     * ProcessOut's project secret key
      * @var string
      */
-    protected $ProjectKey;
+    protected $projectSecret;
+    
 
     /**
      * Default ProcessOut's instance
@@ -39,17 +41,53 @@ class ProcessOut
 
     /**
      * ProcessOut constructor
-     * @param string $projectId
-     * @param string $projectKey
      */
-    public function __construct($projectId, $projectKey)
+    public function __construct()
     {
-        $this->ProjectId  = $projectId;
-        $this->ProjectKey = $projectKey;
-
         $this->cURL = new cURL;
     }
 
+    
+    /**
+     * Set projectId
+     * @return $this
+     */
+    public function setProjectId($value)
+    {
+        $this->projectId = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get projectId
+     * @return string
+     */
+    public function getProjectId()
+    {
+        return $this->projectId;
+    }
+    
+    /**
+     * Set projectSecret
+     * @return $this
+     */
+    public function setProjectSecret($value)
+    {
+        $this->projectSecret = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get projectSecret
+     * @return string
+     */
+    public function getProjectSecret()
+    {
+        return $this->projectSecret;
+    }
+    
     /**
      * Get the cURL instance
      * @return anlutro\cURL\cURL
@@ -57,24 +95,6 @@ class ProcessOut
     public function getCurl()
     {
         return $this->cURL;
-    }
-
-    /**
-     * Get current project ID
-     * @return string
-     */
-    public function getProjectId()
-    {
-        return $this->ProjectId;
-    }
-
-    /**
-     * Get current project secret key
-     * @return string
-     */
-    public function getProjectKey()
-    {
-        return $this->ProjectKey;
     }
 
     /**

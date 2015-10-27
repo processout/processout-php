@@ -1,17 +1,17 @@
 {
-  "name": "processout/processout-php",
-  "description": "ProcessOut PHP Library",
+  "name": "ProcessOut/ProcessOut-php",
+  "description": "ProcessOut API bindings.",
   "keywords": [
-    "processout",
-    "payment processing",
-    "api"
+    "ProcessOut",
+    "api",
+    "bindings"
   ],
-  "homepage": "https://www.processout.com/",
+  "homepage": "https://www.processout.com",
   "license": "MIT",
   "authors": [
     {
       "name": "ProcessOut",
-      "homepage": "https://github.com/processout/processout-php/contributors"
+      "homepage": "https://www.processout.com"
     }
   ],
   "require": {

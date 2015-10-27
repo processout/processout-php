@@ -1,12 +1,9 @@
 <?php
-
-namespace ProcessOut\Callback;
-
+namespace ProcessOut;
 use ProcessOut\ProcessOut;
 
 class Callback
 {
-
     /**
      * ProcessOut instanciated object
      * @var ProcessOut
@@ -24,7 +21,6 @@ class Callback
 
         $this->ProcessOut = $processOut;
     }
-
     public function validate($data)
     {
         //TODO: Use hash_equals with forward compatibility, to avoid timing
@@ -35,5 +31,4 @@ class Callback
             $this->ProcessOut->getProjectKey(),
             true);
     }
-
 }

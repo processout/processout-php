@@ -28,12 +28,6 @@ class Response
     protected $headers;
 
     /**
-     * Raw body
-     * @var string
-     */
-    protected $rawBody;
-
-    /**
      * Json decoded body
      * @var StdClass
      */
@@ -44,17 +38,25 @@ class Response
      * @param anlutro\cURL\Response $raw
      * @param bool|true $checkStatusCode
      */
-    public function __construct(\anlutro\cURL\Response $raw,
-        $checkStatusCode = true)
+    public function __construct(\anlutro\cURL\Response $raw)
     {
-        $this->raw          = $raw;
-        $this->statusCode   = $raw->statusCode;
-        $this->headers      = $raw->headers;
-        $this->body         = json_decode($raw->body);
-        $this->rawObject    = $raw->body;
+        $this->raw        = $raw;
+        $this->statusCode = $raw->statusCode;
+        $this->headers    = $raw->headers;
+        $this->rawObject  = $raw->body;
 
-        if($checkStatusCode)
-            $this->checkStatusCode();
+        switch($this->headers['Content-Type'])
+        {
+        case 'application/json':
+            $this->body = (array) json_decode($raw->body, true);
+            break;
+
+        default:
+            $this->body = (array) parse_str($raw->body);
+            break;
+        }
+
+        $this->check();
     }
 
     /**
@@ -94,63 +96,67 @@ class Response
     }
 
     /**
-     * Get the raw body
-     * @return string
-     */
-    public function getRawBody()
-    {
-        return $this->rawBody;
-    }
-
-    /**
-     * Check if the response says it's a success
+     * Check whether the request was successful or not
      * @return boolean
      */
     public function isSuccess()
     {
-        if(! isset($this->body->success))
+        
+        
+        
+        
+        if(! isset($this->body["success"]) || ! $this->body["success"])
             return false;
+        
+        
 
-        return $this->body->success;
+        return true;
     }
 
     /**
-     * Get the error message from the body
+     * Get the error messages, if any. If there's multiple error messages,
+     * they'll be appended to each others
      * @return string
      */
     public function getMessage()
     {
-        if(! isset($this->body->message))
-            return null;
+        $message = '';
+        
+        
+        if(! empty($this->body["message"]))
+            $message .= $this->body["message"];
+        
+        
+        
+        
 
-        return $this->body->message;
+        return $message;
     }
+
 
     /**
      * Throw an exception if there's been an error in the current response
      * @return void
      */
-    protected function checkStatusCode()
+    protected function check()
     {
-        switch($this->getStatusCode())
+        if(! $this->isSuccess())
         {
-            case 400:
-                throw new ApiException(
-                    $this->getMessage());
-            case 404:
+            if($this->getStatusCode() == 404)
+            {
                 throw new NotFoundException(
-                    $this->getMessage());
-            case 401:
-            case 402:
+                    'The resource could not be found (404): ' .
+                        $this->getMessage());
+            }
+            if($this->getStatusCode() == 401)
+            {
                 throw new ApiAuthenticationException(
-                    $this->getMessage());
-        }
+                    'Your ProcessOut credentials could not be verified (401): ' .
+                        $this->getMessage());
+            }
 
-        if($this->getStatusCode() < 200 || $this->getStatusCode() > 206 ||
-            !$this->isSuccess())
-        {
             throw new ApiException(
-                'ProcessOut returned an error which couldn\'t be identified (' .
+                'ProcessOut returned an error (' .
                     $this->getStatusCode() . '): ' . $this->getMessage());
         }
     }
