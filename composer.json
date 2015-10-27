@@ -19,7 +19,7 @@
     "ext-curl": "*",
     "ext-mbstring": "*",
 
-	"anlutro/curl": "dev-master"
+	"anlutro/curl": "1.4"
   },
   "autoload": {
     "psr-4": {
