@@ -42,10 +42,10 @@ class Response
     {
         $this->raw        = $raw;
         $this->statusCode = $raw->statusCode;
-        $this->headers    = $raw->headers;
+        $this->headers    = array_change_key_case($raw->headers, CASE_LOWER);
         $this->rawObject  = $raw->body;
 
-        switch($this->headers['Content-Type'])
+        switch($this->headers['content-type'])
         {
         case 'application/json':
             $this->body = (array) json_decode($raw->body, true);
