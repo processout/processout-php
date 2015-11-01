@@ -23,12 +23,12 @@ class Callback
     }
     public function validate($data)
     {
-        //TODO: Use hash_equals with forward compatibility, to avoid timing
+        // TODO: Use hash_equals with forward compatibility, to avoid timing
         // based attacks.
         return base64_decode($data['hmac_signature']) == hash_hmac(
             'sha256',
             $data['transaction_id'],
-            $this->ProcessOut->getProjectKey(),
+            $this->ProcessOut->getProjectSecret(),
             true);
     }
 }
