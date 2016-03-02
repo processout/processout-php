@@ -4,9 +4,7 @@ namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Response;
-
 use ProcessOut\Networking\RequestProcessoutPrivate;
-
 use ProcessOut\Networking\RequestProcessoutPublic;
 
 
@@ -18,37 +16,36 @@ class Project
      * @var ProcessOut\ProcessOut
      */
     protected $instance;
-    
+
     /**
      * Email of the project
      * @var string
      */
     protected $email;
-    
+
     /**
      * Unique ID of the project
      * @var string
      */
     protected $id;
-    
+
     /**
      * URL of the project's logo
      * @var string
      */
     protected $logoUrl;
-    
+
     /**
      * Name of the project
      * @var string
      */
     protected $name;
-    
+
     /**
      * Secret key of the project
      * @var string
      */
     protected $secretKey;
-    
 
     /**
      * Project constructor
@@ -62,18 +59,6 @@ class Project
         }
 
         $this->instance = $processOut;
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
 
     
@@ -96,7 +81,6 @@ class Project
     public function setEmail($value)
     {
         $this->email = $value;
-
         return $this;
     }
     
@@ -119,7 +103,6 @@ class Project
     public function setId($value)
     {
         $this->id = $value;
-
         return $this;
     }
     
@@ -142,7 +125,6 @@ class Project
     public function setLogoUrl($value)
     {
         $this->logoUrl = $value;
-
         return $this;
     }
     
@@ -165,7 +147,6 @@ class Project
     public function setName($value)
     {
         $this->name = $value;
-
         return $this;
     }
     
@@ -188,7 +169,6 @@ class Project
     public function setSecretKey($value)
     {
         $this->secretKey = $value;
-
         return $this;
     }
     
@@ -200,45 +180,30 @@ class Project
      */
     public function fillWithData($data)
     {
-        
         if(! empty($data["email"]))
-        {
             $this->setEmail($data["email"]);
-        }
-        
+
         if(! empty($data["id"]))
-        {
             $this->setId($data["id"]);
-        }
-        
+
         if(! empty($data["logo_url"]))
-        {
             $this->setLogoUrl($data["logo_url"]);
-        }
-        
+
         if(! empty($data["name"]))
-        {
             $this->setName($data["name"]);
-        }
-        
+
         if(! empty($data["secret_key"]))
-        {
             $this->setSecretKey($data["secret_key"]);
-        }
-        
 
         return $this;
     }
 
-    
     /**
      * Create a new supervised project which will belong to current project.
-     * 
+     * @param array $options
      * @return $this
      */
-    
-    public function createSupervised()
-    
+    public function createSupervised($options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/projects/supervised";
@@ -249,14 +214,12 @@ class Project
 			"logo_url" => $this->getLogoUrl()
         );
 
-        
-        $response = new Response($request->post($path, $data));
-        
-
-        
-        return $this->fillWithData($response->getBody());
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['project'];
+        return $this->fillWithData($body);
         
     }
-    
 
+    
 }

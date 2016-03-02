@@ -4,9 +4,7 @@ namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Response;
-
 use ProcessOut\Networking\RequestProcessoutPrivate;
-
 use ProcessOut\Networking\RequestProcessoutPublic;
 
 
@@ -18,37 +16,36 @@ class Event
      * @var ProcessOut\ProcessOut
      */
     protected $instance;
-    
+
     /**
      * Data associated to the event, in the form of a dictionary
      * @var dictionary
      */
     protected $data;
-    
+
     /**
      * The date at which the event was fired
      * @var string
      */
     protected $date;
-    
+
     /**
      * Id of the event
      * @var string
      */
     protected $id;
-    
+
     /**
      * Name of the event
      * @var string
      */
     protected $name;
-    
+
     /**
      * Whether or not the event was fired in the sandbox environment
      * @var boolean
      */
     protected $sandbox;
-    
 
     /**
      * Event constructor
@@ -62,18 +59,6 @@ class Event
         }
 
         $this->instance = $processOut;
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
 
     
@@ -96,7 +81,6 @@ class Event
     public function setData($value)
     {
         $this->data = $value;
-
         return $this;
     }
     
@@ -119,7 +103,6 @@ class Event
     public function setDate($value)
     {
         $this->date = $value;
-
         return $this;
     }
     
@@ -142,7 +125,6 @@ class Event
     public function setId($value)
     {
         $this->id = $value;
-
         return $this;
     }
     
@@ -165,7 +147,6 @@ class Event
     public function setName($value)
     {
         $this->name = $value;
-
         return $this;
     }
     
@@ -188,7 +169,6 @@ class Event
     public function setSandbox($value)
     {
         $this->sandbox = $value;
-
         return $this;
     }
     
@@ -200,45 +180,30 @@ class Event
      */
     public function fillWithData($data)
     {
-        
         if(! empty($data["data"]))
-        {
             $this->setData($data["data"]);
-        }
-        
+
         if(! empty($data["date"]))
-        {
             $this->setDate($data["date"]);
-        }
-        
+
         if(! empty($data["id"]))
-        {
             $this->setId($data["id"]);
-        }
-        
+
         if(! empty($data["name"]))
-        {
             $this->setName($data["name"]);
-        }
-        
+
         if(! empty($data["sandbox"]))
-        {
             $this->setSandbox($data["sandbox"]);
-        }
-        
 
         return $this;
     }
 
-    
     /**
      * Get the 15 oldest events pending processing.
-     * 
+     * @param array $options
      * @return array
      */
-    
-    public static function pull()
-    
+    public static function pull($options = array()
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/events";
@@ -247,14 +212,10 @@ class Event
 
         );
 
-        
-        $response = new Response($request->get($path, $data));
-        
-
-        
+        $response = new Response($request->get($path, $data, $options));
         $a    = array();
         $body = $response->getBody();
-        foreach($body["events"] as $v)
+        foreach($body['events'] as $v)
         {
             $tmp = new Event($this->instance);
             $tmp->fillWithData($v);
@@ -262,17 +223,14 @@ class Event
         }
 
         return $a;
-        
     }
-    
+
     /**
      * Set all the events as processed.
-     * 
+     * @param array $options
      * @return bool
      */
-    
-    public static function setAllProcessed()
-    
+    public static function setAllProcessed($options = array()
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/events";
@@ -281,23 +239,18 @@ class Event
 
         );
 
-        
-        $response = new Response($request->delete($path, $data));
-        
-
-        
+        $response = new Response($request->delete($path, $data, $options));
         return $response->isSuccess();
         
     }
-    
+
     /**
      * Get the information related to the specific event.
 	 * @param string $id
+     * @param array $options
      * @return $this
      */
-    
-    public static function find($id)
-    
+    public static function find($id, $options = array()
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/events/" . urlencode($id) . "";
@@ -306,23 +259,19 @@ class Event
 
         );
 
-        
-        $response = new Response($request->get($path, $data));
-        
-
-        
-        return $this->fillWithData($response->getBody());
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['event'];
+        return $this->fillWithData($body);
         
     }
-    
+
     /**
      * Set the specific event as processed.
-
+     * @param array $options
      * @return bool
      */
-    
-    public function markProcessed()
-    
+    public function markProcessed($options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/events/" . urlencode($this->getId()) . "";
@@ -331,14 +280,10 @@ class Event
 
         );
 
-        
-        $response = new Response($request->delete($path, $data));
-        
-
-        
+        $response = new Response($request->delete($path, $data, $options));
         return $response->isSuccess();
         
     }
-    
 
+    
 }

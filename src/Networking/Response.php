@@ -101,14 +101,8 @@ class Response
      */
     public function isSuccess()
     {
-        
-        
-        
-        
         if(! isset($this->body["success"]) || ! $this->body["success"])
             return false;
-        
-        
 
         return true;
     }
@@ -121,14 +115,8 @@ class Response
     public function getMessage()
     {
         $message = '';
-        
-        
         if(! empty($this->body["message"]))
             $message .= $this->body["message"];
-        
-        
-        
-        
 
         return $message;
     }

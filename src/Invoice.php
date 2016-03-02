@@ -4,9 +4,7 @@ namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Response;
-
 use ProcessOut\Networking\RequestProcessoutPrivate;
-
 use ProcessOut\Networking\RequestProcessoutPublic;
 
 
@@ -56,12 +54,6 @@ class Invoice
     protected $name;
 
     /**
-     * URL called by processout to notify your application when an event is fired. Most commonly known as webhooks
-     * @var string
-     */
-    protected $notifyUrl;
-
-    /**
      * Price of the item
      * @var string
      */
@@ -103,7 +95,6 @@ class Invoice
      */
     protected $url;
 
-
     /**
      * Invoice constructor
      * @param ProcessOut\ProcessOut|null $processOut
@@ -115,48 +106,14 @@ class Invoice
             $processOut = ProcessOut::getDefault();
         }
 
-        $this->instance = $processOut;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        $this->setRequestEmail((bool) false);
-
-
-
+        $this->instance = $processOut;$this->setRequestEmail((bool) false);
         $this->setRequestShipping((bool) false);
-
-
-
-
-
         $this->setShipping("0.00");
-
-
-
         $this->setTaxes("0.00");
-
-
-
-
+        
     }
 
-
+    
     /**
      * Get CancelUrl
      * URL where to redirect the customer when the transaction has been canceled. Defaults to ProcessOut's landing page
@@ -176,10 +133,9 @@ class Invoice
     public function setCancelUrl($value)
     {
         $this->cancelUrl = $value;
-
         return $this;
     }
-
+    
     /**
      * Get Currency
      * Currency of the item's price (ex: USD)
@@ -199,10 +155,9 @@ class Invoice
     public function setCurrency($value)
     {
         $this->currency = $value;
-
         return $this;
     }
-
+    
     /**
      * Get Custom
      * Custom value, can be anything. The value is sent back to notify_url
@@ -222,10 +177,9 @@ class Invoice
     public function setCustom($value)
     {
         $this->custom = $value;
-
         return $this;
     }
-
+    
     /**
      * Get Id
      * Id of the created invoice
@@ -245,10 +199,9 @@ class Invoice
     public function setId($value)
     {
         $this->id = $value;
-
         return $this;
     }
-
+    
     /**
      * Get Metas
      * Contains a key value dictionary representing additional informations shown on the checkout page
@@ -268,10 +221,9 @@ class Invoice
     public function setMetas($value)
     {
         $this->metas = $value;
-
         return $this;
     }
-
+    
     /**
      * Get Name
      * Name of the item
@@ -291,33 +243,9 @@ class Invoice
     public function setName($value)
     {
         $this->name = $value;
-
         return $this;
     }
-
-    /**
-     * Get NotifyUrl
-     * URL called by processout to notify your application when an event is fired. Most commonly known as webhooks
-     * @return string
-     */
-    public function getNotifyUrl()
-    {
-        return $this->notifyUrl;
-    }
-
-    /**
-     * Set NotifyUrl
-     * URL called by processout to notify your application when an event is fired. Most commonly known as webhooks
-     * @param  string $value
-     * @return $this
-     */
-    public function setNotifyUrl($value)
-    {
-        $this->notifyUrl = $value;
-
-        return $this;
-    }
-
+    
     /**
      * Get Price
      * Price of the item
@@ -337,10 +265,9 @@ class Invoice
     public function setPrice($value)
     {
         $this->price = $value;
-
         return $this;
     }
-
+    
     /**
      * Get RequestEmail
      * Determine if we want to ask the customer for his email
@@ -360,10 +287,9 @@ class Invoice
     public function setRequestEmail($value)
     {
         $this->requestEmail = $value;
-
         return $this;
     }
-
+    
     /**
      * Get RequestShipping
      * Determine if we want to ask the customer for its shipping address
@@ -383,10 +309,9 @@ class Invoice
     public function setRequestShipping($value)
     {
         $this->requestShipping = $value;
-
         return $this;
     }
-
+    
     /**
      * Get ReturnUrl
      * URL where to redirect the customer once the payment has been placed. Defaults to ProcessOut's landing page
@@ -406,10 +331,9 @@ class Invoice
     public function setReturnUrl($value)
     {
         $this->returnUrl = $value;
-
         return $this;
     }
-
+    
     /**
      * Get Shipping
      * Shipping price added on top of the item price
@@ -429,10 +353,9 @@ class Invoice
     public function setShipping($value)
     {
         $this->shipping = $value;
-
         return $this;
     }
-
+    
     /**
      * Get Taxes
      * Taxes price added on top of the item price
@@ -452,10 +375,9 @@ class Invoice
     public function setTaxes($value)
     {
         $this->taxes = $value;
-
         return $this;
     }
-
+    
     /**
      * Get Url
      * URL to which you can redirect your customer in order to pay
@@ -475,10 +397,9 @@ class Invoice
     public function setUrl($value)
     {
         $this->url = $value;
-
         return $this;
     }
-
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -487,126 +408,155 @@ class Invoice
      */
     public function fillWithData($data)
     {
-
         if(! empty($data["cancel_url"]))
-        {
             $this->setCancelUrl($data["cancel_url"]);
-        }
 
         if(! empty($data["currency"]))
-        {
             $this->setCurrency($data["currency"]);
-        }
 
         if(! empty($data["custom"]))
-        {
             $this->setCustom($data["custom"]);
-        }
 
         if(! empty($data["id"]))
-        {
             $this->setId($data["id"]);
-        }
 
         if(! empty($data["metas"]))
-        {
             $this->setMetas($data["metas"]);
-        }
 
         if(! empty($data["name"]))
-        {
             $this->setName($data["name"]);
-        }
-
-        if(! empty($data["notify_url"]))
-        {
-            $this->setNotifyUrl($data["notify_url"]);
-        }
 
         if(! empty($data["price"]))
-        {
             $this->setPrice($data["price"]);
-        }
 
         if(! empty($data["request_email"]))
-        {
             $this->setRequestEmail($data["request_email"]);
-        }
 
         if(! empty($data["request_shipping"]))
-        {
             $this->setRequestShipping($data["request_shipping"]);
-        }
 
         if(! empty($data["return_url"]))
-        {
             $this->setReturnUrl($data["return_url"]);
-        }
 
         if(! empty($data["shipping"]))
-        {
             $this->setShipping($data["shipping"]);
-        }
 
         if(! empty($data["taxes"]))
-        {
             $this->setTaxes($data["taxes"]);
-        }
 
         if(! empty($data["url"]))
-        {
             $this->setUrl($data["url"]);
-        }
-
 
         return $this;
     }
 
+    /**
+     * Get the customer associated with the current invoice.
+     * @param array $options
+     * @return Customer
+     */
+    public function customer($options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['customer'];
+        $customer = new Customer($this->instance);
+        return $customer->fillWithData($body);
+        
+    }
+
+    /**
+     * Link a customer to the invoice.
+	 * @param string $customerId
+     * @param array $options
+     * @return Customer
+     */
+    public function setCustomer($customerId, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
+
+        $data = array(
+			"customer_id" => $customerId
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['customer'];
+        $customer = new Customer($this->instance);
+        return $customer->fillWithData($body);
+        
+    }
 
     /**
      * Create an invoice.
-     *
-     * @return $this
+     * @param array $options
+     * @return Invoice
      */
-
-    public function create()
-
+    public function create($options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/invoices";
 
         $data = array(
-			"request_email" => $this->getRequestEmail(),
-			"request_shipping" => $this->getRequestShipping(),
-			"metas" => $this->getMetas(),
-			"return_url" => $this->getReturnUrl(),
-			"cancel_url" => $this->getCancelUrl(),
-			"notify_url" => $this->getNotifyUrl(),
-			"custom" => $this->getCustom(),
-			"name" => $this->getName(),
-			"price" => $this->getPrice(),
-			"currency" => $this->getCurrency(),
-			"taxes" => $this->getTaxes(),
-			"shipping" => $this->getShipping()
+			"name" => $this->getName(), 
+			"price" => $this->getPrice(), 
+			"taxes" => $this->getTaxes(), 
+			"shipping" => $this->getShipping(), 
+			"currency" => $this->getCurrency(), 
+			"request_email" => $this->getRequestEmail(), 
+			"request_shipping" => $this->getRequestShipping(), 
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl(), 
+			"metas" => $this->getMetas(), 
+			"custom" => $this->getCustom()
         );
 
-
-        $response = new Response($request->post($path, $data));
-
-
-
-        return $this->fillWithData($response->getBody());
-
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['invoice'];
+        $invoice = new Invoice($this->instance);
+        return $invoice->fillWithData($body);
+        
     }
 
     /**
-     * Get the invoice information.
-	 * @param string $id
-     * @return Invoice
+     * Charge using a customer token.
+	 * @param string $tokenId
+     * @param array $options
+     * @return CustomerAction
      */
+    public function chargeWithToken($tokenId, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/invoices/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "/charges";
 
-    public static function find($id)
+        $data = array(
 
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['customer_action'];
+        $customerAction = new CustomerAction($this->instance);
+        return $customerAction->fillWithData($body);
+        
+    }
+
+    /**
+     * Get the invoice data.
+	 * @param string $id
+     * @param array $options
+     * @return $this
+     */
+    public static function find($id, $options = array()
     {
         $request = new RequestProcessoutPublic($this->instance);
         $path    = "/invoices/" . urlencode($id) . "";
@@ -615,15 +565,35 @@ class Invoice
 
         );
 
-
-        $response = new Response($request->get($path, $data));
-
-
-
-        $invoice = new Invoice($this->instance);
-        return $invoice->fillWithData($response->getBody());
-
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['invoice'];
+        return $this->fillWithData($body);
+        
     }
 
+    /**
+     * Charge using a manually generated payment gateway token.
+	 * @param string $token
+     * @param array $options
+     * @return CustomerAction
+     */
+    public function charge($token, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/invoices/" . urlencode($this->getId()) . "/gateways/{gateway_name}/charges";
 
+        $data = array(
+			"token" => $token
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['customer_action'];
+        $customerAction = new CustomerAction($this->instance);
+        return $customerAction->fillWithData($body);
+        
+    }
+
+    
 }

@@ -11,7 +11,7 @@ class ProcessOut
     /**
      * ProcessOut host url
      */
-    const HOST = 'https://api.processout.com/v1';
+    const HOST = 'https://api.processout.com/';
 
     /**
      * Contains cURL instance
@@ -19,19 +19,17 @@ class ProcessOut
      */
     protected $cURL;
 
-    
     /**
      * ProcessOut's project id
      * @var string
      */
     protected $projectId;
-    
+
     /**
      * ProcessOut's project secret key
      * @var string
      */
     protected $projectSecret;
-    
 
     /**
      * Default ProcessOut's instance
@@ -47,7 +45,6 @@ class ProcessOut
         $this->cURL = new cURL;
     }
 
-    
     /**
      * Set projectId
      * @return $this
@@ -67,7 +64,7 @@ class ProcessOut
     {
         return $this->projectId;
     }
-    
+
     /**
      * Set projectSecret
      * @return $this
@@ -87,7 +84,7 @@ class ProcessOut
     {
         return $this->projectSecret;
     }
-    
+
     /**
      * Get the cURL instance
      * @return anlutro\cURL\cURL

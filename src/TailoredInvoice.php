@@ -4,9 +4,7 @@ namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Response;
-
 use ProcessOut\Networking\RequestProcessoutPrivate;
-
 use ProcessOut\Networking\RequestProcessoutPublic;
 
 
@@ -18,67 +16,54 @@ class TailoredInvoice
      * @var ProcessOut\ProcessOut
      */
     protected $instance;
-    
+
     /**
      * URL where to redirect the customer when the transaction has been canceled. Defaults to ProcessOut's landing page
      * @var string
      */
     protected $cancelUrl;
-    
+
     /**
      * Currency of the item's price (ex: USD)
      * @var string
      */
     protected $currency;
-    
+
     /**
      * Id of the tailored invoice
      * @var string
      */
     protected $id;
-    
+
     /**
      * Name of the item
      * @var string
      */
     protected $name;
-    
-    /**
-     * URL called by processout to notify your application when an event is fired. Most commonly known as webhooks
-     * @var string
-     */
-    protected $notifyUrl;
-    
+
     /**
      * Price of the item
      * @var string
      */
     protected $price;
-    
-    /**
-     * The recurring payment period, in days. ProcessOut will make sure to collect your payments at the end of each period. If set to `0`, the recurring period is disabled.
-     * @var integer
-     */
-    protected $recurringDays;
-    
+
     /**
      * URL where to redirect the customer once the payment has been placed. Defaults to ProcessOut's landing page
      * @var string
      */
     protected $returnUrl;
-    
+
     /**
      * Shipping price added on top of the item price
      * @var string
      */
     protected $shipping;
-    
+
     /**
      * Taxes price added on top of the item price
      * @var string
      */
     protected $taxes;
-    
 
     /**
      * TailoredInvoice constructor
@@ -91,34 +76,8 @@ class TailoredInvoice
             $processOut = ProcessOut::getDefault();
         }
 
-        $this->instance = $processOut;
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        $this->setRecurringDays((int) 0);
-        
-        
-        
-        
-        
-        $this->setShipping("0.00");
-        
-        
-        
+        $this->instance = $processOut;$this->setShipping("0.00");
         $this->setTaxes("0.00");
-        
         
     }
 
@@ -142,7 +101,6 @@ class TailoredInvoice
     public function setCancelUrl($value)
     {
         $this->cancelUrl = $value;
-
         return $this;
     }
     
@@ -165,7 +123,6 @@ class TailoredInvoice
     public function setCurrency($value)
     {
         $this->currency = $value;
-
         return $this;
     }
     
@@ -188,7 +145,6 @@ class TailoredInvoice
     public function setId($value)
     {
         $this->id = $value;
-
         return $this;
     }
     
@@ -211,30 +167,6 @@ class TailoredInvoice
     public function setName($value)
     {
         $this->name = $value;
-
-        return $this;
-    }
-    
-    /**
-     * Get NotifyUrl
-     * URL called by processout to notify your application when an event is fired. Most commonly known as webhooks
-     * @return string
-     */
-    public function getNotifyUrl()
-    {
-        return $this->notifyUrl;
-    }
-
-    /**
-     * Set NotifyUrl
-     * URL called by processout to notify your application when an event is fired. Most commonly known as webhooks
-     * @param  string $value
-     * @return $this
-     */
-    public function setNotifyUrl($value)
-    {
-        $this->notifyUrl = $value;
-
         return $this;
     }
     
@@ -257,30 +189,6 @@ class TailoredInvoice
     public function setPrice($value)
     {
         $this->price = $value;
-
-        return $this;
-    }
-    
-    /**
-     * Get RecurringDays
-     * The recurring payment period, in days. ProcessOut will make sure to collect your payments at the end of each period. If set to `0`, the recurring period is disabled.
-     * @return int
-     */
-    public function getRecurringDays()
-    {
-        return $this->recurringDays;
-    }
-
-    /**
-     * Set RecurringDays
-     * The recurring payment period, in days. ProcessOut will make sure to collect your payments at the end of each period. If set to `0`, the recurring period is disabled.
-     * @param  int $value
-     * @return $this
-     */
-    public function setRecurringDays($value)
-    {
-        $this->recurringDays = $value;
-
         return $this;
     }
     
@@ -303,7 +211,6 @@ class TailoredInvoice
     public function setReturnUrl($value)
     {
         $this->returnUrl = $value;
-
         return $this;
     }
     
@@ -326,7 +233,6 @@ class TailoredInvoice
     public function setShipping($value)
     {
         $this->shipping = $value;
-
         return $this;
     }
     
@@ -349,7 +255,6 @@ class TailoredInvoice
     public function setTaxes($value)
     {
         $this->taxes = $value;
-
         return $this;
     }
     
@@ -361,96 +266,40 @@ class TailoredInvoice
      */
     public function fillWithData($data)
     {
-        
         if(! empty($data["cancel_url"]))
-        {
             $this->setCancelUrl($data["cancel_url"]);
-        }
-        
+
         if(! empty($data["currency"]))
-        {
             $this->setCurrency($data["currency"]);
-        }
-        
+
         if(! empty($data["id"]))
-        {
             $this->setId($data["id"]);
-        }
-        
+
         if(! empty($data["name"]))
-        {
             $this->setName($data["name"]);
-        }
-        
-        if(! empty($data["notify_url"]))
-        {
-            $this->setNotifyUrl($data["notify_url"]);
-        }
-        
+
         if(! empty($data["price"]))
-        {
             $this->setPrice($data["price"]);
-        }
-        
-        if(! empty($data["recurring_days"]))
-        {
-            $this->setRecurringDays($data["recurring_days"]);
-        }
-        
+
         if(! empty($data["return_url"]))
-        {
             $this->setReturnUrl($data["return_url"]);
-        }
-        
+
         if(! empty($data["shipping"]))
-        {
             $this->setShipping($data["shipping"]);
-        }
-        
+
         if(! empty($data["taxes"]))
-        {
             $this->setTaxes($data["taxes"]);
-        }
-        
 
         return $this;
     }
 
-    
     /**
-     * Create an invoice from a tailored invoice.
-	 * @param string $tailoredInvoiceId
-     * @return Invoice
-     */
-    
-    public static function invoice($tailoredInvoiceId)
-    
-    {
-        $request = new RequestProcessoutPublic($this->instance);
-        $path    = "/invoices/from-tailored/" . urlencode($tailoredInvoiceId) . "";
-
-        $data = array(
-
-        );
-
-        
-        $response = new Response($request->post($path, $data));
-        
-
-        
-        $invoice = new Invoice($this->instance);
-        return $invoice->fillWithData($response->getBody());
-        
-    }
-    
-    /**
-     * Get tailored invoice information.
+     * Get tailored invoice data.
 	 * @param string $id
+     * @param array $options
      * @return $this
      */
-    
-    public static function find($id)
-    
+    public static function find($id, $options = array()
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/tailored-invoices/" . urlencode($id) . "";
@@ -459,23 +308,19 @@ class TailoredInvoice
 
         );
 
-        
-        $response = new Response($request->get($path, $data));
-        
-
-        
-        return $this->fillWithData($response->getBody());
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['tailored_invoice'];
+        return $this->fillWithData($body);
         
     }
-    
-    /**
-     * Update the tailored invoice information.
 
+    /**
+     * Update the tailored invoice data.
+     * @param array $options
      * @return $this
      */
-    
-    public function save()
-    
+    public function save($options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
@@ -491,23 +336,19 @@ class TailoredInvoice
 			"shipping" => $this->getShipping()
         );
 
-        
-        $response = new Response($request->put($path, $data));
-        
-
-        
-        return $this->fillWithData($response->getBody());
+        $response = new Response($request->put($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['tailored_invoice'];
+        return $this->fillWithData($body);
         
     }
-    
+
     /**
      * Delete a tailored invoice.
-
+     * @param array $options
      * @return bool
      */
-    
-    public function delete()
-    
+    public function delete($options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
@@ -516,23 +357,39 @@ class TailoredInvoice
 
         );
 
-        
-        $response = new Response($request->delete($path, $data));
-        
-
-        
+        $response = new Response($request->delete($path, $data, $options));
         return $response->isSuccess();
         
     }
-    
+
     /**
-     * Get all available tailored invoices information.
-     * 
+     * Create an invoice from a tailored invoice.
+     * @param array $options
+     * @return Invoice
+     */
+    public function invoice($options = array())
+    {
+        $request = new RequestProcessoutPublic($this->instance);
+        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "/invoices";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['invoice'];
+        $invoice = new Invoice($this->instance);
+        return $invoice->fillWithData($body);
+        
+    }
+
+    /**
+     * List all tailored invoices.
+     * @param array $options
      * @return array
      */
-    
-    public static function all()
-    
+    public static function all($options = array()
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/tailored-invoices";
@@ -541,14 +398,10 @@ class TailoredInvoice
 
         );
 
-        
-        $response = new Response($request->get($path, $data));
-        
-
-        
+        $response = new Response($request->get($path, $data, $options));
         $a    = array();
         $body = $response->getBody();
-        foreach($body["tailored-invoices"] as $v)
+        foreach($body['tailored_invoices'] as $v)
         {
             $tmp = new TailoredInvoice($this->instance);
             $tmp->fillWithData($v);
@@ -556,40 +409,35 @@ class TailoredInvoice
         }
 
         return $a;
-        
     }
-    
+
     /**
      * Create a new tailored invoice.
-     * 
-     * @return $this
+     * @param array $options
+     * @return TailoredInvoice
      */
-    
-    public function create()
-    
+    public function create($options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/tailored-invoices";
 
         $data = array(
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"notify_url" => $this->getNotifyUrl(), 
 			"name" => $this->getName(), 
 			"price" => $this->getPrice(), 
-			"currency" => $this->getCurrency(), 
 			"taxes" => $this->getTaxes(), 
-			"shipping" => $this->getShipping()
+			"shipping" => $this->getShipping(), 
+			"currency" => $this->getCurrency(), 
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl()
         );
 
-        
-        $response = new Response($request->post($path, $data));
-        
-
-        
-        return $this->fillWithData($response->getBody());
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['tailored_invoice'];
+        $tailoredInvoice = new TailoredInvoice($this->instance);
+        return $tailoredInvoice->fillWithData($body);
         
     }
-    
 
+    
 }

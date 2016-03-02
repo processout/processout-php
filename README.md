@@ -4,9 +4,9 @@ ProcessOut PHP
 [![Latest Stable Version](https://poser.pugx.org/processout/processout-php/v/stable)](https://packagist.org/packages/processout/processout-php)
 [![License](https://poser.pugx.org/processout/processout-php/license)](https://packagist.org/packages/processout/processout-php)
 
-This package provides bindings to the ProcessOut API. Manage your callbacks, create new invoices, redirect your users to a newly generated checkout page and more.
+This package provides bindings to the ProcessOut API. Manage your callbacks, create new invoices, redirect your users to a newly generated checkout page and more. 
 
-ProcessOut makes you able to manage a bunch of payment gateways - such as PayPal, Crypto currencies, Payza or Dwolla, with no efforts.
+ProcessOut makes you able to manage a bunch of payment gateways - such as PayPal, Crypto currencies, Payza or Dwolla, with no efforts. 
 
 Learn more on the [ProcessOut website](https://www.processout.com).
 
@@ -24,7 +24,7 @@ The package's installation is done using composer. Simply add these lines to you
 ``` json
 {
     "require": {
-        "ProcessOut/ProcessOut-php": "dev-master"
+        "ProcessOut/ProcessOut-php": "^3.0.0.0"
     }
 }
 ```
@@ -34,11 +34,3 @@ And run the composer update command to install/update the package.
 ``` sh
 composer update
 ```
-
-Getting started
----------------
-
-Full documentation of this library can be found in our official documentation,
-with powerful and easy to use examples, as well as use cases.
-
-[ProcessOut's documentation](https://docs.processout.com)
