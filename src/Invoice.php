@@ -496,6 +496,52 @@ class Invoice
     }
 
     /**
+     * Charge using a manually generated payment gateway token.
+	 * @param string $token
+     * @param array $options
+     * @return CustomerAction
+     */
+    public function charge($token, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/invoices/" . urlencode($this->getId()) . "/gateways/{gateway_name}/charges";
+
+        $data = array(
+			"token" => $token
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['customer_action'];
+        $customerAction = new CustomerAction($this->instance);
+        return $customerAction->fillWithData($body);
+        
+    }
+
+    /**
+     * Charge using a customer token.
+	 * @param string $tokenId
+     * @param array $options
+     * @return CustomerAction
+     */
+    public function chargeWithToken($tokenId, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/invoices/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "/charges";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['customer_action'];
+        $customerAction = new CustomerAction($this->instance);
+        return $customerAction->fillWithData($body);
+        
+    }
+
+    /**
      * Create an invoice.
      * @param array $options
      * @return Invoice
@@ -528,29 +574,6 @@ class Invoice
     }
 
     /**
-     * Charge using a customer token.
-	 * @param string $tokenId
-     * @param array $options
-     * @return CustomerAction
-     */
-    public function chargeWithToken($tokenId, $options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/invoices/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "/charges";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['customer_action'];
-        $customerAction = new CustomerAction($this->instance);
-        return $customerAction->fillWithData($body);
-        
-    }
-
-    /**
      * Get the invoice data.
 	 * @param string $id
      * @param array $options
@@ -569,29 +592,6 @@ class Invoice
         $body = $response->getBody();
         $body = $body['invoice'];
         return $this->fillWithData($body);
-        
-    }
-
-    /**
-     * Charge using a manually generated payment gateway token.
-	 * @param string $token
-     * @param array $options
-     * @return CustomerAction
-     */
-    public function charge($token, $options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/invoices/" . urlencode($this->getId()) . "/gateways/{gateway_name}/charges";
-
-        $data = array(
-			"token" => $token
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['customer_action'];
-        $customerAction = new CustomerAction($this->instance);
-        return $customerAction->fillWithData($body);
         
     }
 

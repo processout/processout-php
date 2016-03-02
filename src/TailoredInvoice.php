@@ -294,6 +294,83 @@ class TailoredInvoice
     }
 
     /**
+     * List all tailored invoices.
+     * @param array $options
+     * @return array
+     */
+    public static function all($options = array()
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/tailored-invoices";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['tailored_invoices'] as $v)
+        {
+            $tmp = new TailoredInvoice($this->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        return $a;
+    }
+
+    /**
+     * Create a new tailored invoice.
+     * @param array $options
+     * @return TailoredInvoice
+     */
+    public function create($options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/tailored-invoices";
+
+        $data = array(
+			"name" => $this->getName(), 
+			"price" => $this->getPrice(), 
+			"taxes" => $this->getTaxes(), 
+			"shipping" => $this->getShipping(), 
+			"currency" => $this->getCurrency(), 
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl()
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['tailored_invoice'];
+        $tailoredInvoice = new TailoredInvoice($this->instance);
+        return $tailoredInvoice->fillWithData($body);
+        
+    }
+
+    /**
+     * Create an invoice from a tailored invoice.
+     * @param array $options
+     * @return Invoice
+     */
+    public function invoice($options = array())
+    {
+        $request = new RequestProcessoutPublic($this->instance);
+        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "/invoices";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['invoice'];
+        $invoice = new Invoice($this->instance);
+        return $invoice->fillWithData($body);
+        
+    }
+
+    /**
      * Get tailored invoice data.
 	 * @param string $id
      * @param array $options
@@ -359,83 +436,6 @@ class TailoredInvoice
 
         $response = new Response($request->delete($path, $data, $options));
         return $response->isSuccess();
-        
-    }
-
-    /**
-     * Create an invoice from a tailored invoice.
-     * @param array $options
-     * @return Invoice
-     */
-    public function invoice($options = array())
-    {
-        $request = new RequestProcessoutPublic($this->instance);
-        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "/invoices";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['invoice'];
-        $invoice = new Invoice($this->instance);
-        return $invoice->fillWithData($body);
-        
-    }
-
-    /**
-     * List all tailored invoices.
-     * @param array $options
-     * @return array
-     */
-    public static function all($options = array()
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/tailored-invoices";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $a    = array();
-        $body = $response->getBody();
-        foreach($body['tailored_invoices'] as $v)
-        {
-            $tmp = new TailoredInvoice($this->instance);
-            $tmp->fillWithData($v);
-            $a[] = $tmp;
-        }
-
-        return $a;
-    }
-
-    /**
-     * Create a new tailored invoice.
-     * @param array $options
-     * @return TailoredInvoice
-     */
-    public function create($options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/tailored-invoices";
-
-        $data = array(
-			"name" => $this->getName(), 
-			"price" => $this->getPrice(), 
-			"taxes" => $this->getTaxes(), 
-			"shipping" => $this->getShipping(), 
-			"currency" => $this->getCurrency(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl()
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['tailored_invoice'];
-        $tailoredInvoice = new TailoredInvoice($this->instance);
-        return $tailoredInvoice->fillWithData($body);
         
     }
 
