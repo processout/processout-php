@@ -422,6 +422,32 @@ class Customer
     }
 
     /**
+     * Authorize (create) a new customer token.
+	 * @param string $gatewayName
+	 * @param string $name
+	 * @param string $token
+     * @param array $options
+     * @return CustomerToken
+     */
+    public function authorize($gatewayName, $name, $token, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/customers/" . urlencode($this->getId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
+
+        $data = array(
+			"name" => $name, 
+			"token" => $token
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['token'];
+        $customerToken = new CustomerToken($this->instance);
+        return $customerToken->fillWithData($body);
+        
+    }
+
+    /**
      * Get the customer data.
 	 * @param string $id
      * @param array $options
@@ -516,32 +542,6 @@ class Customer
         }
 
         return $a;
-    }
-
-    /**
-     * Authorize (create) a new customer token.
-	 * @param string $gatewayName
-	 * @param string $name
-	 * @param string $token
-     * @param array $options
-     * @return CustomerToken
-     */
-    public function authorize($gatewayName, $name, $token, $options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/customers/" . urlencode($this->getId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
-
-        $data = array(
-			"name" => $name, 
-			"token" => $token
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['token'];
-        $customerToken = new CustomerToken($this->instance);
-        return $customerToken->fillWithData($body);
-        
     }
 
     

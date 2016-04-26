@@ -451,56 +451,25 @@ class Invoice
     }
 
     /**
-     * Create an invoice.
+     * Charge using a customer token.
+	 * @param string $tokenId
      * @param array $options
-     * @return Invoice
+     * @return CustomerAction
      */
-    public function create($options = array())
+    public function chargeWithToken($tokenId, $options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/invoices";
+        $path    = "/invoices/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "/charges";
 
         $data = array(
-			"name" => $this->getName(), 
-			"price" => $this->getPrice(), 
-			"taxes" => $this->getTaxes(), 
-			"shipping" => $this->getShipping(), 
-			"currency" => $this->getCurrency(), 
-			"request_email" => $this->getRequestEmail(), 
-			"request_shipping" => $this->getRequestShipping(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"metas" => $this->getMetas(), 
-			"custom" => $this->getCustom()
+
         );
 
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
-        $body = $body['invoice'];
-        $invoice = new Invoice($this->instance);
-        return $invoice->fillWithData($body);
-        
-    }
-
-    /**
-     * Get the invoice data.
-	 * @param string $id
-     * @param array $options
-     * @return $this
-     */
-    public static function find($id, $options = array())
-    {
-        $request = new RequestProcessoutPublic($this->instance);
-        $path    = "/invoices/" . urlencode($id) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['invoice'];
-        return $this->fillWithData($body);
+        $body = $body['customer_action'];
+        $customerAction = new CustomerAction($this->instance);
+        return $customerAction->fillWithData($body);
         
     }
 
@@ -528,25 +497,24 @@ class Invoice
     }
 
     /**
-     * Charge using a customer token.
-	 * @param string $tokenId
+     * Get the invoice data.
+	 * @param string $id
      * @param array $options
-     * @return CustomerAction
+     * @return $this
      */
-    public function chargeWithToken($tokenId, $options = array())
+    public static function find($id, $options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/invoices/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "/charges";
+        $request = new RequestProcessoutPublic($this->instance);
+        $path    = "/invoices/" . urlencode($id) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
-        $body = $body['customer_action'];
-        $customerAction = new CustomerAction($this->instance);
-        return $customerAction->fillWithData($body);
+        $body = $body['invoice'];
+        return $this->fillWithData($body);
         
     }
 
@@ -592,6 +560,38 @@ class Invoice
         $body = $body['customer'];
         $customer = new Customer($this->instance);
         return $customer->fillWithData($body);
+        
+    }
+
+    /**
+     * Create an invoice.
+     * @param array $options
+     * @return Invoice
+     */
+    public function create($options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/invoices";
+
+        $data = array(
+			"name" => $this->getName(), 
+			"price" => $this->getPrice(), 
+			"taxes" => $this->getTaxes(), 
+			"shipping" => $this->getShipping(), 
+			"currency" => $this->getCurrency(), 
+			"request_email" => $this->getRequestEmail(), 
+			"request_shipping" => $this->getRequestShipping(), 
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl(), 
+			"metas" => $this->getMetas(), 
+			"custom" => $this->getCustom()
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['invoice'];
+        $invoice = new Invoice($this->instance);
+        return $invoice->fillWithData($body);
         
     }
 

@@ -50,7 +50,7 @@ class RequestProcessoutPrivate
     protected function prepare($request, $options)
     {
         $request = $this->authenticate($request);
-        $request = $this->setHeader('API-Version', '1.1.0.0');
+        $request = $request->setHeader('API-Version', '1.1.0.0');
         if (! empty($options['idempotency_key']))
             $request = $request->setHeader('Idempotency-Key',
                 $options['idempotency_key']);

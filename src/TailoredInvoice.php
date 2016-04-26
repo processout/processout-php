@@ -294,75 +294,6 @@ class TailoredInvoice
     }
 
     /**
-     * Get tailored invoice data.
-	 * @param string $id
-     * @param array $options
-     * @return $this
-     */
-    public static function find($id, $options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/tailored-invoices/" . urlencode($id) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['tailored_invoice'];
-        return $this->fillWithData($body);
-        
-    }
-
-    /**
-     * Update the tailored invoice data.
-     * @param array $options
-     * @return $this
-     */
-    public function save($options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
-
-        $data = array(
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"notify_url" => $this->getNotifyUrl(), 
-			"name" => $this->getName(), 
-			"price" => $this->getPrice(), 
-			"currency" => $this->getCurrency(), 
-			"taxes" => $this->getTaxes(), 
-			"shipping" => $this->getShipping()
-        );
-
-        $response = new Response($request->put($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['tailored_invoice'];
-        return $this->fillWithData($body);
-        
-    }
-
-    /**
-     * Delete a tailored invoice.
-     * @param array $options
-     * @return bool
-     */
-    public function delete($options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->delete($path, $data, $options));
-        return $response->isSuccess();
-        
-    }
-
-    /**
      * Create an invoice from a tailored invoice.
      * @param array $options
      * @return Invoice
@@ -436,6 +367,75 @@ class TailoredInvoice
         $body = $body['tailored_invoice'];
         $tailoredInvoice = new TailoredInvoice($this->instance);
         return $tailoredInvoice->fillWithData($body);
+        
+    }
+
+    /**
+     * Get tailored invoice data.
+	 * @param string $id
+     * @param array $options
+     * @return $this
+     */
+    public static function find($id, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/tailored-invoices/" . urlencode($id) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['tailored_invoice'];
+        return $this->fillWithData($body);
+        
+    }
+
+    /**
+     * Update the tailored invoice data.
+     * @param array $options
+     * @return $this
+     */
+    public function save($options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
+
+        $data = array(
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl(), 
+			"notify_url" => $this->getNotifyUrl(), 
+			"name" => $this->getName(), 
+			"price" => $this->getPrice(), 
+			"currency" => $this->getCurrency(), 
+			"taxes" => $this->getTaxes(), 
+			"shipping" => $this->getShipping()
+        );
+
+        $response = new Response($request->put($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['tailored_invoice'];
+        return $this->fillWithData($body);
+        
+    }
+
+    /**
+     * Delete a tailored invoice.
+     * @param array $options
+     * @return bool
+     */
+    public function delete($options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->delete($path, $data, $options));
+        return $response->isSuccess();
         
     }
 
