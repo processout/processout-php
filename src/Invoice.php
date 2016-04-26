@@ -451,14 +451,47 @@ class Invoice
     }
 
     /**
-     * Get the customer associated with the current invoice.
+     * Create an invoice.
      * @param array $options
-     * @return Customer
+     * @return Invoice
      */
-    public function customer($options = array())
+    public function create($options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
+        $path    = "/invoices";
+
+        $data = array(
+			"name" => $this->getName(), 
+			"price" => $this->getPrice(), 
+			"taxes" => $this->getTaxes(), 
+			"shipping" => $this->getShipping(), 
+			"currency" => $this->getCurrency(), 
+			"request_email" => $this->getRequestEmail(), 
+			"request_shipping" => $this->getRequestShipping(), 
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl(), 
+			"metas" => $this->getMetas(), 
+			"custom" => $this->getCustom()
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['invoice'];
+        $invoice = new Invoice($this->instance);
+        return $invoice->fillWithData($body);
+        
+    }
+
+    /**
+     * Get the invoice data.
+	 * @param string $id
+     * @param array $options
+     * @return $this
+     */
+    public static function find($id, $options = array())
+    {
+        $request = new RequestProcessoutPublic($this->instance);
+        $path    = "/invoices/" . urlencode($id) . "";
 
         $data = array(
 
@@ -466,32 +499,8 @@ class Invoice
 
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
-        $body = $body['customer'];
-        $customer = new Customer($this->instance);
-        return $customer->fillWithData($body);
-        
-    }
-
-    /**
-     * Link a customer to the invoice.
-	 * @param string $customerId
-     * @param array $options
-     * @return Customer
-     */
-    public function setCustomer($customerId, $options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
-
-        $data = array(
-			"customer_id" => $customerId
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['customer'];
-        $customer = new Customer($this->instance);
-        return $customer->fillWithData($body);
+        $body = $body['invoice'];
+        return $this->fillWithData($body);
         
     }
 
@@ -542,47 +551,14 @@ class Invoice
     }
 
     /**
-     * Create an invoice.
+     * Get the customer associated with the current invoice.
      * @param array $options
-     * @return Invoice
+     * @return Customer
      */
-    public function create($options = array())
+    public function customer($options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/invoices";
-
-        $data = array(
-			"name" => $this->getName(), 
-			"price" => $this->getPrice(), 
-			"taxes" => $this->getTaxes(), 
-			"shipping" => $this->getShipping(), 
-			"currency" => $this->getCurrency(), 
-			"request_email" => $this->getRequestEmail(), 
-			"request_shipping" => $this->getRequestShipping(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"metas" => $this->getMetas(), 
-			"custom" => $this->getCustom()
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['invoice'];
-        $invoice = new Invoice($this->instance);
-        return $invoice->fillWithData($body);
-        
-    }
-
-    /**
-     * Get the invoice data.
-	 * @param string $id
-     * @param array $options
-     * @return $this
-     */
-    public static function find($id, $options = array()
-    {
-        $request = new RequestProcessoutPublic($this->instance);
-        $path    = "/invoices/" . urlencode($id) . "";
+        $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
 
         $data = array(
 
@@ -590,8 +566,32 @@ class Invoice
 
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
-        $body = $body['invoice'];
-        return $this->fillWithData($body);
+        $body = $body['customer'];
+        $customer = new Customer($this->instance);
+        return $customer->fillWithData($body);
+        
+    }
+
+    /**
+     * Link a customer to the invoice.
+	 * @param string $customerId
+     * @param array $options
+     * @return Customer
+     */
+    public function setCustomer($customerId, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
+
+        $data = array(
+			"customer_id" => $customerId
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['customer'];
+        $customer = new Customer($this->instance);
+        return $customer->fillWithData($body);
         
     }
 

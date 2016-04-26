@@ -203,7 +203,7 @@ class Event
      * @param array $options
      * @return array
      */
-    public static function pull($options = array()
+    public static function pull($options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/events";
@@ -230,7 +230,7 @@ class Event
      * @param array $options
      * @return bool
      */
-    public static function setAllProcessed($options = array()
+    public static function setAllProcessed($options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/events";
@@ -250,7 +250,7 @@ class Event
      * @param array $options
      * @return $this
      */
-    public static function find($id, $options = array()
+    public static function find($id, $options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/events/" . urlencode($id) . "";

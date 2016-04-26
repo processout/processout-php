@@ -388,12 +388,34 @@ class RecurringInvoice
     }
 
     /**
+     * Get the invoice representing the new recurring invoice iteration.
+     * @param array $options
+     * @return Invoice
+     */
+    public function invoice($options = array())
+    {
+        $request = new RequestProcessoutPublic($this->instance);
+        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "/invoices";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['invoice'];
+        $invoice = new Invoice($this->instance);
+        return $invoice->fillWithData($body);
+        
+    }
+
+    /**
      * Get the recurring invoice data.
 	 * @param string $id
      * @param array $options
      * @return $this
      */
-    public static function find($id, $options = array()
+    public static function find($id, $options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/recurring-invoices/" . urlencode($id) . "";
@@ -448,28 +470,6 @@ class RecurringInvoice
         $body = $body['customer'];
         $customer = new Customer($this->instance);
         return $customer->fillWithData($body);
-        
-    }
-
-    /**
-     * Get the invoice representing the new recurring invoice iteration.
-     * @param array $options
-     * @return Invoice
-     */
-    public function invoice($options = array())
-    {
-        $request = new RequestProcessoutPublic($this->instance);
-        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "/invoices";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['invoice'];
-        $invoice = new Invoice($this->instance);
-        return $invoice->fillWithData($body);
         
     }
 

@@ -121,8 +121,8 @@ class RequestProcessoutPublic
     public function delete($path, $data, $options)
     {
         $request = $this->cURL->newJsonRequest('DELETE',
-            ProcessOut::HOST . $path,
-            $data
+            ProcessOut::HOST . $path . "?" .
+            http_build_query($data)
         );
         $this->prepare($request, $options);
 

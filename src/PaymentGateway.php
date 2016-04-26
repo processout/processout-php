@@ -239,7 +239,7 @@ class PaymentGateway
      * @param array $options
      * @return bool
      */
-    public static function delete($gatewayName, $options = array()
+    public static function delete($gatewayName, $options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/gateways/" . urlencode($gatewayName) . "";

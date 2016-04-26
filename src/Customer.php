@@ -30,24 +30,6 @@ class Customer
     protected $address2;
 
     /**
-     * URL used to redirect the customer when the authorization was canceled. Defaults to ProcessOut's cancel landing page
-     * @var string
-     */
-    protected $authorizationCancelUrl;
-
-    /**
-     * URL used to redirect the customer once the authorized future payments. Defaults to ProcessOut's landing page
-     * @var string
-     */
-    protected $authorizationSuccessUrl;
-
-    /**
-     * URL to which you can redirect your customer in order to authorize future payments
-     * @var string
-     */
-    protected $authorizationUrl;
-
-    /**
      * Shipping city of the customer
      * @var string
      */
@@ -145,72 +127,6 @@ class Customer
     public function setAddress2($value)
     {
         $this->address2 = $value;
-        return $this;
-    }
-    
-    /**
-     * Get AuthorizationCancelUrl
-     * URL used to redirect the customer when the authorization was canceled. Defaults to ProcessOut's cancel landing page
-     * @return string
-     */
-    public function getAuthorizationCancelUrl()
-    {
-        return $this->authorizationCancelUrl;
-    }
-
-    /**
-     * Set AuthorizationCancelUrl
-     * URL used to redirect the customer when the authorization was canceled. Defaults to ProcessOut's cancel landing page
-     * @param  string $value
-     * @return $this
-     */
-    public function setAuthorizationCancelUrl($value)
-    {
-        $this->authorizationCancelUrl = $value;
-        return $this;
-    }
-    
-    /**
-     * Get AuthorizationSuccessUrl
-     * URL used to redirect the customer once the authorized future payments. Defaults to ProcessOut's landing page
-     * @return string
-     */
-    public function getAuthorizationSuccessUrl()
-    {
-        return $this->authorizationSuccessUrl;
-    }
-
-    /**
-     * Set AuthorizationSuccessUrl
-     * URL used to redirect the customer once the authorized future payments. Defaults to ProcessOut's landing page
-     * @param  string $value
-     * @return $this
-     */
-    public function setAuthorizationSuccessUrl($value)
-    {
-        $this->authorizationSuccessUrl = $value;
-        return $this;
-    }
-    
-    /**
-     * Get AuthorizationUrl
-     * URL to which you can redirect your customer in order to authorize future payments
-     * @return string
-     */
-    public function getAuthorizationUrl()
-    {
-        return $this->authorizationUrl;
-    }
-
-    /**
-     * Set AuthorizationUrl
-     * URL to which you can redirect your customer in order to authorize future payments
-     * @param  string $value
-     * @return $this
-     */
-    public function setAuthorizationUrl($value)
-    {
-        $this->authorizationUrl = $value;
         return $this;
     }
     
@@ -382,15 +298,6 @@ class Customer
         if(! empty($data["address2"]))
             $this->setAddress2($data["address2"]);
 
-        if(! empty($data["authorization_cancel_url"]))
-            $this->setAuthorizationCancelUrl($data["authorization_cancel_url"]);
-
-        if(! empty($data["authorization_success_url"]))
-            $this->setAuthorizationSuccessUrl($data["authorization_success_url"]);
-
-        if(! empty($data["authorization_url"]))
-            $this->setAuthorizationUrl($data["authorization_url"]);
-
         if(! empty($data["city"]))
             $this->setCity($data["city"]);
 
@@ -413,6 +320,62 @@ class Customer
             $this->setZip($data["zip"]);
 
         return $this;
+    }
+
+    /**
+     * Get the customers list belonging to the project.
+     * @param array $options
+     * @return array
+     */
+    public static function all($options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/customers";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['customers'] as $v)
+        {
+            $tmp = new Customer($this->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        return $a;
+    }
+
+    /**
+     * Create a new customer.
+     * @param array $options
+     * @return Customer
+     */
+    public function create($options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/customers";
+
+        $data = array(
+			"email" => $this->getEmail(), 
+			"first_name" => $this->getFirstName(), 
+			"last_name" => $this->getLastName(), 
+			"address1" => $this->getAddress1(), 
+			"address2" => $this->getAddress2(), 
+			"city" => $this->getCity(), 
+			"zip" => $this->getZip(), 
+			"country_code" => $this->getCountryCode()
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['customer'];
+        $customer = new Customer($this->instance);
+        return $customer->fillWithData($body);
+        
     }
 
     /**
@@ -464,7 +427,7 @@ class Customer
      * @param array $options
      * @return $this
      */
-    public static function find($id, $options = array()
+    public static function find($id, $options = array())
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/customers/" . urlencode($id) . "";
@@ -578,62 +541,6 @@ class Customer
         $body = $body['token'];
         $customerToken = new CustomerToken($this->instance);
         return $customerToken->fillWithData($body);
-        
-    }
-
-    /**
-     * Get the customers list belonging to the project.
-     * @param array $options
-     * @return array
-     */
-    public static function all($options = array()
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/customers";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $a    = array();
-        $body = $response->getBody();
-        foreach($body['customers'] as $v)
-        {
-            $tmp = new Customer($this->instance);
-            $tmp->fillWithData($v);
-            $a[] = $tmp;
-        }
-
-        return $a;
-    }
-
-    /**
-     * Create a new customer.
-     * @param array $options
-     * @return Customer
-     */
-    public function create($options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/customers";
-
-        $data = array(
-			"email" => $this->getEmail(), 
-			"first_name" => $this->getFirstName(), 
-			"last_name" => $this->getLastName(), 
-			"address1" => $this->getAddress1(), 
-			"address2" => $this->getAddress2(), 
-			"city" => $this->getCity(), 
-			"zip" => $this->getZip(), 
-			"country_code" => $this->getCountryCode()
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['customer'];
-        $customer = new Customer($this->instance);
-        return $customer->fillWithData($body);
         
     }
 
