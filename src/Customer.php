@@ -323,6 +323,32 @@ class Customer
     }
 
     /**
+     * Authorize (create) a new customer token.
+	 * @param string $gatewayName
+	 * @param string $name
+	 * @param string $token
+     * @param array $options
+     * @return CustomerToken
+     */
+    public function authorize($gatewayName, $name, $token, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/customers/" . urlencode($this->getId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
+
+        $data = array(
+			"name" => $name, 
+			"token" => $token
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['token'];
+        $customerToken = new CustomerToken($this->instance);
+        return $customerToken->fillWithData($body);
+        
+    }
+
+    /**
      * Get the customers list belonging to the project.
      * @param array $options
      * @return array
@@ -379,6 +405,33 @@ class Customer
     }
 
     /**
+     * Get all the authorization tokens of the customer.
+     * @param array $options
+     * @return array
+     */
+    public function tokens($options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "customers/" . urlencode($this->getId()) . "/tokens";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['tokens'] as $v)
+        {
+            $tmp = new CustomerToken($this->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        return $a;
+    }
+
+    /**
      * Find a specific customer token.
 	 * @param string $tokenId
      * @param array $options
@@ -418,32 +471,6 @@ class Customer
 
         $response = new Response($request->delete($path, $data, $options));
         return $response->isSuccess();
-        
-    }
-
-    /**
-     * Authorize (create) a new customer token.
-	 * @param string $gatewayName
-	 * @param string $name
-	 * @param string $token
-     * @param array $options
-     * @return CustomerToken
-     */
-    public function authorize($gatewayName, $name, $token, $options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/customers/" . urlencode($this->getId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
-
-        $data = array(
-			"name" => $name, 
-			"token" => $token
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['token'];
-        $customerToken = new CustomerToken($this->instance);
-        return $customerToken->fillWithData($body);
         
     }
 
@@ -515,33 +542,6 @@ class Customer
         $response = new Response($request->delete($path, $data, $options));
         return $response->isSuccess();
         
-    }
-
-    /**
-     * Get all the authorization tokens of the customer.
-     * @param array $options
-     * @return array
-     */
-    public function tokens($options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "customers/" . urlencode($this->getId()) . "/tokens";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $a    = array();
-        $body = $response->getBody();
-        foreach($body['tokens'] as $v)
-        {
-            $tmp = new CustomerToken($this->instance);
-            $tmp->fillWithData($v);
-            $a[] = $tmp;
-        }
-
-        return $a;
     }
 
     

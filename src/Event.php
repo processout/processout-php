@@ -199,6 +199,47 @@ class Event
     }
 
     /**
+     * Get the information related to the specific event.
+	 * @param string $id
+     * @param array $options
+     * @return $this
+     */
+    public static function find($id, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/events/" . urlencode($id) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['event'];
+        return $this->fillWithData($body);
+        
+    }
+
+    /**
+     * Set the specific event as processed.
+     * @param array $options
+     * @return bool
+     */
+    public function markProcessed($options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/events/" . urlencode($this->getId()) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->delete($path, $data, $options));
+        return $response->isSuccess();
+        
+    }
+
+    /**
      * Get the 15 oldest events pending processing.
      * @param array $options
      * @return array
@@ -234,47 +275,6 @@ class Event
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/events";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->delete($path, $data, $options));
-        return $response->isSuccess();
-        
-    }
-
-    /**
-     * Get the information related to the specific event.
-	 * @param string $id
-     * @param array $options
-     * @return $this
-     */
-    public static function find($id, $options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/events/" . urlencode($id) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['event'];
-        return $this->fillWithData($body);
-        
-    }
-
-    /**
-     * Set the specific event as processed.
-     * @param array $options
-     * @return bool
-     */
-    public function markProcessed($options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/events/" . urlencode($this->getId()) . "";
 
         $data = array(
 

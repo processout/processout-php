@@ -388,6 +388,38 @@ class RecurringInvoice
     }
 
     /**
+     * Create a new recurring invoice.
+	 * @param string $customerId
+     * @param array $options
+     * @return RecurringInvoice
+     */
+    public function create($customerId, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/customers/" . urlencode($customerId) . "/recurring-invoices";
+
+        $data = array(
+			"name" => $this->getName(), 
+			"price" => $this->getPrice(), 
+			"shipping" => $this->getShipping(), 
+			"taxes" => $this->getTaxes(), 
+			"currency" => $this->getCurrency(), 
+			"recurring_days" => $this->getRecurringDays(), 
+			"trial_days" => $this->getTrialDays(), 
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl(), 
+			"custom" => $this->getCustom()
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['recurring_invoice'];
+        $recurringInvoice = new RecurringInvoice($this->instance);
+        return $recurringInvoice->fillWithData($body);
+        
+    }
+
+    /**
      * Get the recurring invoice data.
 	 * @param string $id
      * @param array $options
@@ -430,60 +462,6 @@ class RecurringInvoice
     }
 
     /**
-     * Get the invoice representing the new recurring invoice iteration.
-     * @param array $options
-     * @return Invoice
-     */
-    public function invoice($options = array())
-    {
-        $request = new RequestProcessoutPublic($this->instance);
-        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "/invoices";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['invoice'];
-        $invoice = new Invoice($this->instance);
-        return $invoice->fillWithData($body);
-        
-    }
-
-    /**
-     * Create a new recurring invoice.
-	 * @param string $customerId
-     * @param array $options
-     * @return RecurringInvoice
-     */
-    public function create($customerId, $options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/customers/" . urlencode($customerId) . "/recurring-invoices";
-
-        $data = array(
-			"name" => $this->getName(), 
-			"price" => $this->getPrice(), 
-			"shipping" => $this->getShipping(), 
-			"taxes" => $this->getTaxes(), 
-			"currency" => $this->getCurrency(), 
-			"recurring_days" => $this->getRecurringDays(), 
-			"trial_days" => $this->getTrialDays(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"custom" => $this->getCustom()
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['recurring_invoice'];
-        $recurringInvoice = new RecurringInvoice($this->instance);
-        return $recurringInvoice->fillWithData($body);
-        
-    }
-
-    /**
      * Get the customer linked to the recurring invoice.
      * @param array $options
      * @return Customer
@@ -502,6 +480,28 @@ class RecurringInvoice
         $body = $body['customer'];
         $customer = new Customer($this->instance);
         return $customer->fillWithData($body);
+        
+    }
+
+    /**
+     * Get the invoice representing the new recurring invoice iteration.
+     * @param array $options
+     * @return Invoice
+     */
+    public function invoice($options = array())
+    {
+        $request = new RequestProcessoutPublic($this->instance);
+        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "/invoices";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['invoice'];
+        $invoice = new Invoice($this->instance);
+        return $invoice->fillWithData($body);
         
     }
 
