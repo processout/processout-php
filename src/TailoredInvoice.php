@@ -18,18 +18,6 @@ class TailoredInvoice
     protected $instance;
 
     /**
-     * URL where to redirect the customer when the transaction has been canceled. Defaults to ProcessOut's landing page
-     * @var string
-     */
-    protected $cancelUrl;
-
-    /**
-     * Currency of the item's price (ex: USD)
-     * @var string
-     */
-    protected $currency;
-
-    /**
      * Id of the tailored invoice
      * @var string
      */
@@ -48,10 +36,16 @@ class TailoredInvoice
     protected $price;
 
     /**
-     * URL where to redirect the customer once the payment has been placed. Defaults to ProcessOut's landing page
+     * Currency of the item's price (ex: USD)
      * @var string
      */
-    protected $returnUrl;
+    protected $currency;
+
+    /**
+     * Taxes price added on top of the item price
+     * @var string
+     */
+    protected $taxes;
 
     /**
      * Shipping price added on top of the item price
@@ -60,10 +54,16 @@ class TailoredInvoice
     protected $shipping;
 
     /**
-     * Taxes price added on top of the item price
+     * URL where to redirect the customer once the payment has been placed. Defaults to ProcessOut's landing page
      * @var string
      */
-    protected $taxes;
+    protected $returnUrl;
+
+    /**
+     * URL where to redirect the customer when the transaction has been canceled. Defaults to ProcessOut's landing page
+     * @var string
+     */
+    protected $cancelUrl;
 
     /**
      * TailoredInvoice constructor
@@ -76,55 +76,13 @@ class TailoredInvoice
             $processOut = ProcessOut::getDefault();
         }
 
-        $this->instance = $processOut;$this->setShipping("0.00");
+        $this->instance = $processOut;
+
         $this->setTaxes("0.00");
+        $this->setShipping("0.00");
         
     }
 
-    
-    /**
-     * Get CancelUrl
-     * URL where to redirect the customer when the transaction has been canceled. Defaults to ProcessOut's landing page
-     * @return string
-     */
-    public function getCancelUrl()
-    {
-        return $this->cancelUrl;
-    }
-
-    /**
-     * Set CancelUrl
-     * URL where to redirect the customer when the transaction has been canceled. Defaults to ProcessOut's landing page
-     * @param  string $value
-     * @return $this
-     */
-    public function setCancelUrl($value)
-    {
-        $this->cancelUrl = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Currency
-     * Currency of the item's price (ex: USD)
-     * @return string
-     */
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    /**
-     * Set Currency
-     * Currency of the item's price (ex: USD)
-     * @param  string $value
-     * @return $this
-     */
-    public function setCurrency($value)
-    {
-        $this->currency = $value;
-        return $this;
-    }
     
     /**
      * Get Id
@@ -193,24 +151,46 @@ class TailoredInvoice
     }
     
     /**
-     * Get ReturnUrl
-     * URL where to redirect the customer once the payment has been placed. Defaults to ProcessOut's landing page
+     * Get Currency
+     * Currency of the item's price (ex: USD)
      * @return string
      */
-    public function getReturnUrl()
+    public function getCurrency()
     {
-        return $this->returnUrl;
+        return $this->currency;
     }
 
     /**
-     * Set ReturnUrl
-     * URL where to redirect the customer once the payment has been placed. Defaults to ProcessOut's landing page
+     * Set Currency
+     * Currency of the item's price (ex: USD)
      * @param  string $value
      * @return $this
      */
-    public function setReturnUrl($value)
+    public function setCurrency($value)
     {
-        $this->returnUrl = $value;
+        $this->currency = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Taxes
+     * Taxes price added on top of the item price
+     * @return string
+     */
+    public function getTaxes()
+    {
+        return $this->taxes;
+    }
+
+    /**
+     * Set Taxes
+     * Taxes price added on top of the item price
+     * @param  string $value
+     * @return $this
+     */
+    public function setTaxes($value)
+    {
+        $this->taxes = $value;
         return $this;
     }
     
@@ -237,24 +217,46 @@ class TailoredInvoice
     }
     
     /**
-     * Get Taxes
-     * Taxes price added on top of the item price
+     * Get ReturnUrl
+     * URL where to redirect the customer once the payment has been placed. Defaults to ProcessOut's landing page
      * @return string
      */
-    public function getTaxes()
+    public function getReturnUrl()
     {
-        return $this->taxes;
+        return $this->returnUrl;
     }
 
     /**
-     * Set Taxes
-     * Taxes price added on top of the item price
+     * Set ReturnUrl
+     * URL where to redirect the customer once the payment has been placed. Defaults to ProcessOut's landing page
      * @param  string $value
      * @return $this
      */
-    public function setTaxes($value)
+    public function setReturnUrl($value)
     {
-        $this->taxes = $value;
+        $this->returnUrl = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CancelUrl
+     * URL where to redirect the customer when the transaction has been canceled. Defaults to ProcessOut's landing page
+     * @return string
+     */
+    public function getCancelUrl()
+    {
+        return $this->cancelUrl;
+    }
+
+    /**
+     * Set CancelUrl
+     * URL where to redirect the customer when the transaction has been canceled. Defaults to ProcessOut's landing page
+     * @param  string $value
+     * @return $this
+     */
+    public function setCancelUrl($value)
+    {
+        $this->cancelUrl = $value;
         return $this;
     }
     
@@ -266,12 +268,6 @@ class TailoredInvoice
      */
     public function fillWithData($data)
     {
-        if(! empty($data["cancel_url"]))
-            $this->setCancelUrl($data["cancel_url"]);
-
-        if(! empty($data["currency"]))
-            $this->setCurrency($data["currency"]);
-
         if(! empty($data["id"]))
             $this->setId($data["id"]);
 
@@ -281,14 +277,20 @@ class TailoredInvoice
         if(! empty($data["price"]))
             $this->setPrice($data["price"]);
 
-        if(! empty($data["return_url"]))
-            $this->setReturnUrl($data["return_url"]);
+        if(! empty($data["currency"]))
+            $this->setCurrency($data["currency"]);
+
+        if(! empty($data["taxes"]))
+            $this->setTaxes($data["taxes"]);
 
         if(! empty($data["shipping"]))
             $this->setShipping($data["shipping"]);
 
-        if(! empty($data["taxes"]))
-            $this->setTaxes($data["taxes"]);
+        if(! empty($data["return_url"]))
+            $this->setReturnUrl($data["return_url"]);
+
+        if(! empty($data["cancel_url"]))
+            $this->setCancelUrl($data["cancel_url"]);
 
         return $this;
     }

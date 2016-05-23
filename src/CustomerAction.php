@@ -35,6 +35,8 @@ class CustomerAction
         }
 
         $this->instance = $processOut;
+
+        
     }
 
     

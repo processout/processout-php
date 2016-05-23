@@ -18,18 +18,6 @@ class Event
     protected $instance;
 
     /**
-     * Data associated to the event, in the form of a dictionary
-     * @var dictionary
-     */
-    protected $data;
-
-    /**
-     * The date at which the event was fired
-     * @var string
-     */
-    protected $date;
-
-    /**
      * Id of the event
      * @var string
      */
@@ -40,6 +28,18 @@ class Event
      * @var string
      */
     protected $name;
+
+    /**
+     * Data associated to the event, in the form of a dictionary
+     * @var dictionary
+     */
+    protected $data;
+
+    /**
+     * The date at which the event was fired
+     * @var string
+     */
+    protected $date;
 
     /**
      * Whether or not the event was fired in the sandbox environment
@@ -59,52 +59,10 @@ class Event
         }
 
         $this->instance = $processOut;
+
+        
     }
 
-    
-    /**
-     * Get Data
-     * Data associated to the event, in the form of a dictionary
-     * @return array
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
-     * Set Data
-     * Data associated to the event, in the form of a dictionary
-     * @param  array $value
-     * @return $this
-     */
-    public function setData($value)
-    {
-        $this->data = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Date
-     * The date at which the event was fired
-     * @return string
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * Set Date
-     * The date at which the event was fired
-     * @param  string $value
-     * @return $this
-     */
-    public function setDate($value)
-    {
-        $this->date = $value;
-        return $this;
-    }
     
     /**
      * Get Id
@@ -151,6 +109,50 @@ class Event
     }
     
     /**
+     * Get Data
+     * Data associated to the event, in the form of a dictionary
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * Set Data
+     * Data associated to the event, in the form of a dictionary
+     * @param  array $value
+     * @return $this
+     */
+    public function setData($value)
+    {
+        $this->data = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Date
+     * The date at which the event was fired
+     * @return string
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set Date
+     * The date at which the event was fired
+     * @param  string $value
+     * @return $this
+     */
+    public function setDate($value)
+    {
+        $this->date = $value;
+        return $this;
+    }
+    
+    /**
      * Get Sandbox
      * Whether or not the event was fired in the sandbox environment
      * @return bool
@@ -180,63 +182,22 @@ class Event
      */
     public function fillWithData($data)
     {
-        if(! empty($data["data"]))
-            $this->setData($data["data"]);
-
-        if(! empty($data["date"]))
-            $this->setDate($data["date"]);
-
         if(! empty($data["id"]))
             $this->setId($data["id"]);
 
         if(! empty($data["name"]))
             $this->setName($data["name"]);
 
+        if(! empty($data["data"]))
+            $this->setData($data["data"]);
+
+        if(! empty($data["date"]))
+            $this->setDate($data["date"]);
+
         if(! empty($data["sandbox"]))
             $this->setSandbox($data["sandbox"]);
 
         return $this;
-    }
-
-    /**
-     * Get the information related to the specific event.
-	 * @param string $id
-     * @param array $options
-     * @return $this
-     */
-    public static function find($id, $options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/events/" . urlencode($id) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['event'];
-        return $this->fillWithData($body);
-        
-    }
-
-    /**
-     * Set the specific event as processed.
-     * @param array $options
-     * @return bool
-     */
-    public function markProcessed($options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/events/" . urlencode($this->getId()) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->delete($path, $data, $options));
-        return $response->isSuccess();
-        
     }
 
     /**
@@ -275,6 +236,47 @@ class Event
     {
         $request = new RequestProcessoutPrivate($this->instance);
         $path    = "/events";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->delete($path, $data, $options));
+        return $response->isSuccess();
+        
+    }
+
+    /**
+     * Get the information related to the specific event.
+	 * @param string $id
+     * @param array $options
+     * @return $this
+     */
+    public static function find($id, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/events/" . urlencode($id) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['event'];
+        return $this->fillWithData($body);
+        
+    }
+
+    /**
+     * Set the specific event as processed.
+     * @param array $options
+     * @return bool
+     */
+    public function markProcessed($options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/events/" . urlencode($this->getId()) . "";
 
         $data = array(
 

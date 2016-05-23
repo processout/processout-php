@@ -18,16 +18,16 @@ class Project
     protected $instance;
 
     /**
+     * Name of the project
+     * @var string
+     */
+    protected $name;
+
+    /**
      * Email of the project
      * @var string
      */
     protected $email;
-
-    /**
-     * Unique ID of the project
-     * @var string
-     */
-    protected $id;
 
     /**
      * URL of the project's logo
@@ -36,10 +36,10 @@ class Project
     protected $logoUrl;
 
     /**
-     * Name of the project
+     * Unique ID of the project
      * @var string
      */
-    protected $name;
+    protected $id;
 
     /**
      * Secret key of the project
@@ -59,8 +59,32 @@ class Project
         }
 
         $this->instance = $processOut;
+
+        
     }
 
+    
+    /**
+     * Get Name
+     * Name of the project
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set Name
+     * Name of the project
+     * @param  string $value
+     * @return $this
+     */
+    public function setName($value)
+    {
+        $this->name = $value;
+        return $this;
+    }
     
     /**
      * Get Email
@@ -81,28 +105,6 @@ class Project
     public function setEmail($value)
     {
         $this->email = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Id
-     * Unique ID of the project
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set Id
-     * Unique ID of the project
-     * @param  string $value
-     * @return $this
-     */
-    public function setId($value)
-    {
-        $this->id = $value;
         return $this;
     }
     
@@ -129,24 +131,24 @@ class Project
     }
     
     /**
-     * Get Name
-     * Name of the project
+     * Get Id
+     * Unique ID of the project
      * @return string
      */
-    public function getName()
+    public function getId()
     {
-        return $this->name;
+        return $this->id;
     }
 
     /**
-     * Set Name
-     * Name of the project
+     * Set Id
+     * Unique ID of the project
      * @param  string $value
      * @return $this
      */
-    public function setName($value)
+    public function setId($value)
     {
-        $this->name = $value;
+        $this->id = $value;
         return $this;
     }
     
@@ -180,17 +182,17 @@ class Project
      */
     public function fillWithData($data)
     {
+        if(! empty($data["name"]))
+            $this->setName($data["name"]);
+
         if(! empty($data["email"]))
             $this->setEmail($data["email"]);
-
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
 
         if(! empty($data["logo_url"]))
             $this->setLogoUrl($data["logo_url"]);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
+        if(! empty($data["id"]))
+            $this->setId($data["id"]);
 
         if(! empty($data["secret_key"]))
             $this->setSecretKey($data["secret_key"]);

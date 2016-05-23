@@ -18,10 +18,10 @@ class PaymentGateway
     protected $instance;
 
     /**
-     * Determine if the gateway's integration is still in beta
-     * @var boolean
+     * Internal name of the payment gateway
+     * @var string
      */
-    protected $beta;
+    protected $name;
 
     /**
      * Name of the payment gateway to be displayed
@@ -30,10 +30,10 @@ class PaymentGateway
     protected $displayName;
 
     /**
-     * Internal name of the payment gateway
-     * @var string
+     * Determine if the gateway's integration is still in beta
+     * @var boolean
      */
-    protected $name;
+    protected $beta;
 
     /**
      * 
@@ -59,28 +59,30 @@ class PaymentGateway
         }
 
         $this->instance = $processOut;
+
+        
     }
 
     
     /**
-     * Get Beta
-     * Determine if the gateway's integration is still in beta
-     * @return bool
+     * Get Name
+     * Internal name of the payment gateway
+     * @return string
      */
-    public function getBeta()
+    public function getName()
     {
-        return $this->beta;
+        return $this->name;
     }
 
     /**
-     * Set Beta
-     * Determine if the gateway's integration is still in beta
-     * @param  bool $value
+     * Set Name
+     * Internal name of the payment gateway
+     * @param  string $value
      * @return $this
      */
-    public function setBeta($value)
+    public function setName($value)
     {
-        $this->beta = $value;
+        $this->name = $value;
         return $this;
     }
     
@@ -107,24 +109,24 @@ class PaymentGateway
     }
     
     /**
-     * Get Name
-     * Internal name of the payment gateway
-     * @return string
+     * Get Beta
+     * Determine if the gateway's integration is still in beta
+     * @return bool
      */
-    public function getName()
+    public function getBeta()
     {
-        return $this->name;
+        return $this->beta;
     }
 
     /**
-     * Set Name
-     * Internal name of the payment gateway
-     * @param  string $value
+     * Set Beta
+     * Determine if the gateway's integration is still in beta
+     * @param  bool $value
      * @return $this
      */
-    public function setName($value)
+    public function setBeta($value)
     {
-        $this->name = $value;
+        $this->beta = $value;
         return $this;
     }
     
@@ -192,14 +194,14 @@ class PaymentGateway
      */
     public function fillWithData($data)
     {
-        if(! empty($data["beta"]))
-            $this->setBeta($data["beta"]);
+        if(! empty($data["name"]))
+            $this->setName($data["name"]);
 
         if(! empty($data["display_name"]))
             $this->setDisplayName($data["display_name"]);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
+        if(! empty($data["beta"]))
+            $this->setBeta($data["beta"]);
 
         if(! empty($data["public_keys"]))
             $this->setPublicKeys($data["public_keys"]);

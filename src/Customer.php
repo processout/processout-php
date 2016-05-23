@@ -18,6 +18,24 @@ class Customer
     protected $instance;
 
     /**
+     * Id of the customer
+     * @var string
+     */
+    protected $id;
+
+    /**
+     * First name of the customer
+     * @var string
+     */
+    protected $firstName;
+
+    /**
+     * Last name of the customer
+     * @var string
+     */
+    protected $lastName;
+
+    /**
      * Main address of the customer
      * @var string
      */
@@ -36,30 +54,6 @@ class Customer
     protected $city;
 
     /**
-     * Shipping country code of the customer
-     * @var string
-     */
-    protected $countryCode;
-
-    /**
-     * First name of the customer
-     * @var string
-     */
-    protected $firstName;
-
-    /**
-     * Id of the customer
-     * @var string
-     */
-    protected $id;
-
-    /**
-     * Last name of the customer
-     * @var string
-     */
-    protected $lastName;
-
-    /**
      * Shipping state of the customer
      * @var string
      */
@@ -70,6 +64,12 @@ class Customer
      * @var string
      */
     protected $zip;
+
+    /**
+     * Shipping country code of the customer
+     * @var string
+     */
+    protected $countryCode;
 
     /**
      * Customer constructor
@@ -83,8 +83,76 @@ class Customer
         }
 
         $this->instance = $processOut;
+
+        
     }
 
+    
+    /**
+     * Get Id
+     * Id of the customer
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set Id
+     * Id of the customer
+     * @param  string $value
+     * @return $this
+     */
+    public function setId($value)
+    {
+        $this->id = $value;
+        return $this;
+    }
+    
+    /**
+     * Get FirstName
+     * First name of the customer
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set FirstName
+     * First name of the customer
+     * @param  string $value
+     * @return $this
+     */
+    public function setFirstName($value)
+    {
+        $this->firstName = $value;
+        return $this;
+    }
+    
+    /**
+     * Get LastName
+     * Last name of the customer
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Set LastName
+     * Last name of the customer
+     * @param  string $value
+     * @return $this
+     */
+    public function setLastName($value)
+    {
+        $this->lastName = $value;
+        return $this;
+    }
     
     /**
      * Get Address1
@@ -153,94 +221,6 @@ class Customer
     }
     
     /**
-     * Get CountryCode
-     * Shipping country code of the customer
-     * @return string
-     */
-    public function getCountryCode()
-    {
-        return $this->countryCode;
-    }
-
-    /**
-     * Set CountryCode
-     * Shipping country code of the customer
-     * @param  string $value
-     * @return $this
-     */
-    public function setCountryCode($value)
-    {
-        $this->countryCode = $value;
-        return $this;
-    }
-    
-    /**
-     * Get FirstName
-     * First name of the customer
-     * @return string
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * Set FirstName
-     * First name of the customer
-     * @param  string $value
-     * @return $this
-     */
-    public function setFirstName($value)
-    {
-        $this->firstName = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Id
-     * Id of the customer
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set Id
-     * Id of the customer
-     * @param  string $value
-     * @return $this
-     */
-    public function setId($value)
-    {
-        $this->id = $value;
-        return $this;
-    }
-    
-    /**
-     * Get LastName
-     * Last name of the customer
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * Set LastName
-     * Last name of the customer
-     * @param  string $value
-     * @return $this
-     */
-    public function setLastName($value)
-    {
-        $this->lastName = $value;
-        return $this;
-    }
-    
-    /**
      * Get State
      * Shipping state of the customer
      * @return string
@@ -284,6 +264,28 @@ class Customer
         return $this;
     }
     
+    /**
+     * Get CountryCode
+     * Shipping country code of the customer
+     * @return string
+     */
+    public function getCountryCode()
+    {
+        return $this->countryCode;
+    }
+
+    /**
+     * Set CountryCode
+     * Shipping country code of the customer
+     * @param  string $value
+     * @return $this
+     */
+    public function setCountryCode($value)
+    {
+        $this->countryCode = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -292,6 +294,15 @@ class Customer
      */
     public function fillWithData($data)
     {
+        if(! empty($data["id"]))
+            $this->setId($data["id"]);
+
+        if(! empty($data["first_name"]))
+            $this->setFirstName($data["first_name"]);
+
+        if(! empty($data["last_name"]))
+            $this->setLastName($data["last_name"]);
+
         if(! empty($data["address1"]))
             $this->setAddress1($data["address1"]);
 
@@ -301,51 +312,16 @@ class Customer
         if(! empty($data["city"]))
             $this->setCity($data["city"]);
 
-        if(! empty($data["country_code"]))
-            $this->setCountryCode($data["country_code"]);
-
-        if(! empty($data["first_name"]))
-            $this->setFirstName($data["first_name"]);
-
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
-
-        if(! empty($data["last_name"]))
-            $this->setLastName($data["last_name"]);
-
         if(! empty($data["state"]))
             $this->setState($data["state"]);
 
         if(! empty($data["zip"]))
             $this->setZip($data["zip"]);
 
+        if(! empty($data["country_code"]))
+            $this->setCountryCode($data["country_code"]);
+
         return $this;
-    }
-
-    /**
-     * Authorize (create) a new customer token.
-	 * @param string $gatewayName
-	 * @param string $name
-	 * @param string $token
-     * @param array $options
-     * @return CustomerToken
-     */
-    public function authorize($gatewayName, $name, $token, $options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "/customers/" . urlencode($this->getId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
-
-        $data = array(
-			"name" => $name, 
-			"token" => $token
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['token'];
-        $customerToken = new CustomerToken($this->instance);
-        return $customerToken->fillWithData($body);
-        
     }
 
     /**
@@ -401,76 +377,6 @@ class Customer
         $body = $body['customer'];
         $customer = new Customer($this->instance);
         return $customer->fillWithData($body);
-        
-    }
-
-    /**
-     * Get all the authorization tokens of the customer.
-     * @param array $options
-     * @return array
-     */
-    public function tokens($options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "customers/" . urlencode($this->getId()) . "/tokens";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $a    = array();
-        $body = $response->getBody();
-        foreach($body['tokens'] as $v)
-        {
-            $tmp = new CustomerToken($this->instance);
-            $tmp->fillWithData($v);
-            $a[] = $tmp;
-        }
-
-        return $a;
-    }
-
-    /**
-     * Find a specific customer token.
-	 * @param string $tokenId
-     * @param array $options
-     * @return CustomerToken
-     */
-    public function findToken($tokenId, $options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['token'];
-        $customerToken = new CustomerToken($this->instance);
-        return $customerToken->fillWithData($body);
-        
-    }
-
-    /**
-     * Revoke (delete) a specific customer token.
-	 * @param string $tokenId
-     * @param array $options
-     * @return bool
-     */
-    public function revoke($tokenId, $options = array())
-    {
-        $request = new RequestProcessoutPrivate($this->instance);
-        $path    = "customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->delete($path, $data, $options));
-        return $response->isSuccess();
         
     }
 
@@ -541,6 +447,102 @@ class Customer
 
         $response = new Response($request->delete($path, $data, $options));
         return $response->isSuccess();
+        
+    }
+
+    /**
+     * Get all the authorization tokens of the customer.
+     * @param array $options
+     * @return array
+     */
+    public function tokens($options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/customers/" . urlencode($this->getId()) . "/tokens";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['tokens'] as $v)
+        {
+            $tmp = new CustomerToken($this->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        return $a;
+    }
+
+    /**
+     * Find a specific customer token.
+	 * @param string $tokenId
+     * @param array $options
+     * @return CustomerToken
+     */
+    public function findToken($tokenId, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['token'];
+        $customerToken = new CustomerToken($this->instance);
+        return $customerToken->fillWithData($body);
+        
+    }
+
+    /**
+     * Revoke (delete) a specific customer token.
+	 * @param string $tokenId
+     * @param array $options
+     * @return bool
+     */
+    public function revokeToken($tokenId, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->delete($path, $data, $options));
+        return $response->isSuccess();
+        
+    }
+
+    /**
+     * Authorize (create) a new customer token.
+	 * @param string $gatewayName
+	 * @param string $name
+	 * @param string $token
+     * @param array $options
+     * @return CustomerToken
+     */
+    public function authorize($gatewayName, $name, $token, $options = array())
+    {
+        $request = new RequestProcessoutPrivate($this->instance);
+        $path    = "/customers/" . urlencode($this->getId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
+
+        $data = array(
+			"name" => $name, 
+			"token" => $token
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['token'];
+        $customerToken = new CustomerToken($this->instance);
+        return $customerToken->fillWithData($body);
         
     }
 

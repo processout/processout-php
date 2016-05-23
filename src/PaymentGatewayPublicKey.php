@@ -41,6 +41,8 @@ class PaymentGatewayPublicKey
         }
 
         $this->instance = $processOut;
+
+        
     }
 
     

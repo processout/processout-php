@@ -18,12 +18,6 @@ class CustomerToken
     protected $instance;
 
     /**
-     * Name of the payment gateway this token was created on
-     * @var string
-     */
-    protected $gateway;
-
-    /**
      * Id of the customer token
      * @var string
      */
@@ -34,6 +28,12 @@ class CustomerToken
      * @var string
      */
     protected $name;
+
+    /**
+     * Name of the payment gateway this token was created on
+     * @var string
+     */
+    protected $gateway;
 
     /**
      * CustomerToken constructor
@@ -47,30 +47,10 @@ class CustomerToken
         }
 
         $this->instance = $processOut;
+
+        
     }
 
-    
-    /**
-     * Get Gateway
-     * Name of the payment gateway this token was created on
-     * @return string
-     */
-    public function getGateway()
-    {
-        return $this->gateway;
-    }
-
-    /**
-     * Set Gateway
-     * Name of the payment gateway this token was created on
-     * @param  string $value
-     * @return $this
-     */
-    public function setGateway($value)
-    {
-        $this->gateway = $value;
-        return $this;
-    }
     
     /**
      * Get Id
@@ -116,6 +96,28 @@ class CustomerToken
         return $this;
     }
     
+    /**
+     * Get Gateway
+     * Name of the payment gateway this token was created on
+     * @return string
+     */
+    public function getGateway()
+    {
+        return $this->gateway;
+    }
+
+    /**
+     * Set Gateway
+     * Name of the payment gateway this token was created on
+     * @param  string $value
+     * @return $this
+     */
+    public function setGateway($value)
+    {
+        $this->gateway = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -124,14 +126,14 @@ class CustomerToken
      */
     public function fillWithData($data)
     {
-        if(! empty($data["gateway"]))
-            $this->setGateway($data["gateway"]);
-
         if(! empty($data["id"]))
             $this->setId($data["id"]);
 
         if(! empty($data["name"]))
             $this->setName($data["name"]);
+
+        if(! empty($data["gateway"]))
+            $this->setGateway($data["gateway"]);
 
         return $this;
     }
