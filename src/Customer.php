@@ -24,6 +24,12 @@ class Customer
     protected $id;
 
     /**
+     * Email of the customer
+     * @var string
+     */
+    protected $email;
+
+    /**
      * First name of the customer
      * @var string
      */
@@ -107,6 +113,28 @@ class Customer
     public function setId($value)
     {
         $this->id = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Email
+     * Email of the customer
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set Email
+     * Email of the customer
+     * @param  string $value
+     * @return $this
+     */
+    public function setEmail($value)
+    {
+        $this->email = $value;
         return $this;
     }
     
@@ -296,6 +324,9 @@ class Customer
     {
         if(! empty($data["id"]))
             $this->setId($data["id"]);
+
+        if(! empty($data["email"]))
+            $this->setEmail($data["email"]);
 
         if(! empty($data["first_name"]))
             $this->setFirstName($data["first_name"]);
