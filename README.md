@@ -24,7 +24,7 @@ The package's installation is done using composer. Simply add these lines to you
 ``` json
 {
     "require": {
-        "ProcessOut/ProcessOut-php": "^3.1.0.2"
+        "ProcessOut/ProcessOut-php": "^3.1.1.0"
     }
 }
 ```

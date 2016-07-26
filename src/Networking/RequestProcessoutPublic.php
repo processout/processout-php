@@ -67,7 +67,7 @@ class RequestProcessoutPublic
     public function get($path, $data, $options)
     {
         $request = $this->cURL->newJsonRequest('GET',
-            ProcessOut::HOST . $path . "?" .
+            $this->processOut->getHost() . $path . "?" .
             http_build_query($data)
         );
         $this->prepare($request, $options);
@@ -85,7 +85,7 @@ class RequestProcessoutPublic
     public function post($path, $data, $options)
     {
         $request = $this->cURL->newJsonRequest('POST',
-            ProcessOut::HOST . $path,
+            $this->processOut->getHost() . $path,
             $data
         );
         $this->prepare($request, $options);
@@ -103,7 +103,7 @@ class RequestProcessoutPublic
     public function put($path, $data, $options)
     {
         $request = $this->cURL->newJsonRequest('PUT',
-            ProcessOut::HOST . $path,
+            $this->processOut->getHost() . $path,
             $data
         );
         $this->prepare($request, $options);
@@ -121,7 +121,7 @@ class RequestProcessoutPublic
     public function delete($path, $data, $options)
     {
         $request = $this->cURL->newJsonRequest('DELETE',
-            ProcessOut::HOST . $path . "?" .
+            $this->processOut->getHost() . $path . "?" .
             http_build_query($data)
         );
         $this->prepare($request, $options);

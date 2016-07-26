@@ -11,7 +11,7 @@ class ProcessOut
     /**
      * ProcessOut host url
      */
-    const HOST = 'https://api.processout.com/';
+    protected $host = 'https://api.processout.com/';
 
     /**
      * Contains cURL instance
@@ -43,6 +43,25 @@ class ProcessOut
     public function __construct()
     {
         $this->cURL = new cURL;
+    }
+
+    /**
+     * Get the library host URL
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * Set the library host URL
+     * @return $this
+     */
+    public function setHost($host)
+    {
+        $this->host = $host;
+        return $this;
     }
 
     /**
