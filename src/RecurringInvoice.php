@@ -489,7 +489,7 @@ class RecurringInvoice
      */
     public function invoice($options = array())
     {
-        $cur = new RecurringInvoice();
+        $cur = $this;
         $request = new RequestProcessoutPublic($cur->instance);
         $path    = "/recurring-invoices/" . urlencode($this->getId()) . "/invoices";
 
@@ -513,7 +513,7 @@ class RecurringInvoice
      */
     public function create($customerId, $options = array())
     {
-        $cur = new RecurringInvoice();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($customerId) . "/recurring-invoices";
 
@@ -546,7 +546,7 @@ class RecurringInvoice
      */
     public static function find($id, $options = array())
     {
-        $cur = $this;
+        $cur = new RecurringInvoice();
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/recurring-invoices/" . urlencode($id) . "";
 
@@ -569,7 +569,7 @@ class RecurringInvoice
      */
     public function end($reason, $options = array())
     {
-        $cur = new RecurringInvoice();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/recurring-invoices/" . urlencode($this->getId()) . "";
 
@@ -589,7 +589,7 @@ class RecurringInvoice
      */
     public function customer($options = array())
     {
-        $cur = new RecurringInvoice();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/recurring-invoices/" . urlencode($this->getId()) . "/customers";
 

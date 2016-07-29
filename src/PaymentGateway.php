@@ -220,7 +220,7 @@ class PaymentGateway
      */
     public function save($gatewayName, $options = array())
     {
-        $cur = new PaymentGateway();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/gateways/" . urlencode($gatewayName) . "";
 
@@ -244,7 +244,7 @@ class PaymentGateway
      */
     public static function delete($gatewayName, $options = array())
     {
-        $cur = $this;
+        $cur = new PaymentGateway();
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/gateways/" . urlencode($gatewayName) . "";
 

@@ -302,7 +302,7 @@ class TailoredInvoice
      */
     public function invoice($options = array())
     {
-        $cur = new TailoredInvoice();
+        $cur = $this;
         $request = new RequestProcessoutPublic($cur->instance);
         $path    = "/tailored-invoices/" . urlencode($this->getId()) . "/invoices";
 
@@ -325,7 +325,7 @@ class TailoredInvoice
      */
     public static function all($options = array())
     {
-        $cur = $this;
+        $cur = new TailoredInvoice();
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/tailored-invoices";
 
@@ -353,7 +353,7 @@ class TailoredInvoice
      */
     public function create($options = array())
     {
-        $cur = new TailoredInvoice();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/tailored-invoices";
 
@@ -383,7 +383,7 @@ class TailoredInvoice
      */
     public static function find($id, $options = array())
     {
-        $cur = $this;
+        $cur = new TailoredInvoice();
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/tailored-invoices/" . urlencode($id) . "";
 
@@ -405,7 +405,7 @@ class TailoredInvoice
      */
     public function save($options = array())
     {
-        $cur = new TailoredInvoice();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
 
@@ -434,7 +434,7 @@ class TailoredInvoice
      */
     public function delete($options = array())
     {
-        $cur = new TailoredInvoice();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
 

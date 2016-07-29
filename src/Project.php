@@ -207,7 +207,7 @@ class Project
      */
     public function createSupervised($options = array())
     {
-        $cur = new Project();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/projects/supervised";
 

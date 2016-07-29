@@ -459,7 +459,7 @@ class Invoice
      */
     public function create($options = array())
     {
-        $cur = new Invoice();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/invoices";
 
@@ -493,7 +493,7 @@ class Invoice
      */
     public static function find($id, $options = array())
     {
-        $cur = $this;
+        $cur = new Invoice();
         $request = new RequestProcessoutPublic($cur->instance);
         $path    = "/invoices/" . urlencode($id) . "";
 
@@ -515,7 +515,7 @@ class Invoice
      */
     public function customer($options = array())
     {
-        $cur = new Invoice();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
 
@@ -539,7 +539,7 @@ class Invoice
      */
     public function setCustomer($customerId, $options = array())
     {
-        $cur = new Invoice();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
 
@@ -563,7 +563,7 @@ class Invoice
      */
     public function charge($token, $options = array())
     {
-        $cur = new Invoice();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/invoices/" . urlencode($this->getId()) . "/gateways/{gateway_name}/charges";
 
@@ -587,7 +587,7 @@ class Invoice
      */
     public function chargeWithToken($tokenId, $options = array())
     {
-        $cur = new Invoice();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/invoices/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "/charges";
 

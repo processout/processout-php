@@ -362,7 +362,7 @@ class Customer
      */
     public static function all($options = array())
     {
-        $cur = $this;
+        $cur = new Customer();
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers";
 
@@ -390,7 +390,7 @@ class Customer
      */
     public function create($options = array())
     {
-        $cur = new Customer();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers";
 
@@ -421,7 +421,7 @@ class Customer
      */
     public static function find($id, $options = array())
     {
-        $cur = $this;
+        $cur = new Customer();
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($id) . "";
 
@@ -443,7 +443,7 @@ class Customer
      */
     public function save($options = array())
     {
-        $cur = new Customer();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($this->getId()) . "";
 
@@ -473,7 +473,7 @@ class Customer
      */
     public function delete($options = array())
     {
-        $cur = new Customer();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($this->getId()) . "";
 
@@ -493,7 +493,7 @@ class Customer
      */
     public function tokens($options = array())
     {
-        $cur = new Customer();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($this->getId()) . "/tokens";
 
@@ -522,7 +522,7 @@ class Customer
      */
     public function findToken($tokenId, $options = array())
     {
-        $cur = new Customer();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
 
@@ -546,7 +546,7 @@ class Customer
      */
     public function revokeToken($tokenId, $options = array())
     {
-        $cur = new Customer();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
 
@@ -569,7 +569,7 @@ class Customer
      */
     public function authorize($gatewayName, $name, $token, $options = array())
     {
-        $cur = new Customer();
+        $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($this->getId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
 
