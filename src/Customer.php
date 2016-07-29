@@ -362,7 +362,8 @@ class Customer
      */
     public static function all($options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers";
 
         $data = array(
@@ -374,7 +375,7 @@ class Customer
         $body = $response->getBody();
         foreach($body['customers'] as $v)
         {
-            $tmp = new Customer($this->instance);
+            $tmp = new Customer($cur->instance);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
@@ -389,7 +390,8 @@ class Customer
      */
     public function create($options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Customer();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers";
 
         $data = array(
@@ -406,7 +408,7 @@ class Customer
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
         $body = $body['customer'];
-        $customer = new Customer($this->instance);
+        $customer = new Customer($cur->instance);
         return $customer->fillWithData($body);
         
     }
@@ -419,7 +421,8 @@ class Customer
      */
     public static function find($id, $options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($id) . "";
 
         $data = array(
@@ -429,7 +432,7 @@ class Customer
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['customer'];
-        return $this->fillWithData($body);
+        return $cur->fillWithData($body);
         
     }
 
@@ -440,7 +443,8 @@ class Customer
      */
     public function save($options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Customer();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($this->getId()) . "";
 
         $data = array(
@@ -457,7 +461,7 @@ class Customer
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
         $body = $body['customer'];
-        $customer = new Customer($this->instance);
+        $customer = new Customer($cur->instance);
         return $customer->fillWithData($body);
         
     }
@@ -469,7 +473,8 @@ class Customer
      */
     public function delete($options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Customer();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($this->getId()) . "";
 
         $data = array(
@@ -488,7 +493,8 @@ class Customer
      */
     public function tokens($options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Customer();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($this->getId()) . "/tokens";
 
         $data = array(
@@ -500,7 +506,7 @@ class Customer
         $body = $response->getBody();
         foreach($body['tokens'] as $v)
         {
-            $tmp = new CustomerToken($this->instance);
+            $tmp = new CustomerToken($cur->instance);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
@@ -516,7 +522,8 @@ class Customer
      */
     public function findToken($tokenId, $options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Customer();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
 
         $data = array(
@@ -526,7 +533,7 @@ class Customer
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['token'];
-        $customerToken = new CustomerToken($this->instance);
+        $customerToken = new CustomerToken($cur->instance);
         return $customerToken->fillWithData($body);
         
     }
@@ -539,7 +546,8 @@ class Customer
      */
     public function revokeToken($tokenId, $options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Customer();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
 
         $data = array(
@@ -561,7 +569,8 @@ class Customer
      */
     public function authorize($gatewayName, $name, $token, $options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Customer();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/customers/" . urlencode($this->getId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
 
         $data = array(
@@ -572,7 +581,7 @@ class Customer
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
         $body = $body['token'];
-        $customerToken = new CustomerToken($this->instance);
+        $customerToken = new CustomerToken($cur->instance);
         return $customerToken->fillWithData($body);
         
     }

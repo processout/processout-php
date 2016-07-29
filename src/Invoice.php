@@ -459,7 +459,8 @@ class Invoice
      */
     public function create($options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Invoice();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/invoices";
 
         $data = array(
@@ -479,7 +480,7 @@ class Invoice
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
         $body = $body['invoice'];
-        $invoice = new Invoice($this->instance);
+        $invoice = new Invoice($cur->instance);
         return $invoice->fillWithData($body);
         
     }
@@ -492,7 +493,8 @@ class Invoice
      */
     public static function find($id, $options = array())
     {
-        $request = new RequestProcessoutPublic($this->instance);
+        $cur = $this;
+        $request = new RequestProcessoutPublic($cur->instance);
         $path    = "/invoices/" . urlencode($id) . "";
 
         $data = array(
@@ -502,7 +504,7 @@ class Invoice
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['invoice'];
-        return $this->fillWithData($body);
+        return $cur->fillWithData($body);
         
     }
 
@@ -513,7 +515,8 @@ class Invoice
      */
     public function customer($options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Invoice();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
 
         $data = array(
@@ -523,7 +526,7 @@ class Invoice
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['customer'];
-        $customer = new Customer($this->instance);
+        $customer = new Customer($cur->instance);
         return $customer->fillWithData($body);
         
     }
@@ -536,7 +539,8 @@ class Invoice
      */
     public function setCustomer($customerId, $options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Invoice();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
 
         $data = array(
@@ -546,7 +550,7 @@ class Invoice
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
         $body = $body['customer'];
-        $customer = new Customer($this->instance);
+        $customer = new Customer($cur->instance);
         return $customer->fillWithData($body);
         
     }
@@ -559,7 +563,8 @@ class Invoice
      */
     public function charge($token, $options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Invoice();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/invoices/" . urlencode($this->getId()) . "/gateways/{gateway_name}/charges";
 
         $data = array(
@@ -569,7 +574,7 @@ class Invoice
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
         $body = $body['customer_action'];
-        $customerAction = new CustomerAction($this->instance);
+        $customerAction = new CustomerAction($cur->instance);
         return $customerAction->fillWithData($body);
         
     }
@@ -582,7 +587,8 @@ class Invoice
      */
     public function chargeWithToken($tokenId, $options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Invoice();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/invoices/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "/charges";
 
         $data = array(
@@ -592,7 +598,7 @@ class Invoice
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
         $body = $body['customer_action'];
-        $customerAction = new CustomerAction($this->instance);
+        $customerAction = new CustomerAction($cur->instance);
         return $customerAction->fillWithData($body);
         
     }

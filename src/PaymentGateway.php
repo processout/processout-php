@@ -220,7 +220,8 @@ class PaymentGateway
      */
     public function save($gatewayName, $options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new PaymentGateway();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/gateways/" . urlencode($gatewayName) . "";
 
         $data = array(
@@ -230,7 +231,7 @@ class PaymentGateway
         $response = new Response($request->put($path, $data, $options));
         $body = $response->getBody();
         $body = $body['gateway'];
-        $paymentGateway = new PaymentGateway($this->instance);
+        $paymentGateway = new PaymentGateway($cur->instance);
         return $paymentGateway->fillWithData($body);
         
     }
@@ -243,7 +244,8 @@ class PaymentGateway
      */
     public static function delete($gatewayName, $options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/gateways/" . urlencode($gatewayName) . "";
 
         $data = array(

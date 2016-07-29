@@ -45,16 +45,7 @@ class Response
         $this->headers    = array_change_key_case($raw->headers, CASE_LOWER);
         $this->rawObject  = $raw->body;
 
-        switch($this->headers['content-type'])
-        {
-        case 'application/json':
-            $this->body = (array) json_decode($raw->body, true);
-            break;
-
-        default:
-            $this->body = (array) parse_str($raw->body);
-            break;
-        }
+        $this->body = (array) json_decode($raw->body, true);
 
         $this->check();
     }

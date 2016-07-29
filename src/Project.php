@@ -207,7 +207,8 @@ class Project
      */
     public function createSupervised($options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Project();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/projects/supervised";
 
         $data = array(
@@ -219,7 +220,7 @@ class Project
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
         $body = $body['project'];
-        return $this->fillWithData($body);
+        return $cur->fillWithData($body);
         
     }
 

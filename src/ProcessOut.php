@@ -11,7 +11,7 @@ class ProcessOut
     /**
      * ProcessOut host url
      */
-    protected $host = 'https://api.processout.com/';
+    protected $host = 'https://api.processout.com';
 
     /**
      * Contains cURL instance

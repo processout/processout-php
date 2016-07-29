@@ -207,7 +207,8 @@ class Event
      */
     public static function pull($options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/events";
 
         $data = array(
@@ -219,7 +220,7 @@ class Event
         $body = $response->getBody();
         foreach($body['events'] as $v)
         {
-            $tmp = new Event($this->instance);
+            $tmp = new Event($cur->instance);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
@@ -234,7 +235,8 @@ class Event
      */
     public static function setAllProcessed($options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/events";
 
         $data = array(
@@ -254,7 +256,8 @@ class Event
      */
     public static function find($id, $options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/events/" . urlencode($id) . "";
 
         $data = array(
@@ -264,7 +267,7 @@ class Event
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['event'];
-        return $this->fillWithData($body);
+        return $cur->fillWithData($body);
         
     }
 
@@ -275,7 +278,8 @@ class Event
      */
     public function markProcessed($options = array())
     {
-        $request = new RequestProcessoutPrivate($this->instance);
+        $cur = new Event();
+        $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/events/" . urlencode($this->getId()) . "";
 
         $data = array(
