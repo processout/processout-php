@@ -20,13 +20,13 @@ class ProcessOut
     protected $cURL;
 
     /**
-     * ProcessOut's project id
+     * ProcessOut project ID
      * @var string
      */
     protected $projectId;
 
     /**
-     * ProcessOut's project secret key
+     * ProcessOut project secret key
      * @var string
      */
     protected $projectSecret;

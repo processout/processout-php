@@ -18,88 +18,100 @@ class RecurringInvoice
     protected $instance;
 
     /**
-     * Id of the recurring invoice
+     * ID of the recurring invoice
      * @var string
      */
     protected $id;
 
     /**
-     * URL to which you can redirect your customer in order to activate the recurring invoice
+     * URL to which you may redirect your customer to authorize the recurring invoice
      * @var string
      */
     protected $url;
 
     /**
-     * Name of the item
+     * Name of the recurring invoice
      * @var string
      */
     protected $name;
 
     /**
-     * Price of the item
+     * Price of the recurring invoice
      * @var string
      */
     protected $price;
 
     /**
-     * Currency of the item's price (ex: USD)
+     * Currency of the recurring invoice
      * @var string
      */
     protected $currency;
 
     /**
-     * Taxes price added on top of the item price
+     * Taxes applied on the recurring invoice (on top of the price)
      * @var string
      */
     protected $taxes;
 
     /**
-     * Shipping price added on top of the item price
+     * Shipping fees applied on the recurring invoice (on top of the price)
      * @var string
      */
     protected $shipping;
 
     /**
-     * The recurring payment period, in days. ProcessOut will make sure to collect your payments at the end of each period.
-     * @var integer
-     */
-    protected $recurringDays;
-
-    /**
-     * The recurring trial period, in days.
-     * @var integer
-     */
-    protected $trialDays;
-
-    /**
-     * Whether or not the recurring invoice has ended. True if expired is true
-     * @var boolean
-     */
-    protected $ended;
-
-    /**
-     * The reason why the recurring invoice ended
-     * @var string
-     */
-    protected $endedReason;
-
-    /**
-     * URL where to redirect the customer once the recurring invoice has been authorized. Defaults to ProcessOut's landing page
+     * URL where the customer will be redirected upon payment
      * @var string
      */
     protected $returnUrl;
 
     /**
-     * URL where to redirect the customer when the recurring invoice authorization has been canceled. Defaults to ProcessOut's landing page
+     * URL where the customer will be redirected if the paymen was canceled
      * @var string
      */
     protected $cancelUrl;
 
     /**
-     * Custom value, can be anything. The value is sent back to notify_url
+     * The recurring payment period, in days
+     * @var integer
+     */
+    protected $recurringDays;
+
+    /**
+     * The trial period, in days. The customer will not be charged during this time span
+     * @var integer
+     */
+    protected $trialDays;
+
+    /**
+     * Custom variable passed along in the events/webhooks
      * @var string
      */
     protected $custom;
+
+    /**
+     * Weither or not the recurring invoice has ended (programmatically or canceled)
+     * @var boolean
+     */
+    protected $ended;
+
+    /**
+     * Reason as to why the recurring invoice ended
+     * @var string
+     */
+    protected $endedReason;
+
+    /**
+     * Define whether or not the authorization is in sandbox environment
+     * @var boolean
+     */
+    protected $sandbox;
+
+    /**
+     * Date at which the invoice was created
+     * @var string
+     */
+    protected $createdAt;
 
     /**
      * RecurringInvoice constructor
@@ -123,7 +135,7 @@ class RecurringInvoice
     
     /**
      * Get Id
-     * Id of the recurring invoice
+     * ID of the recurring invoice
      * @return string
      */
     public function getId()
@@ -133,7 +145,7 @@ class RecurringInvoice
 
     /**
      * Set Id
-     * Id of the recurring invoice
+     * ID of the recurring invoice
      * @param  string $value
      * @return $this
      */
@@ -145,7 +157,7 @@ class RecurringInvoice
     
     /**
      * Get Url
-     * URL to which you can redirect your customer in order to activate the recurring invoice
+     * URL to which you may redirect your customer to authorize the recurring invoice
      * @return string
      */
     public function getUrl()
@@ -155,7 +167,7 @@ class RecurringInvoice
 
     /**
      * Set Url
-     * URL to which you can redirect your customer in order to activate the recurring invoice
+     * URL to which you may redirect your customer to authorize the recurring invoice
      * @param  string $value
      * @return $this
      */
@@ -167,7 +179,7 @@ class RecurringInvoice
     
     /**
      * Get Name
-     * Name of the item
+     * Name of the recurring invoice
      * @return string
      */
     public function getName()
@@ -177,7 +189,7 @@ class RecurringInvoice
 
     /**
      * Set Name
-     * Name of the item
+     * Name of the recurring invoice
      * @param  string $value
      * @return $this
      */
@@ -189,7 +201,7 @@ class RecurringInvoice
     
     /**
      * Get Price
-     * Price of the item
+     * Price of the recurring invoice
      * @return string
      */
     public function getPrice()
@@ -199,7 +211,7 @@ class RecurringInvoice
 
     /**
      * Set Price
-     * Price of the item
+     * Price of the recurring invoice
      * @param  string $value
      * @return $this
      */
@@ -211,7 +223,7 @@ class RecurringInvoice
     
     /**
      * Get Currency
-     * Currency of the item's price (ex: USD)
+     * Currency of the recurring invoice
      * @return string
      */
     public function getCurrency()
@@ -221,7 +233,7 @@ class RecurringInvoice
 
     /**
      * Set Currency
-     * Currency of the item's price (ex: USD)
+     * Currency of the recurring invoice
      * @param  string $value
      * @return $this
      */
@@ -233,7 +245,7 @@ class RecurringInvoice
     
     /**
      * Get Taxes
-     * Taxes price added on top of the item price
+     * Taxes applied on the recurring invoice (on top of the price)
      * @return string
      */
     public function getTaxes()
@@ -243,7 +255,7 @@ class RecurringInvoice
 
     /**
      * Set Taxes
-     * Taxes price added on top of the item price
+     * Taxes applied on the recurring invoice (on top of the price)
      * @param  string $value
      * @return $this
      */
@@ -255,7 +267,7 @@ class RecurringInvoice
     
     /**
      * Get Shipping
-     * Shipping price added on top of the item price
+     * Shipping fees applied on the recurring invoice (on top of the price)
      * @return string
      */
     public function getShipping()
@@ -265,7 +277,7 @@ class RecurringInvoice
 
     /**
      * Set Shipping
-     * Shipping price added on top of the item price
+     * Shipping fees applied on the recurring invoice (on top of the price)
      * @param  string $value
      * @return $this
      */
@@ -276,96 +288,8 @@ class RecurringInvoice
     }
     
     /**
-     * Get RecurringDays
-     * The recurring payment period, in days. ProcessOut will make sure to collect your payments at the end of each period.
-     * @return int
-     */
-    public function getRecurringDays()
-    {
-        return $this->recurringDays;
-    }
-
-    /**
-     * Set RecurringDays
-     * The recurring payment period, in days. ProcessOut will make sure to collect your payments at the end of each period.
-     * @param  int $value
-     * @return $this
-     */
-    public function setRecurringDays($value)
-    {
-        $this->recurringDays = $value;
-        return $this;
-    }
-    
-    /**
-     * Get TrialDays
-     * The recurring trial period, in days.
-     * @return int
-     */
-    public function getTrialDays()
-    {
-        return $this->trialDays;
-    }
-
-    /**
-     * Set TrialDays
-     * The recurring trial period, in days.
-     * @param  int $value
-     * @return $this
-     */
-    public function setTrialDays($value)
-    {
-        $this->trialDays = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Ended
-     * Whether or not the recurring invoice has ended. True if expired is true
-     * @return bool
-     */
-    public function getEnded()
-    {
-        return $this->ended;
-    }
-
-    /**
-     * Set Ended
-     * Whether or not the recurring invoice has ended. True if expired is true
-     * @param  bool $value
-     * @return $this
-     */
-    public function setEnded($value)
-    {
-        $this->ended = $value;
-        return $this;
-    }
-    
-    /**
-     * Get EndedReason
-     * The reason why the recurring invoice ended
-     * @return string
-     */
-    public function getEndedReason()
-    {
-        return $this->endedReason;
-    }
-
-    /**
-     * Set EndedReason
-     * The reason why the recurring invoice ended
-     * @param  string $value
-     * @return $this
-     */
-    public function setEndedReason($value)
-    {
-        $this->endedReason = $value;
-        return $this;
-    }
-    
-    /**
      * Get ReturnUrl
-     * URL where to redirect the customer once the recurring invoice has been authorized. Defaults to ProcessOut's landing page
+     * URL where the customer will be redirected upon payment
      * @return string
      */
     public function getReturnUrl()
@@ -375,7 +299,7 @@ class RecurringInvoice
 
     /**
      * Set ReturnUrl
-     * URL where to redirect the customer once the recurring invoice has been authorized. Defaults to ProcessOut's landing page
+     * URL where the customer will be redirected upon payment
      * @param  string $value
      * @return $this
      */
@@ -387,7 +311,7 @@ class RecurringInvoice
     
     /**
      * Get CancelUrl
-     * URL where to redirect the customer when the recurring invoice authorization has been canceled. Defaults to ProcessOut's landing page
+     * URL where the customer will be redirected if the paymen was canceled
      * @return string
      */
     public function getCancelUrl()
@@ -397,7 +321,7 @@ class RecurringInvoice
 
     /**
      * Set CancelUrl
-     * URL where to redirect the customer when the recurring invoice authorization has been canceled. Defaults to ProcessOut's landing page
+     * URL where the customer will be redirected if the paymen was canceled
      * @param  string $value
      * @return $this
      */
@@ -408,8 +332,52 @@ class RecurringInvoice
     }
     
     /**
+     * Get RecurringDays
+     * The recurring payment period, in days
+     * @return int
+     */
+    public function getRecurringDays()
+    {
+        return $this->recurringDays;
+    }
+
+    /**
+     * Set RecurringDays
+     * The recurring payment period, in days
+     * @param  int $value
+     * @return $this
+     */
+    public function setRecurringDays($value)
+    {
+        $this->recurringDays = $value;
+        return $this;
+    }
+    
+    /**
+     * Get TrialDays
+     * The trial period, in days. The customer will not be charged during this time span
+     * @return int
+     */
+    public function getTrialDays()
+    {
+        return $this->trialDays;
+    }
+
+    /**
+     * Set TrialDays
+     * The trial period, in days. The customer will not be charged during this time span
+     * @param  int $value
+     * @return $this
+     */
+    public function setTrialDays($value)
+    {
+        $this->trialDays = $value;
+        return $this;
+    }
+    
+    /**
      * Get Custom
-     * Custom value, can be anything. The value is sent back to notify_url
+     * Custom variable passed along in the events/webhooks
      * @return string
      */
     public function getCustom()
@@ -419,13 +387,101 @@ class RecurringInvoice
 
     /**
      * Set Custom
-     * Custom value, can be anything. The value is sent back to notify_url
+     * Custom variable passed along in the events/webhooks
      * @param  string $value
      * @return $this
      */
     public function setCustom($value)
     {
         $this->custom = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Ended
+     * Weither or not the recurring invoice has ended (programmatically or canceled)
+     * @return bool
+     */
+    public function getEnded()
+    {
+        return $this->ended;
+    }
+
+    /**
+     * Set Ended
+     * Weither or not the recurring invoice has ended (programmatically or canceled)
+     * @param  bool $value
+     * @return $this
+     */
+    public function setEnded($value)
+    {
+        $this->ended = $value;
+        return $this;
+    }
+    
+    /**
+     * Get EndedReason
+     * Reason as to why the recurring invoice ended
+     * @return string
+     */
+    public function getEndedReason()
+    {
+        return $this->endedReason;
+    }
+
+    /**
+     * Set EndedReason
+     * Reason as to why the recurring invoice ended
+     * @param  string $value
+     * @return $this
+     */
+    public function setEndedReason($value)
+    {
+        $this->endedReason = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Sandbox
+     * Define whether or not the authorization is in sandbox environment
+     * @return bool
+     */
+    public function getSandbox()
+    {
+        return $this->sandbox;
+    }
+
+    /**
+     * Set Sandbox
+     * Define whether or not the authorization is in sandbox environment
+     * @param  bool $value
+     * @return $this
+     */
+    public function setSandbox($value)
+    {
+        $this->sandbox = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CreatedAt
+     * Date at which the invoice was created
+     * @return string
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set CreatedAt
+     * Date at which the invoice was created
+     * @param  string $value
+     * @return $this
+     */
+    public function setCreatedAt($value)
+    {
+        $this->createdAt = $value;
         return $this;
     }
     
@@ -458,11 +514,20 @@ class RecurringInvoice
         if(! empty($data["shipping"]))
             $this->setShipping($data["shipping"]);
 
+        if(! empty($data["return_url"]))
+            $this->setReturnUrl($data["return_url"]);
+
+        if(! empty($data["cancel_url"]))
+            $this->setCancelUrl($data["cancel_url"]);
+
         if(! empty($data["recurring_days"]))
             $this->setRecurringDays($data["recurring_days"]);
 
         if(! empty($data["trial_days"]))
             $this->setTrialDays($data["trial_days"]);
+
+        if(! empty($data["custom"]))
+            $this->setCustom($data["custom"]);
 
         if(! empty($data["ended"]))
             $this->setEnded($data["ended"]);
@@ -470,28 +535,48 @@ class RecurringInvoice
         if(! empty($data["ended_reason"]))
             $this->setEndedReason($data["ended_reason"]);
 
-        if(! empty($data["return_url"]))
-            $this->setReturnUrl($data["return_url"]);
+        if(! empty($data["sandbox"]))
+            $this->setSandbox($data["sandbox"]);
 
-        if(! empty($data["cancel_url"]))
-            $this->setCancelUrl($data["cancel_url"]);
-
-        if(! empty($data["custom"]))
-            $this->setCustom($data["custom"]);
+        if(! empty($data["created_at"]))
+            $this->setCreatedAt($data["created_at"]);
 
         return $this;
     }
 
     /**
-     * Get the invoice representing the new recurring invoice iteration.
+     * Get the customer linked to the recurring invoice.
+     * @param array $options
+     * @return Customer
+     */
+    public function customer($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/recurring-invoices/" . urlencode($this->getRecurringInvoiceId()) . "/customers";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['customer'];
+        $customer = new Customer($cur->instance);
+        return $customer->fillWithData($body);
+        
+    }
+
+    /**
+     * Get the invoice corresponding to the last iteration of the recurring invoice.
      * @param array $options
      * @return Invoice
      */
     public function invoice($options = array())
     {
         $cur = $this;
-        $request = new RequestProcessoutPublic($cur->instance);
-        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "/invoices";
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/recurring-invoices/" . urlencode($this->getRecurringInvoiceId()) . "/invoices";
 
         $data = array(
 
@@ -506,7 +591,7 @@ class RecurringInvoice
     }
 
     /**
-     * Create a new recurring invoice.
+     * Create a new recurring invoice for the given customer.
 	 * @param string $customerId
      * @param array $options
      * @return RecurringInvoice
@@ -515,19 +600,21 @@ class RecurringInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($customerId) . "/recurring-invoices";
+        $path    = "/recurring-invoices";
 
         $data = array(
 			"name" => $this->getName(), 
 			"price" => $this->getPrice(), 
-			"shipping" => $this->getShipping(), 
 			"taxes" => $this->getTaxes(), 
+			"shipping" => $this->getShipping(), 
 			"currency" => $this->getCurrency(), 
-			"recurring_days" => $this->getRecurringDays(), 
-			"trial_days" => $this->getTrialDays(), 
 			"return_url" => $this->getReturnUrl(), 
 			"cancel_url" => $this->getCancelUrl(), 
-			"custom" => $this->getCustom()
+			"custom" => $this->getCustom(), 
+			"recurring_days" => $this->getRecurringDays(), 
+			"trial_days" => $this->getTrialDays(), 
+			"ended_reason" => $this->getEndedReason(), 
+			"customer_id" => $customerId
         );
 
         $response = new Response($request->post($path, $data, $options));
@@ -539,16 +626,16 @@ class RecurringInvoice
     }
 
     /**
-     * Get the recurring invoice data.
-	 * @param string $id
+     * Find a recurring invoice by its ID.
+	 * @param string $recurringInvoiceId
      * @param array $options
-     * @return $this
+     * @return RecurringInvoice
      */
-    public static function find($id, $options = array())
+    public static function find($recurringInvoiceId, $options = array())
     {
         $cur = new RecurringInvoice();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/recurring-invoices/" . urlencode($id) . "";
+        $path    = "/recurring-invoices/" . urlencode($recurringInvoiceId) . "";
 
         $data = array(
 
@@ -557,12 +644,13 @@ class RecurringInvoice
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['recurring_invoice'];
-        return $cur->fillWithData($body);
+        $recurringInvoice = new RecurringInvoice($cur->instance);
+        return $recurringInvoice->fillWithData($body);
         
     }
 
     /**
-     * End a recurring invoice.
+     * End a recurring invoice. The reason may be provided as well.
 	 * @param string $reason
      * @param array $options
      * @return bool
@@ -571,7 +659,7 @@ class RecurringInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "";
+        $path    = "/recurring-invoices/" . urlencode($this->getRecurringInvoiceId()) . "";
 
         $data = array(
 			"reason" => $reason
@@ -579,29 +667,6 @@ class RecurringInvoice
 
         $response = new Response($request->delete($path, $data, $options));
         return $response->isSuccess();
-        
-    }
-
-    /**
-     * Get the customer linked to the recurring invoice.
-     * @param array $options
-     * @return Customer
-     */
-    public function customer($options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "/customers";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['customer'];
-        $customer = new Customer($cur->instance);
-        return $customer->fillWithData($body);
         
     }
 

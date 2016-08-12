@@ -6,12 +6,12 @@
     "api",
     "bindings"
   ],
-  "homepage": "https://www.processout.com",
+  "homepage": "https://processout.com",
   "license": "MIT",
   "authors": [
     {
       "name": "ProcessOut",
-      "homepage": "https://www.processout.com"
+      "homepage": "https://processout.com"
     }
   ],
   "require": {

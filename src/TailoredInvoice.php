@@ -18,52 +18,76 @@ class TailoredInvoice
     protected $instance;
 
     /**
-     * Id of the tailored invoice
+     * ID of the tailored invoice
      * @var string
      */
     protected $id;
 
     /**
-     * Name of the item
+     * Name of the tailored invoice
      * @var string
      */
     protected $name;
 
     /**
-     * Price of the item
+     * Price of the tailored invoice
      * @var string
      */
     protected $price;
 
     /**
-     * Currency of the item's price (ex: USD)
+     * Currency of the tailored invoice
      * @var string
      */
     protected $currency;
 
     /**
-     * Taxes price added on top of the item price
+     * Taxes applied on the tailored invoice (on top of the price)
      * @var string
      */
     protected $taxes;
 
     /**
-     * Shipping price added on top of the item price
+     * Shipping fees applied on the tailored invoice (on top of the price)
      * @var string
      */
     protected $shipping;
 
     /**
-     * URL where to redirect the customer once the payment has been placed. Defaults to ProcessOut's landing page
+     * Choose whether or not to request the email during the checkout process
+     * @var boolean
+     */
+    protected $requestEmail;
+
+    /**
+     * Choose whether or not to request the shipping address during the checkout process
+     * @var boolean
+     */
+    protected $requestShipping;
+
+    /**
+     * URL where the customer will be redirected upon payment
      * @var string
      */
     protected $returnUrl;
 
     /**
-     * URL where to redirect the customer when the transaction has been canceled. Defaults to ProcessOut's landing page
+     * URL where the customer will be redirected if the paymen was canceled
      * @var string
      */
     protected $cancelUrl;
+
+    /**
+     * Custom variable passed along in the events/webhooks
+     * @var string
+     */
+    protected $custom;
+
+    /**
+     * Date at which the tailored invoice was created
+     * @var string
+     */
+    protected $createdAt;
 
     /**
      * TailoredInvoice constructor
@@ -80,13 +104,15 @@ class TailoredInvoice
 
         $this->setTaxes("0.00");
         $this->setShipping("0.00");
+        $this->setRequestEmail((bool) false);
+        $this->setRequestShipping((bool) false);
         
     }
 
     
     /**
      * Get Id
-     * Id of the tailored invoice
+     * ID of the tailored invoice
      * @return string
      */
     public function getId()
@@ -96,7 +122,7 @@ class TailoredInvoice
 
     /**
      * Set Id
-     * Id of the tailored invoice
+     * ID of the tailored invoice
      * @param  string $value
      * @return $this
      */
@@ -108,7 +134,7 @@ class TailoredInvoice
     
     /**
      * Get Name
-     * Name of the item
+     * Name of the tailored invoice
      * @return string
      */
     public function getName()
@@ -118,7 +144,7 @@ class TailoredInvoice
 
     /**
      * Set Name
-     * Name of the item
+     * Name of the tailored invoice
      * @param  string $value
      * @return $this
      */
@@ -130,7 +156,7 @@ class TailoredInvoice
     
     /**
      * Get Price
-     * Price of the item
+     * Price of the tailored invoice
      * @return string
      */
     public function getPrice()
@@ -140,7 +166,7 @@ class TailoredInvoice
 
     /**
      * Set Price
-     * Price of the item
+     * Price of the tailored invoice
      * @param  string $value
      * @return $this
      */
@@ -152,7 +178,7 @@ class TailoredInvoice
     
     /**
      * Get Currency
-     * Currency of the item's price (ex: USD)
+     * Currency of the tailored invoice
      * @return string
      */
     public function getCurrency()
@@ -162,7 +188,7 @@ class TailoredInvoice
 
     /**
      * Set Currency
-     * Currency of the item's price (ex: USD)
+     * Currency of the tailored invoice
      * @param  string $value
      * @return $this
      */
@@ -174,7 +200,7 @@ class TailoredInvoice
     
     /**
      * Get Taxes
-     * Taxes price added on top of the item price
+     * Taxes applied on the tailored invoice (on top of the price)
      * @return string
      */
     public function getTaxes()
@@ -184,7 +210,7 @@ class TailoredInvoice
 
     /**
      * Set Taxes
-     * Taxes price added on top of the item price
+     * Taxes applied on the tailored invoice (on top of the price)
      * @param  string $value
      * @return $this
      */
@@ -196,7 +222,7 @@ class TailoredInvoice
     
     /**
      * Get Shipping
-     * Shipping price added on top of the item price
+     * Shipping fees applied on the tailored invoice (on top of the price)
      * @return string
      */
     public function getShipping()
@@ -206,7 +232,7 @@ class TailoredInvoice
 
     /**
      * Set Shipping
-     * Shipping price added on top of the item price
+     * Shipping fees applied on the tailored invoice (on top of the price)
      * @param  string $value
      * @return $this
      */
@@ -217,8 +243,52 @@ class TailoredInvoice
     }
     
     /**
+     * Get RequestEmail
+     * Choose whether or not to request the email during the checkout process
+     * @return bool
+     */
+    public function getRequestEmail()
+    {
+        return $this->requestEmail;
+    }
+
+    /**
+     * Set RequestEmail
+     * Choose whether or not to request the email during the checkout process
+     * @param  bool $value
+     * @return $this
+     */
+    public function setRequestEmail($value)
+    {
+        $this->requestEmail = $value;
+        return $this;
+    }
+    
+    /**
+     * Get RequestShipping
+     * Choose whether or not to request the shipping address during the checkout process
+     * @return bool
+     */
+    public function getRequestShipping()
+    {
+        return $this->requestShipping;
+    }
+
+    /**
+     * Set RequestShipping
+     * Choose whether or not to request the shipping address during the checkout process
+     * @param  bool $value
+     * @return $this
+     */
+    public function setRequestShipping($value)
+    {
+        $this->requestShipping = $value;
+        return $this;
+    }
+    
+    /**
      * Get ReturnUrl
-     * URL where to redirect the customer once the payment has been placed. Defaults to ProcessOut's landing page
+     * URL where the customer will be redirected upon payment
      * @return string
      */
     public function getReturnUrl()
@@ -228,7 +298,7 @@ class TailoredInvoice
 
     /**
      * Set ReturnUrl
-     * URL where to redirect the customer once the payment has been placed. Defaults to ProcessOut's landing page
+     * URL where the customer will be redirected upon payment
      * @param  string $value
      * @return $this
      */
@@ -240,7 +310,7 @@ class TailoredInvoice
     
     /**
      * Get CancelUrl
-     * URL where to redirect the customer when the transaction has been canceled. Defaults to ProcessOut's landing page
+     * URL where the customer will be redirected if the paymen was canceled
      * @return string
      */
     public function getCancelUrl()
@@ -250,13 +320,57 @@ class TailoredInvoice
 
     /**
      * Set CancelUrl
-     * URL where to redirect the customer when the transaction has been canceled. Defaults to ProcessOut's landing page
+     * URL where the customer will be redirected if the paymen was canceled
      * @param  string $value
      * @return $this
      */
     public function setCancelUrl($value)
     {
         $this->cancelUrl = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Custom
+     * Custom variable passed along in the events/webhooks
+     * @return string
+     */
+    public function getCustom()
+    {
+        return $this->custom;
+    }
+
+    /**
+     * Set Custom
+     * Custom variable passed along in the events/webhooks
+     * @param  string $value
+     * @return $this
+     */
+    public function setCustom($value)
+    {
+        $this->custom = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CreatedAt
+     * Date at which the tailored invoice was created
+     * @return string
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set CreatedAt
+     * Date at which the tailored invoice was created
+     * @param  string $value
+     * @return $this
+     */
+    public function setCreatedAt($value)
+    {
+        $this->createdAt = $value;
         return $this;
     }
     
@@ -286,40 +400,29 @@ class TailoredInvoice
         if(! empty($data["shipping"]))
             $this->setShipping($data["shipping"]);
 
+        if(! empty($data["request_email"]))
+            $this->setRequestEmail($data["request_email"]);
+
+        if(! empty($data["request_shipping"]))
+            $this->setRequestShipping($data["request_shipping"]);
+
         if(! empty($data["return_url"]))
             $this->setReturnUrl($data["return_url"]);
 
         if(! empty($data["cancel_url"]))
             $this->setCancelUrl($data["cancel_url"]);
 
+        if(! empty($data["custom"]))
+            $this->setCustom($data["custom"]);
+
+        if(! empty($data["created_at"]))
+            $this->setCreatedAt($data["created_at"]);
+
         return $this;
     }
 
     /**
-     * Create an invoice from a tailored invoice.
-     * @param array $options
-     * @return Invoice
-     */
-    public function invoice($options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPublic($cur->instance);
-        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "/invoices";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['invoice'];
-        $invoice = new Invoice($cur->instance);
-        return $invoice->fillWithData($body);
-        
-    }
-
-    /**
-     * List all tailored invoices.
+     * Get all the tailored invoices.
      * @param array $options
      * @return array
      */
@@ -363,8 +466,11 @@ class TailoredInvoice
 			"taxes" => $this->getTaxes(), 
 			"shipping" => $this->getShipping(), 
 			"currency" => $this->getCurrency(), 
+			"request_email" => $this->getRequestEmail(), 
+			"request_shipping" => $this->getRequestShipping(), 
 			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl()
+			"cancel_url" => $this->getCancelUrl(), 
+			"custom" => $this->getCustom()
         );
 
         $response = new Response($request->post($path, $data, $options));
@@ -376,16 +482,16 @@ class TailoredInvoice
     }
 
     /**
-     * Get tailored invoice data.
-	 * @param string $id
+     * Find a tailored invoice by its ID.
+	 * @param string $tailoredInvoiceId
      * @param array $options
-     * @return $this
+     * @return TailoredInvoice
      */
-    public static function find($id, $options = array())
+    public static function find($tailoredInvoiceId, $options = array())
     {
         $cur = new TailoredInvoice();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/tailored-invoices/" . urlencode($id) . "";
+        $path    = "/tailored-invoices/" . urlencode($tailoredInvoiceId) . "";
 
         $data = array(
 
@@ -394,12 +500,13 @@ class TailoredInvoice
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['tailored_invoice'];
-        return $cur->fillWithData($body);
+        $tailoredInvoice = new TailoredInvoice($cur->instance);
+        return $tailoredInvoice->fillWithData($body);
         
     }
 
     /**
-     * Update the tailored invoice data.
+     * Save the updated tailored invoice attributes.
      * @param array $options
      * @return $this
      */
@@ -407,17 +514,10 @@ class TailoredInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
+        $path    = "/tailored-invoices/" . urlencode($this->getTailoredInvoiceId()) . "";
 
         $data = array(
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"notify_url" => $this->getNotifyUrl(), 
-			"name" => $this->getName(), 
-			"price" => $this->getPrice(), 
-			"currency" => $this->getCurrency(), 
-			"taxes" => $this->getTaxes(), 
-			"shipping" => $this->getShipping()
+
         );
 
         $response = new Response($request->put($path, $data, $options));
@@ -428,7 +528,7 @@ class TailoredInvoice
     }
 
     /**
-     * Delete a tailored invoice.
+     * Delete the tailored invoice.
      * @param array $options
      * @return bool
      */
@@ -436,7 +536,7 @@ class TailoredInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
+        $path    = "/tailored-invoices/" . urlencode($this->getTailoredInvoiceId()) . "";
 
         $data = array(
 

@@ -8,7 +8,7 @@ use ProcessOut\Networking\RequestProcessoutPrivate;
 use ProcessOut\Networking\RequestProcessoutPublic;
 
 
-class Event
+class Transaction
 {
 
     /**
@@ -18,43 +18,37 @@ class Event
     protected $instance;
 
     /**
-     * ID of the event
+     * ID of the transaction
      * @var string
      */
     protected $id;
 
     /**
-     * Name of the event
+     * Status of the transaction
      * @var string
      */
-    protected $name;
+    protected $status;
 
     /**
-     * Data associated to the event, in the form of a dictionary
-     * @var dictionary
+     * ProcessOut fee applied on the transaction
+     * @var string
      */
-    protected $data;
+    protected $fee;
 
     /**
-     * Define whether or not event was processed
-     * @var boolean
-     */
-    protected $processed;
-
-    /**
-     * Define whether or not the authorization is in sandbox environment
+     * Define whether or not the transaction is in sandbox environment
      * @var boolean
      */
     protected $sandbox;
 
     /**
-     * Date at which the authorization was created
+     * Date at which the transaction was created
      * @var string
      */
     protected $createdAt;
 
     /**
-     * Event constructor
+     * Transaction constructor
      * @param ProcessOut\ProcessOut|null $processOut
      */
     public function __construct(ProcessOut $processOut = null)
@@ -72,7 +66,7 @@ class Event
     
     /**
      * Get Id
-     * ID of the event
+     * ID of the transaction
      * @return string
      */
     public function getId()
@@ -82,7 +76,7 @@ class Event
 
     /**
      * Set Id
-     * ID of the event
+     * ID of the transaction
      * @param  string $value
      * @return $this
      */
@@ -93,74 +87,52 @@ class Event
     }
     
     /**
-     * Get Name
-     * Name of the event
+     * Get Status
+     * Status of the transaction
      * @return string
      */
-    public function getName()
+    public function getStatus()
     {
-        return $this->name;
+        return $this->status;
     }
 
     /**
-     * Set Name
-     * Name of the event
+     * Set Status
+     * Status of the transaction
      * @param  string $value
      * @return $this
      */
-    public function setName($value)
+    public function setStatus($value)
     {
-        $this->name = $value;
+        $this->status = $value;
         return $this;
     }
     
     /**
-     * Get Data
-     * Data associated to the event, in the form of a dictionary
-     * @return array
+     * Get Fee
+     * ProcessOut fee applied on the transaction
+     * @return string
      */
-    public function getData()
+    public function getFee()
     {
-        return $this->data;
+        return $this->fee;
     }
 
     /**
-     * Set Data
-     * Data associated to the event, in the form of a dictionary
-     * @param  array $value
+     * Set Fee
+     * ProcessOut fee applied on the transaction
+     * @param  string $value
      * @return $this
      */
-    public function setData($value)
+    public function setFee($value)
     {
-        $this->data = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Processed
-     * Define whether or not event was processed
-     * @return bool
-     */
-    public function getProcessed()
-    {
-        return $this->processed;
-    }
-
-    /**
-     * Set Processed
-     * Define whether or not event was processed
-     * @param  bool $value
-     * @return $this
-     */
-    public function setProcessed($value)
-    {
-        $this->processed = $value;
+        $this->fee = $value;
         return $this;
     }
     
     /**
      * Get Sandbox
-     * Define whether or not the authorization is in sandbox environment
+     * Define whether or not the transaction is in sandbox environment
      * @return bool
      */
     public function getSandbox()
@@ -170,7 +142,7 @@ class Event
 
     /**
      * Set Sandbox
-     * Define whether or not the authorization is in sandbox environment
+     * Define whether or not the transaction is in sandbox environment
      * @param  bool $value
      * @return $this
      */
@@ -182,7 +154,7 @@ class Event
     
     /**
      * Get CreatedAt
-     * Date at which the authorization was created
+     * Date at which the transaction was created
      * @return string
      */
     public function getCreatedAt()
@@ -192,7 +164,7 @@ class Event
 
     /**
      * Set CreatedAt
-     * Date at which the authorization was created
+     * Date at which the transaction was created
      * @param  string $value
      * @return $this
      */
@@ -206,21 +178,18 @@ class Event
     /**
      * Fills the current object with the new values pulled from the data
      * @param  array $data
-     * @return Event
+     * @return Transaction
      */
     public function fillWithData($data)
     {
         if(! empty($data["id"]))
             $this->setId($data["id"]);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
+        if(! empty($data["status"]))
+            $this->setStatus($data["status"]);
 
-        if(! empty($data["data"]))
-            $this->setData($data["data"]);
-
-        if(! empty($data["processed"]))
-            $this->setProcessed($data["processed"]);
+        if(! empty($data["fee"]))
+            $this->setFee($data["fee"]);
 
         if(! empty($data["sandbox"]))
             $this->setSandbox($data["sandbox"]);
@@ -232,15 +201,15 @@ class Event
     }
 
     /**
-     * Get all the events.
+     * Get all the transactions.
      * @param array $options
      * @return array
      */
     public static function all($options = array())
     {
-        $cur = new Event();
+        $cur = new Transaction();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/events";
+        $path    = "/transactions";
 
         $data = array(
 
@@ -249,9 +218,9 @@ class Event
         $response = new Response($request->get($path, $data, $options));
         $a    = array();
         $body = $response->getBody();
-        foreach($body['events'] as $v)
+        foreach($body['transactions'] as $v)
         {
-            $tmp = new Event($cur->instance);
+            $tmp = new Transaction($cur->instance);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
@@ -260,16 +229,16 @@ class Event
     }
 
     /**
-     * Find an event by its ID.
-	 * @param string $eventId
+     * Find a transaction by its ID.
+	 * @param string $transactionId
      * @param array $options
-     * @return Event
+     * @return Transaction
      */
-    public static function find($eventId, $options = array())
+    public static function find($transactionId, $options = array())
     {
-        $cur = new Event();
+        $cur = new Transaction();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/events/" . urlencode($eventId) . "";
+        $path    = "/transactions/" . urlencode($transactionId) . "";
 
         $data = array(
 
@@ -277,29 +246,9 @@ class Event
 
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
-        $body = $body['event'];
-        $event = new Event($cur->instance);
-        return $event->fillWithData($body);
-        
-    }
-
-    /**
-     * Mark the event as processed.
-     * @param array $options
-     * @return bool
-     */
-    public function markProcessed($options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/events/" . urlencode($this->getEventId()) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->put($path, $data, $options));
-        return $response->isSuccess();
+        $body = $body['transaction'];
+        $transaction = new Transaction($cur->instance);
+        return $transaction->fillWithData($body);
         
     }
 

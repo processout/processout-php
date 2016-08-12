@@ -18,7 +18,7 @@ class Customer
     protected $instance;
 
     /**
-     * Id of the customer
+     * ID of the customer
      * @var string
      */
     protected $id;
@@ -42,7 +42,7 @@ class Customer
     protected $lastName;
 
     /**
-     * Main address of the customer
+     * Address of the customer
      * @var string
      */
     protected $address1;
@@ -54,28 +54,40 @@ class Customer
     protected $address2;
 
     /**
-     * Shipping city of the customer
+     * City of the customer
      * @var string
      */
     protected $city;
 
     /**
-     * Shipping state of the customer
+     * State of the customer
      * @var string
      */
     protected $state;
 
     /**
-     * Shipping ZIP code of the customer
+     * ZIP code of the customer
      * @var string
      */
     protected $zip;
 
     /**
-     * Shipping country code of the customer
+     * Country code of the customer
      * @var string
      */
     protected $countryCode;
+
+    /**
+     * Define whether or not the customer is in sandbox environment
+     * @var boolean
+     */
+    protected $sandbox;
+
+    /**
+     * Date at which the customer was created
+     * @var string
+     */
+    protected $createdAt;
 
     /**
      * Customer constructor
@@ -96,7 +108,7 @@ class Customer
     
     /**
      * Get Id
-     * Id of the customer
+     * ID of the customer
      * @return string
      */
     public function getId()
@@ -106,7 +118,7 @@ class Customer
 
     /**
      * Set Id
-     * Id of the customer
+     * ID of the customer
      * @param  string $value
      * @return $this
      */
@@ -184,7 +196,7 @@ class Customer
     
     /**
      * Get Address1
-     * Main address of the customer
+     * Address of the customer
      * @return string
      */
     public function getAddress1()
@@ -194,7 +206,7 @@ class Customer
 
     /**
      * Set Address1
-     * Main address of the customer
+     * Address of the customer
      * @param  string $value
      * @return $this
      */
@@ -228,7 +240,7 @@ class Customer
     
     /**
      * Get City
-     * Shipping city of the customer
+     * City of the customer
      * @return string
      */
     public function getCity()
@@ -238,7 +250,7 @@ class Customer
 
     /**
      * Set City
-     * Shipping city of the customer
+     * City of the customer
      * @param  string $value
      * @return $this
      */
@@ -250,7 +262,7 @@ class Customer
     
     /**
      * Get State
-     * Shipping state of the customer
+     * State of the customer
      * @return string
      */
     public function getState()
@@ -260,7 +272,7 @@ class Customer
 
     /**
      * Set State
-     * Shipping state of the customer
+     * State of the customer
      * @param  string $value
      * @return $this
      */
@@ -272,7 +284,7 @@ class Customer
     
     /**
      * Get Zip
-     * Shipping ZIP code of the customer
+     * ZIP code of the customer
      * @return string
      */
     public function getZip()
@@ -282,7 +294,7 @@ class Customer
 
     /**
      * Set Zip
-     * Shipping ZIP code of the customer
+     * ZIP code of the customer
      * @param  string $value
      * @return $this
      */
@@ -294,7 +306,7 @@ class Customer
     
     /**
      * Get CountryCode
-     * Shipping country code of the customer
+     * Country code of the customer
      * @return string
      */
     public function getCountryCode()
@@ -304,13 +316,57 @@ class Customer
 
     /**
      * Set CountryCode
-     * Shipping country code of the customer
+     * Country code of the customer
      * @param  string $value
      * @return $this
      */
     public function setCountryCode($value)
     {
         $this->countryCode = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Sandbox
+     * Define whether or not the customer is in sandbox environment
+     * @return bool
+     */
+    public function getSandbox()
+    {
+        return $this->sandbox;
+    }
+
+    /**
+     * Set Sandbox
+     * Define whether or not the customer is in sandbox environment
+     * @param  bool $value
+     * @return $this
+     */
+    public function setSandbox($value)
+    {
+        $this->sandbox = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CreatedAt
+     * Date at which the customer was created
+     * @return string
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set CreatedAt
+     * Date at which the customer was created
+     * @param  string $value
+     * @return $this
+     */
+    public function setCreatedAt($value)
+    {
+        $this->createdAt = $value;
         return $this;
     }
     
@@ -352,11 +408,121 @@ class Customer
         if(! empty($data["country_code"]))
             $this->setCountryCode($data["country_code"]);
 
+        if(! empty($data["sandbox"]))
+            $this->setSandbox($data["sandbox"]);
+
+        if(! empty($data["created_at"]))
+            $this->setCreatedAt($data["created_at"]);
+
         return $this;
     }
 
     /**
-     * Get the customers list belonging to the project.
+     * Get the recurring invoices linked to the customer.
+     * @param array $options
+     * @return array
+     */
+    public function recurringInvoices($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/recurring-invoices";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['recurring_invoices'] as $v)
+        {
+            $tmp = new RecurringInvoice($cur->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        return $a;
+    }
+
+    /**
+     * Get the customer's tokens.
+     * @param array $options
+     * @return array
+     */
+    public function tokens($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['tokens'] as $v)
+        {
+            $tmp = new Token($cur->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        return $a;
+    }
+
+    /**
+     * Get a specific customer's token by its ID.
+	 * @param string $tokenId
+     * @param array $options
+     * @return Token
+     */
+    public function token($tokenId, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($tokenId) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['token'];
+        $token = new Token($cur->instance);
+        return $token->fillWithData($body);
+        
+    }
+
+    /**
+     * Get a specific customer's token by its ID.
+	 * @param string $tokenId
+     * @param array $options
+     * @return Token
+     */
+    public function delete($tokenId, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($tokenId) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->delete($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['token'];
+        $token = new Token($cur->instance);
+        return $token->fillWithData($body);
+        
+    }
+
+    /**
+     * Get all the customers.
      * @param array $options
      * @return array
      */
@@ -401,6 +567,7 @@ class Customer
 			"address1" => $this->getAddress1(), 
 			"address2" => $this->getAddress2(), 
 			"city" => $this->getCity(), 
+			"state" => $this->getState(), 
 			"zip" => $this->getZip(), 
 			"country_code" => $this->getCountryCode()
         );
@@ -414,16 +581,16 @@ class Customer
     }
 
     /**
-     * Get the customer data.
-	 * @param string $id
+     * Find a customer by its ID.
+	 * @param string $customerId
      * @param array $options
-     * @return $this
+     * @return Customer
      */
-    public static function find($id, $options = array())
+    public static function find($customerId, $options = array())
     {
         $cur = new Customer();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($id) . "";
+        $path    = "/customers/" . urlencode($customerId) . "";
 
         $data = array(
 
@@ -432,37 +599,30 @@ class Customer
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['customer'];
-        return $cur->fillWithData($body);
+        $customer = new Customer($cur->instance);
+        return $customer->fillWithData($body);
         
     }
 
     /**
-     * Update the customer data.
+     * Save the updated customer attributes.
      * @param array $options
-     * @return Customer
+     * @return $this
      */
     public function save($options = array())
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getId()) . "";
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "";
 
         $data = array(
-			"email" => $this->getEmail(), 
-			"first_name" => $this->getFirstName(), 
-			"last_name" => $this->getLastName(), 
-			"address1" => $this->getAddress1(), 
-			"address2" => $this->getAddress2(), 
-			"city" => $this->getCity(), 
-			"zip" => $this->getZip(), 
-			"country_code" => $this->getCountryCode()
+
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = new Response($request->put($path, $data, $options));
         $body = $response->getBody();
         $body = $body['customer'];
-        $customer = new Customer($cur->instance);
-        return $customer->fillWithData($body);
+        return $cur->fillWithData($body);
         
     }
 
@@ -475,7 +635,7 @@ class Customer
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getId()) . "";
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "";
 
         $data = array(
 
@@ -483,106 +643,6 @@ class Customer
 
         $response = new Response($request->delete($path, $data, $options));
         return $response->isSuccess();
-        
-    }
-
-    /**
-     * Get all the authorization tokens of the customer.
-     * @param array $options
-     * @return array
-     */
-    public function tokens($options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getId()) . "/tokens";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $a    = array();
-        $body = $response->getBody();
-        foreach($body['tokens'] as $v)
-        {
-            $tmp = new CustomerToken($cur->instance);
-            $tmp->fillWithData($v);
-            $a[] = $tmp;
-        }
-
-        return $a;
-    }
-
-    /**
-     * Find a specific customer token.
-	 * @param string $tokenId
-     * @param array $options
-     * @return CustomerToken
-     */
-    public function findToken($tokenId, $options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['token'];
-        $customerToken = new CustomerToken($cur->instance);
-        return $customerToken->fillWithData($body);
-        
-    }
-
-    /**
-     * Revoke (delete) a specific customer token.
-	 * @param string $tokenId
-     * @param array $options
-     * @return bool
-     */
-    public function revokeToken($tokenId, $options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->delete($path, $data, $options));
-        return $response->isSuccess();
-        
-    }
-
-    /**
-     * Authorize (create) a new customer token.
-	 * @param string $gatewayName
-	 * @param string $name
-	 * @param string $token
-     * @param array $options
-     * @return CustomerToken
-     */
-    public function authorize($gatewayName, $name, $token, $options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
-
-        $data = array(
-			"name" => $name, 
-			"token" => $token
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['token'];
-        $customerToken = new CustomerToken($cur->instance);
-        return $customerToken->fillWithData($body);
         
     }
 
