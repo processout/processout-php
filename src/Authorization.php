@@ -24,6 +24,12 @@ class Authorization
     protected $id;
 
     /**
+     * Customer linked to the authorization
+     * @var object
+     */
+    protected $customer;
+
+    /**
      * URL to which you may redirect your customer to proceed with the authorization
      * @var string
      */
@@ -107,6 +113,35 @@ class Authorization
     public function setId($value)
     {
         $this->id = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Customer
+     * Customer linked to the authorization
+     * @return object
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * Set Customer
+     * Customer linked to the authorization
+     * @param  object $value
+     * @return $this
+     */
+    public function setCustomer($value)
+    {
+        if (is_object($value))
+            $this->customer = $value;
+        else
+        {
+            $obj = new Customer($this->instance);
+            $obj->fillWithData($value);
+            $this->customer = $obj;
+        }
         return $this;
     }
     
@@ -297,6 +332,9 @@ class Authorization
         if(! empty($data["id"]))
             $this->setId($data["id"]);
 
+        if(! empty($data["customer"]))
+            $this->setCustomer($data["customer"]);
+
         if(! empty($data["url"]))
             $this->setUrl($data["url"]);
 
@@ -322,136 +360,6 @@ class Authorization
             $this->setCreatedAt($data["created_at"]);
 
         return $this;
-    }
-
-    /**
-     * Get the customer linked to the authorization.
-     * @param array $options
-     * @return Customer
-     */
-    public function customer($options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/authorizations/" . urlencode($this->getAuthorizationId()) . "/customers";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['customer'];
-        $customer = new Customer($cur->instance);
-        return $customer->fillWithData($body);
-        
-    }
-
-    /**
-     * Authorize (create) a new customer token on the given gateway.
-	 * @param string $gatewayName
-	 * @param string $name
-	 * @param string $token
-     * @param array $options
-     * @return Token
-     */
-    public function authorize($gatewayName, $name, $token, $options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/authorizations/" . urlencode($this->getAuthorizationId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
-
-        $data = array(
-			"name" => $name, 
-			"token" => $token
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['token'];
-        $token = new Token($cur->instance);
-        return $token->fillWithData($body);
-        
-    }
-
-    /**
-     * Create a new authorization for the given customer ID.
-	 * @param string $customerId
-     * @param array $options
-     * @return Authorization
-     */
-    public function create($customerId, $options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/authorizations";
-
-        $data = array(
-			"name" => $this->getName(), 
-			"currency" => $this->getCurrency(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"custom" => $this->getCustom(), 
-			"customer_id" => $customerId
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['authorization'];
-        $authorization = new Authorization($cur->instance);
-        return $authorization->fillWithData($body);
-        
-    }
-
-    /**
-     * Find an authorization by its ID.
-	 * @param string $authorizationId
-     * @param array $options
-     * @return $this
-     */
-    public static function find($authorizationId, $options = array())
-    {
-        $cur = new Authorization();
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/authorizations/" . urlencode($authorizationId) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['authorization'];
-        return $cur->fillWithData($body);
-        
-    }
-
-    /**
-     * Create a new authorization for the given customer.
-	 * @param string $customerId
-     * @param array $options
-     * @return Authorization
-     */
-    public function create($customerId, $options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($customerId) . "/authorizations";
-
-        $data = array(
-			"name" => $this->getName(), 
-			"currency" => $this->getCurrency(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"custom" => $this->getCustom()
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['authorization'];
-        $authorization = new Authorization($cur->instance);
-        return $authorization->fillWithData($body);
-        
     }
 
     

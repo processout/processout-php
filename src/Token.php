@@ -24,6 +24,12 @@ class Token
     protected $id;
 
     /**
+     * Customer linked to the token
+     * @var object
+     */
+    protected $customer;
+
+    /**
      * Name of the customer token
      * @var string
      */
@@ -77,6 +83,35 @@ class Token
     public function setId($value)
     {
         $this->id = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Customer
+     * Customer linked to the token
+     * @return object
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * Set Customer
+     * Customer linked to the token
+     * @param  object $value
+     * @return $this
+     */
+    public function setCustomer($value)
+    {
+        if (is_object($value))
+            $this->customer = $value;
+        else
+        {
+            $obj = new Customer($this->instance);
+            $obj->fillWithData($value);
+            $this->customer = $obj;
+        }
         return $this;
     }
     
@@ -156,6 +191,9 @@ class Token
     {
         if(! empty($data["id"]))
             $this->setId($data["id"]);
+
+        if(! empty($data["customer"]))
+            $this->setCustomer($data["customer"]);
 
         if(! empty($data["name"]))
             $this->setName($data["name"]);

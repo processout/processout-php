@@ -24,6 +24,12 @@ class RecurringInvoice
     protected $id;
 
     /**
+     * Customer linked to the recurring invoice
+     * @var object
+     */
+    protected $customer;
+
+    /**
      * URL to which you may redirect your customer to authorize the recurring invoice
      * @var string
      */
@@ -152,6 +158,35 @@ class RecurringInvoice
     public function setId($value)
     {
         $this->id = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Customer
+     * Customer linked to the recurring invoice
+     * @return object
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * Set Customer
+     * Customer linked to the recurring invoice
+     * @param  object $value
+     * @return $this
+     */
+    public function setCustomer($value)
+    {
+        if (is_object($value))
+            $this->customer = $value;
+        else
+        {
+            $obj = new Customer($this->instance);
+            $obj->fillWithData($value);
+            $this->customer = $obj;
+        }
         return $this;
     }
     
@@ -495,6 +530,9 @@ class RecurringInvoice
     {
         if(! empty($data["id"]))
             $this->setId($data["id"]);
+
+        if(! empty($data["customer"]))
+            $this->setCustomer($data["customer"]);
 
         if(! empty($data["url"]))
             $this->setUrl($data["url"]);

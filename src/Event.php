@@ -42,16 +42,16 @@ class Event
     protected $processed;
 
     /**
-     * Define whether or not the authorization is in sandbox environment
+     * Define whether or not the event is in sandbox environment
      * @var boolean
      */
     protected $sandbox;
 
     /**
-     * Date at which the authorization was created
+     * Date at which the event was fired
      * @var string
      */
-    protected $createdAt;
+    protected $firedAt;
 
     /**
      * Event constructor
@@ -160,7 +160,7 @@ class Event
     
     /**
      * Get Sandbox
-     * Define whether or not the authorization is in sandbox environment
+     * Define whether or not the event is in sandbox environment
      * @return bool
      */
     public function getSandbox()
@@ -170,7 +170,7 @@ class Event
 
     /**
      * Set Sandbox
-     * Define whether or not the authorization is in sandbox environment
+     * Define whether or not the event is in sandbox environment
      * @param  bool $value
      * @return $this
      */
@@ -181,24 +181,24 @@ class Event
     }
     
     /**
-     * Get CreatedAt
-     * Date at which the authorization was created
+     * Get FiredAt
+     * Date at which the event was fired
      * @return string
      */
-    public function getCreatedAt()
+    public function getFiredAt()
     {
-        return $this->createdAt;
+        return $this->firedAt;
     }
 
     /**
-     * Set CreatedAt
-     * Date at which the authorization was created
+     * Set FiredAt
+     * Date at which the event was fired
      * @param  string $value
      * @return $this
      */
-    public function setCreatedAt($value)
+    public function setFiredAt($value)
     {
-        $this->createdAt = $value;
+        $this->firedAt = $value;
         return $this;
     }
     
@@ -225,8 +225,8 @@ class Event
         if(! empty($data["sandbox"]))
             $this->setSandbox($data["sandbox"]);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data["fired_at"]))
+            $this->setFiredAt($data["fired_at"]);
 
         return $this;
     }

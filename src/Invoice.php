@@ -24,6 +24,18 @@ class Invoice
     protected $id;
 
     /**
+     * Customer linked to the invoice, if any
+     * @var object
+     */
+    protected $customer;
+
+    /**
+     * Recurring invoice to which the invoice is linked to, if any
+     * @var object
+     */
+    protected $recurringInvoice;
+
+    /**
      * URL to which you may redirect your customer to proceed with the payment
      * @var string
      */
@@ -141,6 +153,64 @@ class Invoice
     public function setId($value)
     {
         $this->id = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Customer
+     * Customer linked to the invoice, if any
+     * @return object
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * Set Customer
+     * Customer linked to the invoice, if any
+     * @param  object $value
+     * @return $this
+     */
+    public function setCustomer($value)
+    {
+        if (is_object($value))
+            $this->customer = $value;
+        else
+        {
+            $obj = new Customer($this->instance);
+            $obj->fillWithData($value);
+            $this->customer = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get RecurringInvoice
+     * Recurring invoice to which the invoice is linked to, if any
+     * @return object
+     */
+    public function getRecurringInvoice()
+    {
+        return $this->recurringInvoice;
+    }
+
+    /**
+     * Set RecurringInvoice
+     * Recurring invoice to which the invoice is linked to, if any
+     * @param  object $value
+     * @return $this
+     */
+    public function setRecurringInvoice($value)
+    {
+        if (is_object($value))
+            $this->recurringInvoice = $value;
+        else
+        {
+            $obj = new RecurringInvoice($this->instance);
+            $obj->fillWithData($value);
+            $this->recurringInvoice = $obj;
+        }
         return $this;
     }
     
@@ -440,6 +510,12 @@ class Invoice
     {
         if(! empty($data["id"]))
             $this->setId($data["id"]);
+
+        if(! empty($data["customer"]))
+            $this->setCustomer($data["customer"]);
+
+        if(! empty($data["recurring_invoice"]))
+            $this->setRecurringInvoice($data["recurring_invoice"]);
 
         if(! empty($data["url"]))
             $this->setUrl($data["url"]);

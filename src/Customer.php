@@ -78,6 +78,12 @@ class Customer
     protected $countryCode;
 
     /**
+     * Wether the customer has a PIN set or not
+     * @var boolean
+     */
+    protected $hasPin;
+
+    /**
      * Define whether or not the customer is in sandbox environment
      * @var boolean
      */
@@ -327,6 +333,28 @@ class Customer
     }
     
     /**
+     * Get HasPin
+     * Wether the customer has a PIN set or not
+     * @return bool
+     */
+    public function getHasPin()
+    {
+        return $this->hasPin;
+    }
+
+    /**
+     * Set HasPin
+     * Wether the customer has a PIN set or not
+     * @param  bool $value
+     * @return $this
+     */
+    public function setHasPin($value)
+    {
+        $this->hasPin = $value;
+        return $this;
+    }
+    
+    /**
      * Get Sandbox
      * Define whether or not the customer is in sandbox environment
      * @return bool
@@ -408,6 +436,9 @@ class Customer
         if(! empty($data["country_code"]))
             $this->setCountryCode($data["country_code"]);
 
+        if(! empty($data["has_pin"]))
+            $this->setHasPin($data["has_pin"]);
+
         if(! empty($data["sandbox"]))
             $this->setSandbox($data["sandbox"]);
 
@@ -415,6 +446,33 @@ class Customer
             $this->setCreatedAt($data["created_at"]);
 
         return $this;
+    }
+
+    /**
+     * Create a new authorization request for the current customer.
+     * @param array $options
+     * @return AuthorizationRequest
+     */
+    public function createAuthorization($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/authorization-requests";
+
+        $data = array(
+			"name" => $this->getName(), 
+			"currency" => $this->getCurrency(), 
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl(), 
+			"custom" => $this->getCustom()
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['authorization_request'];
+        $authorizationRequest = new AuthorizationRequest($cur->instance);
+        return $authorizationRequest->fillWithData($body);
+        
     }
 
     /**
@@ -443,6 +501,39 @@ class Customer
         }
 
         return $a;
+    }
+
+    /**
+     * Create a new recurring invoice for the current customer.
+     * @param array $options
+     * @return RecurringInvoice
+     */
+    public function createRecurringInvoice($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/recurring-invoices";
+
+        $data = array(
+			"name" => $this->getName(), 
+			"price" => $this->getPrice(), 
+			"taxes" => $this->getTaxes(), 
+			"shipping" => $this->getShipping(), 
+			"currency" => $this->getCurrency(), 
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl(), 
+			"custom" => $this->getCustom(), 
+			"recurring_days" => $this->getRecurringDays(), 
+			"trial_days" => $this->getTrialDays(), 
+			"ended_reason" => $this->getEndedReason()
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['recurring_invoice'];
+        $recurringInvoice = new RecurringInvoice($cur->instance);
+        return $recurringInvoice->fillWithData($body);
+        
     }
 
     /**
