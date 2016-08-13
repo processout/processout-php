@@ -5,10 +5,9 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Response;
 use ProcessOut\Networking\RequestProcessoutPrivate;
-use ProcessOut\Networking\RequestProcessoutPublic;
 
 
-class Authorization
+class AuthorizationRequest
 {
 
     /**
@@ -78,7 +77,7 @@ class Authorization
     protected $createdAt;
 
     /**
-     * Authorization constructor
+     * AuthorizationRequest constructor
      * @param ProcessOut\ProcessOut|null $processOut
      */
     public function __construct(ProcessOut $processOut = null)
@@ -325,7 +324,7 @@ class Authorization
     /**
      * Fills the current object with the new values pulled from the data
      * @param  array $data
-     * @return Authorization
+     * @return AuthorizationRequest
      */
     public function fillWithData($data)
     {
@@ -360,6 +359,108 @@ class Authorization
             $this->setCreatedAt($data["created_at"]);
 
         return $this;
+    }
+
+    /**
+     * Get the customer linked to the authorization request.
+     * @param array $options
+     * @return Customer
+     */
+    public function customer($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/authorization-requests/" . urlencode($this->getAuthorizationRequestId()) . "/customers";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['customer'];
+        $customer = new Customer($cur->instance);
+        return $customer->fillWithData($body);
+        
+    }
+
+    /**
+     * Authorize (create) a new customer token on the given gateway.
+	 * @param string $gatewayName
+	 * @param string $name
+	 * @param string $token
+     * @param array $options
+     * @return Token
+     */
+    public function authorize($gatewayName, $name, $token, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/authorization-requests/" . urlencode($this->getAuthorizationRequestId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
+
+        $data = array(
+			"name" => $name, 
+			"token" => $token
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['token'];
+        $token = new Token($cur->instance);
+        return $token->fillWithData($body);
+        
+    }
+
+    /**
+     * Create a new authorization request for the given customer ID.
+	 * @param string $customerId
+     * @param array $options
+     * @return AuthorizationRequest
+     */
+    public function create($customerId, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/authorization-requests";
+
+        $data = array(
+			"name" => $this->getName(), 
+			"currency" => $this->getCurrency(), 
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl(), 
+			"custom" => $this->getCustom(), 
+			"customer_id" => $customerId
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['authorization_request'];
+        $authorizationRequest = new AuthorizationRequest($cur->instance);
+        return $authorizationRequest->fillWithData($body);
+        
+    }
+
+    /**
+     * Find an authorization request by its ID.
+	 * @param string $authorizationRequestId
+     * @param array $options
+     * @return $this
+     */
+    public static function find($authorizationRequestId, $options = array())
+    {
+        $cur = new AuthorizationRequest();
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/authorization-requests/" . urlencode($authorizationRequestId) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['authorization_request'];
+        return $cur->fillWithData($body);
+        
     }
 
     

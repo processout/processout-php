@@ -5,7 +5,6 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Response;
 use ProcessOut\Networking\RequestProcessoutPrivate;
-use ProcessOut\Networking\RequestProcessoutPublic;
 
 
 class TailoredInvoice
