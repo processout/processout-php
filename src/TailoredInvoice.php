@@ -421,6 +421,29 @@ class TailoredInvoice
     }
 
     /**
+     * Create a new invoice from the tailored invoice.
+     * @param array $options
+     * @return Invoice
+     */
+    public function invoice($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/tailored-invoices/" . urlencode($this->getTailoredInvoiceId()) . "/invoices";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['invoice'];
+        $invoice = new Invoice($cur->instance);
+        return $invoice->fillWithData($body);
+        
+    }
+
+    /**
      * Get all the tailored invoices.
      * @param array $options
      * @return array

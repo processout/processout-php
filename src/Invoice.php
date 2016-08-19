@@ -582,12 +582,12 @@ class Invoice
     }
 
     /**
-     * Link a customer to the invoice.
+     * Assign a customer to the invoice.
 	 * @param string $customerId
      * @param array $options
      * @return Customer
      */
-    public function setCustomer($customerId, $options = array())
+    public function assignCustomer($customerId, $options = array())
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);

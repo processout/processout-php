@@ -528,30 +528,6 @@ class Customer
     }
 
     /**
-     * Get a specific customer's token by its ID.
-	 * @param string $tokenId
-     * @param array $options
-     * @return Token
-     */
-    public function delete($tokenId, $options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($tokenId) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->delete($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['token'];
-        $token = new Token($cur->instance);
-        return $token->fillWithData($body);
-        
-    }
-
-    /**
      * Get all the customers.
      * @param array $options
      * @return array

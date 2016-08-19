@@ -206,5 +206,28 @@ class Token
         return $this;
     }
 
+    /**
+     * Delete a specific customer's token by its ID.
+     * @param array $options
+     * @return Token
+     */
+    public function delete($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($this->getTokenId()) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->delete($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['token'];
+        $token = new Token($cur->instance);
+        return $token->fillWithData($body);
+        
+    }
+
     
 }

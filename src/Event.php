@@ -231,6 +231,34 @@ class Event
     }
 
     /**
+     * Get all the webhooks of the event.
+     * @param array $options
+     * @return array
+     */
+    public function webhooks($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/events/" . urlencode($this->getEventId()) . "/webhooks";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['webhooks'] as $v)
+        {
+            $tmp = new Webhook($cur->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        return $a;
+    }
+
+    /**
      * Get all the events.
      * @param array $options
      * @return array
