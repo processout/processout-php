@@ -77,16 +77,16 @@ class RecurringInvoice
     protected $cancelUrl;
 
     /**
-     * The recurring payment period, in days
+     * The recurring payment period, formatted in the format "1d2w3m4y" (day, week, month, year)
      * @var integer
      */
-    protected $recurringDays;
+    protected $interval;
 
     /**
-     * The trial period, in days. The customer will not be charged during this time span
+     * The trial period. The customer will not be charged during this time span. Formatted in the format "1d2w3m4y" (day, week, month, year)
      * @var integer
      */
-    protected $trialDays;
+    protected $trialPeriod;
 
     /**
      * Custom variable passed along in the events/webhooks
@@ -133,7 +133,7 @@ class RecurringInvoice
 
         $this->setTaxes("0.00");
         $this->setShipping("0.00");
-        $this->setTrialDays((int) 0);
+        $this->setTrialPeriod((int) 0);
         
     }
 
@@ -366,46 +366,46 @@ class RecurringInvoice
     }
     
     /**
-     * Get RecurringDays
-     * The recurring payment period, in days
+     * Get Interval
+     * The recurring payment period, formatted in the format "1d2w3m4y" (day, week, month, year)
      * @return int
      */
-    public function getRecurringDays()
+    public function getInterval()
     {
-        return $this->recurringDays;
+        return $this->interval;
     }
 
     /**
-     * Set RecurringDays
-     * The recurring payment period, in days
+     * Set Interval
+     * The recurring payment period, formatted in the format "1d2w3m4y" (day, week, month, year)
      * @param  int $value
      * @return $this
      */
-    public function setRecurringDays($value)
+    public function setInterval($value)
     {
-        $this->recurringDays = $value;
+        $this->interval = $value;
         return $this;
     }
     
     /**
-     * Get TrialDays
-     * The trial period, in days. The customer will not be charged during this time span
+     * Get TrialPeriod
+     * The trial period. The customer will not be charged during this time span. Formatted in the format "1d2w3m4y" (day, week, month, year)
      * @return int
      */
-    public function getTrialDays()
+    public function getTrialPeriod()
     {
-        return $this->trialDays;
+        return $this->trialPeriod;
     }
 
     /**
-     * Set TrialDays
-     * The trial period, in days. The customer will not be charged during this time span
+     * Set TrialPeriod
+     * The trial period. The customer will not be charged during this time span. Formatted in the format "1d2w3m4y" (day, week, month, year)
      * @param  int $value
      * @return $this
      */
-    public function setTrialDays($value)
+    public function setTrialPeriod($value)
     {
-        $this->trialDays = $value;
+        $this->trialPeriod = $value;
         return $this;
     }
     
@@ -557,11 +557,11 @@ class RecurringInvoice
         if(! empty($data["cancel_url"]))
             $this->setCancelUrl($data["cancel_url"]);
 
-        if(! empty($data["recurring_days"]))
-            $this->setRecurringDays($data["recurring_days"]);
+        if(! empty($data["interval"]))
+            $this->setInterval($data["interval"]);
 
-        if(! empty($data["trial_days"]))
-            $this->setTrialDays($data["trial_days"]);
+        if(! empty($data["trial_period"]))
+            $this->setTrialPeriod($data["trial_period"]);
 
         if(! empty($data["custom"]))
             $this->setCustom($data["custom"]);
@@ -648,8 +648,10 @@ class RecurringInvoice
 			"return_url" => $this->getReturnUrl(), 
 			"cancel_url" => $this->getCancelUrl(), 
 			"custom" => $this->getCustom(), 
-			"recurring_days" => $this->getRecurringDays(), 
-			"trial_days" => $this->getTrialDays(), 
+			"interval" => $this->getInterval(), 
+			"interval_days" => $this->getIntervalDays(), 
+			"trial_period" => $this->getTrialPeriod(), 
+			"trial_period_days" => $this->getTrialPeriodDays(), 
 			"ended_reason" => $this->getEndedReason(), 
 			"customer_id" => $customerId
         );
