@@ -429,7 +429,7 @@ class TailoredInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/tailored-invoices/" . urlencode($this->getTailoredInvoiceId()) . "/invoices";
+        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "/invoices";
 
         $data = array(
 
@@ -536,7 +536,7 @@ class TailoredInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/tailored-invoices/" . urlencode($this->getTailoredInvoiceId()) . "";
+        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
 
         $data = array(
 
@@ -558,7 +558,7 @@ class TailoredInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/tailored-invoices/" . urlencode($this->getTailoredInvoiceId()) . "";
+        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
 
         $data = array(
 

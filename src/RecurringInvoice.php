@@ -590,7 +590,7 @@ class RecurringInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/recurring-invoices/" . urlencode($this->getRecurringInvoiceId()) . "/customers";
+        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "/customers";
 
         $data = array(
 
@@ -613,7 +613,7 @@ class RecurringInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/recurring-invoices/" . urlencode($this->getRecurringInvoiceId()) . "/invoices";
+        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "/invoices";
 
         $data = array(
 
@@ -649,9 +649,7 @@ class RecurringInvoice
 			"cancel_url" => $this->getCancelUrl(), 
 			"custom" => $this->getCustom(), 
 			"interval" => $this->getInterval(), 
-			"interval_days" => $this->getIntervalDays(), 
 			"trial_period" => $this->getTrialPeriod(), 
-			"trial_period_days" => $this->getTrialPeriodDays(), 
 			"ended_reason" => $this->getEndedReason(), 
 			"customer_id" => $customerId
         );
@@ -698,7 +696,7 @@ class RecurringInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/recurring-invoices/" . urlencode($this->getRecurringInvoiceId()) . "";
+        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "";
 
         $data = array(
 			"reason" => $reason

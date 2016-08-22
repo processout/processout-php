@@ -370,7 +370,7 @@ class AuthorizationRequest
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/authorization-requests/" . urlencode($this->getAuthorizationRequestId()) . "/customers";
+        $path    = "/authorization-requests/" . urlencode($this->getId()) . "/customers";
 
         $data = array(
 
@@ -396,7 +396,7 @@ class AuthorizationRequest
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/authorization-requests/" . urlencode($this->getAuthorizationRequestId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
+        $path    = "/authorization-requests/" . urlencode($this->getId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
 
         $data = array(
 			"name" => $name, 
@@ -442,15 +442,15 @@ class AuthorizationRequest
 
     /**
      * Find an authorization request by its ID.
-	 * @param string $authorizationRequestId
+	 * @param string $id
      * @param array $options
      * @return $this
      */
-    public static function find($authorizationRequestId, $options = array())
+    public static function find($id, $options = array())
     {
         $cur = new AuthorizationRequest();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/authorization-requests/" . urlencode($authorizationRequestId) . "";
+        $path    = "/authorization-requests/" . urlencode($id) . "";
 
         $data = array(
 

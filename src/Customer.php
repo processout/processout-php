@@ -456,7 +456,7 @@ class Customer
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/recurring-invoices";
+        $path    = "/customers/" . urlencode($this->getId()) . "/recurring-invoices";
 
         $data = array(
 
@@ -484,7 +484,7 @@ class Customer
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens";
+        $path    = "/customers/" . urlencode($this->getId()) . "/tokens";
 
         $data = array(
 
@@ -513,7 +513,7 @@ class Customer
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($tokenId) . "";
+        $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
 
         $data = array(
 
@@ -619,7 +619,7 @@ class Customer
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getCustomerId()) . "";
+        $path    = "/customers/" . urlencode($this->getId()) . "";
 
         $data = array(
 
@@ -641,7 +641,7 @@ class Customer
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getCustomerId()) . "";
+        $path    = "/customers/" . urlencode($this->getId()) . "";
 
         $data = array(
 

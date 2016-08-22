@@ -239,7 +239,7 @@ class Event
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/events/" . urlencode($this->getEventId()) . "/webhooks";
+        $path    = "/events/" . urlencode($this->getId()) . "/webhooks";
 
         $data = array(
 
@@ -319,7 +319,7 @@ class Event
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/events/" . urlencode($this->getEventId()) . "";
+        $path    = "/events/" . urlencode($this->getId()) . "";
 
         $data = array(
 

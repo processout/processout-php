@@ -29,6 +29,12 @@ class Token
     protected $customer;
 
     /**
+     * ID of the customer token
+     * @var string
+     */
+    protected $customerId;
+
+    /**
      * Name of the customer token
      * @var string
      */
@@ -115,6 +121,28 @@ class Token
     }
     
     /**
+     * Get CustomerId
+     * ID of the customer token
+     * @return string
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * Set CustomerId
+     * ID of the customer token
+     * @param  string $value
+     * @return $this
+     */
+    public function setCustomerId($value)
+    {
+        $this->customerId = $value;
+        return $this;
+    }
+    
+    /**
      * Get Name
      * Name of the customer token
      * @return string
@@ -194,6 +222,9 @@ class Token
         if(! empty($data["customer"]))
             $this->setCustomer($data["customer"]);
 
+        if(! empty($data["customer_id"]))
+            $this->setCustomerId($data["customer_id"]);
+
         if(! empty($data["name"]))
             $this->setName($data["name"]);
 
@@ -215,7 +246,7 @@ class Token
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($this->getTokenId()) . "";
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($this->getId()) . "";
 
         $data = array(
 
