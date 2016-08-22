@@ -78,13 +78,13 @@ class RecurringInvoice
 
     /**
      * The recurring payment period, formatted in the format "1d2w3m4y" (day, week, month, year)
-     * @var integer
+     * @var string
      */
     protected $interval;
 
     /**
      * The trial period. The customer will not be charged during this time span. Formatted in the format "1d2w3m4y" (day, week, month, year)
-     * @var integer
+     * @var string
      */
     protected $trialPeriod;
 
@@ -133,7 +133,7 @@ class RecurringInvoice
 
         $this->setTaxes("0.00");
         $this->setShipping("0.00");
-        $this->setTrialPeriod((int) 0);
+        $this->setTrialPeriod("0d");
         
     }
 
@@ -368,7 +368,7 @@ class RecurringInvoice
     /**
      * Get Interval
      * The recurring payment period, formatted in the format "1d2w3m4y" (day, week, month, year)
-     * @return int
+     * @return string
      */
     public function getInterval()
     {
@@ -378,7 +378,7 @@ class RecurringInvoice
     /**
      * Set Interval
      * The recurring payment period, formatted in the format "1d2w3m4y" (day, week, month, year)
-     * @param  int $value
+     * @param  string $value
      * @return $this
      */
     public function setInterval($value)
@@ -390,7 +390,7 @@ class RecurringInvoice
     /**
      * Get TrialPeriod
      * The trial period. The customer will not be charged during this time span. Formatted in the format "1d2w3m4y" (day, week, month, year)
-     * @return int
+     * @return string
      */
     public function getTrialPeriod()
     {
@@ -400,7 +400,7 @@ class RecurringInvoice
     /**
      * Set TrialPeriod
      * The trial period. The customer will not be charged during this time span. Formatted in the format "1d2w3m4y" (day, week, month, year)
-     * @param  int $value
+     * @param  string $value
      * @return $this
      */
     public function setTrialPeriod($value)
