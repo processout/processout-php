@@ -442,15 +442,15 @@ class AuthorizationRequest
 
     /**
      * Find an authorization request by its ID.
-	 * @param string $id
+	 * @param string $authorizationRequestId
      * @param array $options
      * @return $this
      */
-    public static function find($id, $options = array())
+    public static function find($authorizationRequestId, $options = array())
     {
         $cur = new AuthorizationRequest();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/authorization-requests/" . urlencode($id) . "";
+        $path    = "/authorization-requests/" . urlencode($authorizationRequestId) . "";
 
         $data = array(
 

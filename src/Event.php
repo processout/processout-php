@@ -29,16 +29,10 @@ class Event
     protected $name;
 
     /**
-     * Data associated to the event, in the form of a dictionary
-     * @var dictionary
+     * Data object associated to the event
+     * @var object
      */
     protected $data;
-
-    /**
-     * Define whether or not event was processed
-     * @var boolean
-     */
-    protected $processed;
 
     /**
      * Define whether or not the event is in sandbox environment
@@ -115,8 +109,8 @@ class Event
     
     /**
      * Get Data
-     * Data associated to the event, in the form of a dictionary
-     * @return array
+     * Data object associated to the event
+     * @return object
      */
     public function getData()
     {
@@ -125,35 +119,13 @@ class Event
 
     /**
      * Set Data
-     * Data associated to the event, in the form of a dictionary
-     * @param  array $value
+     * Data object associated to the event
+     * @param  object $value
      * @return $this
      */
     public function setData($value)
     {
         $this->data = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Processed
-     * Define whether or not event was processed
-     * @return bool
-     */
-    public function getProcessed()
-    {
-        return $this->processed;
-    }
-
-    /**
-     * Set Processed
-     * Define whether or not event was processed
-     * @param  bool $value
-     * @return $this
-     */
-    public function setProcessed($value)
-    {
-        $this->processed = $value;
         return $this;
     }
     
@@ -217,9 +189,6 @@ class Event
 
         if(! empty($data["data"]))
             $this->setData($data["data"]);
-
-        if(! empty($data["processed"]))
-            $this->setProcessed($data["processed"]);
 
         if(! empty($data["sandbox"]))
             $this->setSandbox($data["sandbox"]);
@@ -307,26 +276,6 @@ class Event
         $body = $body['event'];
         $event = new Event($cur->instance);
         return $event->fillWithData($body);
-        
-    }
-
-    /**
-     * Mark the event as processed.
-     * @param array $options
-     * @return bool
-     */
-    public function markProcessed($options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/events/" . urlencode($this->getId()) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->put($path, $data, $options));
-        return $response->isSuccess();
         
     }
 
