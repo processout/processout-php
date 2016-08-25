@@ -77,6 +77,12 @@ class Customer
     protected $countryCode;
 
     /**
+     * Metadata related to the customer, in the form of a dictionary (key-value pair)
+     * @var dictionary
+     */
+    protected $metadata;
+
+    /**
      * Wether the customer has a PIN set or not
      * @var boolean
      */
@@ -107,6 +113,7 @@ class Customer
 
         $this->instance = $processOut;
 
+        $this->setMetadata(array('_library' => 'php'));
         
     }
 
@@ -332,6 +339,28 @@ class Customer
     }
     
     /**
+     * Get Metadata
+     * Metadata related to the customer, in the form of a dictionary (key-value pair)
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * Set Metadata
+     * Metadata related to the customer, in the form of a dictionary (key-value pair)
+     * @param  array $value
+     * @return $this
+     */
+    public function setMetadata($value)
+    {
+        $this->metadata = $value;
+        return $this;
+    }
+    
+    /**
      * Get HasPin
      * Wether the customer has a PIN set or not
      * @return bool
@@ -434,6 +463,9 @@ class Customer
 
         if(! empty($data["country_code"]))
             $this->setCountryCode($data["country_code"]);
+
+        if(! empty($data["metadata"]))
+            $this->setMetadata($data["metadata"]);
 
         if(! empty($data["has_pin"]))
             $this->setHasPin($data["has_pin"]);
@@ -575,7 +607,8 @@ class Customer
 			"city" => $this->getCity(), 
 			"state" => $this->getState(), 
 			"zip" => $this->getZip(), 
-			"country_code" => $this->getCountryCode()
+			"country_code" => $this->getCountryCode(), 
+			"metadata" => $this->getMetadata()
         );
 
         $response = new Response($request->post($path, $data, $options));

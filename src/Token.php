@@ -41,6 +41,12 @@ class Token
     protected $name;
 
     /**
+     * Metadata related to the token, in the form of a dictionary (key-value pair)
+     * @var dictionary
+     */
+    protected $metadata;
+
+    /**
      * Define whether or not the customer token is used on a recurring invoice
      * @var string
      */
@@ -65,6 +71,7 @@ class Token
 
         $this->instance = $processOut;
 
+        $this->setMetadata(array('_library' => 'php'));
         
     }
 
@@ -165,6 +172,28 @@ class Token
     }
     
     /**
+     * Get Metadata
+     * Metadata related to the token, in the form of a dictionary (key-value pair)
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * Set Metadata
+     * Metadata related to the token, in the form of a dictionary (key-value pair)
+     * @param  array $value
+     * @return $this
+     */
+    public function setMetadata($value)
+    {
+        $this->metadata = $value;
+        return $this;
+    }
+    
+    /**
      * Get IsRecurringInvoice
      * Define whether or not the customer token is used on a recurring invoice
      * @return string
@@ -227,6 +256,9 @@ class Token
 
         if(! empty($data["name"]))
             $this->setName($data["name"]);
+
+        if(! empty($data["metadata"]))
+            $this->setMetadata($data["metadata"]);
 
         if(! empty($data["is_recurring_invoice"]))
             $this->setIsRecurringInvoice($data["is_recurring_invoice"]);

@@ -47,10 +47,10 @@ class Invoice
     protected $name;
 
     /**
-     * Price of the invoice
+     * Amount to be paid
      * @var string
      */
-    protected $price;
+    protected $amount;
 
     /**
      * Currency of the invoice
@@ -59,16 +59,10 @@ class Invoice
     protected $currency;
 
     /**
-     * Taxes applied on the invoice (on top of the price)
-     * @var string
+     * Metadata related to the invoice, in the form of a dictionary (key-value pair)
+     * @var dictionary
      */
-    protected $taxes;
-
-    /**
-     * Shipping fees applied on the invoice (on top of the price)
-     * @var string
-     */
-    protected $shipping;
+    protected $metadata;
 
     /**
      * Choose whether or not to request the email during the checkout process
@@ -95,12 +89,6 @@ class Invoice
     protected $cancelUrl;
 
     /**
-     * Custom variable passed along in the events/webhooks
-     * @var string
-     */
-    protected $custom;
-
-    /**
      * Define whether or not the authorization is in sandbox environment
      * @var boolean
      */
@@ -125,8 +113,7 @@ class Invoice
 
         $this->instance = $processOut;
 
-        $this->setTaxes("0.00");
-        $this->setShipping("0.00");
+        $this->setMetadata(array('_library' => 'php'));
         $this->setRequestEmail((bool) false);
         $this->setRequestShipping((bool) false);
         
@@ -258,24 +245,24 @@ class Invoice
     }
     
     /**
-     * Get Price
-     * Price of the invoice
+     * Get Amount
+     * Amount to be paid
      * @return string
      */
-    public function getPrice()
+    public function getAmount()
     {
-        return $this->price;
+        return $this->amount;
     }
 
     /**
-     * Set Price
-     * Price of the invoice
+     * Set Amount
+     * Amount to be paid
      * @param  string $value
      * @return $this
      */
-    public function setPrice($value)
+    public function setAmount($value)
     {
-        $this->price = $value;
+        $this->amount = $value;
         return $this;
     }
     
@@ -302,46 +289,24 @@ class Invoice
     }
     
     /**
-     * Get Taxes
-     * Taxes applied on the invoice (on top of the price)
-     * @return string
+     * Get Metadata
+     * Metadata related to the invoice, in the form of a dictionary (key-value pair)
+     * @return array
      */
-    public function getTaxes()
+    public function getMetadata()
     {
-        return $this->taxes;
+        return $this->metadata;
     }
 
     /**
-     * Set Taxes
-     * Taxes applied on the invoice (on top of the price)
-     * @param  string $value
+     * Set Metadata
+     * Metadata related to the invoice, in the form of a dictionary (key-value pair)
+     * @param  array $value
      * @return $this
      */
-    public function setTaxes($value)
+    public function setMetadata($value)
     {
-        $this->taxes = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Shipping
-     * Shipping fees applied on the invoice (on top of the price)
-     * @return string
-     */
-    public function getShipping()
-    {
-        return $this->shipping;
-    }
-
-    /**
-     * Set Shipping
-     * Shipping fees applied on the invoice (on top of the price)
-     * @param  string $value
-     * @return $this
-     */
-    public function setShipping($value)
-    {
-        $this->shipping = $value;
+        $this->metadata = $value;
         return $this;
     }
     
@@ -434,28 +399,6 @@ class Invoice
     }
     
     /**
-     * Get Custom
-     * Custom variable passed along in the events/webhooks
-     * @return string
-     */
-    public function getCustom()
-    {
-        return $this->custom;
-    }
-
-    /**
-     * Set Custom
-     * Custom variable passed along in the events/webhooks
-     * @param  string $value
-     * @return $this
-     */
-    public function setCustom($value)
-    {
-        $this->custom = $value;
-        return $this;
-    }
-    
-    /**
      * Get Sandbox
      * Define whether or not the authorization is in sandbox environment
      * @return bool
@@ -522,17 +465,14 @@ class Invoice
         if(! empty($data["name"]))
             $this->setName($data["name"]);
 
-        if(! empty($data["price"]))
-            $this->setPrice($data["price"]);
+        if(! empty($data["amount"]))
+            $this->setAmount($data["amount"]);
 
         if(! empty($data["currency"]))
             $this->setCurrency($data["currency"]);
 
-        if(! empty($data["taxes"]))
-            $this->setTaxes($data["taxes"]);
-
-        if(! empty($data["shipping"]))
-            $this->setShipping($data["shipping"]);
+        if(! empty($data["metadata"]))
+            $this->setMetadata($data["metadata"]);
 
         if(! empty($data["request_email"]))
             $this->setRequestEmail($data["request_email"]);
@@ -545,9 +485,6 @@ class Invoice
 
         if(! empty($data["cancel_url"]))
             $this->setCancelUrl($data["cancel_url"]);
-
-        if(! empty($data["custom"]))
-            $this->setCustom($data["custom"]);
 
         if(! empty($data["sandbox"]))
             $this->setSandbox($data["sandbox"]);
@@ -695,15 +632,13 @@ class Invoice
 
         $data = array(
 			"name" => $this->getName(), 
-			"price" => $this->getPrice(), 
-			"taxes" => $this->getTaxes(), 
-			"shipping" => $this->getShipping(), 
+			"amount" => $this->getAmount(), 
 			"currency" => $this->getCurrency(), 
+			"metadata" => $this->getMetadata(), 
 			"request_email" => $this->getRequestEmail(), 
 			"request_shipping" => $this->getRequestShipping(), 
 			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"custom" => $this->getCustom()
+			"cancel_url" => $this->getCancelUrl()
         );
 
         $response = new Response($request->post($path, $data, $options));

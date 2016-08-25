@@ -17,61 +17,55 @@ class RecurringInvoice
     protected $instance;
 
     /**
-     * ID of the recurring invoice
+     * ID of the subscription
      * @var string
      */
     protected $id;
 
     /**
-     * Customer linked to the recurring invoice
+     * Customer linked to the subscription
      * @var object
      */
     protected $customer;
 
     /**
-     * URL to which you may redirect your customer to authorize the recurring invoice
+     * URL to which you may redirect your customer to authorize the subscription
      * @var string
      */
     protected $url;
 
     /**
-     * Name of the recurring invoice
+     * Name of the subscription
      * @var string
      */
     protected $name;
 
     /**
-     * Price of the recurring invoice
+     * Price of the subscription
      * @var string
      */
-    protected $price;
+    protected $amount;
 
     /**
-     * Currency of the recurring invoice
+     * Currency of the subscription
      * @var string
      */
     protected $currency;
 
     /**
-     * Taxes applied on the recurring invoice (on top of the price)
-     * @var string
+     * Metadata related to the subscription, in the form of a dictionary (key-value pair)
+     * @var dictionary
      */
-    protected $taxes;
+    protected $metadata;
 
     /**
-     * Shipping fees applied on the recurring invoice (on top of the price)
-     * @var string
-     */
-    protected $shipping;
-
-    /**
-     * URL where the customer will be redirected upon payment
+     * URL where the customer will be redirected when he activates the subscription
      * @var string
      */
     protected $returnUrl;
 
     /**
-     * URL where the customer will be redirected if the paymen was canceled
+     * URL where the customer will be redirected when he canceles the subscription
      * @var string
      */
     protected $cancelUrl;
@@ -87,12 +81,6 @@ class RecurringInvoice
      * @var string
      */
     protected $trialPeriod;
-
-    /**
-     * Custom variable passed along in the events/webhooks
-     * @var string
-     */
-    protected $custom;
 
     /**
      * Weither or not the recurring invoice has ended (programmatically or canceled)
@@ -131,8 +119,7 @@ class RecurringInvoice
 
         $this->instance = $processOut;
 
-        $this->setTaxes("0.00");
-        $this->setShipping("0.00");
+        $this->setMetadata(array('_library' => 'php'));
         $this->setTrialPeriod("0d");
         
     }
@@ -140,7 +127,7 @@ class RecurringInvoice
     
     /**
      * Get Id
-     * ID of the recurring invoice
+     * ID of the subscription
      * @return string
      */
     public function getId()
@@ -150,7 +137,7 @@ class RecurringInvoice
 
     /**
      * Set Id
-     * ID of the recurring invoice
+     * ID of the subscription
      * @param  string $value
      * @return $this
      */
@@ -162,7 +149,7 @@ class RecurringInvoice
     
     /**
      * Get Customer
-     * Customer linked to the recurring invoice
+     * Customer linked to the subscription
      * @return object
      */
     public function getCustomer()
@@ -172,7 +159,7 @@ class RecurringInvoice
 
     /**
      * Set Customer
-     * Customer linked to the recurring invoice
+     * Customer linked to the subscription
      * @param  object $value
      * @return $this
      */
@@ -191,7 +178,7 @@ class RecurringInvoice
     
     /**
      * Get Url
-     * URL to which you may redirect your customer to authorize the recurring invoice
+     * URL to which you may redirect your customer to authorize the subscription
      * @return string
      */
     public function getUrl()
@@ -201,7 +188,7 @@ class RecurringInvoice
 
     /**
      * Set Url
-     * URL to which you may redirect your customer to authorize the recurring invoice
+     * URL to which you may redirect your customer to authorize the subscription
      * @param  string $value
      * @return $this
      */
@@ -213,7 +200,7 @@ class RecurringInvoice
     
     /**
      * Get Name
-     * Name of the recurring invoice
+     * Name of the subscription
      * @return string
      */
     public function getName()
@@ -223,7 +210,7 @@ class RecurringInvoice
 
     /**
      * Set Name
-     * Name of the recurring invoice
+     * Name of the subscription
      * @param  string $value
      * @return $this
      */
@@ -234,30 +221,30 @@ class RecurringInvoice
     }
     
     /**
-     * Get Price
-     * Price of the recurring invoice
+     * Get Amount
+     * Price of the subscription
      * @return string
      */
-    public function getPrice()
+    public function getAmount()
     {
-        return $this->price;
+        return $this->amount;
     }
 
     /**
-     * Set Price
-     * Price of the recurring invoice
+     * Set Amount
+     * Price of the subscription
      * @param  string $value
      * @return $this
      */
-    public function setPrice($value)
+    public function setAmount($value)
     {
-        $this->price = $value;
+        $this->amount = $value;
         return $this;
     }
     
     /**
      * Get Currency
-     * Currency of the recurring invoice
+     * Currency of the subscription
      * @return string
      */
     public function getCurrency()
@@ -267,7 +254,7 @@ class RecurringInvoice
 
     /**
      * Set Currency
-     * Currency of the recurring invoice
+     * Currency of the subscription
      * @param  string $value
      * @return $this
      */
@@ -278,52 +265,30 @@ class RecurringInvoice
     }
     
     /**
-     * Get Taxes
-     * Taxes applied on the recurring invoice (on top of the price)
-     * @return string
+     * Get Metadata
+     * Metadata related to the subscription, in the form of a dictionary (key-value pair)
+     * @return array
      */
-    public function getTaxes()
+    public function getMetadata()
     {
-        return $this->taxes;
+        return $this->metadata;
     }
 
     /**
-     * Set Taxes
-     * Taxes applied on the recurring invoice (on top of the price)
-     * @param  string $value
+     * Set Metadata
+     * Metadata related to the subscription, in the form of a dictionary (key-value pair)
+     * @param  array $value
      * @return $this
      */
-    public function setTaxes($value)
+    public function setMetadata($value)
     {
-        $this->taxes = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Shipping
-     * Shipping fees applied on the recurring invoice (on top of the price)
-     * @return string
-     */
-    public function getShipping()
-    {
-        return $this->shipping;
-    }
-
-    /**
-     * Set Shipping
-     * Shipping fees applied on the recurring invoice (on top of the price)
-     * @param  string $value
-     * @return $this
-     */
-    public function setShipping($value)
-    {
-        $this->shipping = $value;
+        $this->metadata = $value;
         return $this;
     }
     
     /**
      * Get ReturnUrl
-     * URL where the customer will be redirected upon payment
+     * URL where the customer will be redirected when he activates the subscription
      * @return string
      */
     public function getReturnUrl()
@@ -333,7 +298,7 @@ class RecurringInvoice
 
     /**
      * Set ReturnUrl
-     * URL where the customer will be redirected upon payment
+     * URL where the customer will be redirected when he activates the subscription
      * @param  string $value
      * @return $this
      */
@@ -345,7 +310,7 @@ class RecurringInvoice
     
     /**
      * Get CancelUrl
-     * URL where the customer will be redirected if the paymen was canceled
+     * URL where the customer will be redirected when he canceles the subscription
      * @return string
      */
     public function getCancelUrl()
@@ -355,7 +320,7 @@ class RecurringInvoice
 
     /**
      * Set CancelUrl
-     * URL where the customer will be redirected if the paymen was canceled
+     * URL where the customer will be redirected when he canceles the subscription
      * @param  string $value
      * @return $this
      */
@@ -406,28 +371,6 @@ class RecurringInvoice
     public function setTrialPeriod($value)
     {
         $this->trialPeriod = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Custom
-     * Custom variable passed along in the events/webhooks
-     * @return string
-     */
-    public function getCustom()
-    {
-        return $this->custom;
-    }
-
-    /**
-     * Set Custom
-     * Custom variable passed along in the events/webhooks
-     * @param  string $value
-     * @return $this
-     */
-    public function setCustom($value)
-    {
-        $this->custom = $value;
         return $this;
     }
     
@@ -539,17 +482,14 @@ class RecurringInvoice
         if(! empty($data["name"]))
             $this->setName($data["name"]);
 
-        if(! empty($data["price"]))
-            $this->setPrice($data["price"]);
+        if(! empty($data["amount"]))
+            $this->setAmount($data["amount"]);
 
         if(! empty($data["currency"]))
             $this->setCurrency($data["currency"]);
 
-        if(! empty($data["taxes"]))
-            $this->setTaxes($data["taxes"]);
-
-        if(! empty($data["shipping"]))
-            $this->setShipping($data["shipping"]);
+        if(! empty($data["metadata"]))
+            $this->setMetadata($data["metadata"]);
 
         if(! empty($data["return_url"]))
             $this->setReturnUrl($data["return_url"]);
@@ -562,9 +502,6 @@ class RecurringInvoice
 
         if(! empty($data["trial_period"]))
             $this->setTrialPeriod($data["trial_period"]);
-
-        if(! empty($data["custom"]))
-            $this->setCustom($data["custom"]);
 
         if(! empty($data["ended"]))
             $this->setEnded($data["ended"]);
@@ -641,13 +578,11 @@ class RecurringInvoice
 
         $data = array(
 			"name" => $this->getName(), 
-			"price" => $this->getPrice(), 
-			"taxes" => $this->getTaxes(), 
-			"shipping" => $this->getShipping(), 
+			"amount" => $this->getAmount(), 
 			"currency" => $this->getCurrency(), 
+			"metadata" => $this->getMetadata(), 
 			"return_url" => $this->getReturnUrl(), 
 			"cancel_url" => $this->getCancelUrl(), 
-			"custom" => $this->getCustom(), 
 			"interval" => $this->getInterval(), 
 			"trial_period" => $this->getTrialPeriod(), 
 			"ended_reason" => $this->getEndedReason(), 
