@@ -23,6 +23,12 @@ class Activity
     protected $id;
 
     /**
+     * Project to which the activity belongs
+     * @var object
+     */
+    protected $project;
+
+    /**
      * Title of the activity
      * @var string
      */
@@ -82,6 +88,35 @@ class Activity
     public function setId($value)
     {
         $this->id = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Project
+     * Project to which the activity belongs
+     * @return object
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
+
+    /**
+     * Set Project
+     * Project to which the activity belongs
+     * @param  object $value
+     * @return $this
+     */
+    public function setProject($value)
+    {
+        if (is_object($value))
+            $this->project = $value;
+        else
+        {
+            $obj = new Project($this->instance);
+            $obj->fillWithData($value);
+            $this->project = $obj;
+        }
         return $this;
     }
     
@@ -183,6 +218,9 @@ class Activity
     {
         if(! empty($data["id"]))
             $this->setId($data["id"]);
+
+        if(! empty($data["project"]))
+            $this->setProject($data["project"]);
 
         if(! empty($data["title"]))
             $this->setTitle($data["title"]);

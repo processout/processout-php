@@ -59,6 +59,20 @@ class RequestProcessoutPrivate
     }
 
     /**
+     * Prepare the request data
+     * @param  array $data
+     * @param  array $options
+     * @return array $data
+     */
+    protected function getData($data, $options)
+    {
+        if (! empty($options['expand']))
+            $data['expand'] = $data['expand'];
+
+        return $data;
+    }
+
+    /**
      * Generate a get request
      * @param  string $path
      * @param  array  $data
@@ -69,7 +83,7 @@ class RequestProcessoutPrivate
     {
         $request = $this->cURL->newJsonRequest('GET',
             $this->processOut->getHost() . $path . "?" .
-            http_build_query($data)
+            http_build_query($this->getData($data, $options))
         );
         $this->prepare($request, $options);
 
@@ -87,7 +101,7 @@ class RequestProcessoutPrivate
     {
         $request = $this->cURL->newJsonRequest('POST',
             $this->processOut->getHost() . $path,
-            $data
+            $this->getData($data, $options)
         );
         $this->prepare($request, $options);
 
@@ -105,7 +119,7 @@ class RequestProcessoutPrivate
     {
         $request = $this->cURL->newJsonRequest('PUT',
             $this->processOut->getHost() . $path,
-            $data
+            $this->getData($data, $options)
         );
         $this->prepare($request, $options);
 
@@ -123,7 +137,7 @@ class RequestProcessoutPrivate
     {
         $request = $this->cURL->newJsonRequest('DELETE',
             $this->processOut->getHost() . $path . "?" .
-            http_build_query($data)
+            http_build_query($this->getData($data, $options))
         );
         $this->prepare($request, $options);
 

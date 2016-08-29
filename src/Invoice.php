@@ -23,6 +23,12 @@ class Invoice
     protected $id;
 
     /**
+     * Project to which the invoice belongs
+     * @var object
+     */
+    protected $project;
+
+    /**
      * Customer linked to the invoice, if any
      * @var object
      */
@@ -139,6 +145,35 @@ class Invoice
     public function setId($value)
     {
         $this->id = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Project
+     * Project to which the invoice belongs
+     * @return object
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
+
+    /**
+     * Set Project
+     * Project to which the invoice belongs
+     * @param  object $value
+     * @return $this
+     */
+    public function setProject($value)
+    {
+        if (is_object($value))
+            $this->project = $value;
+        else
+        {
+            $obj = new Project($this->instance);
+            $obj->fillWithData($value);
+            $this->project = $obj;
+        }
         return $this;
     }
     
@@ -452,6 +487,9 @@ class Invoice
     {
         if(! empty($data["id"]))
             $this->setId($data["id"]);
+
+        if(! empty($data["project"]))
+            $this->setProject($data["project"]);
 
         if(! empty($data["customer"]))
             $this->setCustomer($data["customer"]);
