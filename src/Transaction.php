@@ -23,6 +23,24 @@ class Transaction
     protected $id;
 
     /**
+     * Name of the transaction
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * Amount of the transaction
+     * @var string
+     */
+    protected $amount;
+
+    /**
+     * Currency of the transaction
+     * @var string
+     */
+    protected $currency;
+
+    /**
      * Status of the transaction
      * @var string
      */
@@ -32,7 +50,13 @@ class Transaction
      * ProcessOut fee applied on the transaction
      * @var string
      */
-    protected $fee;
+    protected $processoutFee;
+
+    /**
+     * Metadata related to the transaction, in the form of a dictionary (key-value pair)
+     * @var dictionary
+     */
+    protected $metadata;
 
     /**
      * Define whether or not the transaction is in sandbox environment
@@ -59,6 +83,7 @@ class Transaction
 
         $this->instance = $processOut;
 
+        $this->setMetadata(array('_library' => 'php'));
         
     }
 
@@ -86,6 +111,72 @@ class Transaction
     }
     
     /**
+     * Get Name
+     * Name of the transaction
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set Name
+     * Name of the transaction
+     * @param  string $value
+     * @return $this
+     */
+    public function setName($value)
+    {
+        $this->name = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Amount
+     * Amount of the transaction
+     * @return string
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * Set Amount
+     * Amount of the transaction
+     * @param  string $value
+     * @return $this
+     */
+    public function setAmount($value)
+    {
+        $this->amount = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Currency
+     * Currency of the transaction
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * Set Currency
+     * Currency of the transaction
+     * @param  string $value
+     * @return $this
+     */
+    public function setCurrency($value)
+    {
+        $this->currency = $value;
+        return $this;
+    }
+    
+    /**
      * Get Status
      * Status of the transaction
      * @return string
@@ -108,24 +199,46 @@ class Transaction
     }
     
     /**
-     * Get Fee
+     * Get ProcessoutFee
      * ProcessOut fee applied on the transaction
      * @return string
      */
-    public function getFee()
+    public function getProcessoutFee()
     {
-        return $this->fee;
+        return $this->processoutFee;
     }
 
     /**
-     * Set Fee
+     * Set ProcessoutFee
      * ProcessOut fee applied on the transaction
      * @param  string $value
      * @return $this
      */
-    public function setFee($value)
+    public function setProcessoutFee($value)
     {
-        $this->fee = $value;
+        $this->processoutFee = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Metadata
+     * Metadata related to the transaction, in the form of a dictionary (key-value pair)
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * Set Metadata
+     * Metadata related to the transaction, in the form of a dictionary (key-value pair)
+     * @param  array $value
+     * @return $this
+     */
+    public function setMetadata($value)
+    {
+        $this->metadata = $value;
         return $this;
     }
     
@@ -184,11 +297,23 @@ class Transaction
         if(! empty($data["id"]))
             $this->setId($data["id"]);
 
+        if(! empty($data["name"]))
+            $this->setName($data["name"]);
+
+        if(! empty($data["amount"]))
+            $this->setAmount($data["amount"]);
+
+        if(! empty($data["currency"]))
+            $this->setCurrency($data["currency"]);
+
         if(! empty($data["status"]))
             $this->setStatus($data["status"]);
 
-        if(! empty($data["fee"]))
-            $this->setFee($data["fee"]);
+        if(! empty($data["processout_fee"]))
+            $this->setProcessoutFee($data["processout_fee"]);
+
+        if(! empty($data["metadata"]))
+            $this->setMetadata($data["metadata"]);
 
         if(! empty($data["sandbox"]))
             $this->setSandbox($data["sandbox"]);
@@ -197,6 +322,34 @@ class Transaction
             $this->setCreatedAt($data["created_at"]);
 
         return $this;
+    }
+
+    /**
+     * Get the transaction's refunds.
+     * @param array $options
+     * @return array
+     */
+    public function refunds($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/transactions/" . urlencode($this->getId()) . "/refunds";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['refunds'] as $v)
+        {
+            $tmp = new Refund($cur->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        return $a;
     }
 
     /**
@@ -231,7 +384,7 @@ class Transaction
      * Find a transaction by its ID.
 	 * @param string $transactionId
      * @param array $options
-     * @return Transaction
+     * @return $this
      */
     public static function find($transactionId, $options = array())
     {
@@ -246,8 +399,7 @@ class Transaction
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['transaction'];
-        $transaction = new Transaction($cur->instance);
-        return $transaction->fillWithData($body);
+        return $cur->fillWithData($body);
         
     }
 

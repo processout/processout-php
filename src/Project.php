@@ -199,5 +199,56 @@ class Project
         return $this;
     }
 
+    /**
+     * Get all the gateway configurations of the project
+     * @param array $options
+     * @return array
+     */
+    public function gatewayConfigurations($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/projects/" . urlencode($this->getId()) . "/gateway-configurations";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['gateway_configurations'] as $v)
+        {
+            $tmp = new GatewayConfiguration($cur->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        return $a;
+    }
+
+    /**
+     * Find a project by its ID.
+	 * @param string $projectId
+     * @param array $options
+     * @return $this
+     */
+    public static function find($projectId, $options = array())
+    {
+        $cur = new Project();
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/projects/" . urlencode($projectId) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['project'];
+        return $cur->fillWithData($body);
+        
+    }
+
     
 }

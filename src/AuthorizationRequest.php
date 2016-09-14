@@ -35,6 +35,12 @@ class AuthorizationRequest
     protected $customer;
 
     /**
+     * Token linked to the authorization request, once authorized
+     * @var object
+     */
+    protected $token;
+
+    /**
      * URL to which you may redirect your customer to proceed with the authorization
      * @var string
      */
@@ -175,6 +181,35 @@ class AuthorizationRequest
             $obj = new Customer($this->instance);
             $obj->fillWithData($value);
             $this->customer = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get Token
+     * Token linked to the authorization request, once authorized
+     * @return object
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set Token
+     * Token linked to the authorization request, once authorized
+     * @param  object $value
+     * @return $this
+     */
+    public function setToken($value)
+    {
+        if (is_object($value))
+            $this->token = $value;
+        else
+        {
+            $obj = new Token($this->instance);
+            $obj->fillWithData($value);
+            $this->token = $obj;
         }
         return $this;
     }
@@ -372,6 +407,9 @@ class AuthorizationRequest
         if(! empty($data["customer"]))
             $this->setCustomer($data["customer"]);
 
+        if(! empty($data["token"]))
+            $this->setToken($data["token"]);
+
         if(! empty($data["url"]))
             $this->setUrl($data["url"]);
 
@@ -423,29 +461,26 @@ class AuthorizationRequest
     }
 
     /**
-     * Authorize (create) a new customer token on the given gateway.
-	 * @param string $gatewayName
-	 * @param string $name
-	 * @param string $token
+     * Get the customer action needed to be continue the token authorization flow on the given gateway.
+	 * @param string $gatewayConfigurationId
      * @param array $options
-     * @return Token
+     * @return CustomerAction
      */
-    public function authorize($gatewayName, $name, $token, $options = array())
+    public function customerAction($gatewayConfigurationId, $options = array())
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/authorization-requests/" . urlencode($this->getId()) . "/gateways/" . urlencode($gatewayName) . "/tokens";
+        $path    = "/authorization-requests/" . urlencode($this->getId()) . "/gateway-configurations/" . urlencode($gatewayConfigurationId) . "/customer-action";
 
         $data = array(
-			"name" => $name, 
-			"token" => $token
+
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
-        $body = $body['token'];
-        $token = new Token($cur->instance);
-        return $token->fillWithData($body);
+        $body = $body['customer_action'];
+        $customerAction = new CustomerAction($cur->instance);
+        return $customerAction->fillWithData($body);
         
     }
 
@@ -453,7 +488,7 @@ class AuthorizationRequest
      * Create a new authorization request for the given customer ID.
 	 * @param string $customerId
      * @param array $options
-     * @return AuthorizationRequest
+     * @return $this
      */
     public function create($customerId, $options = array())
     {
@@ -473,8 +508,7 @@ class AuthorizationRequest
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
         $body = $body['authorization_request'];
-        $authorizationRequest = new AuthorizationRequest($cur->instance);
-        return $authorizationRequest->fillWithData($body);
+        return $cur->fillWithData($body);
         
     }
 

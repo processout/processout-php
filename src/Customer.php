@@ -518,15 +518,15 @@ class Customer
     }
 
     /**
-     * Get the recurring invoices linked to the customer.
+     * Get the subscriptions belonging to the customer.
      * @param array $options
      * @return array
      */
-    public function recurringInvoices($options = array())
+    public function subscriptions($options = array())
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getId()) . "/recurring-invoices";
+        $path    = "/customers/" . urlencode($this->getId()) . "/subscriptions";
 
         $data = array(
 
@@ -535,9 +535,9 @@ class Customer
         $response = new Response($request->get($path, $data, $options));
         $a    = array();
         $body = $response->getBody();
-        foreach($body['recurring_invoices'] as $v)
+        foreach($body['subscriptions'] as $v)
         {
-            $tmp = new RecurringInvoice($cur->instance);
+            $tmp = new Subscription($cur->instance);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
@@ -574,30 +574,6 @@ class Customer
     }
 
     /**
-     * Get a specific customer's token by its ID.
-	 * @param string $tokenId
-     * @param array $options
-     * @return Token
-     */
-    public function token($tokenId, $options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['token'];
-        $token = new Token($cur->instance);
-        return $token->fillWithData($body);
-        
-    }
-
-    /**
      * Get all the customers.
      * @param array $options
      * @return array
@@ -628,7 +604,7 @@ class Customer
     /**
      * Create a new customer.
      * @param array $options
-     * @return Customer
+     * @return $this
      */
     public function create($options = array())
     {
@@ -652,8 +628,7 @@ class Customer
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
         $body = $body['customer'];
-        $customer = new Customer($cur->instance);
-        return $customer->fillWithData($body);
+        return $cur->fillWithData($body);
         
     }
 
@@ -661,7 +636,7 @@ class Customer
      * Find a customer by its ID.
 	 * @param string $customerId
      * @param array $options
-     * @return Customer
+     * @return $this
      */
     public static function find($customerId, $options = array())
     {
@@ -676,8 +651,7 @@ class Customer
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['customer'];
-        $customer = new Customer($cur->instance);
-        return $customer->fillWithData($body);
+        return $cur->fillWithData($body);
         
     }
 
@@ -693,7 +667,16 @@ class Customer
         $path    = "/customers/" . urlencode($this->getId()) . "";
 
         $data = array(
-
+			"email" => $this->getEmail(), 
+			"first_name" => $this->getFirstName(), 
+			"last_name" => $this->getLastName(), 
+			"address1" => $this->getAddress1(), 
+			"address2" => $this->getAddress2(), 
+			"city" => $this->getCity(), 
+			"state" => $this->getState(), 
+			"zip" => $this->getZip(), 
+			"country_code" => $this->getCountryCode(), 
+			"metadata" => $this->getMetadata()
         );
 
         $response = new Response($request->put($path, $data, $options));

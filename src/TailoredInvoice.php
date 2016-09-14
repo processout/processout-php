@@ -442,7 +442,7 @@ class TailoredInvoice
     /**
      * Create a new tailored invoice.
      * @param array $options
-     * @return TailoredInvoice
+     * @return $this
      */
     public function create($options = array())
     {
@@ -464,8 +464,7 @@ class TailoredInvoice
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
         $body = $body['tailored_invoice'];
-        $tailoredInvoice = new TailoredInvoice($cur->instance);
-        return $tailoredInvoice->fillWithData($body);
+        return $cur->fillWithData($body);
         
     }
 
@@ -473,7 +472,7 @@ class TailoredInvoice
      * Find a tailored invoice by its ID.
 	 * @param string $tailoredInvoiceId
      * @param array $options
-     * @return TailoredInvoice
+     * @return $this
      */
     public static function find($tailoredInvoiceId, $options = array())
     {
@@ -488,8 +487,7 @@ class TailoredInvoice
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['tailored_invoice'];
-        $tailoredInvoice = new TailoredInvoice($cur->instance);
-        return $tailoredInvoice->fillWithData($body);
+        return $cur->fillWithData($body);
         
     }
 
@@ -505,7 +503,14 @@ class TailoredInvoice
         $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
 
         $data = array(
-
+			"name" => $this->getName(), 
+			"amount" => $this->getAmount(), 
+			"currency" => $this->getCurrency(), 
+			"metadata" => $this->getMetadata(), 
+			"request_email" => $this->getRequestEmail(), 
+			"request_shipping" => $this->getRequestShipping(), 
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl()
         );
 
         $response = new Response($request->put($path, $data, $options));

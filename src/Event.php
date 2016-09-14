@@ -297,7 +297,7 @@ class Event
      * Find an event by its ID.
 	 * @param string $eventId
      * @param array $options
-     * @return Event
+     * @return $this
      */
     public static function find($eventId, $options = array())
     {
@@ -312,8 +312,7 @@ class Event
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['event'];
-        $event = new Event($cur->instance);
-        return $event->fillWithData($body);
+        return $cur->fillWithData($body);
         
     }
 

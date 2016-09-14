@@ -7,7 +7,7 @@ use ProcessOut\Networking\Response;
 use ProcessOut\Networking\RequestProcessoutPrivate;
 
 
-class RecurringInvoice
+class Subscription
 {
 
     /**
@@ -35,6 +35,12 @@ class RecurringInvoice
     protected $customer;
 
     /**
+     * Token linked to the subscription, once started
+     * @var object
+     */
+    protected $token;
+
+    /**
      * URL to which you may redirect your customer to authorize the subscription
      * @var string
      */
@@ -47,7 +53,7 @@ class RecurringInvoice
     protected $name;
 
     /**
-     * Price of the subscription
+     * Amount of the subscription
      * @var string
      */
     protected $amount;
@@ -77,7 +83,7 @@ class RecurringInvoice
     protected $cancelUrl;
 
     /**
-     * The recurring payment period, formatted in the format "1d2w3m4y" (day, week, month, year)
+     * The subscription interval, formatted in the format "1d2w3m4y" (day, week, month, year)
      * @var string
      */
     protected $interval;
@@ -89,13 +95,19 @@ class RecurringInvoice
     protected $trialPeriod;
 
     /**
-     * Weither or not the recurring invoice has ended (programmatically or canceled)
+     * Weither or not the subscription is active
+     * @var boolean
+     */
+    protected $activated;
+
+    /**
+     * Weither or not the subscription has ended (programmatically or canceled)
      * @var boolean
      */
     protected $ended;
 
     /**
-     * Reason as to why the recurring invoice ended
+     * Reason as to why the subscription ended
      * @var string
      */
     protected $endedReason;
@@ -113,7 +125,7 @@ class RecurringInvoice
     protected $createdAt;
 
     /**
-     * RecurringInvoice constructor
+     * Subscription constructor
      * @param ProcessOut\ProcessOut|null $processOut
      */
     public function __construct(ProcessOut $processOut = null)
@@ -212,6 +224,35 @@ class RecurringInvoice
     }
     
     /**
+     * Get Token
+     * Token linked to the subscription, once started
+     * @return object
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set Token
+     * Token linked to the subscription, once started
+     * @param  object $value
+     * @return $this
+     */
+    public function setToken($value)
+    {
+        if (is_object($value))
+            $this->token = $value;
+        else
+        {
+            $obj = new Token($this->instance);
+            $obj->fillWithData($value);
+            $this->token = $obj;
+        }
+        return $this;
+    }
+    
+    /**
      * Get Url
      * URL to which you may redirect your customer to authorize the subscription
      * @return string
@@ -257,7 +298,7 @@ class RecurringInvoice
     
     /**
      * Get Amount
-     * Price of the subscription
+     * Amount of the subscription
      * @return string
      */
     public function getAmount()
@@ -267,7 +308,7 @@ class RecurringInvoice
 
     /**
      * Set Amount
-     * Price of the subscription
+     * Amount of the subscription
      * @param  string $value
      * @return $this
      */
@@ -367,7 +408,7 @@ class RecurringInvoice
     
     /**
      * Get Interval
-     * The recurring payment period, formatted in the format "1d2w3m4y" (day, week, month, year)
+     * The subscription interval, formatted in the format "1d2w3m4y" (day, week, month, year)
      * @return string
      */
     public function getInterval()
@@ -377,7 +418,7 @@ class RecurringInvoice
 
     /**
      * Set Interval
-     * The recurring payment period, formatted in the format "1d2w3m4y" (day, week, month, year)
+     * The subscription interval, formatted in the format "1d2w3m4y" (day, week, month, year)
      * @param  string $value
      * @return $this
      */
@@ -410,8 +451,30 @@ class RecurringInvoice
     }
     
     /**
+     * Get Activated
+     * Weither or not the subscription is active
+     * @return bool
+     */
+    public function getActivated()
+    {
+        return $this->activated;
+    }
+
+    /**
+     * Set Activated
+     * Weither or not the subscription is active
+     * @param  bool $value
+     * @return $this
+     */
+    public function setActivated($value)
+    {
+        $this->activated = $value;
+        return $this;
+    }
+    
+    /**
      * Get Ended
-     * Weither or not the recurring invoice has ended (programmatically or canceled)
+     * Weither or not the subscription has ended (programmatically or canceled)
      * @return bool
      */
     public function getEnded()
@@ -421,7 +484,7 @@ class RecurringInvoice
 
     /**
      * Set Ended
-     * Weither or not the recurring invoice has ended (programmatically or canceled)
+     * Weither or not the subscription has ended (programmatically or canceled)
      * @param  bool $value
      * @return $this
      */
@@ -433,7 +496,7 @@ class RecurringInvoice
     
     /**
      * Get EndedReason
-     * Reason as to why the recurring invoice ended
+     * Reason as to why the subscription ended
      * @return string
      */
     public function getEndedReason()
@@ -443,7 +506,7 @@ class RecurringInvoice
 
     /**
      * Set EndedReason
-     * Reason as to why the recurring invoice ended
+     * Reason as to why the subscription ended
      * @param  string $value
      * @return $this
      */
@@ -501,7 +564,7 @@ class RecurringInvoice
     /**
      * Fills the current object with the new values pulled from the data
      * @param  array $data
-     * @return RecurringInvoice
+     * @return Subscription
      */
     public function fillWithData($data)
     {
@@ -513,6 +576,9 @@ class RecurringInvoice
 
         if(! empty($data["customer"]))
             $this->setCustomer($data["customer"]);
+
+        if(! empty($data["token"]))
+            $this->setToken($data["token"]);
 
         if(! empty($data["url"]))
             $this->setUrl($data["url"]);
@@ -541,6 +607,9 @@ class RecurringInvoice
         if(! empty($data["trial_period"]))
             $this->setTrialPeriod($data["trial_period"]);
 
+        if(! empty($data["activated"]))
+            $this->setActivated($data["activated"]);
+
         if(! empty($data["ended"]))
             $this->setEnded($data["ended"]);
 
@@ -557,7 +626,7 @@ class RecurringInvoice
     }
 
     /**
-     * Get the customer linked to the recurring invoice.
+     * Get the customer owning the subscription.
      * @param array $options
      * @return Customer
      */
@@ -565,7 +634,7 @@ class RecurringInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "/customers";
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "/customers";
 
         $data = array(
 
@@ -580,7 +649,31 @@ class RecurringInvoice
     }
 
     /**
-     * Get the invoice corresponding to the last iteration of the recurring invoice.
+     * Get the customer action needed to be continue the subscription authorization flow on the given gateway.
+	 * @param string $gatewayConfigurationId
+     * @param array $options
+     * @return CustomerAction
+     */
+    public function customerAction($gatewayConfigurationId, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "/gateway-configurations/" . urlencode($gatewayConfigurationId) . "/customer-action";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['customer_action'];
+        $customerAction = new CustomerAction($cur->instance);
+        return $customerAction->fillWithData($body);
+        
+    }
+
+    /**
+     * Get the invoice corresponding to the last iteration of the subscription.
      * @param array $options
      * @return Invoice
      */
@@ -588,7 +681,7 @@ class RecurringInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "/invoices";
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "/invoices";
 
         $data = array(
 
@@ -603,16 +696,16 @@ class RecurringInvoice
     }
 
     /**
-     * Create a new recurring invoice for the given customer.
+     * Create a new subscription for the given customer.
 	 * @param string $customerId
      * @param array $options
-     * @return RecurringInvoice
+     * @return $this
      */
     public function create($customerId, $options = array())
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/recurring-invoices";
+        $path    = "/subscriptions";
 
         $data = array(
 			"name" => $this->getName(), 
@@ -629,23 +722,22 @@ class RecurringInvoice
 
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
-        $body = $body['recurring_invoice'];
-        $recurringInvoice = new RecurringInvoice($cur->instance);
-        return $recurringInvoice->fillWithData($body);
+        $body = $body['subscription'];
+        return $cur->fillWithData($body);
         
     }
 
     /**
-     * Find a recurring invoice by its ID.
-	 * @param string $recurringInvoiceId
+     * Find a subscription by its ID.
+	 * @param string $subscriptionId
      * @param array $options
-     * @return RecurringInvoice
+     * @return $this
      */
-    public static function find($recurringInvoiceId, $options = array())
+    public static function find($subscriptionId, $options = array())
     {
-        $cur = new RecurringInvoice();
+        $cur = new Subscription();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/recurring-invoices/" . urlencode($recurringInvoiceId) . "";
+        $path    = "/subscriptions/" . urlencode($subscriptionId) . "";
 
         $data = array(
 
@@ -653,14 +745,34 @@ class RecurringInvoice
 
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
-        $body = $body['recurring_invoice'];
-        $recurringInvoice = new RecurringInvoice($cur->instance);
-        return $recurringInvoice->fillWithData($body);
+        $body = $body['subscription'];
+        return $cur->fillWithData($body);
         
     }
 
     /**
-     * End a recurring invoice. The reason may be provided as well.
+     * Activate the subscription with the provided token.
+	 * @param string $source
+     * @param array $options
+     * @return bool
+     */
+    public function activate($source, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "";
+
+        $data = array(
+			"source" => $source
+        );
+
+        $response = new Response($request->put($path, $data, $options));
+        return $response->isSuccess();
+        
+    }
+
+    /**
+     * End a subscription. The reason may be provided as well.
 	 * @param string $reason
      * @param array $options
      * @return bool
@@ -669,7 +781,7 @@ class RecurringInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/recurring-invoices/" . urlencode($this->getId()) . "";
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
 			"reason" => $reason

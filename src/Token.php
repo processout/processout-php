@@ -35,12 +35,6 @@ class Token
     protected $customerId;
 
     /**
-     * Name of the customer token
-     * @var string
-     */
-    protected $name;
-
-    /**
      * Metadata related to the token, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -48,9 +42,9 @@ class Token
 
     /**
      * Define whether or not the customer token is used on a recurring invoice
-     * @var string
+     * @var boolean
      */
-    protected $isRecurringInvoice;
+    protected $isSubscriptionOnly;
 
     /**
      * Date at which the customer token was created
@@ -150,28 +144,6 @@ class Token
     }
     
     /**
-     * Get Name
-     * Name of the customer token
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set Name
-     * Name of the customer token
-     * @param  string $value
-     * @return $this
-     */
-    public function setName($value)
-    {
-        $this->name = $value;
-        return $this;
-    }
-    
-    /**
      * Get Metadata
      * Metadata related to the token, in the form of a dictionary (key-value pair)
      * @return array
@@ -194,24 +166,24 @@ class Token
     }
     
     /**
-     * Get IsRecurringInvoice
+     * Get IsSubscriptionOnly
      * Define whether or not the customer token is used on a recurring invoice
-     * @return string
+     * @return bool
      */
-    public function getIsRecurringInvoice()
+    public function getIsSubscriptionOnly()
     {
-        return $this->isRecurringInvoice;
+        return $this->isSubscriptionOnly;
     }
 
     /**
-     * Set IsRecurringInvoice
+     * Set IsSubscriptionOnly
      * Define whether or not the customer token is used on a recurring invoice
-     * @param  string $value
+     * @param  bool $value
      * @return $this
      */
-    public function setIsRecurringInvoice($value)
+    public function setIsSubscriptionOnly($value)
     {
-        $this->isRecurringInvoice = $value;
+        $this->isSubscriptionOnly = $value;
         return $this;
     }
     
@@ -254,14 +226,11 @@ class Token
         if(! empty($data["customer_id"]))
             $this->setCustomerId($data["customer_id"]);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
-
         if(! empty($data["metadata"]))
             $this->setMetadata($data["metadata"]);
 
-        if(! empty($data["is_recurring_invoice"]))
-            $this->setIsRecurringInvoice($data["is_recurring_invoice"]);
+        if(! empty($data["is_subscription_only"]))
+            $this->setIsSubscriptionOnly($data["is_subscription_only"]);
 
         if(! empty($data["created_at"]))
             $this->setCreatedAt($data["created_at"]);
@@ -270,25 +239,53 @@ class Token
     }
 
     /**
-     * Delete a specific customer's token by its ID.
+     * Find a customer's token by its ID.
+	 * @param string $customerId
+	 * @param string $tokenId
      * @param array $options
-     * @return Token
+     * @return $this
      */
-    public function delete($options = array())
+    public static function find($customerId, $tokenId, $options = array())
     {
-        $cur = $this;
+        $cur = new Token();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($this->getId()) . "";
+        $path    = "/customers/" . urlencode($customerId) . "/tokens/" . urlencode($tokenId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->delete($path, $data, $options));
+        $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
         $body = $body['token'];
-        $token = new Token($cur->instance);
-        return $token->fillWithData($body);
+        return $cur->fillWithData($body);
+        
+    }
+
+    /**
+     * Create a new token for the given customer ID.
+	 * @param string $customerId
+	 * @param string $target
+	 * @param string $source
+     * @param array $options
+     * @return $this
+     */
+    public function create($customerId, $target, $source, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/customers/" . urlencode($customerId) . "/tokens";
+
+        $data = array(
+			"metadata" => $this->getMetadata(), 
+			"target" => $target, 
+			"source" => $source
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['token'];
+        return $cur->fillWithData($body);
         
     }
 
