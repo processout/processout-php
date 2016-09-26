@@ -766,7 +766,7 @@ class Subscription
 			"source" => $source
         );
 
-        $response = new Response($request->put($path, $data, $options));
+        $response = new Response($request->post($path, $data, $options));
         return $response->isSuccess();
         
     }
