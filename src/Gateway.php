@@ -53,6 +53,12 @@ class Gateway
     protected $flows;
 
     /**
+     * Gateway tags. Mainly used to filter gateways depending on their attributes (e-wallets and such)
+     * @var slice
+     */
+    protected $tags;
+
+    /**
      * Description of the payment gateway
      * @var string
      */
@@ -208,6 +214,28 @@ class Gateway
     }
     
     /**
+     * Get Tags
+     * Gateway tags. Mainly used to filter gateways depending on their attributes (e-wallets and such)
+     * @return array
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Set Tags
+     * Gateway tags. Mainly used to filter gateways depending on their attributes (e-wallets and such)
+     * @param  array $value
+     * @return $this
+     */
+    public function setTags($value)
+    {
+        $this->tags = $value;
+        return $this;
+    }
+    
+    /**
      * Get Description
      * Description of the payment gateway
      * @return string
@@ -254,6 +282,9 @@ class Gateway
 
         if(! empty($data["flows"]))
             $this->setFlows($data["flows"]);
+
+        if(! empty($data["tags"]))
+            $this->setTags($data["tags"]);
 
         if(! empty($data["description"]))
             $this->setDescription($data["description"]);

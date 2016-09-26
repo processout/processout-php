@@ -334,7 +334,7 @@ class Refund
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/transactions/{transactions_id}/refunds";
+        $path    = "/transactions/" . urlencode($transactionId) . "/refunds";
 
         $data = array(
 			"amount" => $this->getAmount(), 

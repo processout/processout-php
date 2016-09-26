@@ -69,6 +69,9 @@ class RequestProcessoutPrivate
         if (! empty($options['expand']))
             $data['expand'] = $data['expand'];
 
+        if (! empty($options['filter']))
+            $data['filter'] = $data['filter'];
+
         return $data;
     }
 
