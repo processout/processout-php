@@ -772,6 +772,28 @@ class Subscription
     }
 
     /**
+     * Update the subscription.
+     * @param array $options
+     * @return $this
+     */
+    public function update($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->put($path, $data, $options));
+        $body = $response->getBody();
+        $body = $body['subscription'];
+        return $cur->fillWithData($body);
+        
+    }
+
+    /**
      * End a subscription. The reason may be provided as well.
 	 * @param string $reason
      * @param array $options

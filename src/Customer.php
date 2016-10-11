@@ -29,6 +29,12 @@ class Customer
     protected $project;
 
     /**
+     * Customer balance. Can be positive or negative. The balance is automatically applied to subscription invoices and is solely used for this purpose
+     * @var string
+     */
+    protected $balance;
+
+    /**
      * Email of the customer
      * @var string
      */
@@ -172,6 +178,28 @@ class Customer
             $obj->fillWithData($value);
             $this->project = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get Balance
+     * Customer balance. Can be positive or negative. The balance is automatically applied to subscription invoices and is solely used for this purpose
+     * @return string
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * Set Balance
+     * Customer balance. Can be positive or negative. The balance is automatically applied to subscription invoices and is solely used for this purpose
+     * @param  string $value
+     * @return $this
+     */
+    public function setBalance($value)
+    {
+        $this->balance = $value;
         return $this;
     }
     
@@ -475,6 +503,9 @@ class Customer
         if(! empty($data["project"]))
             $this->setProject($data["project"]);
 
+        if(! empty($data["balance"]))
+            $this->setBalance($data["balance"]);
+
         if(! empty($data["email"]))
             $this->setEmail($data["email"]);
 
@@ -566,6 +597,34 @@ class Customer
         foreach($body['tokens'] as $v)
         {
             $tmp = new Token($cur->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        return $a;
+    }
+
+    /**
+     * Get the transactions belonging to the customer.
+     * @param array $options
+     * @return array
+     */
+    public function transactions($options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/customers/" . urlencode($this->getId()) . "/transactions";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['transactions'] as $v)
+        {
+            $tmp = new Transaction($cur->instance);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
