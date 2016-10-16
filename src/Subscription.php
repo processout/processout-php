@@ -696,6 +696,34 @@ class Subscription
     }
 
     /**
+     * Get all the subscriptions.
+     * @param array $options
+     * @return array
+     */
+    public static function all($options = array())
+    {
+        $cur = new Subscription();
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/subscriptions";
+
+        $data = array(
+
+        );
+
+        $response = new Response($request->get($path, $data, $options));
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['subscriptions'] as $v)
+        {
+            $tmp = new Subscription($cur->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        return $a;
+    }
+
+    /**
      * Create a new subscription for the given customer.
 	 * @param string $customerId
      * @param array $options
