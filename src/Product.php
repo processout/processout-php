@@ -7,7 +7,7 @@ use ProcessOut\Networking\Response;
 use ProcessOut\Networking\RequestProcessoutPrivate;
 
 
-class TailoredInvoice
+class Product
 {
 
     /**
@@ -17,31 +17,31 @@ class TailoredInvoice
     protected $instance;
 
     /**
-     * ID of the tailored invoice
+     * ID of the product
      * @var string
      */
     protected $id;
 
     /**
-     * Name of the tailored invoice
+     * Name of the product
      * @var string
      */
     protected $name;
 
     /**
-     * Amount of the tailored invoice
+     * Amount of the product
      * @var string
      */
     protected $amount;
 
     /**
-     * Currency of the tailored invoice
+     * Currency of the product
      * @var string
      */
     protected $currency;
 
     /**
-     * Metadata related to the tailored invoice, in the form of a dictionary (key-value pair)
+     * Metadata related to the product, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
     protected $metadata;
@@ -71,19 +71,19 @@ class TailoredInvoice
     protected $cancelUrl;
 
     /**
-     * Custom variable passed along in the events/webhooks
-     * @var string
+     * Define whether or not the product is in sandbox environment
+     * @var boolean
      */
-    protected $custom;
+    protected $sandbox;
 
     /**
-     * Date at which the tailored invoice was created
+     * Date at which the product was created
      * @var string
      */
     protected $createdAt;
 
     /**
-     * TailoredInvoice constructor
+     * Product constructor
      * @param ProcessOut\ProcessOut|null $processOut
      */
     public function __construct(ProcessOut $processOut = null)
@@ -104,7 +104,7 @@ class TailoredInvoice
     
     /**
      * Get Id
-     * ID of the tailored invoice
+     * ID of the product
      * @return string
      */
     public function getId()
@@ -114,7 +114,7 @@ class TailoredInvoice
 
     /**
      * Set Id
-     * ID of the tailored invoice
+     * ID of the product
      * @param  string $value
      * @return $this
      */
@@ -126,7 +126,7 @@ class TailoredInvoice
     
     /**
      * Get Name
-     * Name of the tailored invoice
+     * Name of the product
      * @return string
      */
     public function getName()
@@ -136,7 +136,7 @@ class TailoredInvoice
 
     /**
      * Set Name
-     * Name of the tailored invoice
+     * Name of the product
      * @param  string $value
      * @return $this
      */
@@ -148,7 +148,7 @@ class TailoredInvoice
     
     /**
      * Get Amount
-     * Amount of the tailored invoice
+     * Amount of the product
      * @return string
      */
     public function getAmount()
@@ -158,7 +158,7 @@ class TailoredInvoice
 
     /**
      * Set Amount
-     * Amount of the tailored invoice
+     * Amount of the product
      * @param  string $value
      * @return $this
      */
@@ -170,7 +170,7 @@ class TailoredInvoice
     
     /**
      * Get Currency
-     * Currency of the tailored invoice
+     * Currency of the product
      * @return string
      */
     public function getCurrency()
@@ -180,7 +180,7 @@ class TailoredInvoice
 
     /**
      * Set Currency
-     * Currency of the tailored invoice
+     * Currency of the product
      * @param  string $value
      * @return $this
      */
@@ -192,7 +192,7 @@ class TailoredInvoice
     
     /**
      * Get Metadata
-     * Metadata related to the tailored invoice, in the form of a dictionary (key-value pair)
+     * Metadata related to the product, in the form of a dictionary (key-value pair)
      * @return array
      */
     public function getMetadata()
@@ -202,7 +202,7 @@ class TailoredInvoice
 
     /**
      * Set Metadata
-     * Metadata related to the tailored invoice, in the form of a dictionary (key-value pair)
+     * Metadata related to the product, in the form of a dictionary (key-value pair)
      * @param  array $value
      * @return $this
      */
@@ -301,30 +301,30 @@ class TailoredInvoice
     }
     
     /**
-     * Get Custom
-     * Custom variable passed along in the events/webhooks
-     * @return string
+     * Get Sandbox
+     * Define whether or not the product is in sandbox environment
+     * @return bool
      */
-    public function getCustom()
+    public function getSandbox()
     {
-        return $this->custom;
+        return $this->sandbox;
     }
 
     /**
-     * Set Custom
-     * Custom variable passed along in the events/webhooks
-     * @param  string $value
+     * Set Sandbox
+     * Define whether or not the product is in sandbox environment
+     * @param  bool $value
      * @return $this
      */
-    public function setCustom($value)
+    public function setSandbox($value)
     {
-        $this->custom = $value;
+        $this->sandbox = $value;
         return $this;
     }
     
     /**
      * Get CreatedAt
-     * Date at which the tailored invoice was created
+     * Date at which the product was created
      * @return string
      */
     public function getCreatedAt()
@@ -334,7 +334,7 @@ class TailoredInvoice
 
     /**
      * Set CreatedAt
-     * Date at which the tailored invoice was created
+     * Date at which the product was created
      * @param  string $value
      * @return $this
      */
@@ -348,7 +348,7 @@ class TailoredInvoice
     /**
      * Fills the current object with the new values pulled from the data
      * @param  array $data
-     * @return TailoredInvoice
+     * @return Product
      */
     public function fillWithData($data)
     {
@@ -379,8 +379,8 @@ class TailoredInvoice
         if(! empty($data["cancel_url"]))
             $this->setCancelUrl($data["cancel_url"]);
 
-        if(! empty($data["custom"]))
-            $this->setCustom($data["custom"]);
+        if(! empty($data["sandbox"]))
+            $this->setSandbox($data["sandbox"]);
 
         if(! empty($data["created_at"]))
             $this->setCreatedAt($data["created_at"]);
@@ -389,7 +389,7 @@ class TailoredInvoice
     }
 
     /**
-     * Create a new invoice from the tailored invoice.
+     * Create a new invoice from the product.
      * @param array $options
      * @return Invoice
      */
@@ -397,7 +397,7 @@ class TailoredInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "/invoices";
+        $path    = "/products/" . urlencode($this->getId()) . "/invoices";
 
         $data = array(
 
@@ -412,15 +412,15 @@ class TailoredInvoice
     }
 
     /**
-     * Get all the tailored invoices.
+     * Get all the products.
      * @param array $options
      * @return array
      */
     public static function all($options = array())
     {
-        $cur = new TailoredInvoice();
+        $cur = new Product();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/tailored-invoices";
+        $path    = "/products";
 
         $data = array(
 
@@ -429,9 +429,9 @@ class TailoredInvoice
         $response = new Response($request->get($path, $data, $options));
         $a    = array();
         $body = $response->getBody();
-        foreach($body['tailored_invoices'] as $v)
+        foreach($body['products'] as $v)
         {
-            $tmp = new TailoredInvoice($cur->instance);
+            $tmp = new Product($cur->instance);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
@@ -440,7 +440,7 @@ class TailoredInvoice
     }
 
     /**
-     * Create a new tailored invoice.
+     * Create a new product.
      * @param array $options
      * @return $this
      */
@@ -448,7 +448,7 @@ class TailoredInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/tailored-invoices";
+        $path    = "/products";
 
         $data = array(
 			"name" => $this->getName(), 
@@ -463,22 +463,22 @@ class TailoredInvoice
 
         $response = new Response($request->post($path, $data, $options));
         $body = $response->getBody();
-        $body = $body['tailored_invoice'];
+        $body = $body['product'];
         return $cur->fillWithData($body);
         
     }
 
     /**
-     * Find a tailored invoice by its ID.
-	 * @param string $tailoredInvoiceId
+     * Find a product by its ID.
+	 * @param string $productId
      * @param array $options
      * @return $this
      */
-    public static function find($tailoredInvoiceId, $options = array())
+    public static function find($productId, $options = array())
     {
-        $cur = new TailoredInvoice();
+        $cur = new Product();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/tailored-invoices/" . urlencode($tailoredInvoiceId) . "";
+        $path    = "/products/" . urlencode($productId) . "";
 
         $data = array(
 
@@ -486,13 +486,13 @@ class TailoredInvoice
 
         $response = new Response($request->get($path, $data, $options));
         $body = $response->getBody();
-        $body = $body['tailored_invoice'];
+        $body = $body['product'];
         return $cur->fillWithData($body);
         
     }
 
     /**
-     * Save the updated tailored invoice attributes.
+     * Save the updated product attributes.
      * @param array $options
      * @return $this
      */
@@ -500,7 +500,7 @@ class TailoredInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
+        $path    = "/products/{tailored_invoice_id}";
 
         $data = array(
 			"name" => $this->getName(), 
@@ -515,13 +515,13 @@ class TailoredInvoice
 
         $response = new Response($request->put($path, $data, $options));
         $body = $response->getBody();
-        $body = $body['tailored_invoice'];
+        $body = $body['product'];
         return $cur->fillWithData($body);
         
     }
 
     /**
-     * Delete the tailored invoice.
+     * Delete the product.
      * @param array $options
      * @return bool
      */
@@ -529,7 +529,7 @@ class TailoredInvoice
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/tailored-invoices/" . urlencode($this->getId()) . "";
+        $path    = "/products/" . urlencode($this->getId()) . "";
 
         $data = array(
 

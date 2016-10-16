@@ -101,7 +101,7 @@ class Invoice
     protected $cancelUrl;
 
     /**
-     * Define whether or not the authorization is in sandbox environment
+     * Define whether or not the invoice is in sandbox environment
      * @var boolean
      */
     protected $sandbox;
@@ -470,7 +470,7 @@ class Invoice
     
     /**
      * Get Sandbox
-     * Define whether or not the authorization is in sandbox environment
+     * Define whether or not the invoice is in sandbox environment
      * @return bool
      */
     public function getSandbox()
@@ -480,7 +480,7 @@ class Invoice
 
     /**
      * Set Sandbox
-     * Define whether or not the authorization is in sandbox environment
+     * Define whether or not the invoice is in sandbox environment
      * @param  bool $value
      * @return $this
      */
