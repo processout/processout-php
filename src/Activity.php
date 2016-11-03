@@ -1,5 +1,7 @@
 <?php
 
+// The content of this file was automatically generated
+
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
@@ -253,6 +255,10 @@ class Activity
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field activities
         $a    = array();
         $body = $response->getBody();
         foreach($body['activities'] as $v)
@@ -262,7 +268,10 @@ class Activity
             $a[] = $tmp;
         }
 
-        return $a;
+        $returnValues["Activities"] = $a;
+                
+        return array_values($returnValues)[0];
+        
     }
 
     /**
@@ -282,9 +291,15 @@ class Activity
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field activity
         $body = $response->getBody();
-        $body = $body['activity'];
-        return $cur->fillWithData($body);
+                    $body = $body['activity'];
+                    
+        $returnValues["find"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+// The content of this file was automatically generated
+
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
@@ -253,6 +255,10 @@ class Event
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field webhooks
         $a    = array();
         $body = $response->getBody();
         foreach($body['webhooks'] as $v)
@@ -262,7 +268,10 @@ class Event
             $a[] = $tmp;
         }
 
-        return $a;
+        $returnValues["Webhooks"] = $a;
+                
+        return array_values($returnValues)[0];
+        
     }
 
     /**
@@ -281,6 +290,10 @@ class Event
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field events
         $a    = array();
         $body = $response->getBody();
         foreach($body['events'] as $v)
@@ -290,7 +303,10 @@ class Event
             $a[] = $tmp;
         }
 
-        return $a;
+        $returnValues["Events"] = $a;
+                
+        return array_values($returnValues)[0];
+        
     }
 
     /**
@@ -310,9 +326,15 @@ class Event
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field event
         $body = $response->getBody();
-        $body = $body['event'];
-        return $cur->fillWithData($body);
+                    $body = $body['event'];
+                    
+        $returnValues["find"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 

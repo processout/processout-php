@@ -1,5 +1,7 @@
 <?php
 
+// The content of this file was automatically generated
+
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
@@ -215,6 +217,10 @@ class Project
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field gateway_configurations
         $a    = array();
         $body = $response->getBody();
         foreach($body['gateway_configurations'] as $v)
@@ -224,29 +230,9 @@ class Project
             $a[] = $tmp;
         }
 
-        return $a;
-    }
-
-    /**
-     * Find a project by its ID.
-	 * @param string $projectId
-     * @param array $options
-     * @return $this
-     */
-    public static function find($projectId, $options = array())
-    {
-        $cur = new Project();
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/projects/" . urlencode($projectId) . "";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['project'];
-        return $cur->fillWithData($body);
+        $returnValues["GatewayConfigurations"] = $a;
+                
+        return array_values($returnValues)[0];
         
     }
 

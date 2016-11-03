@@ -9,7 +9,7 @@ use ProcessOut\Networking\Response;
 use ProcessOut\Networking\RequestProcessoutPrivate;
 
 
-class Product
+class Plan
 {
 
     /**
@@ -19,85 +19,79 @@ class Product
     protected $instance;
 
     /**
-     * ID of the product
+     * ID of the plan
      * @var string
      */
     protected $id;
 
     /**
-     * Project to which the product belongs
+     * Project to which the plan belongs
      * @var object
      */
     protected $project;
 
     /**
-     * URL to which you may redirect your customer to proceed with the payment
-     * @var string
-     */
-    protected $url;
-
-    /**
-     * Name of the product
+     * Name of the plan
      * @var string
      */
     protected $name;
 
     /**
-     * Amount of the product
+     * Amount of the plan
      * @var string
      */
     protected $amount;
 
     /**
-     * Currency of the product
+     * Currency of the plan
      * @var string
      */
     protected $currency;
 
     /**
-     * Metadata related to the product, in the form of a dictionary (key-value pair)
+     * Metadata related to the plan, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
     protected $metadata;
 
     /**
-     * Choose whether or not to request the email during the checkout process
-     * @var boolean
+     * The plan interval, formatted in the format "1d2w3m4y" (day, week, month, year)
+     * @var string
      */
-    protected $requestEmail;
+    protected $interval;
 
     /**
-     * Choose whether or not to request the shipping address during the checkout process
-     * @var boolean
+     * The trial period. The customer will not be charged during this time span. Formatted in the format "1d2w3m4y" (day, week, month, year)
+     * @var string
      */
-    protected $requestShipping;
+    protected $trialPeriod;
 
     /**
-     * URL where the customer will be redirected upon payment
+     * URL where the customer will be redirected when he activates the subscription created using this plan
      * @var string
      */
     protected $returnUrl;
 
     /**
-     * URL where the customer will be redirected if the paymen was canceled
+     * URL where the customer will be redirected when he cancelling the subscription created using this plan
      * @var string
      */
     protected $cancelUrl;
 
     /**
-     * Define whether or not the product is in sandbox environment
+     * Define whether or not the plan is in sandbox environment
      * @var boolean
      */
     protected $sandbox;
 
     /**
-     * Date at which the product was created
+     * Date at which the plan was created
      * @var string
      */
     protected $createdAt;
 
     /**
-     * Product constructor
+     * Plan constructor
      * @param ProcessOut\ProcessOut|null $processOut
      */
     public function __construct(ProcessOut $processOut = null)
@@ -110,15 +104,14 @@ class Product
         $this->instance = $processOut;
 
         $this->setMetadata(array('_library' => 'php'));
-        $this->setRequestEmail((bool) false);
-        $this->setRequestShipping((bool) false);
+        $this->setTrialPeriod("0d");
         
     }
 
     
     /**
      * Get Id
-     * ID of the product
+     * ID of the plan
      * @return string
      */
     public function getId()
@@ -128,7 +121,7 @@ class Product
 
     /**
      * Set Id
-     * ID of the product
+     * ID of the plan
      * @param  string $value
      * @return $this
      */
@@ -140,7 +133,7 @@ class Product
     
     /**
      * Get Project
-     * Project to which the product belongs
+     * Project to which the plan belongs
      * @return object
      */
     public function getProject()
@@ -150,7 +143,7 @@ class Product
 
     /**
      * Set Project
-     * Project to which the product belongs
+     * Project to which the plan belongs
      * @param  object $value
      * @return $this
      */
@@ -168,30 +161,8 @@ class Product
     }
     
     /**
-     * Get Url
-     * URL to which you may redirect your customer to proceed with the payment
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * Set Url
-     * URL to which you may redirect your customer to proceed with the payment
-     * @param  string $value
-     * @return $this
-     */
-    public function setUrl($value)
-    {
-        $this->url = $value;
-        return $this;
-    }
-    
-    /**
      * Get Name
-     * Name of the product
+     * Name of the plan
      * @return string
      */
     public function getName()
@@ -201,7 +172,7 @@ class Product
 
     /**
      * Set Name
-     * Name of the product
+     * Name of the plan
      * @param  string $value
      * @return $this
      */
@@ -213,7 +184,7 @@ class Product
     
     /**
      * Get Amount
-     * Amount of the product
+     * Amount of the plan
      * @return string
      */
     public function getAmount()
@@ -223,7 +194,7 @@ class Product
 
     /**
      * Set Amount
-     * Amount of the product
+     * Amount of the plan
      * @param  string $value
      * @return $this
      */
@@ -235,7 +206,7 @@ class Product
     
     /**
      * Get Currency
-     * Currency of the product
+     * Currency of the plan
      * @return string
      */
     public function getCurrency()
@@ -245,7 +216,7 @@ class Product
 
     /**
      * Set Currency
-     * Currency of the product
+     * Currency of the plan
      * @param  string $value
      * @return $this
      */
@@ -257,7 +228,7 @@ class Product
     
     /**
      * Get Metadata
-     * Metadata related to the product, in the form of a dictionary (key-value pair)
+     * Metadata related to the plan, in the form of a dictionary (key-value pair)
      * @return array
      */
     public function getMetadata()
@@ -267,7 +238,7 @@ class Product
 
     /**
      * Set Metadata
-     * Metadata related to the product, in the form of a dictionary (key-value pair)
+     * Metadata related to the plan, in the form of a dictionary (key-value pair)
      * @param  array $value
      * @return $this
      */
@@ -278,52 +249,52 @@ class Product
     }
     
     /**
-     * Get RequestEmail
-     * Choose whether or not to request the email during the checkout process
-     * @return bool
+     * Get Interval
+     * The plan interval, formatted in the format "1d2w3m4y" (day, week, month, year)
+     * @return string
      */
-    public function getRequestEmail()
+    public function getInterval()
     {
-        return $this->requestEmail;
+        return $this->interval;
     }
 
     /**
-     * Set RequestEmail
-     * Choose whether or not to request the email during the checkout process
-     * @param  bool $value
+     * Set Interval
+     * The plan interval, formatted in the format "1d2w3m4y" (day, week, month, year)
+     * @param  string $value
      * @return $this
      */
-    public function setRequestEmail($value)
+    public function setInterval($value)
     {
-        $this->requestEmail = $value;
+        $this->interval = $value;
         return $this;
     }
     
     /**
-     * Get RequestShipping
-     * Choose whether or not to request the shipping address during the checkout process
-     * @return bool
+     * Get TrialPeriod
+     * The trial period. The customer will not be charged during this time span. Formatted in the format "1d2w3m4y" (day, week, month, year)
+     * @return string
      */
-    public function getRequestShipping()
+    public function getTrialPeriod()
     {
-        return $this->requestShipping;
+        return $this->trialPeriod;
     }
 
     /**
-     * Set RequestShipping
-     * Choose whether or not to request the shipping address during the checkout process
-     * @param  bool $value
+     * Set TrialPeriod
+     * The trial period. The customer will not be charged during this time span. Formatted in the format "1d2w3m4y" (day, week, month, year)
+     * @param  string $value
      * @return $this
      */
-    public function setRequestShipping($value)
+    public function setTrialPeriod($value)
     {
-        $this->requestShipping = $value;
+        $this->trialPeriod = $value;
         return $this;
     }
     
     /**
      * Get ReturnUrl
-     * URL where the customer will be redirected upon payment
+     * URL where the customer will be redirected when he activates the subscription created using this plan
      * @return string
      */
     public function getReturnUrl()
@@ -333,7 +304,7 @@ class Product
 
     /**
      * Set ReturnUrl
-     * URL where the customer will be redirected upon payment
+     * URL where the customer will be redirected when he activates the subscription created using this plan
      * @param  string $value
      * @return $this
      */
@@ -345,7 +316,7 @@ class Product
     
     /**
      * Get CancelUrl
-     * URL where the customer will be redirected if the paymen was canceled
+     * URL where the customer will be redirected when he cancelling the subscription created using this plan
      * @return string
      */
     public function getCancelUrl()
@@ -355,7 +326,7 @@ class Product
 
     /**
      * Set CancelUrl
-     * URL where the customer will be redirected if the paymen was canceled
+     * URL where the customer will be redirected when he cancelling the subscription created using this plan
      * @param  string $value
      * @return $this
      */
@@ -367,7 +338,7 @@ class Product
     
     /**
      * Get Sandbox
-     * Define whether or not the product is in sandbox environment
+     * Define whether or not the plan is in sandbox environment
      * @return bool
      */
     public function getSandbox()
@@ -377,7 +348,7 @@ class Product
 
     /**
      * Set Sandbox
-     * Define whether or not the product is in sandbox environment
+     * Define whether or not the plan is in sandbox environment
      * @param  bool $value
      * @return $this
      */
@@ -389,7 +360,7 @@ class Product
     
     /**
      * Get CreatedAt
-     * Date at which the product was created
+     * Date at which the plan was created
      * @return string
      */
     public function getCreatedAt()
@@ -399,7 +370,7 @@ class Product
 
     /**
      * Set CreatedAt
-     * Date at which the product was created
+     * Date at which the plan was created
      * @param  string $value
      * @return $this
      */
@@ -413,7 +384,7 @@ class Product
     /**
      * Fills the current object with the new values pulled from the data
      * @param  array $data
-     * @return Product
+     * @return Plan
      */
     public function fillWithData($data)
     {
@@ -422,9 +393,6 @@ class Product
 
         if(! empty($data["project"]))
             $this->setProject($data["project"]);
-
-        if(! empty($data["url"]))
-            $this->setUrl($data["url"]);
 
         if(! empty($data["name"]))
             $this->setName($data["name"]);
@@ -438,11 +406,11 @@ class Product
         if(! empty($data["metadata"]))
             $this->setMetadata($data["metadata"]);
 
-        if(! empty($data["request_email"]))
-            $this->setRequestEmail($data["request_email"]);
+        if(! empty($data["interval"]))
+            $this->setInterval($data["interval"]);
 
-        if(! empty($data["request_shipping"]))
-            $this->setRequestShipping($data["request_shipping"]);
+        if(! empty($data["trial_period"]))
+            $this->setTrialPeriod($data["trial_period"]);
 
         if(! empty($data["return_url"]))
             $this->setReturnUrl($data["return_url"]);
@@ -460,44 +428,15 @@ class Product
     }
 
     /**
-     * Create a new invoice from the product.
-     * @param array $options
-     * @return Invoice
-     */
-    public function invoice($options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/products/" . urlencode($this->getId()) . "/invoices";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        $returnValues = array();
-
-        
-        // Handling for field invoice
-        $body = $response->getBody();
-        $body = $body['invoice'];
-        $invoice = new Invoice($cur->instance);
-        $returnValues["invoice"] = $invoice->fillWithData($body);
-                
-        return array_values($returnValues)[0];
-        
-    }
-
-    /**
-     * Get all the products.
+     * Get all the plans.
      * @param array $options
      * @return array
      */
     public static function all($options = array())
     {
-        $cur = new Product();
+        $cur = new Plan();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/products";
+        $path    = "/plans";
 
         $data = array(
 
@@ -507,24 +446,24 @@ class Product
         $returnValues = array();
 
         
-        // Handling for field products
+        // Handling for field plans
         $a    = array();
         $body = $response->getBody();
-        foreach($body['products'] as $v)
+        foreach($body['plans'] as $v)
         {
-            $tmp = new Product($cur->instance);
+            $tmp = new Plan($cur->instance);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
 
-        $returnValues["Products"] = $a;
+        $returnValues["Plans"] = $a;
                 
         return array_values($returnValues)[0];
         
     }
 
     /**
-     * Create a new product.
+     * Create a new plan.
      * @param array $options
      * @return $this
      */
@@ -532,15 +471,16 @@ class Product
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/products";
+        $path    = "/plans";
 
         $data = array(
+			"id" => $this->getId(), 
 			"name" => $this->getName(), 
 			"amount" => $this->getAmount(), 
 			"currency" => $this->getCurrency(), 
+			"interval" => $this->getInterval(), 
+			"trial_period" => $this->getTrialPeriod(), 
 			"metadata" => $this->getMetadata(), 
-			"request_email" => $this->getRequestEmail(), 
-			"request_shipping" => $this->getRequestShipping(), 
 			"return_url" => $this->getReturnUrl(), 
 			"cancel_url" => $this->getCancelUrl()
         );
@@ -549,9 +489,9 @@ class Product
         $returnValues = array();
 
         
-        // Handling for field product
+        // Handling for field plan
         $body = $response->getBody();
-                    $body = $body['product'];
+                    $body = $body['plan'];
                     
         $returnValues["create"] = $cur->fillWithData($body);
         return array_values($returnValues)[0];
@@ -559,16 +499,16 @@ class Product
     }
 
     /**
-     * Find a product by its ID.
-	 * @param string $productId
+     * Find a plan by its ID.
+	 * @param string $planId
      * @param array $options
      * @return $this
      */
-    public static function find($productId, $options = array())
+    public static function find($planId, $options = array())
     {
-        $cur = new Product();
+        $cur = new Plan();
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/products/" . urlencode($productId) . "";
+        $path    = "/plans/" . urlencode($planId) . "";
 
         $data = array(
 
@@ -578,9 +518,9 @@ class Product
         $returnValues = array();
 
         
-        // Handling for field product
+        // Handling for field plan
         $body = $response->getBody();
-                    $body = $body['product'];
+                    $body = $body['plan'];
                     
         $returnValues["find"] = $cur->fillWithData($body);
         return array_values($returnValues)[0];
@@ -588,23 +528,20 @@ class Product
     }
 
     /**
-     * Save the updated product attributes.
+     * Update the plan. This action won't affect subscriptions already linked to this plan.
      * @param array $options
      * @return $this
      */
-    public function save($options = array())
+    public function update($options = array())
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/products/" . urlencode($this->getId()) . "";
+        $path    = "/plans/" . urlencode($this->getId()) . "";
 
         $data = array(
 			"name" => $this->getName(), 
-			"amount" => $this->getAmount(), 
-			"currency" => $this->getCurrency(), 
+			"trial_period" => $this->getTrialPeriod(), 
 			"metadata" => $this->getMetadata(), 
-			"request_email" => $this->getRequestEmail(), 
-			"request_shipping" => $this->getRequestShipping(), 
 			"return_url" => $this->getReturnUrl(), 
 			"cancel_url" => $this->getCancelUrl()
         );
@@ -613,25 +550,25 @@ class Product
         $returnValues = array();
 
         
-        // Handling for field product
+        // Handling for field plan
         $body = $response->getBody();
-                    $body = $body['product'];
+                    $body = $body['plan'];
                     
-        $returnValues["save"] = $cur->fillWithData($body);
+        $returnValues["update"] = $cur->fillWithData($body);
         return array_values($returnValues)[0];
         
     }
 
     /**
-     * Delete the product.
+     * Delete a plan. Subscriptions linked to this plan won't be affected.
      * @param array $options
      * @return bool
      */
-    public function delete($options = array())
+    public function end($options = array())
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/products/" . urlencode($this->getId()) . "";
+        $path    = "/plans/" . urlencode($this->getId()) . "";
 
         $data = array(
 

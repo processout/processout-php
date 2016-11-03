@@ -1,5 +1,7 @@
 <?php
 
+// The content of this file was automatically generated
+
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
@@ -45,6 +47,12 @@ class AuthorizationRequest
      * @var string
      */
     protected $url;
+
+    /**
+     * Whether or not the authorization request was authorized
+     * @var boolean
+     */
+    protected $authorized;
 
     /**
      * Name of the authorization
@@ -237,6 +245,28 @@ class AuthorizationRequest
     }
     
     /**
+     * Get Authorized
+     * Whether or not the authorization request was authorized
+     * @return bool
+     */
+    public function getAuthorized()
+    {
+        return $this->authorized;
+    }
+
+    /**
+     * Set Authorized
+     * Whether or not the authorization request was authorized
+     * @param  bool $value
+     * @return $this
+     */
+    public function setAuthorized($value)
+    {
+        $this->authorized = $value;
+        return $this;
+    }
+    
+    /**
      * Get Name
      * Name of the authorization
      * @return string
@@ -413,6 +443,9 @@ class AuthorizationRequest
         if(! empty($data["url"]))
             $this->setUrl($data["url"]);
 
+        if(! empty($data["authorized"]))
+            $this->setAuthorized($data["authorized"]);
+
         if(! empty($data["name"]))
             $this->setName($data["name"]);
 
@@ -453,34 +486,16 @@ class AuthorizationRequest
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field customer
         $body = $response->getBody();
         $body = $body['customer'];
         $customer = new Customer($cur->instance);
-        return $customer->fillWithData($body);
-        
-    }
-
-    /**
-     * Get the customer action needed to be continue the token authorization flow on the given gateway.
-	 * @param string $gatewayConfigurationId
-     * @param array $options
-     * @return CustomerAction
-     */
-    public function customerAction($gatewayConfigurationId, $options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/authorization-requests/" . urlencode($this->getId()) . "/gateway-configurations/" . urlencode($gatewayConfigurationId) . "/customer-action";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['customer_action'];
-        $customerAction = new CustomerAction($cur->instance);
-        return $customerAction->fillWithData($body);
+        $returnValues["customer"] = $customer->fillWithData($body);
+                
+        return array_values($returnValues)[0];
         
     }
 
@@ -506,9 +521,15 @@ class AuthorizationRequest
         );
 
         $response = new Response($request->post($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field authorization_request
         $body = $response->getBody();
-        $body = $body['authorization_request'];
-        return $cur->fillWithData($body);
+                    $body = $body['authorization_request'];
+                    
+        $returnValues["create"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 
@@ -529,9 +550,15 @@ class AuthorizationRequest
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field authorization_request
         $body = $response->getBody();
-        $body = $body['authorization_request'];
-        return $cur->fillWithData($body);
+                    $body = $body['authorization_request'];
+                    
+        $returnValues["find"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 

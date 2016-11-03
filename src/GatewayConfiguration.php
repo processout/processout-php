@@ -1,5 +1,7 @@
 <?php
 
+// The content of this file was automatically generated
+
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;

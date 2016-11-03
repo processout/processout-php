@@ -1,5 +1,7 @@
 <?php
 
+// The content of this file was automatically generated
+
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
@@ -95,7 +97,7 @@ class Invoice
     protected $returnUrl;
 
     /**
-     * URL where the customer will be redirected if the paymen was canceled
+     * URL where the customer will be redirected if the payment was canceled
      * @var string
      */
     protected $cancelUrl;
@@ -448,7 +450,7 @@ class Invoice
     
     /**
      * Get CancelUrl
-     * URL where the customer will be redirected if the paymen was canceled
+     * URL where the customer will be redirected if the payment was canceled
      * @return string
      */
     public function getCancelUrl()
@@ -458,7 +460,7 @@ class Invoice
 
     /**
      * Set CancelUrl
-     * URL where the customer will be redirected if the paymen was canceled
+     * URL where the customer will be redirected if the payment was canceled
      * @param  string $value
      * @return $this
      */
@@ -575,7 +577,7 @@ class Invoice
      * Authorize the invoice using the given source (customer or token)
 	 * @param string $source
      * @param array $options
-     * @return bool
+     * @return Transaction
      */
     public function authorize($source, $options = array())
     {
@@ -588,7 +590,16 @@ class Invoice
         );
 
         $response = new Response($request->post($path, $data, $options));
-        return $response->isSuccess();
+        $returnValues = array();
+
+        
+        // Handling for field transaction
+        $body = $response->getBody();
+        $body = $body['transaction'];
+        $transaction = new Transaction($cur->instance);
+        $returnValues["transaction"] = $transaction->fillWithData($body);
+                
+        return array_values($returnValues)[0];
         
     }
 
@@ -596,7 +607,7 @@ class Invoice
      * Capture the invoice using the given source (customer or token)
 	 * @param string $source
      * @param array $options
-     * @return bool
+     * @return Transaction
      */
     public function capture($source, $options = array())
     {
@@ -609,7 +620,16 @@ class Invoice
         );
 
         $response = new Response($request->post($path, $data, $options));
-        return $response->isSuccess();
+        $returnValues = array();
+
+        
+        // Handling for field transaction
+        $body = $response->getBody();
+        $body = $body['transaction'];
+        $transaction = new Transaction($cur->instance);
+        $returnValues["transaction"] = $transaction->fillWithData($body);
+                
+        return array_values($returnValues)[0];
         
     }
 
@@ -629,10 +649,16 @@ class Invoice
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field customer
         $body = $response->getBody();
         $body = $body['customer'];
         $customer = new Customer($cur->instance);
-        return $customer->fillWithData($body);
+        $returnValues["customer"] = $customer->fillWithData($body);
+                
+        return array_values($returnValues)[0];
         
     }
 
@@ -653,34 +679,16 @@ class Invoice
         );
 
         $response = new Response($request->post($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field customer
         $body = $response->getBody();
         $body = $body['customer'];
         $customer = new Customer($cur->instance);
-        return $customer->fillWithData($body);
-        
-    }
-
-    /**
-     * Get the customer action needed to be continue the payment flow on the given gateway.
-	 * @param string $gatewayConfigurationId
-     * @param array $options
-     * @return CustomerAction
-     */
-    public function customerAction($gatewayConfigurationId, $options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/invoices/" . urlencode($this->getId()) . "/gateway-configurations/" . urlencode($gatewayConfigurationId) . "/customer-action";
-
-        $data = array(
-
-        );
-
-        $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['customer_action'];
-        $customerAction = new CustomerAction($cur->instance);
-        return $customerAction->fillWithData($body);
+        $returnValues["customer"] = $customer->fillWithData($body);
+                
+        return array_values($returnValues)[0];
         
     }
 
@@ -700,17 +708,23 @@ class Invoice
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field transaction
         $body = $response->getBody();
         $body = $body['transaction'];
         $transaction = new Transaction($cur->instance);
-        return $transaction->fillWithData($body);
+        $returnValues["transaction"] = $transaction->fillWithData($body);
+                
+        return array_values($returnValues)[0];
         
     }
 
     /**
      * Void the invoice
      * @param array $options
-     * @return bool
+     * @return Transaction
      */
     public function void($options = array())
     {
@@ -723,7 +737,16 @@ class Invoice
         );
 
         $response = new Response($request->post($path, $data, $options));
-        return $response->isSuccess();
+        $returnValues = array();
+
+        
+        // Handling for field transaction
+        $body = $response->getBody();
+        $body = $body['transaction'];
+        $transaction = new Transaction($cur->instance);
+        $returnValues["transaction"] = $transaction->fillWithData($body);
+                
+        return array_values($returnValues)[0];
         
     }
 
@@ -743,6 +766,10 @@ class Invoice
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field invoices
         $a    = array();
         $body = $response->getBody();
         foreach($body['invoices'] as $v)
@@ -752,7 +779,10 @@ class Invoice
             $a[] = $tmp;
         }
 
-        return $a;
+        $returnValues["Invoices"] = $a;
+                
+        return array_values($returnValues)[0];
+        
     }
 
     /**
@@ -778,9 +808,52 @@ class Invoice
         );
 
         $response = new Response($request->post($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field invoice
         $body = $response->getBody();
-        $body = $body['invoice'];
-        return $cur->fillWithData($body);
+                    $body = $body['invoice'];
+                    
+        $returnValues["create"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
+        
+    }
+
+    /**
+     * Create a new invoice for the given customer ID.
+	 * @param string $customerId
+     * @param array $options
+     * @return $this
+     */
+    public function createForCustomer($customerId, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/invoices";
+
+        $data = array(
+			"name" => $this->getName(), 
+			"amount" => $this->getAmount(), 
+			"currency" => $this->getCurrency(), 
+			"metadata" => $this->getMetadata(), 
+			"request_email" => $this->getRequestEmail(), 
+			"request_shipping" => $this->getRequestShipping(), 
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl(), 
+			"customer_id" => $customerId
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field invoice
+        $body = $response->getBody();
+                    $body = $body['invoice'];
+                    
+        $returnValues["createForCustomer"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 
@@ -801,9 +874,15 @@ class Invoice
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field invoice
         $body = $response->getBody();
-        $body = $body['invoice'];
-        return $cur->fillWithData($body);
+                    $body = $body['invoice'];
+                    
+        $returnValues["find"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 

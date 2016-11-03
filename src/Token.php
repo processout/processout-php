@@ -1,5 +1,7 @@
 <?php
 
+// The content of this file was automatically generated
+
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
@@ -23,16 +25,10 @@ class Token
     protected $id;
 
     /**
-     * Customer linked to the token
+     * Customer owning the token
      * @var object
      */
     protected $customer;
-
-    /**
-     * ID of the customer token
-     * @var string
-     */
-    protected $customerId;
 
     /**
      * Metadata related to the token, in the form of a dictionary (key-value pair)
@@ -94,7 +90,7 @@ class Token
     
     /**
      * Get Customer
-     * Customer linked to the token
+     * Customer owning the token
      * @return object
      */
     public function getCustomer()
@@ -104,7 +100,7 @@ class Token
 
     /**
      * Set Customer
-     * Customer linked to the token
+     * Customer owning the token
      * @param  object $value
      * @return $this
      */
@@ -118,28 +114,6 @@ class Token
             $obj->fillWithData($value);
             $this->customer = $obj;
         }
-        return $this;
-    }
-    
-    /**
-     * Get CustomerId
-     * ID of the customer token
-     * @return string
-     */
-    public function getCustomerId()
-    {
-        return $this->customerId;
-    }
-
-    /**
-     * Set CustomerId
-     * ID of the customer token
-     * @param  string $value
-     * @return $this
-     */
-    public function setCustomerId($value)
-    {
-        $this->customerId = $value;
         return $this;
     }
     
@@ -223,9 +197,6 @@ class Token
         if(! empty($data["customer"]))
             $this->setCustomer($data["customer"]);
 
-        if(! empty($data["customer_id"]))
-            $this->setCustomerId($data["customer_id"]);
-
         if(! empty($data["metadata"]))
             $this->setMetadata($data["metadata"]);
 
@@ -256,21 +227,26 @@ class Token
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field token
         $body = $response->getBody();
-        $body = $body['token'];
-        return $cur->fillWithData($body);
+                    $body = $body['token'];
+                    
+        $returnValues["find"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 
     /**
      * Create a new token for the given customer ID.
 	 * @param string $customerId
-	 * @param string $target
 	 * @param string $source
      * @param array $options
      * @return $this
      */
-    public function create($customerId, $target, $source, $options = array())
+    public function create($customerId, $source, $options = array())
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
@@ -278,14 +254,52 @@ class Token
 
         $data = array(
 			"metadata" => $this->getMetadata(), 
-			"target" => $target, 
 			"source" => $source
         );
 
         $response = new Response($request->post($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field token
         $body = $response->getBody();
-        $body = $body['token'];
-        return $cur->fillWithData($body);
+                    $body = $body['token'];
+                    
+        $returnValues["create"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
+        
+    }
+
+    /**
+     * Create a new token for the given customer ID from an authorization request
+	 * @param string $customerId
+	 * @param string $source
+	 * @param string $target
+     * @param array $options
+     * @return $this
+     */
+    public function createFromRequest($customerId, $source, $target, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/customers/" . urlencode($customerId) . "/tokens";
+
+        $data = array(
+			"metadata" => $this->getMetadata(), 
+			"source" => $source, 
+			"target" => $target
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field token
+        $body = $response->getBody();
+                    $body = $body['token'];
+                    
+        $returnValues["createFromRequest"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 

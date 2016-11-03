@@ -1,5 +1,7 @@
 <?php
 
+// The content of this file was automatically generated
+
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
@@ -27,12 +29,6 @@ class Customer
      * @var object
      */
     protected $project;
-
-    /**
-     * Customer balance. Can be positive or negative. The balance is automatically applied to subscription invoices and is solely used for this purpose
-     * @var string
-     */
-    protected $balance;
 
     /**
      * Email of the customer
@@ -89,6 +85,18 @@ class Customer
     protected $countryCode;
 
     /**
+     * Customer balance. Can be positive or negative
+     * @var string
+     */
+    protected $balance;
+
+    /**
+     * Currency of the customer balance. Once the currency is set it cannot be modified
+     * @var string
+     */
+    protected $currency;
+
+    /**
      * Metadata related to the customer, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -125,6 +133,7 @@ class Customer
 
         $this->instance = $processOut;
 
+        $this->setBalance("0");
         $this->setMetadata(array('_library' => 'php'));
         
     }
@@ -178,28 +187,6 @@ class Customer
             $obj->fillWithData($value);
             $this->project = $obj;
         }
-        return $this;
-    }
-    
-    /**
-     * Get Balance
-     * Customer balance. Can be positive or negative. The balance is automatically applied to subscription invoices and is solely used for this purpose
-     * @return string
-     */
-    public function getBalance()
-    {
-        return $this->balance;
-    }
-
-    /**
-     * Set Balance
-     * Customer balance. Can be positive or negative. The balance is automatically applied to subscription invoices and is solely used for this purpose
-     * @param  string $value
-     * @return $this
-     */
-    public function setBalance($value)
-    {
-        $this->balance = $value;
         return $this;
     }
     
@@ -402,6 +389,50 @@ class Customer
     }
     
     /**
+     * Get Balance
+     * Customer balance. Can be positive or negative
+     * @return string
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * Set Balance
+     * Customer balance. Can be positive or negative
+     * @param  string $value
+     * @return $this
+     */
+    public function setBalance($value)
+    {
+        $this->balance = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Currency
+     * Currency of the customer balance. Once the currency is set it cannot be modified
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * Set Currency
+     * Currency of the customer balance. Once the currency is set it cannot be modified
+     * @param  string $value
+     * @return $this
+     */
+    public function setCurrency($value)
+    {
+        $this->currency = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the customer, in the form of a dictionary (key-value pair)
      * @return array
@@ -503,9 +534,6 @@ class Customer
         if(! empty($data["project"]))
             $this->setProject($data["project"]);
 
-        if(! empty($data["balance"]))
-            $this->setBalance($data["balance"]);
-
         if(! empty($data["email"]))
             $this->setEmail($data["email"]);
 
@@ -532,6 +560,12 @@ class Customer
 
         if(! empty($data["country_code"]))
             $this->setCountryCode($data["country_code"]);
+
+        if(! empty($data["balance"]))
+            $this->setBalance($data["balance"]);
+
+        if(! empty($data["currency"]))
+            $this->setCurrency($data["currency"]);
 
         if(! empty($data["metadata"]))
             $this->setMetadata($data["metadata"]);
@@ -564,6 +598,10 @@ class Customer
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field subscriptions
         $a    = array();
         $body = $response->getBody();
         foreach($body['subscriptions'] as $v)
@@ -573,7 +611,10 @@ class Customer
             $a[] = $tmp;
         }
 
-        return $a;
+        $returnValues["Subscriptions"] = $a;
+                
+        return array_values($returnValues)[0];
+        
     }
 
     /**
@@ -592,6 +633,10 @@ class Customer
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field tokens
         $a    = array();
         $body = $response->getBody();
         foreach($body['tokens'] as $v)
@@ -601,7 +646,10 @@ class Customer
             $a[] = $tmp;
         }
 
-        return $a;
+        $returnValues["Tokens"] = $a;
+                
+        return array_values($returnValues)[0];
+        
     }
 
     /**
@@ -620,6 +668,10 @@ class Customer
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field transactions
         $a    = array();
         $body = $response->getBody();
         foreach($body['transactions'] as $v)
@@ -629,7 +681,10 @@ class Customer
             $a[] = $tmp;
         }
 
-        return $a;
+        $returnValues["Transactions"] = $a;
+                
+        return array_values($returnValues)[0];
+        
     }
 
     /**
@@ -648,6 +703,10 @@ class Customer
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field customers
         $a    = array();
         $body = $response->getBody();
         foreach($body['customers'] as $v)
@@ -657,7 +716,10 @@ class Customer
             $a[] = $tmp;
         }
 
-        return $a;
+        $returnValues["Customers"] = $a;
+                
+        return array_values($returnValues)[0];
+        
     }
 
     /**
@@ -672,6 +734,8 @@ class Customer
         $path    = "/customers";
 
         $data = array(
+			"balance" => $this->getBalance(), 
+			"currency" => $this->getCurrency(), 
 			"email" => $this->getEmail(), 
 			"first_name" => $this->getFirstName(), 
 			"last_name" => $this->getLastName(), 
@@ -685,9 +749,15 @@ class Customer
         );
 
         $response = new Response($request->post($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field customer
         $body = $response->getBody();
-        $body = $body['customer'];
-        return $cur->fillWithData($body);
+                    $body = $body['customer'];
+                    
+        $returnValues["create"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 
@@ -708,9 +778,15 @@ class Customer
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field customer
         $body = $response->getBody();
-        $body = $body['customer'];
-        return $cur->fillWithData($body);
+                    $body = $body['customer'];
+                    
+        $returnValues["find"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 
@@ -726,6 +802,7 @@ class Customer
         $path    = "/customers/" . urlencode($this->getId()) . "";
 
         $data = array(
+			"balance" => $this->getBalance(), 
 			"email" => $this->getEmail(), 
 			"first_name" => $this->getFirstName(), 
 			"last_name" => $this->getLastName(), 
@@ -739,9 +816,15 @@ class Customer
         );
 
         $response = new Response($request->put($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field customer
         $body = $response->getBody();
-        $body = $body['customer'];
-        return $cur->fillWithData($body);
+                    $body = $body['customer'];
+                    
+        $returnValues["save"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 
@@ -761,7 +844,11 @@ class Customer
         );
 
         $response = new Response($request->delete($path, $data, $options));
-        return $response->isSuccess();
+        $returnValues = array();
+
+        
+        $returnValues["success"] = $response->isSuccess();
+        return array_values($returnValues)[0];
         
     }
 

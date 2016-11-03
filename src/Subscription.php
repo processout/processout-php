@@ -1,5 +1,7 @@
 <?php
 
+// The content of this file was automatically generated
+
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
@@ -29,19 +31,25 @@ class Subscription
     protected $project;
 
     /**
+     * Plan used to create this subscription
+     * @var object
+     */
+    protected $plan;
+
+    /**
      * Customer linked to the subscription
      * @var object
      */
     protected $customer;
 
     /**
-     * Token linked to the subscription, once started
+     * Token used to capture payments on this subscription
      * @var object
      */
     protected $token;
 
     /**
-     * URL to which you may redirect your customer to authorize the subscription
+     * URL to which you may redirect your customer to activate the subscription
      * @var string
      */
     protected $url;
@@ -53,7 +61,7 @@ class Subscription
     protected $name;
 
     /**
-     * Amount of the subscription
+     * Amount to be paid at each billing cycle of the subscription
      * @var string
      */
     protected $amount;
@@ -71,58 +79,88 @@ class Subscription
     protected $metadata;
 
     /**
-     * URL where the customer will be redirected when he activates the subscription
-     * @var string
-     */
-    protected $returnUrl;
-
-    /**
-     * URL where the customer will be redirected when he canceles the subscription
-     * @var string
-     */
-    protected $cancelUrl;
-
-    /**
      * The subscription interval, formatted in the format "1d2w3m4y" (day, week, month, year)
      * @var string
      */
     protected $interval;
 
     /**
-     * The trial period. The customer will not be charged during this time span. Formatted in the format "1d2w3m4y" (day, week, month, year)
+     * Date at which the subscription trial should end. Can be null to set no trial
      * @var string
      */
-    protected $trialPeriod;
+    protected $trialEndAt;
 
     /**
-     * Weither or not the subscription is active
+     * Whether or not the subscription was activated. This field does not take into account whether or not the subscription was canceled. Used the active field to know if the subscription is currently active
      * @var boolean
      */
     protected $activated;
 
     /**
-     * Weither or not the subscription has ended (programmatically or canceled)
+     * Whether or not the subscription is currently active (ie activated and not cancelled)
      * @var boolean
      */
-    protected $ended;
+    protected $active;
 
     /**
-     * Reason as to why the subscription ended
+     * Whether or not the subscription was canceled. The cancellation reason can be found in the cancellation_reason field
+     * @var boolean
+     */
+    protected $canceled;
+
+    /**
+     * Reason as to why the subscription was cancelled
      * @var string
      */
-    protected $endedReason;
+    protected $cancellationReason;
 
     /**
-     * Define whether or not the authorization is in sandbox environment
+     * Wheither or not the subscription is pending cancellation (meaning a cancel_at date was set)
+     * @var boolean
+     */
+    protected $pendingCancellation;
+
+    /**
+     * Date at which the subscription will automatically be canceled. Can be null
+     * @var string
+     */
+    protected $cancelAt;
+
+    /**
+     * URL where the customer will be redirected upon activation of the subscription
+     * @var string
+     */
+    protected $returnUrl;
+
+    /**
+     * URL where the customer will be redirected if the subscription activation was canceled
+     * @var string
+     */
+    protected $cancelUrl;
+
+    /**
+     * Define whether or not the subscription is in sandbox environment
      * @var boolean
      */
     protected $sandbox;
 
     /**
-     * Date at which the invoice was created
+     * Date at which the subscription was created
      * @var string
      */
     protected $createdAt;
+
+    /**
+     * Date at which the subscription was activated. Null if the subscription hasn't been activated yet
+     * @var string
+     */
+    protected $activatedAt;
+
+    /**
+     * Next iteration date, corresponding to the next billing cycle start date
+     * @var string
+     */
+    protected $iterateAt;
 
     /**
      * Subscription constructor
@@ -138,7 +176,6 @@ class Subscription
         $this->instance = $processOut;
 
         $this->setMetadata(array('_library' => 'php'));
-        $this->setTrialPeriod("0d");
         
     }
 
@@ -195,6 +232,35 @@ class Subscription
     }
     
     /**
+     * Get Plan
+     * Plan used to create this subscription
+     * @return object
+     */
+    public function getPlan()
+    {
+        return $this->plan;
+    }
+
+    /**
+     * Set Plan
+     * Plan used to create this subscription
+     * @param  object $value
+     * @return $this
+     */
+    public function setPlan($value)
+    {
+        if (is_object($value))
+            $this->plan = $value;
+        else
+        {
+            $obj = new Plan($this->instance);
+            $obj->fillWithData($value);
+            $this->plan = $obj;
+        }
+        return $this;
+    }
+    
+    /**
      * Get Customer
      * Customer linked to the subscription
      * @return object
@@ -225,7 +291,7 @@ class Subscription
     
     /**
      * Get Token
-     * Token linked to the subscription, once started
+     * Token used to capture payments on this subscription
      * @return object
      */
     public function getToken()
@@ -235,7 +301,7 @@ class Subscription
 
     /**
      * Set Token
-     * Token linked to the subscription, once started
+     * Token used to capture payments on this subscription
      * @param  object $value
      * @return $this
      */
@@ -254,7 +320,7 @@ class Subscription
     
     /**
      * Get Url
-     * URL to which you may redirect your customer to authorize the subscription
+     * URL to which you may redirect your customer to activate the subscription
      * @return string
      */
     public function getUrl()
@@ -264,7 +330,7 @@ class Subscription
 
     /**
      * Set Url
-     * URL to which you may redirect your customer to authorize the subscription
+     * URL to which you may redirect your customer to activate the subscription
      * @param  string $value
      * @return $this
      */
@@ -298,7 +364,7 @@ class Subscription
     
     /**
      * Get Amount
-     * Amount of the subscription
+     * Amount to be paid at each billing cycle of the subscription
      * @return string
      */
     public function getAmount()
@@ -308,7 +374,7 @@ class Subscription
 
     /**
      * Set Amount
-     * Amount of the subscription
+     * Amount to be paid at each billing cycle of the subscription
      * @param  string $value
      * @return $this
      */
@@ -363,50 +429,6 @@ class Subscription
     }
     
     /**
-     * Get ReturnUrl
-     * URL where the customer will be redirected when he activates the subscription
-     * @return string
-     */
-    public function getReturnUrl()
-    {
-        return $this->returnUrl;
-    }
-
-    /**
-     * Set ReturnUrl
-     * URL where the customer will be redirected when he activates the subscription
-     * @param  string $value
-     * @return $this
-     */
-    public function setReturnUrl($value)
-    {
-        $this->returnUrl = $value;
-        return $this;
-    }
-    
-    /**
-     * Get CancelUrl
-     * URL where the customer will be redirected when he canceles the subscription
-     * @return string
-     */
-    public function getCancelUrl()
-    {
-        return $this->cancelUrl;
-    }
-
-    /**
-     * Set CancelUrl
-     * URL where the customer will be redirected when he canceles the subscription
-     * @param  string $value
-     * @return $this
-     */
-    public function setCancelUrl($value)
-    {
-        $this->cancelUrl = $value;
-        return $this;
-    }
-    
-    /**
      * Get Interval
      * The subscription interval, formatted in the format "1d2w3m4y" (day, week, month, year)
      * @return string
@@ -429,30 +451,30 @@ class Subscription
     }
     
     /**
-     * Get TrialPeriod
-     * The trial period. The customer will not be charged during this time span. Formatted in the format "1d2w3m4y" (day, week, month, year)
+     * Get TrialEndAt
+     * Date at which the subscription trial should end. Can be null to set no trial
      * @return string
      */
-    public function getTrialPeriod()
+    public function getTrialEndAt()
     {
-        return $this->trialPeriod;
+        return $this->trialEndAt;
     }
 
     /**
-     * Set TrialPeriod
-     * The trial period. The customer will not be charged during this time span. Formatted in the format "1d2w3m4y" (day, week, month, year)
+     * Set TrialEndAt
+     * Date at which the subscription trial should end. Can be null to set no trial
      * @param  string $value
      * @return $this
      */
-    public function setTrialPeriod($value)
+    public function setTrialEndAt($value)
     {
-        $this->trialPeriod = $value;
+        $this->trialEndAt = $value;
         return $this;
     }
     
     /**
      * Get Activated
-     * Weither or not the subscription is active
+     * Whether or not the subscription was activated. This field does not take into account whether or not the subscription was canceled. Used the active field to know if the subscription is currently active
      * @return bool
      */
     public function getActivated()
@@ -462,7 +484,7 @@ class Subscription
 
     /**
      * Set Activated
-     * Weither or not the subscription is active
+     * Whether or not the subscription was activated. This field does not take into account whether or not the subscription was canceled. Used the active field to know if the subscription is currently active
      * @param  bool $value
      * @return $this
      */
@@ -473,52 +495,162 @@ class Subscription
     }
     
     /**
-     * Get Ended
-     * Weither or not the subscription has ended (programmatically or canceled)
+     * Get Active
+     * Whether or not the subscription is currently active (ie activated and not cancelled)
      * @return bool
      */
-    public function getEnded()
+    public function getActive()
     {
-        return $this->ended;
+        return $this->active;
     }
 
     /**
-     * Set Ended
-     * Weither or not the subscription has ended (programmatically or canceled)
+     * Set Active
+     * Whether or not the subscription is currently active (ie activated and not cancelled)
      * @param  bool $value
      * @return $this
      */
-    public function setEnded($value)
+    public function setActive($value)
     {
-        $this->ended = $value;
+        $this->active = $value;
         return $this;
     }
     
     /**
-     * Get EndedReason
-     * Reason as to why the subscription ended
-     * @return string
+     * Get Canceled
+     * Whether or not the subscription was canceled. The cancellation reason can be found in the cancellation_reason field
+     * @return bool
      */
-    public function getEndedReason()
+    public function getCanceled()
     {
-        return $this->endedReason;
+        return $this->canceled;
     }
 
     /**
-     * Set EndedReason
-     * Reason as to why the subscription ended
+     * Set Canceled
+     * Whether or not the subscription was canceled. The cancellation reason can be found in the cancellation_reason field
+     * @param  bool $value
+     * @return $this
+     */
+    public function setCanceled($value)
+    {
+        $this->canceled = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CancellationReason
+     * Reason as to why the subscription was cancelled
+     * @return string
+     */
+    public function getCancellationReason()
+    {
+        return $this->cancellationReason;
+    }
+
+    /**
+     * Set CancellationReason
+     * Reason as to why the subscription was cancelled
      * @param  string $value
      * @return $this
      */
-    public function setEndedReason($value)
+    public function setCancellationReason($value)
     {
-        $this->endedReason = $value;
+        $this->cancellationReason = $value;
+        return $this;
+    }
+    
+    /**
+     * Get PendingCancellation
+     * Wheither or not the subscription is pending cancellation (meaning a cancel_at date was set)
+     * @return bool
+     */
+    public function getPendingCancellation()
+    {
+        return $this->pendingCancellation;
+    }
+
+    /**
+     * Set PendingCancellation
+     * Wheither or not the subscription is pending cancellation (meaning a cancel_at date was set)
+     * @param  bool $value
+     * @return $this
+     */
+    public function setPendingCancellation($value)
+    {
+        $this->pendingCancellation = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CancelAt
+     * Date at which the subscription will automatically be canceled. Can be null
+     * @return string
+     */
+    public function getCancelAt()
+    {
+        return $this->cancelAt;
+    }
+
+    /**
+     * Set CancelAt
+     * Date at which the subscription will automatically be canceled. Can be null
+     * @param  string $value
+     * @return $this
+     */
+    public function setCancelAt($value)
+    {
+        $this->cancelAt = $value;
+        return $this;
+    }
+    
+    /**
+     * Get ReturnUrl
+     * URL where the customer will be redirected upon activation of the subscription
+     * @return string
+     */
+    public function getReturnUrl()
+    {
+        return $this->returnUrl;
+    }
+
+    /**
+     * Set ReturnUrl
+     * URL where the customer will be redirected upon activation of the subscription
+     * @param  string $value
+     * @return $this
+     */
+    public function setReturnUrl($value)
+    {
+        $this->returnUrl = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CancelUrl
+     * URL where the customer will be redirected if the subscription activation was canceled
+     * @return string
+     */
+    public function getCancelUrl()
+    {
+        return $this->cancelUrl;
+    }
+
+    /**
+     * Set CancelUrl
+     * URL where the customer will be redirected if the subscription activation was canceled
+     * @param  string $value
+     * @return $this
+     */
+    public function setCancelUrl($value)
+    {
+        $this->cancelUrl = $value;
         return $this;
     }
     
     /**
      * Get Sandbox
-     * Define whether or not the authorization is in sandbox environment
+     * Define whether or not the subscription is in sandbox environment
      * @return bool
      */
     public function getSandbox()
@@ -528,7 +660,7 @@ class Subscription
 
     /**
      * Set Sandbox
-     * Define whether or not the authorization is in sandbox environment
+     * Define whether or not the subscription is in sandbox environment
      * @param  bool $value
      * @return $this
      */
@@ -540,7 +672,7 @@ class Subscription
     
     /**
      * Get CreatedAt
-     * Date at which the invoice was created
+     * Date at which the subscription was created
      * @return string
      */
     public function getCreatedAt()
@@ -550,13 +682,57 @@ class Subscription
 
     /**
      * Set CreatedAt
-     * Date at which the invoice was created
+     * Date at which the subscription was created
      * @param  string $value
      * @return $this
      */
     public function setCreatedAt($value)
     {
         $this->createdAt = $value;
+        return $this;
+    }
+    
+    /**
+     * Get ActivatedAt
+     * Date at which the subscription was activated. Null if the subscription hasn't been activated yet
+     * @return string
+     */
+    public function getActivatedAt()
+    {
+        return $this->activatedAt;
+    }
+
+    /**
+     * Set ActivatedAt
+     * Date at which the subscription was activated. Null if the subscription hasn't been activated yet
+     * @param  string $value
+     * @return $this
+     */
+    public function setActivatedAt($value)
+    {
+        $this->activatedAt = $value;
+        return $this;
+    }
+    
+    /**
+     * Get IterateAt
+     * Next iteration date, corresponding to the next billing cycle start date
+     * @return string
+     */
+    public function getIterateAt()
+    {
+        return $this->iterateAt;
+    }
+
+    /**
+     * Set IterateAt
+     * Next iteration date, corresponding to the next billing cycle start date
+     * @param  string $value
+     * @return $this
+     */
+    public function setIterateAt($value)
+    {
+        $this->iterateAt = $value;
         return $this;
     }
     
@@ -573,6 +749,9 @@ class Subscription
 
         if(! empty($data["project"]))
             $this->setProject($data["project"]);
+
+        if(! empty($data["plan"]))
+            $this->setPlan($data["plan"]);
 
         if(! empty($data["customer"]))
             $this->setCustomer($data["customer"]);
@@ -595,32 +774,47 @@ class Subscription
         if(! empty($data["metadata"]))
             $this->setMetadata($data["metadata"]);
 
+        if(! empty($data["interval"]))
+            $this->setInterval($data["interval"]);
+
+        if(! empty($data["trial_end_at"]))
+            $this->setTrialEndAt($data["trial_end_at"]);
+
+        if(! empty($data["activated"]))
+            $this->setActivated($data["activated"]);
+
+        if(! empty($data["active"]))
+            $this->setActive($data["active"]);
+
+        if(! empty($data["canceled"]))
+            $this->setCanceled($data["canceled"]);
+
+        if(! empty($data["cancellation_reason"]))
+            $this->setCancellationReason($data["cancellation_reason"]);
+
+        if(! empty($data["pending_cancellation"]))
+            $this->setPendingCancellation($data["pending_cancellation"]);
+
+        if(! empty($data["cancel_at"]))
+            $this->setCancelAt($data["cancel_at"]);
+
         if(! empty($data["return_url"]))
             $this->setReturnUrl($data["return_url"]);
 
         if(! empty($data["cancel_url"]))
             $this->setCancelUrl($data["cancel_url"]);
 
-        if(! empty($data["interval"]))
-            $this->setInterval($data["interval"]);
-
-        if(! empty($data["trial_period"]))
-            $this->setTrialPeriod($data["trial_period"]);
-
-        if(! empty($data["activated"]))
-            $this->setActivated($data["activated"]);
-
-        if(! empty($data["ended"]))
-            $this->setEnded($data["ended"]);
-
-        if(! empty($data["ended_reason"]))
-            $this->setEndedReason($data["ended_reason"]);
-
         if(! empty($data["sandbox"]))
             $this->setSandbox($data["sandbox"]);
 
         if(! empty($data["created_at"]))
             $this->setCreatedAt($data["created_at"]);
+
+        if(! empty($data["activated_at"]))
+            $this->setActivatedAt($data["activated_at"]);
+
+        if(! empty($data["iterate_at"]))
+            $this->setIterateAt($data["iterate_at"]);
 
         return $this;
     }
@@ -641,57 +835,86 @@ class Subscription
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field customer
         $body = $response->getBody();
         $body = $body['customer'];
         $customer = new Customer($cur->instance);
-        return $customer->fillWithData($body);
+        $returnValues["customer"] = $customer->fillWithData($body);
+                
+        return array_values($returnValues)[0];
         
     }
 
     /**
-     * Get the customer action needed to be continue the subscription authorization flow on the given gateway.
-	 * @param string $gatewayConfigurationId
+     * Get the discounts applied to the subscription.
      * @param array $options
-     * @return CustomerAction
+     * @return array
      */
-    public function customerAction($gatewayConfigurationId, $options = array())
+    public function discounts($options = array())
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/subscriptions/" . urlencode($this->getId()) . "/gateway-configurations/" . urlencode($gatewayConfigurationId) . "/customer-action";
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "/discounts";
 
         $data = array(
 
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field discounts
+        $a    = array();
         $body = $response->getBody();
-        $body = $body['customer_action'];
-        $customerAction = new CustomerAction($cur->instance);
-        return $customerAction->fillWithData($body);
+        foreach($body['discounts'] as $v)
+        {
+            $tmp = new Discount($cur->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        $returnValues["Discounts"] = $a;
+                
+        return array_values($returnValues)[0];
         
     }
 
     /**
-     * Get the invoice corresponding to the last iteration of the subscription.
+     * Get the subscriptions past transactions.
      * @param array $options
-     * @return Invoice
+     * @return array
      */
-    public function invoice($options = array())
+    public function transactions($options = array())
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/subscriptions/" . urlencode($this->getId()) . "/invoices";
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "/transactions";
 
         $data = array(
 
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field transactions
+        $a    = array();
         $body = $response->getBody();
-        $body = $body['invoice'];
-        $invoice = new Invoice($cur->instance);
-        return $invoice->fillWithData($body);
+        foreach($body['transactions'] as $v)
+        {
+            $tmp = new Transaction($cur->instance);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+
+        $returnValues["Transactions"] = $a;
+                
+        return array_values($returnValues)[0];
         
     }
 
@@ -711,6 +934,10 @@ class Subscription
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field subscriptions
         $a    = array();
         $body = $response->getBody();
         foreach($body['subscriptions'] as $v)
@@ -720,7 +947,10 @@ class Subscription
             $a[] = $tmp;
         }
 
-        return $a;
+        $returnValues["Subscriptions"] = $a;
+                
+        return array_values($returnValues)[0];
+        
     }
 
     /**
@@ -736,22 +966,68 @@ class Subscription
         $path    = "/subscriptions";
 
         $data = array(
+			"cancel_at" => $this->getCancelAt(), 
 			"name" => $this->getName(), 
 			"amount" => $this->getAmount(), 
 			"currency" => $this->getCurrency(), 
 			"metadata" => $this->getMetadata(), 
+			"interval" => $this->getInterval(), 
+			"trial_end_at" => $this->getTrialEndAt(), 
 			"return_url" => $this->getReturnUrl(), 
 			"cancel_url" => $this->getCancelUrl(), 
-			"interval" => $this->getInterval(), 
-			"trial_period" => $this->getTrialPeriod(), 
-			"ended_reason" => $this->getEndedReason(), 
 			"customer_id" => $customerId
         );
 
         $response = new Response($request->post($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field subscription
         $body = $response->getBody();
-        $body = $body['subscription'];
-        return $cur->fillWithData($body);
+                    $body = $body['subscription'];
+                    
+        $returnValues["create"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
+        
+    }
+
+    /**
+     * Create a new subscription for the customer from the given plan ID.
+	 * @param string $customerId
+	 * @param string $planId
+     * @param array $options
+     * @return $this
+     */
+    public function createFromPlan($customerId, $planId, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/subscriptions";
+
+        $data = array(
+			"cancel_at" => $this->getCancelAt(), 
+			"name" => $this->getName(), 
+			"amount" => $this->getAmount(), 
+			"currency" => $this->getCurrency(), 
+			"metadata" => $this->getMetadata(), 
+			"interval" => $this->getInterval(), 
+			"trial_end_at" => $this->getTrialEndAt(), 
+			"return_url" => $this->getReturnUrl(), 
+			"cancel_url" => $this->getCancelUrl(), 
+			"customer_id" => $customerId, 
+			"plan_id" => $planId
+        );
+
+        $response = new Response($request->post($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field subscription
+        $body = $response->getBody();
+                    $body = $body['subscription'];
+                    
+        $returnValues["createFromPlan"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 
@@ -772,30 +1048,15 @@ class Subscription
         );
 
         $response = new Response($request->get($path, $data, $options));
-        $body = $response->getBody();
-        $body = $body['subscription'];
-        return $cur->fillWithData($body);
+        $returnValues = array();
+
         
-    }
-
-    /**
-     * Activate the subscription with the provided token.
-	 * @param string $source
-     * @param array $options
-     * @return bool
-     */
-    public function activate($source, $options = array())
-    {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
-        $path    = "/subscriptions/" . urlencode($this->getId()) . "";
-
-        $data = array(
-			"source" => $source
-        );
-
-        $response = new Response($request->post($path, $data, $options));
-        return $response->isSuccess();
+        // Handling for field subscription
+        $body = $response->getBody();
+                    $body = $body['subscription'];
+                    
+        $returnValues["find"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 
@@ -811,34 +1072,139 @@ class Subscription
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
-
+			"trial_end_at" => $this->getTrialEndAt()
         );
 
         $response = new Response($request->put($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field subscription
         $body = $response->getBody();
-        $body = $body['subscription'];
-        return $cur->fillWithData($body);
+                    $body = $body['subscription'];
+                    
+        $returnValues["update"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 
     /**
-     * End a subscription. The reason may be provided as well.
-	 * @param string $reason
+     * Update the subscription's plan.
+	 * @param string $planId
+	 * @param string $prorate
      * @param array $options
-     * @return bool
+     * @return $this
      */
-    public function end($reason, $options = array())
+    public function updatePlan($planId, $prorate, $options = array())
     {
         $cur = $this;
         $request = new RequestProcessoutPrivate($cur->instance);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
-			"reason" => $reason
+			"plan_id" => $planId, 
+			"prorate" => $prorate
+        );
+
+        $response = new Response($request->put($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field subscription
+        $body = $response->getBody();
+                    $body = $body['subscription'];
+                    
+        $returnValues["updatePlan"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
+        
+    }
+
+    /**
+     * Apply a source to the subscription to activate or update the subscription's source.
+	 * @param string $source
+     * @param array $options
+     * @return $this
+     */
+    public function applySource($source, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "";
+
+        $data = array(
+			"source" => $source
+        );
+
+        $response = new Response($request->put($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field subscription
+        $body = $response->getBody();
+                    $body = $body['subscription'];
+                    
+        $returnValues["applySource"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
+        
+    }
+
+    /**
+     * Cancel a subscription. The reason may be provided as well.
+	 * @param string $cancellationReason
+     * @param array $options
+     * @return $this
+     */
+    public function cancel($cancellationReason, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "";
+
+        $data = array(
+			"cancellation_reason" => $cancellationReason
         );
 
         $response = new Response($request->delete($path, $data, $options));
-        return $response->isSuccess();
+        $returnValues = array();
+
+        
+        // Handling for field subscription
+        $body = $response->getBody();
+                    $body = $body['subscription'];
+                    
+        $returnValues["cancel"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
+        
+    }
+
+    /**
+     * Schedule the cancellation of the subscription. The reason may be provided as well.
+	 * @param string $cancelAt
+	 * @param string $cancellationReason
+     * @param array $options
+     * @return $this
+     */
+    public function cancelAt($cancelAt, $cancellationReason, $options = array())
+    {
+        $cur = $this;
+        $request = new RequestProcessoutPrivate($cur->instance);
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "";
+
+        $data = array(
+			"cancel_at" => $cancelAt, 
+			"cancellation_reason" => $cancellationReason
+        );
+
+        $response = new Response($request->delete($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field subscription
+        $body = $response->getBody();
+                    $body = $body['subscription'];
+                    
+        $returnValues["cancelAt"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 

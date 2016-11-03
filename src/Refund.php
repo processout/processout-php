@@ -1,5 +1,7 @@
 <?php
 
+// The content of this file was automatically generated
+
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
@@ -318,9 +320,15 @@ class Refund
         );
 
         $response = new Response($request->get($path, $data, $options));
+        $returnValues = array();
+
+        
+        // Handling for field refund
         $body = $response->getBody();
-        $body = $body['refund'];
-        return $cur->fillWithData($body);
+                    $body = $body['refund'];
+                    
+        $returnValues["find"] = $cur->fillWithData($body);
+        return array_values($returnValues)[0];
         
     }
 
@@ -344,7 +352,11 @@ class Refund
         );
 
         $response = new Response($request->post($path, $data, $options));
-        return $response->isSuccess();
+        $returnValues = array();
+
+        
+        $returnValues["success"] = $response->isSuccess();
+        return array_values($returnValues)[0];
         
     }
 
