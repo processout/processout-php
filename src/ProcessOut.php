@@ -35,7 +35,7 @@ class ProcessOut
      * Default ProcessOut's instance
      * @var ProcessOut
      */
-    protected static $default;
+    protected static $default = null;
 
     /**
      * ProcessOut constructor
@@ -45,6 +45,9 @@ class ProcessOut
         $this->cURL = new cURL;
         $this->projectId = $projectId;
         $this->projectSecret = $projectSecret;
+
+        if (self::$default == null)
+            self::setDefault($this);
     }
 
     /**
