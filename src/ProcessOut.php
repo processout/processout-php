@@ -40,9 +40,11 @@ class ProcessOut
     /**
      * ProcessOut constructor
      */
-    public function __construct()
+    public function __construct($projectId, $projectSecret)
     {
         $this->cURL = new cURL;
+        $this->projectId = $projectId;
+        $this->projectSecret = $projectSecret;
     }
 
     /**
