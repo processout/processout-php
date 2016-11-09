@@ -88,7 +88,7 @@ class RequestProcessoutPrivate
             $this->processOut->getHost() . $path . "?" .
             http_build_query($this->getData($data, $options))
         );
-        $this->prepare($request, $options);
+        $request = $this->prepare($request, $options);
 
         return $request->send();
     }
