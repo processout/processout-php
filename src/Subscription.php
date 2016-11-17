@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Subscription
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the subscription
@@ -164,19 +162,17 @@ class Subscription
 
     /**
      * Subscription constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         $this->setMetadata(array('_library' => 'php'));
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -224,7 +220,7 @@ class Subscription
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -253,7 +249,7 @@ class Subscription
             $this->plan = $value;
         else
         {
-            $obj = new Plan($this->instance);
+            $obj = new Plan($this->client);
             $obj->fillWithData($value);
             $this->plan = $obj;
         }
@@ -282,7 +278,7 @@ class Subscription
             $this->customer = $value;
         else
         {
-            $obj = new Customer($this->instance);
+            $obj = new Customer($this->client);
             $obj->fillWithData($value);
             $this->customer = $obj;
         }
@@ -311,7 +307,7 @@ class Subscription
             $this->token = $value;
         else
         {
-            $obj = new Token($this->instance);
+            $obj = new Token($this->client);
             $obj->fillWithData($value);
             $this->token = $obj;
         }
@@ -744,126 +740,125 @@ class Subscription
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["plan"]))
-            $this->setPlan($data["plan"]);
+        if(! empty($data['plan']))
+            $this->setPlan($data['plan']);
 
-        if(! empty($data["customer"]))
-            $this->setCustomer($data["customer"]);
+        if(! empty($data['customer']))
+            $this->setCustomer($data['customer']);
 
-        if(! empty($data["token"]))
-            $this->setToken($data["token"]);
+        if(! empty($data['token']))
+            $this->setToken($data['token']);
 
-        if(! empty($data["url"]))
-            $this->setUrl($data["url"]);
+        if(! empty($data['url']))
+            $this->setUrl($data['url']);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
+        if(! empty($data['name']))
+            $this->setName($data['name']);
 
-        if(! empty($data["amount"]))
-            $this->setAmount($data["amount"]);
+        if(! empty($data['amount']))
+            $this->setAmount($data['amount']);
 
-        if(! empty($data["currency"]))
-            $this->setCurrency($data["currency"]);
+        if(! empty($data['currency']))
+            $this->setCurrency($data['currency']);
 
-        if(! empty($data["metadata"]))
-            $this->setMetadata($data["metadata"]);
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
 
-        if(! empty($data["interval"]))
-            $this->setInterval($data["interval"]);
+        if(! empty($data['interval']))
+            $this->setInterval($data['interval']);
 
-        if(! empty($data["trial_end_at"]))
-            $this->setTrialEndAt($data["trial_end_at"]);
+        if(! empty($data['trial_end_at']))
+            $this->setTrialEndAt($data['trial_end_at']);
 
-        if(! empty($data["activated"]))
-            $this->setActivated($data["activated"]);
+        if(! empty($data['activated']))
+            $this->setActivated($data['activated']);
 
-        if(! empty($data["active"]))
-            $this->setActive($data["active"]);
+        if(! empty($data['active']))
+            $this->setActive($data['active']);
 
-        if(! empty($data["canceled"]))
-            $this->setCanceled($data["canceled"]);
+        if(! empty($data['canceled']))
+            $this->setCanceled($data['canceled']);
 
-        if(! empty($data["cancellation_reason"]))
-            $this->setCancellationReason($data["cancellation_reason"]);
+        if(! empty($data['cancellation_reason']))
+            $this->setCancellationReason($data['cancellation_reason']);
 
-        if(! empty($data["pending_cancellation"]))
-            $this->setPendingCancellation($data["pending_cancellation"]);
+        if(! empty($data['pending_cancellation']))
+            $this->setPendingCancellation($data['pending_cancellation']);
 
-        if(! empty($data["cancel_at"]))
-            $this->setCancelAt($data["cancel_at"]);
+        if(! empty($data['cancel_at']))
+            $this->setCancelAt($data['cancel_at']);
 
-        if(! empty($data["return_url"]))
-            $this->setReturnUrl($data["return_url"]);
+        if(! empty($data['return_url']))
+            $this->setReturnUrl($data['return_url']);
 
-        if(! empty($data["cancel_url"]))
-            $this->setCancelUrl($data["cancel_url"]);
+        if(! empty($data['cancel_url']))
+            $this->setCancelUrl($data['cancel_url']);
 
-        if(! empty($data["sandbox"]))
-            $this->setSandbox($data["sandbox"]);
+        if(! empty($data['sandbox']))
+            $this->setSandbox($data['sandbox']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
-        if(! empty($data["activated_at"]))
-            $this->setActivatedAt($data["activated_at"]);
+        if(! empty($data['activated_at']))
+            $this->setActivatedAt($data['activated_at']);
 
-        if(! empty($data["iterate_at"]))
-            $this->setIterateAt($data["iterate_at"]);
+        if(! empty($data['iterate_at']))
+            $this->setIterateAt($data['iterate_at']);
 
         return $this;
     }
 
+    
     /**
      * Get the customer owning the subscription.
      * @param array $options
      * @return Customer
      */
-    public function customer($options = array())
+    public function fetchCustomer($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "/customers";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field customer
         $body = $response->getBody();
         $body = $body['customer'];
-        $customer = new Customer($cur->instance);
-        $returnValues["customer"] = $customer->fillWithData($body);
+        $customer = new Customer($this->client);
+        $returnValues['customer'] = $customer->fillWithData($body);
                 
-        return array_values($returnValues)[0];
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Get the discounts applied to the subscription.
      * @param array $options
      * @return array
      */
-    public function discounts($options = array())
+    public function fetchDiscounts($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "/discounts";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -872,33 +867,86 @@ class Subscription
         $body = $response->getBody();
         foreach($body['discounts'] as $v)
         {
-            $tmp = new Discount($cur->instance);
+            $tmp = new Discount($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Discounts"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Discounts'] = $a;
         
+        return array_values($returnValues)[0];
     }
+    
+    /**
+     * Find a subscription's discount by its ID.
+	 * @param string $discountId
+     * @param array $options
+     * @return Discount
+     */
+    public function findDiscount($discountId, $options = array())
+    {
+        $request = new Request($this->client);
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "/discounts/" . urlencode($discountId) . "";
 
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field discount
+        $body = $response->getBody();
+        $body = $body['discount'];
+        $discount = new Discount($this->client);
+        $returnValues['discount'] = $discount->fillWithData($body);
+                
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Remove a discount applied to a subscription.
+	 * @param string $discountId
+     * @param array $options
+     * @return $this
+     */
+    public function removeDiscount($discountId, $options = array())
+    {
+        $request = new Request($this->client);
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "/discounts/" . urlencode($discountId) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->delete($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field discount
+        $body = $response->getBody();
+        $body = $body['discount'];
+        $returnValues['removeDiscount'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
     /**
      * Get the subscriptions past transactions.
      * @param array $options
      * @return array
      */
-    public function transactions($options = array())
+    public function fetchTransactions($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "/transactions";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -907,33 +955,30 @@ class Subscription
         $body = $response->getBody();
         foreach($body['transactions'] as $v)
         {
-            $tmp = new Transaction($cur->instance);
+            $tmp = new Transaction($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Transactions"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Transactions'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Get all the subscriptions.
      * @param array $options
      * @return array
      */
-    public static function all($options = array())
+    public function all($options = array())
     {
-        $cur = new Subscription();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -942,17 +987,15 @@ class Subscription
         $body = $response->getBody();
         foreach($body['subscriptions'] as $v)
         {
-            $tmp = new Subscription($cur->instance);
+            $tmp = new Subscription($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Subscriptions"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Subscriptions'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Create a new subscription for the given customer.
 	 * @param string $customerId
@@ -961,8 +1004,7 @@ class Subscription
      */
     public function create($customerId, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions";
 
         $data = array(
@@ -978,19 +1020,18 @@ class Subscription
 			"customer_id" => $customerId
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field subscription
         $body = $response->getBody();
-                    $body = $body['subscription'];
-                    
-        $returnValues["create"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['subscription'];
+        $returnValues['create'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Create a new subscription for the customer from the given plan ID.
 	 * @param string $customerId
@@ -1000,8 +1041,7 @@ class Subscription
      */
     public function createFromPlan($customerId, $planId, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions";
 
         $data = array(
@@ -1018,76 +1058,73 @@ class Subscription
 			"plan_id" => $planId
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field subscription
         $body = $response->getBody();
-                    $body = $body['subscription'];
-                    
-        $returnValues["createFromPlan"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['subscription'];
+        $returnValues['createFromPlan'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Find a subscription by its ID.
 	 * @param string $subscriptionId
      * @param array $options
      * @return $this
      */
-    public static function find($subscriptionId, $options = array())
+    public function find($subscriptionId, $options = array())
     {
-        $cur = new Subscription();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($subscriptionId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field subscription
         $body = $response->getBody();
-                    $body = $body['subscription'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['subscription'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Update the subscription.
+	 * @param string $prorate
      * @param array $options
      * @return $this
      */
-    public function update($options = array())
+    public function update($prorate, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
-			"trial_end_at" => $this->getTrialEndAt()
+			"trial_end_at" => $this->getTrialEndAt(), 
+			"prorate" => $prorate
         );
 
-        $response = new Response($request->put($path, $data, $options));
+        $response = $request->put($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field subscription
         $body = $response->getBody();
-                    $body = $body['subscription'];
-                    
-        $returnValues["update"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['subscription'];
+        $returnValues['update'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Update the subscription's plan.
 	 * @param string $planId
@@ -1097,8 +1134,7 @@ class Subscription
      */
     public function updatePlan($planId, $prorate, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
@@ -1106,19 +1142,18 @@ class Subscription
 			"prorate" => $prorate
         );
 
-        $response = new Response($request->put($path, $data, $options));
+        $response = $request->put($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field subscription
         $body = $response->getBody();
-                    $body = $body['subscription'];
-                    
-        $returnValues["updatePlan"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['subscription'];
+        $returnValues['updatePlan'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Apply a source to the subscription to activate or update the subscription's source.
 	 * @param string $source
@@ -1127,27 +1162,25 @@ class Subscription
      */
     public function applySource($source, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
 			"source" => $source
         );
 
-        $response = new Response($request->put($path, $data, $options));
+        $response = $request->put($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field subscription
         $body = $response->getBody();
-                    $body = $body['subscription'];
-                    
-        $returnValues["applySource"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['subscription'];
+        $returnValues['applySource'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Cancel a subscription. The reason may be provided as well.
 	 * @param string $cancellationReason
@@ -1156,27 +1189,25 @@ class Subscription
      */
     public function cancel($cancellationReason, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
 			"cancellation_reason" => $cancellationReason
         );
 
-        $response = new Response($request->delete($path, $data, $options));
+        $response = $request->delete($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field subscription
         $body = $response->getBody();
-                    $body = $body['subscription'];
-                    
-        $returnValues["cancel"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['subscription'];
+        $returnValues['cancel'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Schedule the cancellation of the subscription. The reason may be provided as well.
 	 * @param string $cancelAt
@@ -1184,10 +1215,9 @@ class Subscription
      * @param array $options
      * @return $this
      */
-    public function cancelAt($cancelAt, $cancellationReason, $options = array())
+    public function cancelAtDate($cancelAt, $cancellationReason, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
@@ -1195,18 +1225,16 @@ class Subscription
 			"cancellation_reason" => $cancellationReason
         );
 
-        $response = new Response($request->delete($path, $data, $options));
+        $response = $request->delete($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field subscription
         $body = $response->getBody();
-                    $body = $body['subscription'];
-                    
-        $returnValues["cancelAt"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['subscription'];
+        $returnValues['cancelAtDate'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
     
 }

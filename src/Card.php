@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Card
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the card
@@ -98,19 +96,17 @@ class Card
 
     /**
      * Card constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         $this->setMetadata(array('_library' => 'php'));
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -158,7 +154,7 @@ class Card
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -415,44 +411,44 @@ class Card
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["brand"]))
-            $this->setBrand($data["brand"]);
+        if(! empty($data['brand']))
+            $this->setBrand($data['brand']);
 
-        if(! empty($data["type"]))
-            $this->setType($data["type"]);
+        if(! empty($data['type']))
+            $this->setType($data['type']);
 
-        if(! empty($data["bank_name"]))
-            $this->setBankName($data["bank_name"]);
+        if(! empty($data['bank_name']))
+            $this->setBankName($data['bank_name']);
 
-        if(! empty($data["level"]))
-            $this->setLevel($data["level"]);
+        if(! empty($data['level']))
+            $this->setLevel($data['level']);
 
-        if(! empty($data["iin"]))
-            $this->setIin($data["iin"]);
+        if(! empty($data['iin']))
+            $this->setIin($data['iin']);
 
-        if(! empty($data["last_4_digits"]))
-            $this->setLast4Digits($data["last_4_digits"]);
+        if(! empty($data['last_4_digits']))
+            $this->setLast4Digits($data['last_4_digits']);
 
-        if(! empty($data["exp_month"]))
-            $this->setExpMonth($data["exp_month"]);
+        if(! empty($data['exp_month']))
+            $this->setExpMonth($data['exp_month']);
 
-        if(! empty($data["exp_year"]))
-            $this->setExpYear($data["exp_year"]);
+        if(! empty($data['exp_year']))
+            $this->setExpYear($data['exp_year']);
 
-        if(! empty($data["metadata"]))
-            $this->setMetadata($data["metadata"]);
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
 
-        if(! empty($data["sandbox"]))
-            $this->setSandbox($data["sandbox"]);
+        if(! empty($data['sandbox']))
+            $this->setSandbox($data['sandbox']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }

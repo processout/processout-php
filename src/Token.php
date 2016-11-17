@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Token
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the customer token
@@ -29,6 +27,12 @@ class Token
      * @var object
      */
     protected $customer;
+
+    /**
+     * Card used to create this token, if any
+     * @var object
+     */
+    protected $card;
 
     /**
      * Metadata related to the token, in the form of a dictionary (key-value pair)
@@ -50,19 +54,17 @@ class Token
 
     /**
      * Token constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         $this->setMetadata(array('_library' => 'php'));
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -110,9 +112,38 @@ class Token
             $this->customer = $value;
         else
         {
-            $obj = new Customer($this->instance);
+            $obj = new Customer($this->client);
             $obj->fillWithData($value);
             $this->customer = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get Card
+     * Card used to create this token, if any
+     * @return object
+     */
+    public function getCard()
+    {
+        return $this->card;
+    }
+
+    /**
+     * Set Card
+     * Card used to create this token, if any
+     * @param  object $value
+     * @return $this
+     */
+    public function setCard($value)
+    {
+        if (is_object($value))
+            $this->card = $value;
+        else
+        {
+            $obj = new Card($this->client);
+            $obj->fillWithData($value);
+            $this->card = $obj;
         }
         return $this;
     }
@@ -191,24 +222,28 @@ class Token
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["customer"]))
-            $this->setCustomer($data["customer"]);
+        if(! empty($data['customer']))
+            $this->setCustomer($data['customer']);
 
-        if(! empty($data["metadata"]))
-            $this->setMetadata($data["metadata"]);
+        if(! empty($data['card']))
+            $this->setCard($data['card']);
 
-        if(! empty($data["is_subscription_only"]))
-            $this->setIsSubscriptionOnly($data["is_subscription_only"]);
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['is_subscription_only']))
+            $this->setIsSubscriptionOnly($data['is_subscription_only']);
+
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }
 
+    
     /**
      * Find a customer's token by its ID.
 	 * @param string $customerId
@@ -216,29 +251,27 @@ class Token
      * @param array $options
      * @return $this
      */
-    public static function find($customerId, $tokenId, $options = array())
+    public function find($customerId, $tokenId, $options = array())
     {
-        $cur = new Token();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/customers/" . urlencode($customerId) . "/tokens/" . urlencode($tokenId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field token
         $body = $response->getBody();
-                    $body = $body['token'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['token'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Create a new token for the given customer ID.
 	 * @param string $customerId
@@ -248,8 +281,7 @@ class Token
      */
     public function create($customerId, $source, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/customers/" . urlencode($customerId) . "/tokens";
 
         $data = array(
@@ -257,19 +289,18 @@ class Token
 			"source" => $source
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field token
         $body = $response->getBody();
-                    $body = $body['token'];
-                    
-        $returnValues["create"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['token'];
+        $returnValues['create'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Create a new token for the given customer ID from an authorization request
 	 * @param string $customerId
@@ -280,8 +311,7 @@ class Token
      */
     public function createFromRequest($customerId, $source, $target, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/customers/" . urlencode($customerId) . "/tokens";
 
         $data = array(
@@ -290,18 +320,16 @@ class Token
 			"target" => $target
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field token
         $body = $response->getBody();
-                    $body = $body['token'];
-                    
-        $returnValues["createFromRequest"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['token'];
+        $returnValues['createFromRequest'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
     
 }

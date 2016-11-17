@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Activity
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the activity
@@ -56,18 +54,16 @@ class Activity
 
     /**
      * Activity constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -115,7 +111,7 @@ class Activity
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -218,43 +214,43 @@ class Activity
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["title"]))
-            $this->setTitle($data["title"]);
+        if(! empty($data['title']))
+            $this->setTitle($data['title']);
 
-        if(! empty($data["content"]))
-            $this->setContent($data["content"]);
+        if(! empty($data['content']))
+            $this->setContent($data['content']);
 
-        if(! empty($data["level"]))
-            $this->setLevel($data["level"]);
+        if(! empty($data['level']))
+            $this->setLevel($data['level']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }
 
+    
     /**
      * Get all the project activities.
      * @param array $options
      * @return array
      */
-    public static function all($options = array())
+    public function all($options = array())
     {
-        $cur = new Activity();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/activities";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -263,45 +259,40 @@ class Activity
         $body = $response->getBody();
         foreach($body['activities'] as $v)
         {
-            $tmp = new Activity($cur->instance);
+            $tmp = new Activity($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Activities"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Activities'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Find a specific activity and fetch its data.
 	 * @param string $activityId
      * @param array $options
      * @return $this
      */
-    public static function find($activityId, $options = array())
+    public function find($activityId, $options = array())
     {
-        $cur = new Activity();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/activities/" . urlencode($activityId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field activity
         $body = $response->getBody();
-                    $body = $body['activity'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['activity'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
     
 }

@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Webhook
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the recurring invoice
@@ -92,18 +90,16 @@ class Webhook
 
     /**
      * Webhook constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -151,7 +147,7 @@ class Webhook
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -180,7 +176,7 @@ class Webhook
             $this->event = $value;
         else
         {
-            $obj = new Event($this->instance);
+            $obj = new Event($this->client);
             $obj->fillWithData($value);
             $this->event = $obj;
         }
@@ -393,41 +389,41 @@ class Webhook
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["event"]))
-            $this->setEvent($data["event"]);
+        if(! empty($data['event']))
+            $this->setEvent($data['event']);
 
-        if(! empty($data["request_url"]))
-            $this->setRequestUrl($data["request_url"]);
+        if(! empty($data['request_url']))
+            $this->setRequestUrl($data['request_url']);
 
-        if(! empty($data["request_method"]))
-            $this->setRequestMethod($data["request_method"]);
+        if(! empty($data['request_method']))
+            $this->setRequestMethod($data['request_method']);
 
-        if(! empty($data["response_body"]))
-            $this->setResponseBody($data["response_body"]);
+        if(! empty($data['response_body']))
+            $this->setResponseBody($data['response_body']);
 
-        if(! empty($data["response_code"]))
-            $this->setResponseCode($data["response_code"]);
+        if(! empty($data['response_code']))
+            $this->setResponseCode($data['response_code']);
 
-        if(! empty($data["response_headers"]))
-            $this->setResponseHeaders($data["response_headers"]);
+        if(! empty($data['response_headers']))
+            $this->setResponseHeaders($data['response_headers']);
 
-        if(! empty($data["response_time_ms"]))
-            $this->setResponseTimeMs($data["response_time_ms"]);
+        if(! empty($data['response_time_ms']))
+            $this->setResponseTimeMs($data['response_time_ms']);
 
-        if(! empty($data["status"]))
-            $this->setStatus($data["status"]);
+        if(! empty($data['status']))
+            $this->setStatus($data['status']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
-        if(! empty($data["release_at"]))
-            $this->setReleaseAt($data["release_at"]);
+        if(! empty($data['release_at']))
+            $this->setReleaseAt($data['release_at']);
 
         return $this;
     }

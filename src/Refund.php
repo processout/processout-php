@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Refund
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the refund
@@ -68,19 +66,17 @@ class Refund
 
     /**
      * Refund constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         $this->setMetadata(array('_library' => 'php'));
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -128,7 +124,7 @@ class Refund
             $this->transaction = $value;
         else
         {
-            $obj = new Transaction($this->instance);
+            $obj = new Transaction($this->client);
             $obj->fillWithData($value);
             $this->transaction = $obj;
         }
@@ -275,33 +271,34 @@ class Refund
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["transaction"]))
-            $this->setTransaction($data["transaction"]);
+        if(! empty($data['transaction']))
+            $this->setTransaction($data['transaction']);
 
-        if(! empty($data["reason"]))
-            $this->setReason($data["reason"]);
+        if(! empty($data['reason']))
+            $this->setReason($data['reason']);
 
-        if(! empty($data["information"]))
-            $this->setInformation($data["information"]);
+        if(! empty($data['information']))
+            $this->setInformation($data['information']);
 
-        if(! empty($data["amount"]))
-            $this->setAmount($data["amount"]);
+        if(! empty($data['amount']))
+            $this->setAmount($data['amount']);
 
-        if(! empty($data["metadata"]))
-            $this->setMetadata($data["metadata"]);
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
 
-        if(! empty($data["sandbox"]))
-            $this->setSandbox($data["sandbox"]);
+        if(! empty($data['sandbox']))
+            $this->setSandbox($data['sandbox']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }
 
+    
     /**
      * Find a transaction's refund by its ID.
 	 * @param string $transactionId
@@ -309,29 +306,27 @@ class Refund
      * @param array $options
      * @return $this
      */
-    public static function find($transactionId, $refundId, $options = array())
+    public function find($transactionId, $refundId, $options = array())
     {
-        $cur = new Refund();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/transactions/" . urlencode($transactionId) . "/refunds/" . urlencode($refundId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field refund
         $body = $response->getBody();
-                    $body = $body['refund'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['refund'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Apply a refund to a transaction.
 	 * @param string $transactionId
@@ -340,8 +335,7 @@ class Refund
      */
     public function apply($transactionId, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/transactions/" . urlencode($transactionId) . "/refunds";
 
         $data = array(
@@ -351,14 +345,12 @@ class Refund
 			"information" => $this->getInformation()
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
+        $returnValues['success'] = $response->isSuccess();
         
-        $returnValues["success"] = $response->isSuccess();
         return array_values($returnValues)[0];
-        
     }
-
     
 }

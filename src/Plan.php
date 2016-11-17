@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Plan
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the plan
@@ -92,20 +90,18 @@ class Plan
 
     /**
      * Plan constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         $this->setMetadata(array('_library' => 'php'));
         $this->setTrialPeriod("0d");
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -153,7 +149,7 @@ class Plan
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -388,61 +384,61 @@ class Plan
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
+        if(! empty($data['name']))
+            $this->setName($data['name']);
 
-        if(! empty($data["amount"]))
-            $this->setAmount($data["amount"]);
+        if(! empty($data['amount']))
+            $this->setAmount($data['amount']);
 
-        if(! empty($data["currency"]))
-            $this->setCurrency($data["currency"]);
+        if(! empty($data['currency']))
+            $this->setCurrency($data['currency']);
 
-        if(! empty($data["metadata"]))
-            $this->setMetadata($data["metadata"]);
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
 
-        if(! empty($data["interval"]))
-            $this->setInterval($data["interval"]);
+        if(! empty($data['interval']))
+            $this->setInterval($data['interval']);
 
-        if(! empty($data["trial_period"]))
-            $this->setTrialPeriod($data["trial_period"]);
+        if(! empty($data['trial_period']))
+            $this->setTrialPeriod($data['trial_period']);
 
-        if(! empty($data["return_url"]))
-            $this->setReturnUrl($data["return_url"]);
+        if(! empty($data['return_url']))
+            $this->setReturnUrl($data['return_url']);
 
-        if(! empty($data["cancel_url"]))
-            $this->setCancelUrl($data["cancel_url"]);
+        if(! empty($data['cancel_url']))
+            $this->setCancelUrl($data['cancel_url']);
 
-        if(! empty($data["sandbox"]))
-            $this->setSandbox($data["sandbox"]);
+        if(! empty($data['sandbox']))
+            $this->setSandbox($data['sandbox']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }
 
+    
     /**
      * Get all the plans.
      * @param array $options
      * @return array
      */
-    public static function all($options = array())
+    public function all($options = array())
     {
-        $cur = new Plan();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/plans";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -451,17 +447,15 @@ class Plan
         $body = $response->getBody();
         foreach($body['plans'] as $v)
         {
-            $tmp = new Plan($cur->instance);
+            $tmp = new Plan($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Plans"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Plans'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Create a new plan.
      * @param array $options
@@ -469,8 +463,7 @@ class Plan
      */
     public function create($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/plans";
 
         $data = array(
@@ -485,48 +478,45 @@ class Plan
 			"cancel_url" => $this->getCancelUrl()
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field plan
         $body = $response->getBody();
-                    $body = $body['plan'];
-                    
-        $returnValues["create"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['plan'];
+        $returnValues['create'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Find a plan by its ID.
 	 * @param string $planId
      * @param array $options
      * @return $this
      */
-    public static function find($planId, $options = array())
+    public function find($planId, $options = array())
     {
-        $cur = new Plan();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/plans/" . urlencode($planId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field plan
         $body = $response->getBody();
-                    $body = $body['plan'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['plan'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Update the plan. This action won't affect subscriptions already linked to this plan.
      * @param array $options
@@ -534,8 +524,7 @@ class Plan
      */
     public function update($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/plans/" . urlencode($this->getId()) . "";
 
         $data = array(
@@ -546,19 +535,18 @@ class Plan
 			"cancel_url" => $this->getCancelUrl()
         );
 
-        $response = new Response($request->put($path, $data, $options));
+        $response = $request->put($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field plan
         $body = $response->getBody();
-                    $body = $body['plan'];
-                    
-        $returnValues["update"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['plan'];
+        $returnValues['update'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Delete a plan. Subscriptions linked to this plan won't be affected.
      * @param array $options
@@ -566,22 +554,19 @@ class Plan
      */
     public function end($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/plans/" . urlencode($this->getId()) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->delete($path, $data, $options));
+        $response = $request->delete($path, $data, $options);
         $returnValues = array();
 
+        $returnValues['success'] = $response->isSuccess();
         
-        $returnValues["success"] = $response->isSuccess();
         return array_values($returnValues)[0];
-        
     }
-
     
 }

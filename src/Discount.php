@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Discount
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the discount
@@ -74,19 +72,17 @@ class Discount
 
     /**
      * Discount constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         $this->setMetadata(array('_library' => 'php'));
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -134,7 +130,7 @@ class Discount
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -163,7 +159,7 @@ class Discount
             $this->subscription = $value;
         else
         {
-            $obj = new Subscription($this->instance);
+            $obj = new Subscription($this->client);
             $obj->fillWithData($value);
             $this->subscription = $obj;
         }
@@ -192,7 +188,7 @@ class Discount
             $this->coupon = $value;
         else
         {
-            $obj = new Coupon($this->instance);
+            $obj = new Coupon($this->client);
             $obj->fillWithData($value);
             $this->coupon = $obj;
         }
@@ -317,36 +313,37 @@ class Discount
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["subscription"]))
-            $this->setSubscription($data["subscription"]);
+        if(! empty($data['subscription']))
+            $this->setSubscription($data['subscription']);
 
-        if(! empty($data["coupon"]))
-            $this->setCoupon($data["coupon"]);
+        if(! empty($data['coupon']))
+            $this->setCoupon($data['coupon']);
 
-        if(! empty($data["amount"]))
-            $this->setAmount($data["amount"]);
+        if(! empty($data['amount']))
+            $this->setAmount($data['amount']);
 
-        if(! empty($data["expires_at"]))
-            $this->setExpiresAt($data["expires_at"]);
+        if(! empty($data['expires_at']))
+            $this->setExpiresAt($data['expires_at']);
 
-        if(! empty($data["metadata"]))
-            $this->setMetadata($data["metadata"]);
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
 
-        if(! empty($data["sandbox"]))
-            $this->setSandbox($data["sandbox"]);
+        if(! empty($data['sandbox']))
+            $this->setSandbox($data['sandbox']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }
 
+    
     /**
      * Apply a new discount to the given subscription ID.
 	 * @param string $subscriptionId
@@ -355,8 +352,7 @@ class Discount
      */
     public function apply($subscriptionId, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts";
 
         $data = array(
@@ -365,19 +361,18 @@ class Discount
 			"metadata" => $this->getMetadata()
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field discount
         $body = $response->getBody();
-                    $body = $body['discount'];
-                    
-        $returnValues["apply"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['discount'];
+        $returnValues['apply'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Apply a new discount to the given subscription ID from a coupon ID.
 	 * @param string $subscriptionId
@@ -387,8 +382,7 @@ class Discount
      */
     public function applyCoupon($subscriptionId, $couponId, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts";
 
         $data = array(
@@ -398,19 +392,18 @@ class Discount
 			"coupon_id" => $couponId
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field discount
         $body = $response->getBody();
-                    $body = $body['discount'];
-                    
-        $returnValues["applyCoupon"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['discount'];
+        $returnValues['applyCoupon'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Find a subscription's discount by its ID.
 	 * @param string $subscriptionId
@@ -418,28 +411,25 @@ class Discount
      * @param array $options
      * @return $this
      */
-    public static function find($subscriptionId, $discountId, $options = array())
+    public function find($subscriptionId, $discountId, $options = array())
     {
-        $cur = new Discount();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts/" . urlencode($discountId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field discount
         $body = $response->getBody();
-                    $body = $body['discount'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['discount'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
     
 }

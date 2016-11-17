@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Product
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the product
@@ -98,21 +96,19 @@ class Product
 
     /**
      * Product constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         $this->setMetadata(array('_library' => 'php'));
         $this->setRequestEmail((bool) false);
         $this->setRequestShipping((bool) false);
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -160,7 +156,7 @@ class Product
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -417,93 +413,92 @@ class Product
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["url"]))
-            $this->setUrl($data["url"]);
+        if(! empty($data['url']))
+            $this->setUrl($data['url']);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
+        if(! empty($data['name']))
+            $this->setName($data['name']);
 
-        if(! empty($data["amount"]))
-            $this->setAmount($data["amount"]);
+        if(! empty($data['amount']))
+            $this->setAmount($data['amount']);
 
-        if(! empty($data["currency"]))
-            $this->setCurrency($data["currency"]);
+        if(! empty($data['currency']))
+            $this->setCurrency($data['currency']);
 
-        if(! empty($data["metadata"]))
-            $this->setMetadata($data["metadata"]);
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
 
-        if(! empty($data["request_email"]))
-            $this->setRequestEmail($data["request_email"]);
+        if(! empty($data['request_email']))
+            $this->setRequestEmail($data['request_email']);
 
-        if(! empty($data["request_shipping"]))
-            $this->setRequestShipping($data["request_shipping"]);
+        if(! empty($data['request_shipping']))
+            $this->setRequestShipping($data['request_shipping']);
 
-        if(! empty($data["return_url"]))
-            $this->setReturnUrl($data["return_url"]);
+        if(! empty($data['return_url']))
+            $this->setReturnUrl($data['return_url']);
 
-        if(! empty($data["cancel_url"]))
-            $this->setCancelUrl($data["cancel_url"]);
+        if(! empty($data['cancel_url']))
+            $this->setCancelUrl($data['cancel_url']);
 
-        if(! empty($data["sandbox"]))
-            $this->setSandbox($data["sandbox"]);
+        if(! empty($data['sandbox']))
+            $this->setSandbox($data['sandbox']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }
 
+    
     /**
      * Create a new invoice from the product.
      * @param array $options
      * @return Invoice
      */
-    public function invoice($options = array())
+    public function createInvoice($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/products/" . urlencode($this->getId()) . "/invoices";
 
         $data = array(
 
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field invoice
         $body = $response->getBody();
         $body = $body['invoice'];
-        $invoice = new Invoice($cur->instance);
-        $returnValues["invoice"] = $invoice->fillWithData($body);
+        $invoice = new Invoice($this->client);
+        $returnValues['invoice'] = $invoice->fillWithData($body);
                 
-        return array_values($returnValues)[0];
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Get all the products.
      * @param array $options
      * @return array
      */
-    public static function all($options = array())
+    public function all($options = array())
     {
-        $cur = new Product();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/products";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -512,17 +507,15 @@ class Product
         $body = $response->getBody();
         foreach($body['products'] as $v)
         {
-            $tmp = new Product($cur->instance);
+            $tmp = new Product($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Products"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Products'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Create a new product.
      * @param array $options
@@ -530,8 +523,7 @@ class Product
      */
     public function create($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/products";
 
         $data = array(
@@ -545,48 +537,45 @@ class Product
 			"cancel_url" => $this->getCancelUrl()
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field product
         $body = $response->getBody();
-                    $body = $body['product'];
-                    
-        $returnValues["create"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['product'];
+        $returnValues['create'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Find a product by its ID.
 	 * @param string $productId
      * @param array $options
      * @return $this
      */
-    public static function find($productId, $options = array())
+    public function find($productId, $options = array())
     {
-        $cur = new Product();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/products/" . urlencode($productId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field product
         $body = $response->getBody();
-                    $body = $body['product'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['product'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Save the updated product attributes.
      * @param array $options
@@ -594,8 +583,7 @@ class Product
      */
     public function save($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/products/" . urlencode($this->getId()) . "";
 
         $data = array(
@@ -609,19 +597,18 @@ class Product
 			"cancel_url" => $this->getCancelUrl()
         );
 
-        $response = new Response($request->put($path, $data, $options));
+        $response = $request->put($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field product
         $body = $response->getBody();
-                    $body = $body['product'];
-                    
-        $returnValues["save"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['product'];
+        $returnValues['save'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Delete the product.
      * @param array $options
@@ -629,22 +616,19 @@ class Product
      */
     public function delete($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/products/" . urlencode($this->getId()) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->delete($path, $data, $options));
+        $response = $request->delete($path, $data, $options);
         $returnValues = array();
 
+        $returnValues['success'] = $response->isSuccess();
         
-        $returnValues["success"] = $response->isSuccess();
         return array_values($returnValues)[0];
-        
     }
-
     
 }

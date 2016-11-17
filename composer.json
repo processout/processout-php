@@ -1,25 +1,23 @@
 {
-  "name": "ProcessOut/ProcessOut-php",
+  "name": "processout/processout-php",
   "description": "ProcessOut API bindings.",
   "keywords": [
-    "ProcessOut",
+    "processout",
     "api",
     "bindings"
   ],
-  "homepage": "https://processout.com",
+  "homepage": "https://www.processout.com",
   "license": "MIT",
   "authors": [
     {
       "name": "ProcessOut",
-      "homepage": "https://processout.com"
+      "homepage": "https://www.processout.com"
     }
   ],
   "require": {
     "php": ">=5.4",
     "ext-curl": "*",
-    "ext-mbstring": "*",
-
-	"anlutro/curl": "1.4"
+    "ext-mbstring": "*"
   },
   "autoload": {
     "psr-4": {

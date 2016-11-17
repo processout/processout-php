@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Coupon
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the coupon
@@ -98,21 +96,19 @@ class Coupon
 
     /**
      * Coupon constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         $this->setMaxRedemptions((int) 0);
         $this->setMetadata(array('_library' => 'php'));
         $this->setIterationCount((int) 0);
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -160,7 +156,7 @@ class Coupon
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -417,64 +413,64 @@ class Coupon
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
+        if(! empty($data['name']))
+            $this->setName($data['name']);
 
-        if(! empty($data["amount_off"]))
-            $this->setAmountOff($data["amount_off"]);
+        if(! empty($data['amount_off']))
+            $this->setAmountOff($data['amount_off']);
 
-        if(! empty($data["percent_off"]))
-            $this->setPercentOff($data["percent_off"]);
+        if(! empty($data['percent_off']))
+            $this->setPercentOff($data['percent_off']);
 
-        if(! empty($data["currency"]))
-            $this->setCurrency($data["currency"]);
+        if(! empty($data['currency']))
+            $this->setCurrency($data['currency']);
 
-        if(! empty($data["max_redemptions"]))
-            $this->setMaxRedemptions($data["max_redemptions"]);
+        if(! empty($data['max_redemptions']))
+            $this->setMaxRedemptions($data['max_redemptions']);
 
-        if(! empty($data["expires_at"]))
-            $this->setExpiresAt($data["expires_at"]);
+        if(! empty($data['expires_at']))
+            $this->setExpiresAt($data['expires_at']);
 
-        if(! empty($data["metadata"]))
-            $this->setMetadata($data["metadata"]);
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
 
-        if(! empty($data["iteration_count"]))
-            $this->setIterationCount($data["iteration_count"]);
+        if(! empty($data['iteration_count']))
+            $this->setIterationCount($data['iteration_count']);
 
-        if(! empty($data["redeemed_number"]))
-            $this->setRedeemedNumber($data["redeemed_number"]);
+        if(! empty($data['redeemed_number']))
+            $this->setRedeemedNumber($data['redeemed_number']);
 
-        if(! empty($data["sandbox"]))
-            $this->setSandbox($data["sandbox"]);
+        if(! empty($data['sandbox']))
+            $this->setSandbox($data['sandbox']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }
 
+    
     /**
      * Get all the coupons.
      * @param array $options
      * @return array
      */
-    public static function all($options = array())
+    public function all($options = array())
     {
-        $cur = new Coupon();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/coupons";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -483,17 +479,15 @@ class Coupon
         $body = $response->getBody();
         foreach($body['coupons'] as $v)
         {
-            $tmp = new Coupon($cur->instance);
+            $tmp = new Coupon($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Coupons"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Coupons'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Create a new coupon.
      * @param array $options
@@ -501,8 +495,7 @@ class Coupon
      */
     public function create($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/coupons";
 
         $data = array(
@@ -516,48 +509,45 @@ class Coupon
 			"metadata" => $this->getMetadata()
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field coupon
         $body = $response->getBody();
-                    $body = $body['coupon'];
-                    
-        $returnValues["create"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['coupon'];
+        $returnValues['create'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Find a coupon by its ID.
 	 * @param string $couponId
      * @param array $options
      * @return $this
      */
-    public static function find($couponId, $options = array())
+    public function find($couponId, $options = array())
     {
-        $cur = new Coupon();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/coupons/" . urlencode($couponId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field coupon
         $body = $response->getBody();
-                    $body = $body['coupon'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['coupon'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Save the updated coupon attributes.
      * @param array $options
@@ -565,27 +555,25 @@ class Coupon
      */
     public function save($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/coupons/" . urlencode($this->getId()) . "";
 
         $data = array(
 			"metadata" => $this->getMetadata()
         );
 
-        $response = new Response($request->put($path, $data, $options));
+        $response = $request->put($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field coupon
         $body = $response->getBody();
-                    $body = $body['coupon'];
-                    
-        $returnValues["save"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['coupon'];
+        $returnValues['save'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Delete the coupon.
      * @param array $options
@@ -593,22 +581,19 @@ class Coupon
      */
     public function delete($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/coupons/" . urlencode($this->getId()) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->delete($path, $data, $options));
+        $response = $request->delete($path, $data, $options);
         $returnValues = array();
 
+        $returnValues['success'] = $response->isSuccess();
         
-        $returnValues["success"] = $response->isSuccess();
         return array_values($returnValues)[0];
-        
     }
-
     
 }

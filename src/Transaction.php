@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Transaction
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the transaction
@@ -31,25 +29,25 @@ class Transaction
     protected $project;
 
     /**
-     * Subscription to which this transaction belongs
-     * @var object
-     */
-    protected $subscription;
-
-    /**
      * Customer that was linked to this transaction
      * @var object
      */
     protected $customer;
 
     /**
-     * Token that was used to capture the payment of this transaction
+     * Subscription to which this transaction belongs
+     * @var object
+     */
+    protected $subscription;
+
+    /**
+     * Token that was used to capture the payment of this transaction, if any
      * @var object
      */
     protected $token;
 
     /**
-     * Card that was used to capture the payment of this transaction
+     * Card that was used to capture the payment of this transaction, if any
      * @var object
      */
     protected $card;
@@ -122,19 +120,17 @@ class Transaction
 
     /**
      * Transaction constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         $this->setMetadata(array('_library' => 'php'));
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -182,38 +178,9 @@ class Transaction
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
-        }
-        return $this;
-    }
-    
-    /**
-     * Get Subscription
-     * Subscription to which this transaction belongs
-     * @return object
-     */
-    public function getSubscription()
-    {
-        return $this->subscription;
-    }
-
-    /**
-     * Set Subscription
-     * Subscription to which this transaction belongs
-     * @param  object $value
-     * @return $this
-     */
-    public function setSubscription($value)
-    {
-        if (is_object($value))
-            $this->subscription = $value;
-        else
-        {
-            $obj = new Subscription($this->instance);
-            $obj->fillWithData($value);
-            $this->subscription = $obj;
         }
         return $this;
     }
@@ -240,7 +207,7 @@ class Transaction
             $this->customer = $value;
         else
         {
-            $obj = new Customer($this->instance);
+            $obj = new Customer($this->client);
             $obj->fillWithData($value);
             $this->customer = $obj;
         }
@@ -248,8 +215,37 @@ class Transaction
     }
     
     /**
+     * Get Subscription
+     * Subscription to which this transaction belongs
+     * @return object
+     */
+    public function getSubscription()
+    {
+        return $this->subscription;
+    }
+
+    /**
+     * Set Subscription
+     * Subscription to which this transaction belongs
+     * @param  object $value
+     * @return $this
+     */
+    public function setSubscription($value)
+    {
+        if (is_object($value))
+            $this->subscription = $value;
+        else
+        {
+            $obj = new Subscription($this->client);
+            $obj->fillWithData($value);
+            $this->subscription = $obj;
+        }
+        return $this;
+    }
+    
+    /**
      * Get Token
-     * Token that was used to capture the payment of this transaction
+     * Token that was used to capture the payment of this transaction, if any
      * @return object
      */
     public function getToken()
@@ -259,7 +255,7 @@ class Transaction
 
     /**
      * Set Token
-     * Token that was used to capture the payment of this transaction
+     * Token that was used to capture the payment of this transaction, if any
      * @param  object $value
      * @return $this
      */
@@ -269,7 +265,7 @@ class Transaction
             $this->token = $value;
         else
         {
-            $obj = new Token($this->instance);
+            $obj = new Token($this->client);
             $obj->fillWithData($value);
             $this->token = $obj;
         }
@@ -278,7 +274,7 @@ class Transaction
     
     /**
      * Get Card
-     * Card that was used to capture the payment of this transaction
+     * Card that was used to capture the payment of this transaction, if any
      * @return object
      */
     public function getCard()
@@ -288,7 +284,7 @@ class Transaction
 
     /**
      * Set Card
-     * Card that was used to capture the payment of this transaction
+     * Card that was used to capture the payment of this transaction, if any
      * @param  object $value
      * @return $this
      */
@@ -298,7 +294,7 @@ class Transaction
             $this->card = $value;
         else
         {
-            $obj = new Card($this->instance);
+            $obj = new Card($this->client);
             $obj->fillWithData($value);
             $this->card = $obj;
         }
@@ -555,76 +551,76 @@ class Transaction
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["subscription"]))
-            $this->setSubscription($data["subscription"]);
+        if(! empty($data['customer']))
+            $this->setCustomer($data['customer']);
 
-        if(! empty($data["customer"]))
-            $this->setCustomer($data["customer"]);
+        if(! empty($data['subscription']))
+            $this->setSubscription($data['subscription']);
 
-        if(! empty($data["token"]))
-            $this->setToken($data["token"]);
+        if(! empty($data['token']))
+            $this->setToken($data['token']);
 
-        if(! empty($data["card"]))
-            $this->setCard($data["card"]);
+        if(! empty($data['card']))
+            $this->setCard($data['card']);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
+        if(! empty($data['name']))
+            $this->setName($data['name']);
 
-        if(! empty($data["authorized_amount"]))
-            $this->setAuthorizedAmount($data["authorized_amount"]);
+        if(! empty($data['authorized_amount']))
+            $this->setAuthorizedAmount($data['authorized_amount']);
 
-        if(! empty($data["captured_amount"]))
-            $this->setCapturedAmount($data["captured_amount"]);
+        if(! empty($data['captured_amount']))
+            $this->setCapturedAmount($data['captured_amount']);
 
-        if(! empty($data["currency"]))
-            $this->setCurrency($data["currency"]);
+        if(! empty($data['currency']))
+            $this->setCurrency($data['currency']);
 
-        if(! empty($data["status"]))
-            $this->setStatus($data["status"]);
+        if(! empty($data['status']))
+            $this->setStatus($data['status']);
 
-        if(! empty($data["authorized"]))
-            $this->setAuthorized($data["authorized"]);
+        if(! empty($data['authorized']))
+            $this->setAuthorized($data['authorized']);
 
-        if(! empty($data["captured"]))
-            $this->setCaptured($data["captured"]);
+        if(! empty($data['captured']))
+            $this->setCaptured($data['captured']);
 
-        if(! empty($data["processout_fee"]))
-            $this->setProcessoutFee($data["processout_fee"]);
+        if(! empty($data['processout_fee']))
+            $this->setProcessoutFee($data['processout_fee']);
 
-        if(! empty($data["metadata"]))
-            $this->setMetadata($data["metadata"]);
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
 
-        if(! empty($data["sandbox"]))
-            $this->setSandbox($data["sandbox"]);
+        if(! empty($data['sandbox']))
+            $this->setSandbox($data['sandbox']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }
 
+    
     /**
      * Get the transaction's refunds.
      * @param array $options
      * @return array
      */
-    public function refunds($options = array())
+    public function fetchRefunds($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/transactions/" . urlencode($this->getId()) . "/refunds";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -633,33 +629,59 @@ class Transaction
         $body = $response->getBody();
         foreach($body['refunds'] as $v)
         {
-            $tmp = new Refund($cur->instance);
+            $tmp = new Refund($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Refunds"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Refunds'] = $a;
         
+        return array_values($returnValues)[0];
     }
+    
+    /**
+     * Find a transaction's refund by its ID.
+	 * @param string $refundId
+     * @param array $options
+     * @return Refund
+     */
+    public function findRefund($refundId, $options = array())
+    {
+        $request = new Request($this->client);
+        $path    = "/transactions/" . urlencode($this->getId()) . "/refunds/" . urlencode($refundId) . "";
 
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field refund
+        $body = $response->getBody();
+        $body = $body['refund'];
+        $refund = new Refund($this->client);
+        $returnValues['refund'] = $refund->fillWithData($body);
+                
+        
+        return array_values($returnValues)[0];
+    }
+    
     /**
      * Get all the transactions.
      * @param array $options
      * @return array
      */
-    public static function all($options = array())
+    public function all($options = array())
     {
-        $cur = new Transaction();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/transactions";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -668,45 +690,40 @@ class Transaction
         $body = $response->getBody();
         foreach($body['transactions'] as $v)
         {
-            $tmp = new Transaction($cur->instance);
+            $tmp = new Transaction($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Transactions"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Transactions'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Find a transaction by its ID.
 	 * @param string $transactionId
      * @param array $options
      * @return $this
      */
-    public static function find($transactionId, $options = array())
+    public function find($transactionId, $options = array())
     {
-        $cur = new Transaction();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/transactions/" . urlencode($transactionId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field transaction
         $body = $response->getBody();
-                    $body = $body['transaction'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['transaction'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
     
 }

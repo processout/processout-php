@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Invoice
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the invoice
@@ -116,21 +114,19 @@ class Invoice
 
     /**
      * Invoice constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         $this->setMetadata(array('_library' => 'php'));
         $this->setRequestEmail((bool) false);
         $this->setRequestShipping((bool) false);
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -178,7 +174,7 @@ class Invoice
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -207,7 +203,7 @@ class Invoice
             $this->transaction = $value;
         else
         {
-            $obj = new Transaction($this->instance);
+            $obj = new Transaction($this->client);
             $obj->fillWithData($value);
             $this->transaction = $obj;
         }
@@ -236,7 +232,7 @@ class Invoice
             $this->customer = $value;
         else
         {
-            $obj = new Customer($this->instance);
+            $obj = new Customer($this->client);
             $obj->fillWithData($value);
             $this->customer = $obj;
         }
@@ -265,7 +261,7 @@ class Invoice
             $this->subscription = $value;
         else
         {
-            $obj = new Subscription($this->instance);
+            $obj = new Subscription($this->client);
             $obj->fillWithData($value);
             $this->subscription = $obj;
         }
@@ -522,57 +518,58 @@ class Invoice
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["transaction"]))
-            $this->setTransaction($data["transaction"]);
+        if(! empty($data['transaction']))
+            $this->setTransaction($data['transaction']);
 
-        if(! empty($data["customer"]))
-            $this->setCustomer($data["customer"]);
+        if(! empty($data['customer']))
+            $this->setCustomer($data['customer']);
 
-        if(! empty($data["subscription"]))
-            $this->setSubscription($data["subscription"]);
+        if(! empty($data['subscription']))
+            $this->setSubscription($data['subscription']);
 
-        if(! empty($data["url"]))
-            $this->setUrl($data["url"]);
+        if(! empty($data['url']))
+            $this->setUrl($data['url']);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
+        if(! empty($data['name']))
+            $this->setName($data['name']);
 
-        if(! empty($data["amount"]))
-            $this->setAmount($data["amount"]);
+        if(! empty($data['amount']))
+            $this->setAmount($data['amount']);
 
-        if(! empty($data["currency"]))
-            $this->setCurrency($data["currency"]);
+        if(! empty($data['currency']))
+            $this->setCurrency($data['currency']);
 
-        if(! empty($data["metadata"]))
-            $this->setMetadata($data["metadata"]);
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
 
-        if(! empty($data["request_email"]))
-            $this->setRequestEmail($data["request_email"]);
+        if(! empty($data['request_email']))
+            $this->setRequestEmail($data['request_email']);
 
-        if(! empty($data["request_shipping"]))
-            $this->setRequestShipping($data["request_shipping"]);
+        if(! empty($data['request_shipping']))
+            $this->setRequestShipping($data['request_shipping']);
 
-        if(! empty($data["return_url"]))
-            $this->setReturnUrl($data["return_url"]);
+        if(! empty($data['return_url']))
+            $this->setReturnUrl($data['return_url']);
 
-        if(! empty($data["cancel_url"]))
-            $this->setCancelUrl($data["cancel_url"]);
+        if(! empty($data['cancel_url']))
+            $this->setCancelUrl($data['cancel_url']);
 
-        if(! empty($data["sandbox"]))
-            $this->setSandbox($data["sandbox"]);
+        if(! empty($data['sandbox']))
+            $this->setSandbox($data['sandbox']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }
 
+    
     /**
      * Authorize the invoice using the given source (customer or token)
 	 * @param string $source
@@ -581,28 +578,27 @@ class Invoice
      */
     public function authorize($source, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($this->getId()) . "/authorize";
 
         $data = array(
 			"source" => $source
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field transaction
         $body = $response->getBody();
         $body = $body['transaction'];
-        $transaction = new Transaction($cur->instance);
-        $returnValues["transaction"] = $transaction->fillWithData($body);
+        $transaction = new Transaction($this->client);
+        $returnValues['transaction'] = $transaction->fillWithData($body);
                 
-        return array_values($returnValues)[0];
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Capture the invoice using the given source (customer or token)
 	 * @param string $source
@@ -611,57 +607,55 @@ class Invoice
      */
     public function capture($source, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($this->getId()) . "/capture";
 
         $data = array(
 			"source" => $source
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field transaction
         $body = $response->getBody();
         $body = $body['transaction'];
-        $transaction = new Transaction($cur->instance);
-        $returnValues["transaction"] = $transaction->fillWithData($body);
+        $transaction = new Transaction($this->client);
+        $returnValues['transaction'] = $transaction->fillWithData($body);
                 
-        return array_values($returnValues)[0];
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Get the customer linked to the invoice.
      * @param array $options
      * @return Customer
      */
-    public function customer($options = array())
+    public function fetchCustomer($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field customer
         $body = $response->getBody();
         $body = $body['customer'];
-        $customer = new Customer($cur->instance);
-        $returnValues["customer"] = $customer->fillWithData($body);
+        $customer = new Customer($this->client);
+        $returnValues['customer'] = $customer->fillWithData($body);
                 
-        return array_values($returnValues)[0];
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Assign a customer to the invoice.
 	 * @param string $customerId
@@ -670,57 +664,55 @@ class Invoice
      */
     public function assignCustomer($customerId, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
 
         $data = array(
 			"customer_id" => $customerId
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field customer
         $body = $response->getBody();
         $body = $body['customer'];
-        $customer = new Customer($cur->instance);
-        $returnValues["customer"] = $customer->fillWithData($body);
+        $customer = new Customer($this->client);
+        $returnValues['customer'] = $customer->fillWithData($body);
                 
-        return array_values($returnValues)[0];
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Get the transaction of the invoice.
      * @param array $options
      * @return Transaction
      */
-    public function transaction($options = array())
+    public function fetchTransaction($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($this->getId()) . "/transactions";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field transaction
         $body = $response->getBody();
         $body = $body['transaction'];
-        $transaction = new Transaction($cur->instance);
-        $returnValues["transaction"] = $transaction->fillWithData($body);
+        $transaction = new Transaction($this->client);
+        $returnValues['transaction'] = $transaction->fillWithData($body);
                 
-        return array_values($returnValues)[0];
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Void the invoice
      * @param array $options
@@ -728,44 +720,42 @@ class Invoice
      */
     public function void($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($this->getId()) . "/void";
 
         $data = array(
 
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field transaction
         $body = $response->getBody();
         $body = $body['transaction'];
-        $transaction = new Transaction($cur->instance);
-        $returnValues["transaction"] = $transaction->fillWithData($body);
+        $transaction = new Transaction($this->client);
+        $returnValues['transaction'] = $transaction->fillWithData($body);
                 
-        return array_values($returnValues)[0];
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Get all the invoices.
      * @param array $options
      * @return array
      */
-    public static function all($options = array())
+    public function all($options = array())
     {
-        $cur = new Invoice();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/invoices";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -774,17 +764,15 @@ class Invoice
         $body = $response->getBody();
         foreach($body['invoices'] as $v)
         {
-            $tmp = new Invoice($cur->instance);
+            $tmp = new Invoice($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Invoices"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Invoices'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Create a new invoice.
      * @param array $options
@@ -792,8 +780,7 @@ class Invoice
      */
     public function create($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/invoices";
 
         $data = array(
@@ -807,19 +794,18 @@ class Invoice
 			"cancel_url" => $this->getCancelUrl()
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field invoice
         $body = $response->getBody();
-                    $body = $body['invoice'];
-                    
-        $returnValues["create"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['invoice'];
+        $returnValues['create'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Create a new invoice for the given customer ID.
 	 * @param string $customerId
@@ -828,8 +814,7 @@ class Invoice
      */
     public function createForCustomer($customerId, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/invoices";
 
         $data = array(
@@ -844,47 +829,43 @@ class Invoice
 			"customer_id" => $customerId
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field invoice
         $body = $response->getBody();
-                    $body = $body['invoice'];
-                    
-        $returnValues["createForCustomer"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['invoice'];
+        $returnValues['createForCustomer'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Find an invoice by its ID.
 	 * @param string $invoiceId
      * @param array $options
      * @return $this
      */
-    public static function find($invoiceId, $options = array())
+    public function find($invoiceId, $options = array())
     {
-        $cur = new Invoice();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($invoiceId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field invoice
         $body = $response->getBody();
-                    $body = $body['invoice'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['invoice'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
     
 }

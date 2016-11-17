@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Project
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the project
@@ -50,18 +48,16 @@ class Project
 
     /**
      * Project constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -183,24 +179,25 @@ class Project
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
+        if(! empty($data['name']))
+            $this->setName($data['name']);
 
-        if(! empty($data["logo_url"]))
-            $this->setLogoUrl($data["logo_url"]);
+        if(! empty($data['logo_url']))
+            $this->setLogoUrl($data['logo_url']);
 
-        if(! empty($data["email"]))
-            $this->setEmail($data["email"]);
+        if(! empty($data['email']))
+            $this->setEmail($data['email']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }
 
+    
     /**
      * Get all the gateway configurations of the project
      * @param array $options
@@ -208,15 +205,14 @@ class Project
      */
     public function gatewayConfigurations($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/projects/" . urlencode($this->getId()) . "/gateway-configurations";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -225,16 +221,13 @@ class Project
         $body = $response->getBody();
         foreach($body['gateway_configurations'] as $v)
         {
-            $tmp = new GatewayConfiguration($cur->instance);
+            $tmp = new GatewayConfiguration($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["GatewayConfigurations"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['GatewayConfigurations'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
     
 }

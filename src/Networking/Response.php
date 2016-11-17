@@ -2,30 +2,20 @@
 
 namespace ProcessOut\Networking;
 
-use \ProcessOut\Exceptions\ApiException;
+use \ProcessOut\Exceptions\AuthenticationException;
+use \ProcessOut\Exceptions\GenericException;
+use \ProcessOut\Exceptions\InternalException;
 use \ProcessOut\Exceptions\NotFoundException;
-use \ProcessOut\Exceptions\ApiAuthenticationException;
+use \ProcessOut\Exceptions\ValidationException;
 
 class Response
 {
-
-    /**
-     * Raw response
-     * @var anlutro\cURL\Response
-     */
-    protected $raw;
 
     /**
      * Status code
      * @var string
      */
     protected $statusCode;
-
-    /**
-     * Response headers
-     * @var array
-     */
-    protected $headers;
 
     /**
      * Json decoded body
@@ -35,28 +25,15 @@ class Response
 
     /**
      * Response's constructor
-     * @param anlutro\cURL\Response $raw
-     * @param bool|true $checkStatusCode
+     * @param string $raw
+     * @param in     $status
      */
-    public function __construct(\anlutro\cURL\Response $raw)
+    public function __construct($raw, $status)
     {
-        $this->raw        = $raw;
-        $this->statusCode = $raw->statusCode;
-        $this->headers    = array_change_key_case($raw->headers, CASE_LOWER);
-        $this->rawObject  = $raw->body;
-
-        $this->body = (array) json_decode($raw->body, true);
+        $this->statusCode = $status;
+        $this->body       = (array) json_decode($raw, true);
 
         $this->check();
-    }
-
-    /**
-     * Return the raw response
-     * @return anlutro\cURL\Response
-     */
-    public function getRaw()
-    {
-        return $this->raw;
     }
 
     /**
@@ -74,7 +51,7 @@ class Response
      */
     public function getStatusString()
     {
-        return $this->statusCode;
+        return (string) $this->statusCode;
     }
 
     /**
@@ -92,10 +69,7 @@ class Response
      */
     public function isSuccess()
     {
-        if(! isset($this->body["success"]) || ! $this->body["success"])
-            return false;
-
-        return true;
+        return (isset($this->body['success']) && $this->body['success']);
     }
 
     /**
@@ -106,12 +80,11 @@ class Response
     public function getMessage()
     {
         $message = '';
-        if(! empty($this->body["message"]))
-            $message .= $this->body["message"];
+        if(! empty($this->body['message']))
+            $message .= $this->body['message'];
 
         return $message;
     }
-
 
     /**
      * Throw an exception if there's been an error in the current response
@@ -129,14 +102,26 @@ class Response
             }
             if($this->getStatusCode() == 401)
             {
-                throw new ApiAuthenticationException(
+                throw new AuthenticationException(
                     'Your ProcessOut credentials could not be verified (401): ' .
                         $this->getMessage());
             }
+            if($this->getStatusCode() == 400)
+            {
+                throw new ValidationException(
+                    'Your request could not be processed (400): ' .
+                        $this->getMessage());
+            }
+            if($this->getStatusCode() >= 500)
+            {
+                throw new InternalException(
+                    'ProcessOut returned an internal error (' .
+                        $this->getStatusString() . '): ' . $this->getMessage());
+            }
 
-            throw new ApiException(
+            throw new GenericException(
                 'ProcessOut returned an error (' .
-                    $this->getStatusCode() . '): ' . $this->getMessage());
+                    $this->getStatusString() . '): ' . $this->getMessage());
         }
     }
 }

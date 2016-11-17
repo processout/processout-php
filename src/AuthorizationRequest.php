@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class AuthorizationRequest
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the authorization
@@ -98,18 +96,16 @@ class AuthorizationRequest
 
     /**
      * AuthorizationRequest constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -157,7 +153,7 @@ class AuthorizationRequest
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -186,7 +182,7 @@ class AuthorizationRequest
             $this->customer = $value;
         else
         {
-            $obj = new Customer($this->instance);
+            $obj = new Customer($this->client);
             $obj->fillWithData($value);
             $this->customer = $obj;
         }
@@ -215,7 +211,7 @@ class AuthorizationRequest
             $this->token = $value;
         else
         {
-            $obj = new Token($this->instance);
+            $obj = new Token($this->client);
             $obj->fillWithData($value);
             $this->token = $obj;
         }
@@ -428,77 +424,77 @@ class AuthorizationRequest
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["customer"]))
-            $this->setCustomer($data["customer"]);
+        if(! empty($data['customer']))
+            $this->setCustomer($data['customer']);
 
-        if(! empty($data["token"]))
-            $this->setToken($data["token"]);
+        if(! empty($data['token']))
+            $this->setToken($data['token']);
 
-        if(! empty($data["url"]))
-            $this->setUrl($data["url"]);
+        if(! empty($data['url']))
+            $this->setUrl($data['url']);
 
-        if(! empty($data["authorized"]))
-            $this->setAuthorized($data["authorized"]);
+        if(! empty($data['authorized']))
+            $this->setAuthorized($data['authorized']);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
+        if(! empty($data['name']))
+            $this->setName($data['name']);
 
-        if(! empty($data["currency"]))
-            $this->setCurrency($data["currency"]);
+        if(! empty($data['currency']))
+            $this->setCurrency($data['currency']);
 
-        if(! empty($data["return_url"]))
-            $this->setReturnUrl($data["return_url"]);
+        if(! empty($data['return_url']))
+            $this->setReturnUrl($data['return_url']);
 
-        if(! empty($data["cancel_url"]))
-            $this->setCancelUrl($data["cancel_url"]);
+        if(! empty($data['cancel_url']))
+            $this->setCancelUrl($data['cancel_url']);
 
-        if(! empty($data["custom"]))
-            $this->setCustom($data["custom"]);
+        if(! empty($data['custom']))
+            $this->setCustom($data['custom']);
 
-        if(! empty($data["sandbox"]))
-            $this->setSandbox($data["sandbox"]);
+        if(! empty($data['sandbox']))
+            $this->setSandbox($data['sandbox']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }
 
+    
     /**
      * Get the customer linked to the authorization request.
      * @param array $options
      * @return Customer
      */
-    public function customer($options = array())
+    public function fetchCustomer($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/authorization-requests/" . urlencode($this->getId()) . "/customers";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field customer
         $body = $response->getBody();
         $body = $body['customer'];
-        $customer = new Customer($cur->instance);
-        $returnValues["customer"] = $customer->fillWithData($body);
+        $customer = new Customer($this->client);
+        $returnValues['customer'] = $customer->fillWithData($body);
                 
-        return array_values($returnValues)[0];
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Create a new authorization request for the given customer ID.
 	 * @param string $customerId
@@ -507,8 +503,7 @@ class AuthorizationRequest
      */
     public function create($customerId, $options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/authorization-requests";
 
         $data = array(
@@ -520,47 +515,43 @@ class AuthorizationRequest
 			"customer_id" => $customerId
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field authorization_request
         $body = $response->getBody();
-                    $body = $body['authorization_request'];
-                    
-        $returnValues["create"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['authorization_request'];
+        $returnValues['create'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Find an authorization request by its ID.
 	 * @param string $authorizationRequestId
      * @param array $options
      * @return $this
      */
-    public static function find($authorizationRequestId, $options = array())
+    public function find($authorizationRequestId, $options = array())
     {
-        $cur = new AuthorizationRequest();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/authorization-requests/" . urlencode($authorizationRequestId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field authorization_request
         $body = $response->getBody();
-                    $body = $body['authorization_request'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['authorization_request'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
     
 }

@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class GatewayConfiguration
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the gateway configuration
@@ -50,19 +48,17 @@ class GatewayConfiguration
 
     /**
      * GatewayConfiguration constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         $this->setPublicKeys(array('_library' => 'php'));
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -110,7 +106,7 @@ class GatewayConfiguration
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -139,7 +135,7 @@ class GatewayConfiguration
             $this->gateway = $value;
         else
         {
-            $obj = new Gateway($this->instance);
+            $obj = new Gateway($this->client);
             $obj->fillWithData($value);
             $this->gateway = $obj;
         }
@@ -198,20 +194,20 @@ class GatewayConfiguration
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["gateway"]))
-            $this->setGateway($data["gateway"]);
+        if(! empty($data['gateway']))
+            $this->setGateway($data['gateway']);
 
-        if(! empty($data["enabled"]))
-            $this->setEnabled($data["enabled"]);
+        if(! empty($data['enabled']))
+            $this->setEnabled($data['enabled']);
 
-        if(! empty($data["public_keys"]))
-            $this->setPublicKeys($data["public_keys"]);
+        if(! empty($data['public_keys']))
+            $this->setPublicKeys($data['public_keys']);
 
         return $this;
     }

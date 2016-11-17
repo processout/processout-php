@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Event
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the event
@@ -56,18 +54,16 @@ class Event
 
     /**
      * Event constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -115,7 +111,7 @@ class Event
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -218,43 +214,43 @@ class Event
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["name"]))
-            $this->setName($data["name"]);
+        if(! empty($data['name']))
+            $this->setName($data['name']);
 
-        if(! empty($data["data"]))
-            $this->setData($data["data"]);
+        if(! empty($data['data']))
+            $this->setData($data['data']);
 
-        if(! empty($data["sandbox"]))
-            $this->setSandbox($data["sandbox"]);
+        if(! empty($data['sandbox']))
+            $this->setSandbox($data['sandbox']);
 
-        if(! empty($data["fired_at"]))
-            $this->setFiredAt($data["fired_at"]);
+        if(! empty($data['fired_at']))
+            $this->setFiredAt($data['fired_at']);
 
         return $this;
     }
 
+    
     /**
      * Get all the webhooks of the event.
      * @param array $options
      * @return array
      */
-    public function webhooks($options = array())
+    public function fetchWebhooks($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/events/" . urlencode($this->getId()) . "/webhooks";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -263,33 +259,30 @@ class Event
         $body = $response->getBody();
         foreach($body['webhooks'] as $v)
         {
-            $tmp = new Webhook($cur->instance);
+            $tmp = new Webhook($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Webhooks"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Webhooks'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Get all the events.
      * @param array $options
      * @return array
      */
-    public static function all($options = array())
+    public function all($options = array())
     {
-        $cur = new Event();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/events";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -298,45 +291,40 @@ class Event
         $body = $response->getBody();
         foreach($body['events'] as $v)
         {
-            $tmp = new Event($cur->instance);
+            $tmp = new Event($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Events"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Events'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Find an event by its ID.
 	 * @param string $eventId
      * @param array $options
      * @return $this
      */
-    public static function find($eventId, $options = array())
+    public function find($eventId, $options = array())
     {
-        $cur = new Event();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/events/" . urlencode($eventId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field event
         $body = $response->getBody();
-                    $body = $body['event'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['event'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
     
 }

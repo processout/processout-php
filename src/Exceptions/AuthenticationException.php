@@ -4,11 +4,11 @@ namespace ProcessOut\Exceptions;
 
 use \Exception;
 
-class ApiException extends Exception
+class AuthenticationException extends Exception
 {
 
     /**
-     * Exception representing an API error
+     * Exception representing an API authentication error
      * @param string         $message
      * @param integer        $code
      * @param Exception|null $previous

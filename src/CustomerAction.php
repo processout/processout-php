@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class CustomerAction
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * Customer action type (such as url)
@@ -32,18 +30,16 @@ class CustomerAction
 
     /**
      * CustomerAction constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -99,11 +95,11 @@ class CustomerAction
      */
     public function fillWithData($data)
     {
-        if(! empty($data["type"]))
-            $this->setType($data["type"]);
+        if(! empty($data['type']))
+            $this->setType($data['type']);
 
-        if(! empty($data["value"]))
-            $this->setValue($data["value"]);
+        if(! empty($data['value']))
+            $this->setValue($data['value']);
 
         return $this;
     }

@@ -5,18 +5,16 @@
 namespace ProcessOut;
 
 use ProcessOut\ProcessOut;
-use ProcessOut\Networking\Response;
-use ProcessOut\Networking\RequestProcessoutPrivate;
-
+use ProcessOut\Networking\Request;
 
 class Customer
 {
 
     /**
-     * ProcessOut's instance
+     * ProcessOut's client
      * @var ProcessOut\ProcessOut
      */
-    protected $instance;
+    protected $client;
 
     /**
      * ID of the customer
@@ -122,20 +120,18 @@ class Customer
 
     /**
      * Customer constructor
-     * @param ProcessOut\ProcessOut|null $processOut
+     * @param ProcessOut\ProcessOut $client
+     * @param array|null $prefill
      */
-    public function __construct(ProcessOut $processOut = null)
+    public function __construct(ProcessOut $client, $prefill = array())
     {
-        if(is_null($processOut))
-        {
-            $processOut = ProcessOut::getDefault();
-        }
-
-        $this->instance = $processOut;
+        $this->client = $client;
 
         $this->setBalance("0");
         $this->setMetadata(array('_library' => 'php'));
         
+
+        $this->fillWithData($prefill);
     }
 
     
@@ -183,7 +179,7 @@ class Customer
             $this->project = $value;
         else
         {
-            $obj = new Project($this->instance);
+            $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
         }
@@ -528,76 +524,76 @@ class Customer
      */
     public function fillWithData($data)
     {
-        if(! empty($data["id"]))
-            $this->setId($data["id"]);
+        if(! empty($data['id']))
+            $this->setId($data['id']);
 
-        if(! empty($data["project"]))
-            $this->setProject($data["project"]);
+        if(! empty($data['project']))
+            $this->setProject($data['project']);
 
-        if(! empty($data["email"]))
-            $this->setEmail($data["email"]);
+        if(! empty($data['email']))
+            $this->setEmail($data['email']);
 
-        if(! empty($data["first_name"]))
-            $this->setFirstName($data["first_name"]);
+        if(! empty($data['first_name']))
+            $this->setFirstName($data['first_name']);
 
-        if(! empty($data["last_name"]))
-            $this->setLastName($data["last_name"]);
+        if(! empty($data['last_name']))
+            $this->setLastName($data['last_name']);
 
-        if(! empty($data["address1"]))
-            $this->setAddress1($data["address1"]);
+        if(! empty($data['address1']))
+            $this->setAddress1($data['address1']);
 
-        if(! empty($data["address2"]))
-            $this->setAddress2($data["address2"]);
+        if(! empty($data['address2']))
+            $this->setAddress2($data['address2']);
 
-        if(! empty($data["city"]))
-            $this->setCity($data["city"]);
+        if(! empty($data['city']))
+            $this->setCity($data['city']);
 
-        if(! empty($data["state"]))
-            $this->setState($data["state"]);
+        if(! empty($data['state']))
+            $this->setState($data['state']);
 
-        if(! empty($data["zip"]))
-            $this->setZip($data["zip"]);
+        if(! empty($data['zip']))
+            $this->setZip($data['zip']);
 
-        if(! empty($data["country_code"]))
-            $this->setCountryCode($data["country_code"]);
+        if(! empty($data['country_code']))
+            $this->setCountryCode($data['country_code']);
 
-        if(! empty($data["balance"]))
-            $this->setBalance($data["balance"]);
+        if(! empty($data['balance']))
+            $this->setBalance($data['balance']);
 
-        if(! empty($data["currency"]))
-            $this->setCurrency($data["currency"]);
+        if(! empty($data['currency']))
+            $this->setCurrency($data['currency']);
 
-        if(! empty($data["metadata"]))
-            $this->setMetadata($data["metadata"]);
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
 
-        if(! empty($data["has_pin"]))
-            $this->setHasPin($data["has_pin"]);
+        if(! empty($data['has_pin']))
+            $this->setHasPin($data['has_pin']);
 
-        if(! empty($data["sandbox"]))
-            $this->setSandbox($data["sandbox"]);
+        if(! empty($data['sandbox']))
+            $this->setSandbox($data['sandbox']);
 
-        if(! empty($data["created_at"]))
-            $this->setCreatedAt($data["created_at"]);
+        if(! empty($data['created_at']))
+            $this->setCreatedAt($data['created_at']);
 
         return $this;
     }
 
+    
     /**
      * Get the subscriptions belonging to the customer.
      * @param array $options
      * @return array
      */
-    public function subscriptions($options = array())
+    public function fetchSubscriptions($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/customers/" . urlencode($this->getId()) . "/subscriptions";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -606,33 +602,30 @@ class Customer
         $body = $response->getBody();
         foreach($body['subscriptions'] as $v)
         {
-            $tmp = new Subscription($cur->instance);
+            $tmp = new Subscription($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Subscriptions"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Subscriptions'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Get the customer's tokens.
      * @param array $options
      * @return array
      */
-    public function tokens($options = array())
+    public function fetchTokens($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/customers/" . urlencode($this->getId()) . "/tokens";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -641,33 +634,59 @@ class Customer
         $body = $response->getBody();
         foreach($body['tokens'] as $v)
         {
-            $tmp = new Token($cur->instance);
+            $tmp = new Token($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Tokens"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Tokens'] = $a;
         
+        return array_values($returnValues)[0];
     }
+    
+    /**
+     * Find a customer's token by its ID.
+	 * @param string $tokenId
+     * @param array $options
+     * @return Token
+     */
+    public function findToken($tokenId, $options = array())
+    {
+        $request = new Request($this->client);
+        $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
 
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field token
+        $body = $response->getBody();
+        $body = $body['token'];
+        $token = new Token($this->client);
+        $returnValues['token'] = $token->fillWithData($body);
+                
+        
+        return array_values($returnValues)[0];
+    }
+    
     /**
      * Get the transactions belonging to the customer.
      * @param array $options
      * @return array
      */
-    public function transactions($options = array())
+    public function fetchTransactions($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/customers/" . urlencode($this->getId()) . "/transactions";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -676,33 +695,30 @@ class Customer
         $body = $response->getBody();
         foreach($body['transactions'] as $v)
         {
-            $tmp = new Transaction($cur->instance);
+            $tmp = new Transaction($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Transactions"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Transactions'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Get all the customers.
      * @param array $options
      * @return array
      */
-    public static function all($options = array())
+    public function all($options = array())
     {
-        $cur = new Customer();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/customers";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
@@ -711,17 +727,15 @@ class Customer
         $body = $response->getBody();
         foreach($body['customers'] as $v)
         {
-            $tmp = new Customer($cur->instance);
+            $tmp = new Customer($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-
-        $returnValues["Customers"] = $a;
-                
-        return array_values($returnValues)[0];
+        $returnValues['Customers'] = $a;
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Create a new customer.
      * @param array $options
@@ -729,8 +743,7 @@ class Customer
      */
     public function create($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/customers";
 
         $data = array(
@@ -748,48 +761,45 @@ class Customer
 			"metadata" => $this->getMetadata()
         );
 
-        $response = new Response($request->post($path, $data, $options));
+        $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field customer
         $body = $response->getBody();
-                    $body = $body['customer'];
-                    
-        $returnValues["create"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['customer'];
+        $returnValues['create'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Find a customer by its ID.
 	 * @param string $customerId
      * @param array $options
      * @return $this
      */
-    public static function find($customerId, $options = array())
+    public function find($customerId, $options = array())
     {
-        $cur = new Customer();
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/customers/" . urlencode($customerId) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->get($path, $data, $options));
+        $response = $request->get($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field customer
         $body = $response->getBody();
-                    $body = $body['customer'];
-                    
-        $returnValues["find"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['customer'];
+        $returnValues['find'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Save the updated customer attributes.
      * @param array $options
@@ -797,8 +807,7 @@ class Customer
      */
     public function save($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/customers/" . urlencode($this->getId()) . "";
 
         $data = array(
@@ -815,19 +824,18 @@ class Customer
 			"metadata" => $this->getMetadata()
         );
 
-        $response = new Response($request->put($path, $data, $options));
+        $response = $request->put($path, $data, $options);
         $returnValues = array();
 
         
         // Handling for field customer
         $body = $response->getBody();
-                    $body = $body['customer'];
-                    
-        $returnValues["save"] = $cur->fillWithData($body);
-        return array_values($returnValues)[0];
+        $body = $body['customer'];
+        $returnValues['save'] = $this->fillWithData($body);
         
+        return array_values($returnValues)[0];
     }
-
+    
     /**
      * Delete the customer.
      * @param array $options
@@ -835,22 +843,19 @@ class Customer
      */
     public function delete($options = array())
     {
-        $cur = $this;
-        $request = new RequestProcessoutPrivate($cur->instance);
+        $request = new Request($this->client);
         $path    = "/customers/" . urlencode($this->getId()) . "";
 
         $data = array(
 
         );
 
-        $response = new Response($request->delete($path, $data, $options));
+        $response = $request->delete($path, $data, $options);
         $returnValues = array();
 
+        $returnValues['success'] = $response->isSuccess();
         
-        $returnValues["success"] = $response->isSuccess();
         return array_values($returnValues)[0];
-        
     }
-
     
 }
