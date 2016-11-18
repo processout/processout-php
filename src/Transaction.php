@@ -640,7 +640,7 @@ class Transaction
     
     /**
      * Find a transaction's refund by its ID.
-	 * @param string $refundId
+     * @param string $refundId
      * @param array $options
      * @return Refund
      */
@@ -701,7 +701,7 @@ class Transaction
     
     /**
      * Find a transaction by its ID.
-	 * @param string $transactionId
+     * @param string $transactionId
      * @param array $options
      * @return $this
      */

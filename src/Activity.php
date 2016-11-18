@@ -270,7 +270,7 @@ class Activity
     
     /**
      * Find a specific activity and fetch its data.
-	 * @param string $activityId
+     * @param string $activityId
      * @param array $options
      * @return $this
      */

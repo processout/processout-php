@@ -497,7 +497,7 @@ class AuthorizationRequest
     
     /**
      * Create a new authorization request for the given customer ID.
-	 * @param string $customerId
+     * @param string $customerId
      * @param array $options
      * @return $this
      */
@@ -507,12 +507,12 @@ class AuthorizationRequest
         $path    = "/authorization-requests";
 
         $data = array(
-			"name" => $this->getName(), 
-			"currency" => $this->getCurrency(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"custom" => $this->getCustom(), 
-			"customer_id" => $customerId
+            "name" => $this->getName(), 
+            "currency" => $this->getCurrency(), 
+            "return_url" => $this->getReturnUrl(), 
+            "cancel_url" => $this->getCancelUrl(), 
+            "custom" => $this->getCustom(), 
+            "customer_id" => $customerId
         );
 
         $response = $request->post($path, $data, $options);
@@ -529,7 +529,7 @@ class AuthorizationRequest
     
     /**
      * Find an authorization request by its ID.
-	 * @param string $authorizationRequestId
+     * @param string $authorizationRequestId
      * @param array $options
      * @return $this
      */

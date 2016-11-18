@@ -527,14 +527,14 @@ class Product
         $path    = "/products";
 
         $data = array(
-			"name" => $this->getName(), 
-			"amount" => $this->getAmount(), 
-			"currency" => $this->getCurrency(), 
-			"metadata" => $this->getMetadata(), 
-			"request_email" => $this->getRequestEmail(), 
-			"request_shipping" => $this->getRequestShipping(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl()
+            "name" => $this->getName(), 
+            "amount" => $this->getAmount(), 
+            "currency" => $this->getCurrency(), 
+            "metadata" => $this->getMetadata(), 
+            "request_email" => $this->getRequestEmail(), 
+            "request_shipping" => $this->getRequestShipping(), 
+            "return_url" => $this->getReturnUrl(), 
+            "cancel_url" => $this->getCancelUrl()
         );
 
         $response = $request->post($path, $data, $options);
@@ -551,7 +551,7 @@ class Product
     
     /**
      * Find a product by its ID.
-	 * @param string $productId
+     * @param string $productId
      * @param array $options
      * @return $this
      */
@@ -587,14 +587,14 @@ class Product
         $path    = "/products/" . urlencode($this->getId()) . "";
 
         $data = array(
-			"name" => $this->getName(), 
-			"amount" => $this->getAmount(), 
-			"currency" => $this->getCurrency(), 
-			"metadata" => $this->getMetadata(), 
-			"request_email" => $this->getRequestEmail(), 
-			"request_shipping" => $this->getRequestShipping(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl()
+            "name" => $this->getName(), 
+            "amount" => $this->getAmount(), 
+            "currency" => $this->getCurrency(), 
+            "metadata" => $this->getMetadata(), 
+            "request_email" => $this->getRequestEmail(), 
+            "request_shipping" => $this->getRequestShipping(), 
+            "return_url" => $this->getReturnUrl(), 
+            "cancel_url" => $this->getCancelUrl()
         );
 
         $response = $request->put($path, $data, $options);

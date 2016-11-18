@@ -499,14 +499,14 @@ class Coupon
         $path    = "/coupons";
 
         $data = array(
-			"id" => $this->getId(), 
-			"amount_off" => $this->getAmountOff(), 
-			"percent_off" => $this->getPercentOff(), 
-			"currency" => $this->getCurrency(), 
-			"iteration_count" => $this->getIterationCount(), 
-			"max_redemptions" => $this->getMaxRedemptions(), 
-			"expires_at" => $this->getExpiresAt(), 
-			"metadata" => $this->getMetadata()
+            "id" => $this->getId(), 
+            "amount_off" => $this->getAmountOff(), 
+            "percent_off" => $this->getPercentOff(), 
+            "currency" => $this->getCurrency(), 
+            "iteration_count" => $this->getIterationCount(), 
+            "max_redemptions" => $this->getMaxRedemptions(), 
+            "expires_at" => $this->getExpiresAt(), 
+            "metadata" => $this->getMetadata()
         );
 
         $response = $request->post($path, $data, $options);
@@ -523,7 +523,7 @@ class Coupon
     
     /**
      * Find a coupon by its ID.
-	 * @param string $couponId
+     * @param string $couponId
      * @param array $options
      * @return $this
      */
@@ -559,7 +559,7 @@ class Coupon
         $path    = "/coupons/" . urlencode($this->getId()) . "";
 
         $data = array(
-			"metadata" => $this->getMetadata()
+            "metadata" => $this->getMetadata()
         );
 
         $response = $request->put($path, $data, $options);

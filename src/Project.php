@@ -203,7 +203,7 @@ class Project
      * @param array $options
      * @return array
      */
-    public function gatewayConfigurations($options = array())
+    public function fetchGatewayConfigurations($options = array())
     {
         $request = new Request($this->client);
         $path    = "/projects/" . urlencode($this->getId()) . "/gateway-configurations";

@@ -301,8 +301,8 @@ class Refund
     
     /**
      * Find a transaction's refund by its ID.
-	 * @param string $transactionId
-	 * @param string $refundId
+     * @param string $transactionId
+     * @param string $refundId
      * @param array $options
      * @return $this
      */
@@ -329,7 +329,7 @@ class Refund
     
     /**
      * Apply a refund to a transaction.
-	 * @param string $transactionId
+     * @param string $transactionId
      * @param array $options
      * @return bool
      */
@@ -339,10 +339,10 @@ class Refund
         $path    = "/transactions/" . urlencode($transactionId) . "/refunds";
 
         $data = array(
-			"amount" => $this->getAmount(), 
-			"metadata" => $this->getMetadata(), 
-			"reason" => $this->getReason(), 
-			"information" => $this->getInformation()
+            "amount" => $this->getAmount(), 
+            "metadata" => $this->getMetadata(), 
+            "reason" => $this->getReason(), 
+            "information" => $this->getInformation()
         );
 
         $response = $request->post($path, $data, $options);

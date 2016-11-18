@@ -302,7 +302,7 @@ class Event
     
     /**
      * Find an event by its ID.
-	 * @param string $eventId
+     * @param string $eventId
      * @param array $options
      * @return $this
      */

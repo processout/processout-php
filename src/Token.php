@@ -246,8 +246,8 @@ class Token
     
     /**
      * Find a customer's token by its ID.
-	 * @param string $customerId
-	 * @param string $tokenId
+     * @param string $customerId
+     * @param string $tokenId
      * @param array $options
      * @return $this
      */
@@ -274,8 +274,8 @@ class Token
     
     /**
      * Create a new token for the given customer ID.
-	 * @param string $customerId
-	 * @param string $source
+     * @param string $customerId
+     * @param string $source
      * @param array $options
      * @return $this
      */
@@ -285,8 +285,8 @@ class Token
         $path    = "/customers/" . urlencode($customerId) . "/tokens";
 
         $data = array(
-			"metadata" => $this->getMetadata(), 
-			"source" => $source
+            "metadata" => $this->getMetadata(), 
+            "source" => $source
         );
 
         $response = $request->post($path, $data, $options);
@@ -303,9 +303,9 @@ class Token
     
     /**
      * Create a new token for the given customer ID from an authorization request
-	 * @param string $customerId
-	 * @param string $source
-	 * @param string $target
+     * @param string $customerId
+     * @param string $source
+     * @param string $target
      * @param array $options
      * @return $this
      */
@@ -315,9 +315,9 @@ class Token
         $path    = "/customers/" . urlencode($customerId) . "/tokens";
 
         $data = array(
-			"metadata" => $this->getMetadata(), 
-			"source" => $source, 
-			"target" => $target
+            "metadata" => $this->getMetadata(), 
+            "source" => $source, 
+            "target" => $target
         );
 
         $response = $request->post($path, $data, $options);

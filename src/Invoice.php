@@ -572,7 +572,7 @@ class Invoice
     
     /**
      * Authorize the invoice using the given source (customer or token)
-	 * @param string $source
+     * @param string $source
      * @param array $options
      * @return Transaction
      */
@@ -582,7 +582,7 @@ class Invoice
         $path    = "/invoices/" . urlencode($this->getId()) . "/authorize";
 
         $data = array(
-			"source" => $source
+            "source" => $source
         );
 
         $response = $request->post($path, $data, $options);
@@ -601,7 +601,7 @@ class Invoice
     
     /**
      * Capture the invoice using the given source (customer or token)
-	 * @param string $source
+     * @param string $source
      * @param array $options
      * @return Transaction
      */
@@ -611,7 +611,7 @@ class Invoice
         $path    = "/invoices/" . urlencode($this->getId()) . "/capture";
 
         $data = array(
-			"source" => $source
+            "source" => $source
         );
 
         $response = $request->post($path, $data, $options);
@@ -658,7 +658,7 @@ class Invoice
     
     /**
      * Assign a customer to the invoice.
-	 * @param string $customerId
+     * @param string $customerId
      * @param array $options
      * @return Customer
      */
@@ -668,7 +668,7 @@ class Invoice
         $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
 
         $data = array(
-			"customer_id" => $customerId
+            "customer_id" => $customerId
         );
 
         $response = $request->post($path, $data, $options);
@@ -784,14 +784,14 @@ class Invoice
         $path    = "/invoices";
 
         $data = array(
-			"name" => $this->getName(), 
-			"amount" => $this->getAmount(), 
-			"currency" => $this->getCurrency(), 
-			"metadata" => $this->getMetadata(), 
-			"request_email" => $this->getRequestEmail(), 
-			"request_shipping" => $this->getRequestShipping(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl()
+            "name" => $this->getName(), 
+            "amount" => $this->getAmount(), 
+            "currency" => $this->getCurrency(), 
+            "metadata" => $this->getMetadata(), 
+            "request_email" => $this->getRequestEmail(), 
+            "request_shipping" => $this->getRequestShipping(), 
+            "return_url" => $this->getReturnUrl(), 
+            "cancel_url" => $this->getCancelUrl()
         );
 
         $response = $request->post($path, $data, $options);
@@ -808,7 +808,7 @@ class Invoice
     
     /**
      * Create a new invoice for the given customer ID.
-	 * @param string $customerId
+     * @param string $customerId
      * @param array $options
      * @return $this
      */
@@ -818,15 +818,15 @@ class Invoice
         $path    = "/invoices";
 
         $data = array(
-			"name" => $this->getName(), 
-			"amount" => $this->getAmount(), 
-			"currency" => $this->getCurrency(), 
-			"metadata" => $this->getMetadata(), 
-			"request_email" => $this->getRequestEmail(), 
-			"request_shipping" => $this->getRequestShipping(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"customer_id" => $customerId
+            "name" => $this->getName(), 
+            "amount" => $this->getAmount(), 
+            "currency" => $this->getCurrency(), 
+            "metadata" => $this->getMetadata(), 
+            "request_email" => $this->getRequestEmail(), 
+            "request_shipping" => $this->getRequestShipping(), 
+            "return_url" => $this->getReturnUrl(), 
+            "cancel_url" => $this->getCancelUrl(), 
+            "customer_id" => $customerId
         );
 
         $response = $request->post($path, $data, $options);
@@ -843,7 +843,7 @@ class Invoice
     
     /**
      * Find an invoice by its ID.
-	 * @param string $invoiceId
+     * @param string $invoiceId
      * @param array $options
      * @return $this
      */

@@ -467,15 +467,15 @@ class Plan
         $path    = "/plans";
 
         $data = array(
-			"id" => $this->getId(), 
-			"name" => $this->getName(), 
-			"amount" => $this->getAmount(), 
-			"currency" => $this->getCurrency(), 
-			"interval" => $this->getInterval(), 
-			"trial_period" => $this->getTrialPeriod(), 
-			"metadata" => $this->getMetadata(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl()
+            "id" => $this->getId(), 
+            "name" => $this->getName(), 
+            "amount" => $this->getAmount(), 
+            "currency" => $this->getCurrency(), 
+            "interval" => $this->getInterval(), 
+            "trial_period" => $this->getTrialPeriod(), 
+            "metadata" => $this->getMetadata(), 
+            "return_url" => $this->getReturnUrl(), 
+            "cancel_url" => $this->getCancelUrl()
         );
 
         $response = $request->post($path, $data, $options);
@@ -492,7 +492,7 @@ class Plan
     
     /**
      * Find a plan by its ID.
-	 * @param string $planId
+     * @param string $planId
      * @param array $options
      * @return $this
      */
@@ -528,11 +528,11 @@ class Plan
         $path    = "/plans/" . urlencode($this->getId()) . "";
 
         $data = array(
-			"name" => $this->getName(), 
-			"trial_period" => $this->getTrialPeriod(), 
-			"metadata" => $this->getMetadata(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl()
+            "name" => $this->getName(), 
+            "trial_period" => $this->getTrialPeriod(), 
+            "metadata" => $this->getMetadata(), 
+            "return_url" => $this->getReturnUrl(), 
+            "cancel_url" => $this->getCancelUrl()
         );
 
         $response = $request->put($path, $data, $options);

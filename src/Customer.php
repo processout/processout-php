@@ -645,7 +645,7 @@ class Customer
     
     /**
      * Find a customer's token by its ID.
-	 * @param string $tokenId
+     * @param string $tokenId
      * @param array $options
      * @return Token
      */
@@ -747,18 +747,18 @@ class Customer
         $path    = "/customers";
 
         $data = array(
-			"balance" => $this->getBalance(), 
-			"currency" => $this->getCurrency(), 
-			"email" => $this->getEmail(), 
-			"first_name" => $this->getFirstName(), 
-			"last_name" => $this->getLastName(), 
-			"address1" => $this->getAddress1(), 
-			"address2" => $this->getAddress2(), 
-			"city" => $this->getCity(), 
-			"state" => $this->getState(), 
-			"zip" => $this->getZip(), 
-			"country_code" => $this->getCountryCode(), 
-			"metadata" => $this->getMetadata()
+            "balance" => $this->getBalance(), 
+            "currency" => $this->getCurrency(), 
+            "email" => $this->getEmail(), 
+            "first_name" => $this->getFirstName(), 
+            "last_name" => $this->getLastName(), 
+            "address1" => $this->getAddress1(), 
+            "address2" => $this->getAddress2(), 
+            "city" => $this->getCity(), 
+            "state" => $this->getState(), 
+            "zip" => $this->getZip(), 
+            "country_code" => $this->getCountryCode(), 
+            "metadata" => $this->getMetadata()
         );
 
         $response = $request->post($path, $data, $options);
@@ -775,7 +775,7 @@ class Customer
     
     /**
      * Find a customer by its ID.
-	 * @param string $customerId
+     * @param string $customerId
      * @param array $options
      * @return $this
      */
@@ -811,17 +811,17 @@ class Customer
         $path    = "/customers/" . urlencode($this->getId()) . "";
 
         $data = array(
-			"balance" => $this->getBalance(), 
-			"email" => $this->getEmail(), 
-			"first_name" => $this->getFirstName(), 
-			"last_name" => $this->getLastName(), 
-			"address1" => $this->getAddress1(), 
-			"address2" => $this->getAddress2(), 
-			"city" => $this->getCity(), 
-			"state" => $this->getState(), 
-			"zip" => $this->getZip(), 
-			"country_code" => $this->getCountryCode(), 
-			"metadata" => $this->getMetadata()
+            "balance" => $this->getBalance(), 
+            "email" => $this->getEmail(), 
+            "first_name" => $this->getFirstName(), 
+            "last_name" => $this->getLastName(), 
+            "address1" => $this->getAddress1(), 
+            "address2" => $this->getAddress2(), 
+            "city" => $this->getCity(), 
+            "state" => $this->getState(), 
+            "zip" => $this->getZip(), 
+            "country_code" => $this->getCountryCode(), 
+            "metadata" => $this->getMetadata()
         );
 
         $response = $request->put($path, $data, $options);

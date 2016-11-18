@@ -877,8 +877,37 @@ class Subscription
     }
     
     /**
+     * Apply a coupon on the subscription.
+     * @param string $couponId
+     * @param array $options
+     * @return Discount
+     */
+    public function applyCoupon($couponId, $options = array())
+    {
+        $request = new Request($this->client);
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "/discounts";
+
+        $data = array(
+            "coupon_id" => $couponId
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field discount
+        $body = $response->getBody();
+        $body = $body['discount'];
+        $discount = new Discount($this->client);
+        $returnValues['discount'] = $discount->fillWithData($body);
+                
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
      * Find a subscription's discount by its ID.
-	 * @param string $discountId
+     * @param string $discountId
      * @param array $options
      * @return Discount
      */
@@ -907,7 +936,7 @@ class Subscription
     
     /**
      * Remove a discount applied to a subscription.
-	 * @param string $discountId
+     * @param string $discountId
      * @param array $options
      * @return $this
      */
@@ -998,7 +1027,7 @@ class Subscription
     
     /**
      * Create a new subscription for the given customer.
-	 * @param string $customerId
+     * @param string $customerId
      * @param array $options
      * @return $this
      */
@@ -1008,16 +1037,16 @@ class Subscription
         $path    = "/subscriptions";
 
         $data = array(
-			"cancel_at" => $this->getCancelAt(), 
-			"name" => $this->getName(), 
-			"amount" => $this->getAmount(), 
-			"currency" => $this->getCurrency(), 
-			"metadata" => $this->getMetadata(), 
-			"interval" => $this->getInterval(), 
-			"trial_end_at" => $this->getTrialEndAt(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"customer_id" => $customerId
+            "cancel_at" => $this->getCancelAt(), 
+            "name" => $this->getName(), 
+            "amount" => $this->getAmount(), 
+            "currency" => $this->getCurrency(), 
+            "metadata" => $this->getMetadata(), 
+            "interval" => $this->getInterval(), 
+            "trial_end_at" => $this->getTrialEndAt(), 
+            "return_url" => $this->getReturnUrl(), 
+            "cancel_url" => $this->getCancelUrl(), 
+            "customer_id" => $customerId
         );
 
         $response = $request->post($path, $data, $options);
@@ -1034,8 +1063,8 @@ class Subscription
     
     /**
      * Create a new subscription for the customer from the given plan ID.
-	 * @param string $customerId
-	 * @param string $planId
+     * @param string $customerId
+     * @param string $planId
      * @param array $options
      * @return $this
      */
@@ -1045,17 +1074,17 @@ class Subscription
         $path    = "/subscriptions";
 
         $data = array(
-			"cancel_at" => $this->getCancelAt(), 
-			"name" => $this->getName(), 
-			"amount" => $this->getAmount(), 
-			"currency" => $this->getCurrency(), 
-			"metadata" => $this->getMetadata(), 
-			"interval" => $this->getInterval(), 
-			"trial_end_at" => $this->getTrialEndAt(), 
-			"return_url" => $this->getReturnUrl(), 
-			"cancel_url" => $this->getCancelUrl(), 
-			"customer_id" => $customerId, 
-			"plan_id" => $planId
+            "cancel_at" => $this->getCancelAt(), 
+            "name" => $this->getName(), 
+            "amount" => $this->getAmount(), 
+            "currency" => $this->getCurrency(), 
+            "metadata" => $this->getMetadata(), 
+            "interval" => $this->getInterval(), 
+            "trial_end_at" => $this->getTrialEndAt(), 
+            "return_url" => $this->getReturnUrl(), 
+            "cancel_url" => $this->getCancelUrl(), 
+            "customer_id" => $customerId, 
+            "plan_id" => $planId
         );
 
         $response = $request->post($path, $data, $options);
@@ -1072,7 +1101,7 @@ class Subscription
     
     /**
      * Find a subscription by its ID.
-	 * @param string $subscriptionId
+     * @param string $subscriptionId
      * @param array $options
      * @return $this
      */
@@ -1099,7 +1128,7 @@ class Subscription
     
     /**
      * Update the subscription.
-	 * @param string $prorate
+     * @param string $prorate
      * @param array $options
      * @return $this
      */
@@ -1109,8 +1138,8 @@ class Subscription
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
-			"trial_end_at" => $this->getTrialEndAt(), 
-			"prorate" => $prorate
+            "trial_end_at" => $this->getTrialEndAt(), 
+            "prorate" => $prorate
         );
 
         $response = $request->put($path, $data, $options);
@@ -1127,8 +1156,8 @@ class Subscription
     
     /**
      * Update the subscription's plan.
-	 * @param string $planId
-	 * @param string $prorate
+     * @param string $planId
+     * @param string $prorate
      * @param array $options
      * @return $this
      */
@@ -1138,8 +1167,8 @@ class Subscription
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
-			"plan_id" => $planId, 
-			"prorate" => $prorate
+            "plan_id" => $planId, 
+            "prorate" => $prorate
         );
 
         $response = $request->put($path, $data, $options);
@@ -1156,7 +1185,7 @@ class Subscription
     
     /**
      * Apply a source to the subscription to activate or update the subscription's source.
-	 * @param string $source
+     * @param string $source
      * @param array $options
      * @return $this
      */
@@ -1166,7 +1195,7 @@ class Subscription
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
-			"source" => $source
+            "source" => $source
         );
 
         $response = $request->put($path, $data, $options);
@@ -1183,7 +1212,7 @@ class Subscription
     
     /**
      * Cancel a subscription. The reason may be provided as well.
-	 * @param string $cancellationReason
+     * @param string $cancellationReason
      * @param array $options
      * @return $this
      */
@@ -1193,7 +1222,7 @@ class Subscription
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
-			"cancellation_reason" => $cancellationReason
+            "cancellation_reason" => $cancellationReason
         );
 
         $response = $request->delete($path, $data, $options);
@@ -1210,8 +1239,8 @@ class Subscription
     
     /**
      * Schedule the cancellation of the subscription. The reason may be provided as well.
-	 * @param string $cancelAt
-	 * @param string $cancellationReason
+     * @param string $cancelAt
+     * @param string $cancellationReason
      * @param array $options
      * @return $this
      */
@@ -1221,8 +1250,8 @@ class Subscription
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
-			"cancel_at" => $cancelAt, 
-			"cancellation_reason" => $cancellationReason
+            "cancel_at" => $cancelAt, 
+            "cancellation_reason" => $cancellationReason
         );
 
         $response = $request->delete($path, $data, $options);

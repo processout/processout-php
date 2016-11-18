@@ -346,7 +346,7 @@ class Discount
     
     /**
      * Apply a new discount to the given subscription ID.
-	 * @param string $subscriptionId
+     * @param string $subscriptionId
      * @param array $options
      * @return $this
      */
@@ -356,9 +356,9 @@ class Discount
         $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts";
 
         $data = array(
-			"amount" => $this->getAmount(), 
-			"expires_at" => $this->getExpiresAt(), 
-			"metadata" => $this->getMetadata()
+            "amount" => $this->getAmount(), 
+            "expires_at" => $this->getExpiresAt(), 
+            "metadata" => $this->getMetadata()
         );
 
         $response = $request->post($path, $data, $options);
@@ -374,9 +374,9 @@ class Discount
     }
     
     /**
-     * Apply a new discount to the given subscription ID from a coupon ID.
-	 * @param string $subscriptionId
-	 * @param string $couponId
+     * Apply a new discount on the subscription from a coupon ID.
+     * @param string $subscriptionId
+     * @param string $couponId
      * @param array $options
      * @return $this
      */
@@ -386,10 +386,7 @@ class Discount
         $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts";
 
         $data = array(
-			"amount" => $this->getAmount(), 
-			"expires_at" => $this->getExpiresAt(), 
-			"metadata" => $this->getMetadata(), 
-			"coupon_id" => $couponId
+            "coupon_id" => $couponId
         );
 
         $response = $request->post($path, $data, $options);
@@ -406,8 +403,8 @@ class Discount
     
     /**
      * Find a subscription's discount by its ID.
-	 * @param string $subscriptionId
-	 * @param string $discountId
+     * @param string $subscriptionId
+     * @param string $discountId
      * @param array $options
      * @return $this
      */
