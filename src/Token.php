@@ -35,6 +35,12 @@ class Token
     protected $card;
 
     /**
+     * Type of the token. Can be card or gateway_token
+     * @var string
+     */
+    protected $type;
+
+    /**
      * Metadata related to the token, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -149,6 +155,28 @@ class Token
     }
     
     /**
+     * Get Type
+     * Type of the token. Can be card or gateway_token
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set Type
+     * Type of the token. Can be card or gateway_token
+     * @param  string $value
+     * @return $this
+     */
+    public function setType($value)
+    {
+        $this->type = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the token, in the form of a dictionary (key-value pair)
      * @return array
@@ -230,6 +258,9 @@ class Token
 
         if(! empty($data['card']))
             $this->setCard($data['card']);
+
+        if(! empty($data['type']))
+            $this->setType($data['type']);
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
