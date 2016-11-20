@@ -29,6 +29,12 @@ class Token
     protected $customer;
 
     /**
+     * ID of the customer linked to the token, if any
+     * @var string
+     */
+    protected $customerId;
+
+    /**
      * Card used to create this token, if any
      * @var object
      */
@@ -122,6 +128,28 @@ class Token
             $obj->fillWithData($value);
             $this->customer = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get CustomerId
+     * ID of the customer linked to the token, if any
+     * @return string
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * Set CustomerId
+     * ID of the customer linked to the token, if any
+     * @param  string $value
+     * @return $this
+     */
+    public function setCustomerId($value)
+    {
+        $this->customerId = $value;
         return $this;
     }
     
@@ -256,6 +284,9 @@ class Token
         if(! empty($data['customer']))
             $this->setCustomer($data['customer']);
 
+        if(! empty($data['customer_id']))
+            $this->setCustomerId($data['customer_id']);
+
         if(! empty($data['card']))
             $this->setCard($data['card']);
 
@@ -359,6 +390,28 @@ class Token
         $body = $response->getBody();
         $body = $body['token'];
         $returnValues['createFromRequest'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Delete a customer token
+     * @param array $options
+     * @return bool
+     */
+    public function delete($options = array())
+    {
+        $request = new Request($this->client);
+        $path    = "customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($this->getId()) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->delete($path, $data, $options);
+        $returnValues = array();
+
+        $returnValues['success'] = $response->isSuccess();
         
         return array_values($returnValues)[0];
     }

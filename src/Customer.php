@@ -673,6 +673,29 @@ class Customer
     }
     
     /**
+     * Delete a customer's token by its ID.
+     * @param string $tokenId
+     * @param array $options
+     * @return bool
+     */
+    public function deleteToken($tokenId, $options = array())
+    {
+        $request = new Request($this->client);
+        $path    = "customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->delete($path, $data, $options);
+        $returnValues = array();
+
+        $returnValues['success'] = $response->isSuccess();
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
      * Get the transactions belonging to the customer.
      * @param array $options
      * @return array
