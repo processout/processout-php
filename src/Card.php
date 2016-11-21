@@ -29,10 +29,10 @@ class Card
     protected $project;
 
     /**
-     * Brand of the card (Visa, Mastercard, ...)
+     * Scheme of the card, such as visa or mastercard
      * @var string
      */
-    protected $brand;
+    protected $scheme;
 
     /**
      * Type of the card (Credit, Debit, ...)
@@ -50,7 +50,7 @@ class Card
      * Level of the card (Electron, Classic, Gold, ...)
      * @var string
      */
-    protected $level;
+    protected $brand;
 
     /**
      * First 6 digits of the card
@@ -162,24 +162,24 @@ class Card
     }
     
     /**
-     * Get Brand
-     * Brand of the card (Visa, Mastercard, ...)
+     * Get Scheme
+     * Scheme of the card, such as visa or mastercard
      * @return string
      */
-    public function getBrand()
+    public function getScheme()
     {
-        return $this->brand;
+        return $this->scheme;
     }
 
     /**
-     * Set Brand
-     * Brand of the card (Visa, Mastercard, ...)
+     * Set Scheme
+     * Scheme of the card, such as visa or mastercard
      * @param  string $value
      * @return $this
      */
-    public function setBrand($value)
+    public function setScheme($value)
     {
-        $this->brand = $value;
+        $this->scheme = $value;
         return $this;
     }
     
@@ -228,24 +228,24 @@ class Card
     }
     
     /**
-     * Get Level
+     * Get Brand
      * Level of the card (Electron, Classic, Gold, ...)
      * @return string
      */
-    public function getLevel()
+    public function getBrand()
     {
-        return $this->level;
+        return $this->brand;
     }
 
     /**
-     * Set Level
+     * Set Brand
      * Level of the card (Electron, Classic, Gold, ...)
      * @param  string $value
      * @return $this
      */
-    public function setLevel($value)
+    public function setBrand($value)
     {
-        $this->level = $value;
+        $this->brand = $value;
         return $this;
     }
     
@@ -417,8 +417,8 @@ class Card
         if(! empty($data['project']))
             $this->setProject($data['project']);
 
-        if(! empty($data['brand']))
-            $this->setBrand($data['brand']);
+        if(! empty($data['scheme']))
+            $this->setScheme($data['scheme']);
 
         if(! empty($data['type']))
             $this->setType($data['type']);
@@ -426,8 +426,8 @@ class Card
         if(! empty($data['bank_name']))
             $this->setBankName($data['bank_name']);
 
-        if(! empty($data['level']))
-            $this->setLevel($data['level']);
+        if(! empty($data['brand']))
+            $this->setBrand($data['brand']);
 
         if(! empty($data['iin']))
             $this->setIin($data['iin']);
