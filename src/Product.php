@@ -103,9 +103,7 @@ class Product
     {
         $this->client = $client;
 
-        $this->setMetadata(array('_library' => 'php'));
-        $this->setRequestEmail((bool) false);
-        $this->setRequestShipping((bool) false);
+        $this->setMetadata(null);
         
 
         $this->fillWithData($prefill);

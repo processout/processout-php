@@ -103,9 +103,7 @@ class Coupon
     {
         $this->client = $client;
 
-        $this->setMaxRedemptions((int) 0);
-        $this->setMetadata(array('_library' => 'php'));
-        $this->setIterationCount((int) 0);
+        $this->setMetadata(null);
         
 
         $this->fillWithData($prefill);

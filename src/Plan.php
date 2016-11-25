@@ -97,8 +97,7 @@ class Plan
     {
         $this->client = $client;
 
-        $this->setMetadata(array('_library' => 'php'));
-        $this->setTrialPeriod("0d");
+        $this->setMetadata(null);
         
 
         $this->fillWithData($prefill);
@@ -518,11 +517,11 @@ class Plan
     }
     
     /**
-     * Update the plan. This action won't affect subscriptions already linked to this plan.
+     * Save the updated plan attributes. This action won't affect subscriptions already linked to this plan.
      * @param array $options
      * @return $this
      */
-    public function update($options = array())
+    public function save($options = array())
     {
         $request = new Request($this->client);
         $path    = "/plans/" . urlencode($this->getId()) . "";
@@ -542,7 +541,7 @@ class Plan
         // Handling for field plan
         $body = $response->getBody();
         $body = $body['plan'];
-        $returnValues['update'] = $this->fillWithData($body);
+        $returnValues['save'] = $this->fillWithData($body);
         
         return array_values($returnValues)[0];
     }

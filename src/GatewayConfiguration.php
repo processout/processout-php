@@ -55,7 +55,7 @@ class GatewayConfiguration
     {
         $this->client = $client;
 
-        $this->setPublicKeys(array('_library' => 'php'));
+        $this->setPublicKeys(null);
         
 
         $this->fillWithData($prefill);

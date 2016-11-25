@@ -169,7 +169,7 @@ class Subscription
     {
         $this->client = $client;
 
-        $this->setMetadata(array('_library' => 'php'));
+        $this->setMetadata(null);
         
 
         $this->fillWithData($prefill);
@@ -1127,34 +1127,6 @@ class Subscription
     }
     
     /**
-     * Update the subscription.
-     * @param string $prorate
-     * @param array $options
-     * @return $this
-     */
-    public function update($prorate, $options = array())
-    {
-        $request = new Request($this->client);
-        $path    = "/subscriptions/" . urlencode($this->getId()) . "";
-
-        $data = array(
-            "trial_end_at" => $this->getTrialEndAt(), 
-            "prorate" => $prorate
-        );
-
-        $response = $request->put($path, $data, $options);
-        $returnValues = array();
-
-        
-        // Handling for field subscription
-        $body = $response->getBody();
-        $body = $body['subscription'];
-        $returnValues['update'] = $this->fillWithData($body);
-        
-        return array_values($returnValues)[0];
-    }
-    
-    /**
      * Update the subscription's plan.
      * @param string $planId
      * @param string $prorate
@@ -1206,6 +1178,36 @@ class Subscription
         $body = $response->getBody();
         $body = $body['subscription'];
         $returnValues['applySource'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Save the updated subscription attributes.
+     * @param array $options
+     * @return $this
+     */
+    public function save($options = array())
+    {
+        $request = new Request($this->client);
+        $path    = "/subscriptions/" . urlencode($this->getId()) . "";
+
+        $data = array(
+            "name" => $this->getName(), 
+            "amount" => $this->getAmount(), 
+            "interval" => $this->getInterval(), 
+            "trial_end_at" => $this->getTrialEndAt(), 
+            "metadata" => $this->getMetadata()
+        );
+
+        $response = $request->put($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field subscription
+        $body = $response->getBody();
+        $body = $body['subscription'];
+        $returnValues['save'] = $this->fillWithData($body);
         
         return array_values($returnValues)[0];
     }

@@ -73,7 +73,7 @@ class Refund
     {
         $this->client = $client;
 
-        $this->setMetadata(array('_library' => 'php'));
+        $this->setMetadata(null);
         
 
         $this->fillWithData($prefill);

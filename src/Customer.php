@@ -101,12 +101,6 @@ class Customer
     protected $metadata;
 
     /**
-     * Wether the customer has a PIN set or not
-     * @var boolean
-     */
-    protected $hasPin;
-
-    /**
      * Define whether or not the customer is in sandbox environment
      * @var boolean
      */
@@ -127,8 +121,7 @@ class Customer
     {
         $this->client = $client;
 
-        $this->setBalance("0");
-        $this->setMetadata(array('_library' => 'php'));
+        $this->setMetadata(null);
         
 
         $this->fillWithData($prefill);
@@ -451,28 +444,6 @@ class Customer
     }
     
     /**
-     * Get HasPin
-     * Wether the customer has a PIN set or not
-     * @return bool
-     */
-    public function getHasPin()
-    {
-        return $this->hasPin;
-    }
-
-    /**
-     * Set HasPin
-     * Wether the customer has a PIN set or not
-     * @param  bool $value
-     * @return $this
-     */
-    public function setHasPin($value)
-    {
-        $this->hasPin = $value;
-        return $this;
-    }
-    
-    /**
      * Get Sandbox
      * Define whether or not the customer is in sandbox environment
      * @return bool
@@ -565,9 +536,6 @@ class Customer
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
-
-        if(! empty($data['has_pin']))
-            $this->setHasPin($data['has_pin']);
 
         if(! empty($data['sandbox']))
             $this->setSandbox($data['sandbox']);

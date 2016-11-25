@@ -77,12 +77,6 @@ class AuthorizationRequest
     protected $cancelUrl;
 
     /**
-     * Custom variable passed along in the events/webhooks
-     * @var string
-     */
-    protected $custom;
-
-    /**
      * Define whether or not the authorization is in sandbox environment
      * @var boolean
      */
@@ -351,28 +345,6 @@ class AuthorizationRequest
     }
     
     /**
-     * Get Custom
-     * Custom variable passed along in the events/webhooks
-     * @return string
-     */
-    public function getCustom()
-    {
-        return $this->custom;
-    }
-
-    /**
-     * Set Custom
-     * Custom variable passed along in the events/webhooks
-     * @param  string $value
-     * @return $this
-     */
-    public function setCustom($value)
-    {
-        $this->custom = $value;
-        return $this;
-    }
-    
-    /**
      * Get Sandbox
      * Define whether or not the authorization is in sandbox environment
      * @return bool
@@ -454,9 +426,6 @@ class AuthorizationRequest
         if(! empty($data['cancel_url']))
             $this->setCancelUrl($data['cancel_url']);
 
-        if(! empty($data['custom']))
-            $this->setCustom($data['custom']);
-
         if(! empty($data['sandbox']))
             $this->setSandbox($data['sandbox']);
 
@@ -511,7 +480,6 @@ class AuthorizationRequest
             "currency" => $this->getCurrency(), 
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl(), 
-            "custom" => $this->getCustom(), 
             "customer_id" => $customerId
         );
 
