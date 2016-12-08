@@ -315,6 +315,8 @@ class Token
      */
     public function find($customerId, $tokenId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/customers/" . urlencode($customerId) . "/tokens/" . urlencode($tokenId) . "";
 
@@ -343,6 +345,8 @@ class Token
      */
     public function create($customerId, $source, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/customers/" . urlencode($customerId) . "/tokens";
 
@@ -373,6 +377,8 @@ class Token
      */
     public function createFromRequest($customerId, $source, $target, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/customers/" . urlencode($customerId) . "/tokens";
 
@@ -401,6 +407,8 @@ class Token
      */
     public function delete($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($this->getId()) . "";
 

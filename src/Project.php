@@ -205,6 +205,8 @@ class Project
      */
     public function fetchGatewayConfigurations($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/projects/" . urlencode($this->getId()) . "/gateway-configurations";
 

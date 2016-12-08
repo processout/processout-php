@@ -80,7 +80,7 @@ class Customer
      * Country code of the customer
      * @var string
      */
-    protected $countryCode;
+    protected $country;
 
     /**
      * Customer balance. Can be positive or negative
@@ -356,24 +356,24 @@ class Customer
     }
     
     /**
-     * Get CountryCode
+     * Get Country
      * Country code of the customer
      * @return string
      */
-    public function getCountryCode()
+    public function getCountry()
     {
-        return $this->countryCode;
+        return $this->country;
     }
 
     /**
-     * Set CountryCode
+     * Set Country
      * Country code of the customer
      * @param  string $value
      * @return $this
      */
-    public function setCountryCode($value)
+    public function setCountry($value)
     {
-        $this->countryCode = $value;
+        $this->country = $value;
         return $this;
     }
     
@@ -525,8 +525,8 @@ class Customer
         if(! empty($data['zip']))
             $this->setZip($data['zip']);
 
-        if(! empty($data['country_code']))
-            $this->setCountryCode($data['country_code']);
+        if(! empty($data['country']))
+            $this->setCountry($data['country']);
 
         if(! empty($data['balance']))
             $this->setBalance($data['balance']);
@@ -554,6 +554,8 @@ class Customer
      */
     public function fetchSubscriptions($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/customers/" . urlencode($this->getId()) . "/subscriptions";
 
@@ -586,6 +588,8 @@ class Customer
      */
     public function fetchTokens($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/customers/" . urlencode($this->getId()) . "/tokens";
 
@@ -619,6 +623,8 @@ class Customer
      */
     public function findToken($tokenId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
 
@@ -648,6 +654,8 @@ class Customer
      */
     public function deleteToken($tokenId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
 
@@ -670,6 +678,8 @@ class Customer
      */
     public function fetchTransactions($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/customers/" . urlencode($this->getId()) . "/transactions";
 
@@ -702,6 +712,8 @@ class Customer
      */
     public function all($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/customers";
 
@@ -734,6 +746,8 @@ class Customer
      */
     public function create($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/customers";
 
@@ -748,7 +762,7 @@ class Customer
             "city" => $this->getCity(), 
             "state" => $this->getState(), 
             "zip" => $this->getZip(), 
-            "country_code" => $this->getCountryCode(), 
+            "country" => $this->getCountry(), 
             "metadata" => $this->getMetadata()
         );
 
@@ -772,6 +786,8 @@ class Customer
      */
     public function find($customerId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/customers/" . urlencode($customerId) . "";
 
@@ -798,6 +814,8 @@ class Customer
      */
     public function save($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/customers/" . urlencode($this->getId()) . "";
 
@@ -811,7 +829,7 @@ class Customer
             "city" => $this->getCity(), 
             "state" => $this->getState(), 
             "zip" => $this->getZip(), 
-            "country_code" => $this->getCountryCode(), 
+            "country" => $this->getCountry(), 
             "metadata" => $this->getMetadata()
         );
 
@@ -834,6 +852,8 @@ class Customer
      */
     public function delete($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/customers/" . urlencode($this->getId()) . "";
 

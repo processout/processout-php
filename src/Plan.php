@@ -430,6 +430,8 @@ class Plan
      */
     public function all($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/plans";
 
@@ -462,6 +464,8 @@ class Plan
      */
     public function create($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/plans";
 
@@ -497,6 +501,8 @@ class Plan
      */
     public function find($planId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/plans/" . urlencode($planId) . "";
 
@@ -523,6 +529,8 @@ class Plan
      */
     public function save($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/plans/" . urlencode($this->getId()) . "";
 
@@ -553,6 +561,8 @@ class Plan
      */
     public function end($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/plans/" . urlencode($this->getId()) . "";
 

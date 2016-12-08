@@ -461,6 +461,8 @@ class Product
      */
     public function createInvoice($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/products/" . urlencode($this->getId()) . "/invoices";
 
@@ -489,6 +491,8 @@ class Product
      */
     public function all($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/products";
 
@@ -521,6 +525,8 @@ class Product
      */
     public function create($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/products";
 
@@ -555,6 +561,8 @@ class Product
      */
     public function find($productId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/products/" . urlencode($productId) . "";
 
@@ -581,6 +589,8 @@ class Product
      */
     public function save($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/products/" . urlencode($this->getId()) . "";
 
@@ -614,6 +624,8 @@ class Product
      */
     public function delete($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/products/" . urlencode($this->getId()) . "";
 

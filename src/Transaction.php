@@ -613,6 +613,8 @@ class Transaction
      */
     public function fetchRefunds($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/transactions/" . urlencode($this->getId()) . "/refunds";
 
@@ -646,6 +648,8 @@ class Transaction
      */
     public function findRefund($refundId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/transactions/" . urlencode($this->getId()) . "/refunds/" . urlencode($refundId) . "";
 
@@ -674,6 +678,8 @@ class Transaction
      */
     public function all($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/transactions";
 
@@ -707,6 +713,8 @@ class Transaction
      */
     public function find($transactionId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/transactions/" . urlencode($transactionId) . "";
 

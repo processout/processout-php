@@ -461,6 +461,8 @@ class Coupon
      */
     public function all($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/coupons";
 
@@ -493,6 +495,8 @@ class Coupon
      */
     public function create($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/coupons";
 
@@ -527,6 +531,8 @@ class Coupon
      */
     public function find($couponId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/coupons/" . urlencode($couponId) . "";
 
@@ -553,6 +559,8 @@ class Coupon
      */
     public function save($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/coupons/" . urlencode($this->getId()) . "";
 
@@ -579,6 +587,8 @@ class Coupon
      */
     public function delete($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/coupons/" . urlencode($this->getId()) . "";
 

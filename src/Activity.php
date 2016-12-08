@@ -243,6 +243,8 @@ class Activity
      */
     public function all($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/activities";
 
@@ -276,6 +278,8 @@ class Activity
      */
     public function find($activityId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/activities/" . urlencode($activityId) . "";
 

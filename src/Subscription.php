@@ -823,6 +823,8 @@ class Subscription
      */
     public function fetchCustomer($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "/customers";
 
@@ -851,6 +853,8 @@ class Subscription
      */
     public function fetchDiscounts($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "/discounts";
 
@@ -884,6 +888,8 @@ class Subscription
      */
     public function applyCoupon($couponId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "/discounts";
 
@@ -913,6 +919,8 @@ class Subscription
      */
     public function findDiscount($discountId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "/discounts/" . urlencode($discountId) . "";
 
@@ -942,6 +950,8 @@ class Subscription
      */
     public function removeDiscount($discountId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "/discounts/" . urlencode($discountId) . "";
 
@@ -968,6 +978,8 @@ class Subscription
      */
     public function fetchTransactions($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "/transactions";
 
@@ -1000,6 +1012,8 @@ class Subscription
      */
     public function all($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions";
 
@@ -1033,6 +1047,8 @@ class Subscription
      */
     public function create($customerId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions";
 
@@ -1070,6 +1086,8 @@ class Subscription
      */
     public function createFromPlan($customerId, $planId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions";
 
@@ -1107,6 +1125,8 @@ class Subscription
      */
     public function find($subscriptionId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($subscriptionId) . "";
 
@@ -1135,6 +1155,8 @@ class Subscription
      */
     public function updatePlan($planId, $prorate, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
@@ -1163,6 +1185,8 @@ class Subscription
      */
     public function applySource($source, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
@@ -1189,6 +1213,8 @@ class Subscription
      */
     public function save($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
@@ -1197,7 +1223,8 @@ class Subscription
             "amount" => $this->getAmount(), 
             "interval" => $this->getInterval(), 
             "trial_end_at" => $this->getTrialEndAt(), 
-            "metadata" => $this->getMetadata()
+            "metadata" => $this->getMetadata(), 
+            "coupon_id" => (!empty($options["coupon_id"])) ? $options["coupon_id"] : null
         );
 
         $response = $request->put($path, $data, $options);
@@ -1220,6 +1247,8 @@ class Subscription
      */
     public function cancel($cancellationReason, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
@@ -1248,6 +1277,8 @@ class Subscription
      */
     public function cancelAtDate($cancelAt, $cancellationReason, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 

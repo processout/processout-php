@@ -59,6 +59,36 @@ class Invoice
     protected $name;
 
     /**
+     * Statement to be shown on the bank statement of your customer
+     * @var string
+     */
+    protected $statementDescriptor;
+
+    /**
+     * Support phone number shown on the customer's bank statement
+     * @var string
+     */
+    protected $statementDescriptorPhone;
+
+    /**
+     * City shown on the customer's bank statement
+     * @var string
+     */
+    protected $statementDescriptorCity;
+
+    /**
+     * Your company name shown on the customer's bank statement
+     * @var string
+     */
+    protected $statementDescriptorCompany;
+
+    /**
+     * URL shown on the customer's bank statement
+     * @var string
+     */
+    protected $statementDescriptorUrl;
+
+    /**
      * Amount to be paid
      * @var string
      */
@@ -311,6 +341,116 @@ class Invoice
     }
     
     /**
+     * Get StatementDescriptor
+     * Statement to be shown on the bank statement of your customer
+     * @return string
+     */
+    public function getStatementDescriptor()
+    {
+        return $this->statementDescriptor;
+    }
+
+    /**
+     * Set StatementDescriptor
+     * Statement to be shown on the bank statement of your customer
+     * @param  string $value
+     * @return $this
+     */
+    public function setStatementDescriptor($value)
+    {
+        $this->statementDescriptor = $value;
+        return $this;
+    }
+    
+    /**
+     * Get StatementDescriptorPhone
+     * Support phone number shown on the customer's bank statement
+     * @return string
+     */
+    public function getStatementDescriptorPhone()
+    {
+        return $this->statementDescriptorPhone;
+    }
+
+    /**
+     * Set StatementDescriptorPhone
+     * Support phone number shown on the customer's bank statement
+     * @param  string $value
+     * @return $this
+     */
+    public function setStatementDescriptorPhone($value)
+    {
+        $this->statementDescriptorPhone = $value;
+        return $this;
+    }
+    
+    /**
+     * Get StatementDescriptorCity
+     * City shown on the customer's bank statement
+     * @return string
+     */
+    public function getStatementDescriptorCity()
+    {
+        return $this->statementDescriptorCity;
+    }
+
+    /**
+     * Set StatementDescriptorCity
+     * City shown on the customer's bank statement
+     * @param  string $value
+     * @return $this
+     */
+    public function setStatementDescriptorCity($value)
+    {
+        $this->statementDescriptorCity = $value;
+        return $this;
+    }
+    
+    /**
+     * Get StatementDescriptorCompany
+     * Your company name shown on the customer's bank statement
+     * @return string
+     */
+    public function getStatementDescriptorCompany()
+    {
+        return $this->statementDescriptorCompany;
+    }
+
+    /**
+     * Set StatementDescriptorCompany
+     * Your company name shown on the customer's bank statement
+     * @param  string $value
+     * @return $this
+     */
+    public function setStatementDescriptorCompany($value)
+    {
+        $this->statementDescriptorCompany = $value;
+        return $this;
+    }
+    
+    /**
+     * Get StatementDescriptorUrl
+     * URL shown on the customer's bank statement
+     * @return string
+     */
+    public function getStatementDescriptorUrl()
+    {
+        return $this->statementDescriptorUrl;
+    }
+
+    /**
+     * Set StatementDescriptorUrl
+     * URL shown on the customer's bank statement
+     * @param  string $value
+     * @return $this
+     */
+    public function setStatementDescriptorUrl($value)
+    {
+        $this->statementDescriptorUrl = $value;
+        return $this;
+    }
+    
+    /**
      * Get Amount
      * Amount to be paid
      * @return string
@@ -537,6 +677,21 @@ class Invoice
         if(! empty($data['name']))
             $this->setName($data['name']);
 
+        if(! empty($data['statement_descriptor']))
+            $this->setStatementDescriptor($data['statement_descriptor']);
+
+        if(! empty($data['statement_descriptor_phone']))
+            $this->setStatementDescriptorPhone($data['statement_descriptor_phone']);
+
+        if(! empty($data['statement_descriptor_city']))
+            $this->setStatementDescriptorCity($data['statement_descriptor_city']);
+
+        if(! empty($data['statement_descriptor_company']))
+            $this->setStatementDescriptorCompany($data['statement_descriptor_company']);
+
+        if(! empty($data['statement_descriptor_url']))
+            $this->setStatementDescriptorUrl($data['statement_descriptor_url']);
+
         if(! empty($data['amount']))
             $this->setAmount($data['amount']);
 
@@ -576,6 +731,8 @@ class Invoice
      */
     public function authorize($source, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($this->getId()) . "/authorize";
 
@@ -605,6 +762,8 @@ class Invoice
      */
     public function capture($source, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($this->getId()) . "/capture";
 
@@ -633,6 +792,8 @@ class Invoice
      */
     public function fetchCustomer($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
 
@@ -662,6 +823,8 @@ class Invoice
      */
     public function assignCustomer($customerId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($this->getId()) . "/customers";
 
@@ -690,6 +853,8 @@ class Invoice
      */
     public function fetchTransaction($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($this->getId()) . "/transactions";
 
@@ -718,6 +883,8 @@ class Invoice
      */
     public function void($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($this->getId()) . "/void";
 
@@ -746,6 +913,8 @@ class Invoice
      */
     public function all($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/invoices";
 
@@ -778,6 +947,8 @@ class Invoice
      */
     public function create($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/invoices";
 
@@ -786,6 +957,11 @@ class Invoice
             "amount" => $this->getAmount(), 
             "currency" => $this->getCurrency(), 
             "metadata" => $this->getMetadata(), 
+            "statement_descriptor" => $this->getStatementDescriptor(), 
+            "statement_descriptor_phone" => $this->getStatementDescriptorPhone(), 
+            "statement_descriptor_city" => $this->getStatementDescriptorCity(), 
+            "statement_descriptor_company" => $this->getStatementDescriptorCompany(), 
+            "statement_descriptor_url" => $this->getStatementDescriptorUrl(), 
             "request_email" => $this->getRequestEmail(), 
             "request_shipping" => $this->getRequestShipping(), 
             "return_url" => $this->getReturnUrl(), 
@@ -812,6 +988,8 @@ class Invoice
      */
     public function createForCustomer($customerId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/invoices";
 
@@ -820,6 +998,11 @@ class Invoice
             "amount" => $this->getAmount(), 
             "currency" => $this->getCurrency(), 
             "metadata" => $this->getMetadata(), 
+            "statement_descriptor" => $this->getStatementDescriptor(), 
+            "statement_descriptor_phone" => $this->getStatementDescriptorPhone(), 
+            "statement_descriptor_city" => $this->getStatementDescriptorCity(), 
+            "statement_descriptor_company" => $this->getStatementDescriptorCompany(), 
+            "statement_descriptor_url" => $this->getStatementDescriptorUrl(), 
             "request_email" => $this->getRequestEmail(), 
             "request_shipping" => $this->getRequestShipping(), 
             "return_url" => $this->getReturnUrl(), 
@@ -847,6 +1030,8 @@ class Invoice
      */
     public function find($invoiceId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/invoices/" . urlencode($invoiceId) . "";
 

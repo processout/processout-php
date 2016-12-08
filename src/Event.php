@@ -243,6 +243,8 @@ class Event
      */
     public function fetchWebhooks($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/events/" . urlencode($this->getId()) . "/webhooks";
 
@@ -275,6 +277,8 @@ class Event
      */
     public function all($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/events";
 
@@ -308,6 +312,8 @@ class Event
      */
     public function find($eventId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/events/" . urlencode($eventId) . "";
 

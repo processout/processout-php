@@ -352,6 +352,8 @@ class Discount
      */
     public function apply($subscriptionId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts";
 
@@ -382,6 +384,8 @@ class Discount
      */
     public function applyCoupon($subscriptionId, $couponId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts";
 
@@ -410,6 +414,8 @@ class Discount
      */
     public function find($subscriptionId, $discountId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts/" . urlencode($discountId) . "";
 

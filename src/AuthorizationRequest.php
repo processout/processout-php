@@ -443,6 +443,8 @@ class AuthorizationRequest
      */
     public function fetchCustomer($options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/authorization-requests/" . urlencode($this->getId()) . "/customers";
 
@@ -472,6 +474,8 @@ class AuthorizationRequest
      */
     public function create($customerId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/authorization-requests";
 
@@ -503,6 +507,8 @@ class AuthorizationRequest
      */
     public function find($authorizationRequestId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/authorization-requests/" . urlencode($authorizationRequestId) . "";
 

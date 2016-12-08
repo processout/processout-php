@@ -308,6 +308,8 @@ class Refund
      */
     public function find($transactionId, $refundId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/transactions/" . urlencode($transactionId) . "/refunds/" . urlencode($refundId) . "";
 
@@ -335,6 +337,8 @@ class Refund
      */
     public function apply($transactionId, $options = array())
     {
+        $this->fillWithData($options);
+
         $request = new Request($this->client);
         $path    = "/transactions/" . urlencode($transactionId) . "/refunds";
 
