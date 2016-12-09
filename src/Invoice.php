@@ -737,6 +737,8 @@ class Invoice
         $path    = "/invoices/" . urlencode($this->getId()) . "/authorize";
 
         $data = array(
+            "authorize_only" => (!empty($options["authorize_only"])) ? $options["authorize_only"] : null, 
+            "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "source" => $source
         );
 
@@ -768,6 +770,8 @@ class Invoice
         $path    = "/invoices/" . urlencode($this->getId()) . "/capture";
 
         $data = array(
+            "authorize_only" => (!empty($options["authorize_only"])) ? $options["authorize_only"] : null, 
+            "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "source" => $source
         );
 
@@ -965,7 +969,8 @@ class Invoice
             "request_email" => $this->getRequestEmail(), 
             "request_shipping" => $this->getRequestShipping(), 
             "return_url" => $this->getReturnUrl(), 
-            "cancel_url" => $this->getCancelUrl()
+            "cancel_url" => $this->getCancelUrl(), 
+            "customer_id" => (!empty($options["customer_id"])) ? $options["customer_id"] : null
         );
 
         $response = $request->post($path, $data, $options);

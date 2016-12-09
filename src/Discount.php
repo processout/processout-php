@@ -360,7 +360,8 @@ class Discount
         $data = array(
             "amount" => $this->getAmount(), 
             "expires_at" => $this->getExpiresAt(), 
-            "metadata" => $this->getMetadata()
+            "metadata" => $this->getMetadata(), 
+            "coupon_id" => (!empty($options["coupon_id"])) ? $options["coupon_id"] : null
         );
 
         $response = $request->post($path, $data, $options);

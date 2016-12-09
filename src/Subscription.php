@@ -1062,6 +1062,9 @@ class Subscription
             "trial_end_at" => $this->getTrialEndAt(), 
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl(), 
+            "plan_id" => (!empty($options["plan_id"])) ? $options["plan_id"] : null, 
+            "source" => (!empty($options["source"])) ? $options["source"] : null, 
+            "prorate" => (!empty($options["prorate"])) ? $options["prorate"] : null, 
             "customer_id" => $customerId
         );
 
@@ -1101,6 +1104,7 @@ class Subscription
             "trial_end_at" => $this->getTrialEndAt(), 
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl(), 
+            "source" => (!empty($options["source"])) ? $options["source"] : null, 
             "customer_id" => $customerId, 
             "plan_id" => $planId
         );
@@ -1224,7 +1228,11 @@ class Subscription
             "interval" => $this->getInterval(), 
             "trial_end_at" => $this->getTrialEndAt(), 
             "metadata" => $this->getMetadata(), 
-            "coupon_id" => (!empty($options["coupon_id"])) ? $options["coupon_id"] : null
+            "coupon_id" => (!empty($options["coupon_id"])) ? $options["coupon_id"] : null, 
+            "plan_id" => (!empty($options["plan_id"])) ? $options["plan_id"] : null, 
+            "source" => (!empty($options["source"])) ? $options["source"] : null, 
+            "prorate" => (!empty($options["prorate"])) ? $options["prorate"] : null, 
+            "proration_date" => (!empty($options["proration_date"])) ? $options["proration_date"] : null
         );
 
         $response = $request->put($path, $data, $options);
@@ -1283,6 +1291,7 @@ class Subscription
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
+            "cancel_at_end" => (!empty($options["cancel_at_end"])) ? $options["cancel_at_end"] : null, 
             "cancel_at" => $cancelAt, 
             "cancellation_reason" => $cancellationReason
         );
