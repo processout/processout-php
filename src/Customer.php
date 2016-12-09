@@ -657,7 +657,7 @@ class Customer
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
+        $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "";
 
         $data = array(
 

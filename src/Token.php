@@ -415,7 +415,7 @@ class Token
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($this->getId()) . "";
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($this->getId()) . "";
 
         $data = array(
 

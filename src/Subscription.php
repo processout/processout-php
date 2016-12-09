@@ -29,7 +29,13 @@ class Subscription
     protected $project;
 
     /**
-     * Plan used to create this subscription
+     * ID of the plan linked to this subscription
+     * @var string
+     */
+    protected $planId;
+
+    /**
+     * Plan linked to this subscription
      * @var object
      */
     protected $plan;
@@ -228,8 +234,30 @@ class Subscription
     }
     
     /**
+     * Get PlanId
+     * ID of the plan linked to this subscription
+     * @return string
+     */
+    public function getPlanId()
+    {
+        return $this->planId;
+    }
+
+    /**
+     * Set PlanId
+     * ID of the plan linked to this subscription
+     * @param  string $value
+     * @return $this
+     */
+    public function setPlanId($value)
+    {
+        $this->planId = $value;
+        return $this;
+    }
+    
+    /**
      * Get Plan
-     * Plan used to create this subscription
+     * Plan linked to this subscription
      * @return object
      */
     public function getPlan()
@@ -239,7 +267,7 @@ class Subscription
 
     /**
      * Set Plan
-     * Plan used to create this subscription
+     * Plan linked to this subscription
      * @param  object $value
      * @return $this
      */
@@ -746,6 +774,9 @@ class Subscription
         if(! empty($data['project']))
             $this->setProject($data['project']);
 
+        if(! empty($data['plan_id']))
+            $this->setPlanId($data['plan_id']);
+
         if(! empty($data['plan']))
             $this->setPlan($data['plan']);
 
@@ -1053,6 +1084,7 @@ class Subscription
         $path    = "/subscriptions";
 
         $data = array(
+            "plan_id" => $this->getPlanId(), 
             "cancel_at" => $this->getCancelAt(), 
             "name" => $this->getName(), 
             "amount" => $this->getAmount(), 
@@ -1062,7 +1094,6 @@ class Subscription
             "trial_end_at" => $this->getTrialEndAt(), 
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl(), 
-            "plan_id" => (!empty($options["plan_id"])) ? $options["plan_id"] : null, 
             "source" => (!empty($options["source"])) ? $options["source"] : null, 
             "prorate" => (!empty($options["prorate"])) ? $options["prorate"] : null, 
             "customer_id" => $customerId
@@ -1151,66 +1182,6 @@ class Subscription
     }
     
     /**
-     * Update the subscription's plan.
-     * @param string $planId
-     * @param string $prorate
-     * @param array $options
-     * @return $this
-     */
-    public function updatePlan($planId, $prorate, $options = array())
-    {
-        $this->fillWithData($options);
-
-        $request = new Request($this->client);
-        $path    = "/subscriptions/" . urlencode($this->getId()) . "";
-
-        $data = array(
-            "plan_id" => $planId, 
-            "prorate" => $prorate
-        );
-
-        $response = $request->put($path, $data, $options);
-        $returnValues = array();
-
-        
-        // Handling for field subscription
-        $body = $response->getBody();
-        $body = $body['subscription'];
-        $returnValues['updatePlan'] = $this->fillWithData($body);
-        
-        return array_values($returnValues)[0];
-    }
-    
-    /**
-     * Apply a source to the subscription to activate or update the subscription's source.
-     * @param string $source
-     * @param array $options
-     * @return $this
-     */
-    public function applySource($source, $options = array())
-    {
-        $this->fillWithData($options);
-
-        $request = new Request($this->client);
-        $path    = "/subscriptions/" . urlencode($this->getId()) . "";
-
-        $data = array(
-            "source" => $source
-        );
-
-        $response = $request->put($path, $data, $options);
-        $returnValues = array();
-
-        
-        // Handling for field subscription
-        $body = $response->getBody();
-        $body = $body['subscription'];
-        $returnValues['applySource'] = $this->fillWithData($body);
-        
-        return array_values($returnValues)[0];
-    }
-    
-    /**
      * Save the updated subscription attributes.
      * @param array $options
      * @return $this
@@ -1223,13 +1194,13 @@ class Subscription
         $path    = "/subscriptions/" . urlencode($this->getId()) . "";
 
         $data = array(
+            "plan_id" => $this->getPlanId(), 
             "name" => $this->getName(), 
             "amount" => $this->getAmount(), 
             "interval" => $this->getInterval(), 
             "trial_end_at" => $this->getTrialEndAt(), 
             "metadata" => $this->getMetadata(), 
             "coupon_id" => (!empty($options["coupon_id"])) ? $options["coupon_id"] : null, 
-            "plan_id" => (!empty($options["plan_id"])) ? $options["plan_id"] : null, 
             "source" => (!empty($options["source"])) ? $options["source"] : null, 
             "prorate" => (!empty($options["prorate"])) ? $options["prorate"] : null, 
             "proration_date" => (!empty($options["proration_date"])) ? $options["proration_date"] : null
