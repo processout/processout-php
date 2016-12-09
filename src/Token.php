@@ -352,6 +352,7 @@ class Token
 
         $data = array(
             "metadata" => $this->getMetadata(), 
+            "replace" => (!empty($options["replace"])) ? $options["replace"] : null, 
             "source" => $source
         );
 
@@ -384,6 +385,7 @@ class Token
 
         $data = array(
             "metadata" => $this->getMetadata(), 
+            "replace" => (!empty($options["replace"])) ? $options["replace"] : null, 
             "source" => $source, 
             "target" => $target
         );
