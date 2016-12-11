@@ -17,7 +17,7 @@ Installation
 
 The package's installation is done using composer. Simply add these lines to your composer.json
 
-``` json
+```json
 {
     "require": {
         "ProcessOut/ProcessOut-php": "^5.0.10"
@@ -27,6 +27,28 @@ The package's installation is done using composer. Simply add these lines to you
 
 And run the composer update command to install/update the package.
 
-``` sh
+```sh
 composer update
 ```
+
+Installation without composer
+------------
+
+The ProcessOut PHP library may also be used without composer by directly
+cloning the directory into your project
+
+```sh
+git clone https://github.com/processout/processout-php
+```
+
+or downloading the latest release at 
+
+[https://github.com/ProcessOut/processout-php/releases](https://github.com/ProcessOut/processout-php/releases)
+
+and including the ProcessOut init file
+
+```php
+<php
+include_once("processout-php/init.php");
+```
+
