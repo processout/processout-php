@@ -31,7 +31,7 @@ And run the composer update command to install/update the package.
 composer update
 ```
 
-Installation without composer
+Installing without composer
 ------------
 
 The ProcessOut PHP library may also be used without composer by directly
@@ -42,7 +42,7 @@ git clone https://github.com/processout/processout-php
 ```
 
 or downloading the latest release at 
-[https://github.com/ProcessOut/processout-php/releases](https://github.com/ProcessOut/processout-php/releases)
+[github.com/ProcessOut/processout-php/releases](https://github.com/ProcessOut/processout-php/releases)
 and including the ProcessOut init file
 
 ```php
