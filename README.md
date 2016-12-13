@@ -42,13 +42,10 @@ git clone https://github.com/processout/processout-php
 ```
 
 or downloading the latest release at 
-
 [github.com/ProcessOut/processout-php/releases](https://github.com/ProcessOut/processout-php/releases)
-
 and including the ProcessOut init file
 
 ```php
-<php
 include_once("processout-php/init.php");
 ```
 
