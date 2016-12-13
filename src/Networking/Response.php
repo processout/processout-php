@@ -73,17 +73,27 @@ class Response
     }
 
     /**
-     * Get the error messages, if any. If there's multiple error messages,
-     * they'll be appended to each others
+     * Get the error code, if any
+     * @return string
+     */
+    public function getCode()
+    {
+        if(! empty($this->body['error_type']))
+            return $this->body['error_type'];
+
+        return '';
+    }
+
+    /**
+     * Get the error message, if any
      * @return string
      */
     public function getMessage()
     {
-        $message = '';
         if(! empty($this->body['message']))
-            $message .= $this->body['message'];
+            return $this->body['message'];
 
-        return $message;
+        return '';
     }
 
     /**
@@ -96,32 +106,22 @@ class Response
         {
             if($this->getStatusCode() == 404)
             {
-                throw new NotFoundException(
-                    'The resource could not be found (404): ' .
-                        $this->getMessage());
+                throw new NotFoundException($this->getCode(), $this->getMessage());
             }
             if($this->getStatusCode() == 401)
             {
-                throw new AuthenticationException(
-                    'Your ProcessOut credentials could not be verified (401): ' .
-                        $this->getMessage());
+                throw new AuthenticationException($this->getCode(), $this->getMessage());
             }
             if($this->getStatusCode() == 400)
             {
-                throw new ValidationException(
-                    'Your request could not be processed (400): ' .
-                        $this->getMessage());
+                throw new ValidationException($this->getCode(), $this->getMessage());
             }
             if($this->getStatusCode() >= 500)
             {
-                throw new InternalException(
-                    'ProcessOut returned an internal error (' .
-                        $this->getStatusString() . '): ' . $this->getMessage());
+                throw new InternalException($this->getCode(), $this->getMessage());
             }
 
-            throw new GenericException(
-                'ProcessOut returned an error (' .
-                    $this->getStatusString() . '): ' . $this->getMessage());
+            throw new GenericException($this->getCode(), $this->getMessage());
         }
     }
 }

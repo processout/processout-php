@@ -20,7 +20,7 @@ The package's installation is done using composer. Simply add these lines to you
 ```json
 {
     "require": {
-        "ProcessOut/ProcessOut-php": "^5.0.10"
+        "ProcessOut/ProcessOut-php": "^5.1.0"
     }
 }
 ```
@@ -42,10 +42,13 @@ git clone https://github.com/processout/processout-php
 ```
 
 or downloading the latest release at 
+
 [github.com/ProcessOut/processout-php/releases](https://github.com/ProcessOut/processout-php/releases)
+
 and including the ProcessOut init file
 
 ```php
+<php
 include_once("processout-php/init.php");
 ```
 

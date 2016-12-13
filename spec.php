@@ -38,3 +38,11 @@ $customer = $client->newCustomer()->create(array("expand" => array("project")));
 assert(!empty($customer->getProject()), 'The customer project should be expanded');
 
 $confs = $customer->getProject()->fetchGatewayConfigurations();
+
+// Make sure the error code is correctly fetched
+try {
+    $client->newCustomer()->find('bad');
+    assert(false, 'There should have been an error');
+} catch(\ProcessOut\Exceptions\NotFoundException $e) {
+    assert($e->getCode() == 'resource.customer.not-found', 'The error code was incorrect');
+}
