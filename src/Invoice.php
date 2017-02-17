@@ -47,6 +47,12 @@ class Invoice
     protected $subscription;
 
     /**
+     * Details of the invoice
+     * @var list
+     */
+    protected $details;
+
+    /**
      * URL to which you may redirect your customer to proceed with the payment
      * @var string
      */
@@ -105,18 +111,6 @@ class Invoice
      * @var dictionary
      */
     protected $metadata;
-
-    /**
-     * Choose whether or not to request the email during the checkout process
-     * @var boolean
-     */
-    protected $requestEmail;
-
-    /**
-     * Choose whether or not to request the shipping address during the checkout process
-     * @var boolean
-     */
-    protected $requestShipping;
 
     /**
      * URL where the customer will be redirected upon payment
@@ -292,6 +286,40 @@ class Invoice
             $obj = new Subscription($this->client);
             $obj->fillWithData($value);
             $this->subscription = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get Details
+     * Details of the invoice
+     * @return array
+     */
+    public function getDetails()
+    {
+        return $this->details;
+    }
+
+    /**
+     * Set Details
+     * Details of the invoice
+     * @param  array $value
+     * @return $this
+     */
+    public function setDetails($value)
+    {
+        if (count($value) > 0 && is_object($value[0]))
+            $this->details = $value;
+        else
+        {
+            $a = array();
+            foreach ($value as $v)
+            {
+                $obj = new InvoiceDetail($this->client);
+                $obj->fillWithData($v);
+                $a[] = $obj;
+            }
+            $this->details = $a;
         }
         return $this;
     }
@@ -517,50 +545,6 @@ class Invoice
     }
     
     /**
-     * Get RequestEmail
-     * Choose whether or not to request the email during the checkout process
-     * @return bool
-     */
-    public function getRequestEmail()
-    {
-        return $this->requestEmail;
-    }
-
-    /**
-     * Set RequestEmail
-     * Choose whether or not to request the email during the checkout process
-     * @param  bool $value
-     * @return $this
-     */
-    public function setRequestEmail($value)
-    {
-        $this->requestEmail = $value;
-        return $this;
-    }
-    
-    /**
-     * Get RequestShipping
-     * Choose whether or not to request the shipping address during the checkout process
-     * @return bool
-     */
-    public function getRequestShipping()
-    {
-        return $this->requestShipping;
-    }
-
-    /**
-     * Set RequestShipping
-     * Choose whether or not to request the shipping address during the checkout process
-     * @param  bool $value
-     * @return $this
-     */
-    public function setRequestShipping($value)
-    {
-        $this->requestShipping = $value;
-        return $this;
-    }
-    
-    /**
      * Get ReturnUrl
      * URL where the customer will be redirected upon payment
      * @return string
@@ -671,6 +655,9 @@ class Invoice
         if(! empty($data['subscription']))
             $this->setSubscription($data['subscription']);
 
+        if(! empty($data['details']))
+            $this->setDetails($data['details']);
+
         if(! empty($data['url']))
             $this->setUrl($data['url']);
 
@@ -700,12 +687,6 @@ class Invoice
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
-
-        if(! empty($data['request_email']))
-            $this->setRequestEmail($data['request_email']);
-
-        if(! empty($data['request_shipping']))
-            $this->setRequestShipping($data['request_shipping']);
 
         if(! empty($data['return_url']))
             $this->setReturnUrl($data['return_url']);
@@ -961,13 +942,12 @@ class Invoice
             "amount" => $this->getAmount(), 
             "currency" => $this->getCurrency(), 
             "metadata" => $this->getMetadata(), 
+            "details" => $this->getDetails(), 
             "statement_descriptor" => $this->getStatementDescriptor(), 
             "statement_descriptor_phone" => $this->getStatementDescriptorPhone(), 
             "statement_descriptor_city" => $this->getStatementDescriptorCity(), 
             "statement_descriptor_company" => $this->getStatementDescriptorCompany(), 
             "statement_descriptor_url" => $this->getStatementDescriptorUrl(), 
-            "request_email" => $this->getRequestEmail(), 
-            "request_shipping" => $this->getRequestShipping(), 
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl(), 
             "customer_id" => (!empty($options["customer_id"])) ? $options["customer_id"] : null
@@ -1003,13 +983,12 @@ class Invoice
             "amount" => $this->getAmount(), 
             "currency" => $this->getCurrency(), 
             "metadata" => $this->getMetadata(), 
+            "details" => $this->getDetails(), 
             "statement_descriptor" => $this->getStatementDescriptor(), 
             "statement_descriptor_phone" => $this->getStatementDescriptorPhone(), 
             "statement_descriptor_city" => $this->getStatementDescriptorCity(), 
             "statement_descriptor_company" => $this->getStatementDescriptorCompany(), 
             "statement_descriptor_url" => $this->getStatementDescriptorUrl(), 
-            "request_email" => $this->getRequestEmail(), 
-            "request_shipping" => $this->getRequestShipping(), 
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl(), 
             "customer_id" => $customerId

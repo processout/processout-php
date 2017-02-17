@@ -2,8 +2,8 @@
 
 include 'init.php';
 
-$client = new \ProcessOut\ProcessOut('proj_gAO1Uu0ysZJvDuUpOGPkUBeE3pGalk3x', 
-    'key_fBjPvkgT8gyKc1SUpy0PfjL7UgsRmUug');
+$client = new \ProcessOut\ProcessOut('test-proj_gAO1Uu0ysZJvDuUpOGPkUBeE3pGalk3x', 
+    'test');
 
 // Create and fetch a new invoice
 $invoice = $client->newInvoice(array(

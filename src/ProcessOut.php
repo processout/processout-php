@@ -101,6 +101,15 @@ class ProcessOut
     }
 	
     /**
+     * Create a new CardInformation instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CardInformation
+     */
+	public function newCardInformation($prefill = array()) {
+        return new CardInformation($this, $prefill);
+    }
+	
+    /**
      * Create a new Coupon instance
      * @param array|null $prefill array used to prefill the object
      * @return Coupon
@@ -170,6 +179,15 @@ class ProcessOut
      */
 	public function newInvoice($prefill = array()) {
         return new Invoice($this, $prefill);
+    }
+	
+    /**
+     * Create a new InvoiceDetail instance
+     * @param array|null $prefill array used to prefill the object
+     * @return InvoiceDetail
+     */
+	public function newInvoiceDetail($prefill = array()) {
+        return new InvoiceDetail($this, $prefill);
     }
 	
     /**

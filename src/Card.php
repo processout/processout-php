@@ -53,6 +53,12 @@ class Card
     protected $brand;
 
     /**
+     * Country that issued the card
+     * @var string
+     */
+    protected $country;
+
+    /**
      * First 6 digits of the card
      * @var string
      */
@@ -250,6 +256,28 @@ class Card
     }
     
     /**
+     * Get Country
+     * Country that issued the card
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Set Country
+     * Country that issued the card
+     * @param  string $value
+     * @return $this
+     */
+    public function setCountry($value)
+    {
+        $this->country = $value;
+        return $this;
+    }
+    
+    /**
      * Get Iin
      * First 6 digits of the card
      * @return string
@@ -429,6 +457,9 @@ class Card
         if(! empty($data['brand']))
             $this->setBrand($data['brand']);
 
+        if(! empty($data['country']))
+            $this->setCountry($data['country']);
+
         if(! empty($data['iin']))
             $this->setIin($data['iin']);
 
@@ -453,5 +484,68 @@ class Card
         return $this;
     }
 
+    
+    /**
+     * Get all the cards.
+     * @param array $options
+     * @return array
+     */
+    public function all($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/cards";
+
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field cards
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['cards'] as $v)
+        {
+            $tmp = new Card($this->client);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+        $returnValues['Cards'] = $a;
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Find a card by its ID.
+     * @param string $cardId
+     * @param array $options
+     * @return $this
+     */
+    public function find($cardId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/cards/" . urlencode($cardId) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field card_information
+        $body = $response->getBody();
+        $body = $body['card_information'];
+        $returnValues['find'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
     
 }

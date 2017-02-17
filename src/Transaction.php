@@ -101,6 +101,18 @@ class Transaction
     protected $processoutFee;
 
     /**
+     * Gateway fee estimated before processing the payment
+     * @var string
+     */
+    protected $estimatedFee;
+
+    /**
+     * Fee taken by the payment gateway to process the payment
+     * @var string
+     */
+    protected $gatewayFee;
+
+    /**
      * Metadata related to the transaction, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -478,6 +490,50 @@ class Transaction
     }
     
     /**
+     * Get EstimatedFee
+     * Gateway fee estimated before processing the payment
+     * @return string
+     */
+    public function getEstimatedFee()
+    {
+        return $this->estimatedFee;
+    }
+
+    /**
+     * Set EstimatedFee
+     * Gateway fee estimated before processing the payment
+     * @param  string $value
+     * @return $this
+     */
+    public function setEstimatedFee($value)
+    {
+        $this->estimatedFee = $value;
+        return $this;
+    }
+    
+    /**
+     * Get GatewayFee
+     * Fee taken by the payment gateway to process the payment
+     * @return string
+     */
+    public function getGatewayFee()
+    {
+        return $this->gatewayFee;
+    }
+
+    /**
+     * Set GatewayFee
+     * Fee taken by the payment gateway to process the payment
+     * @param  string $value
+     * @return $this
+     */
+    public function setGatewayFee($value)
+    {
+        $this->gatewayFee = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the transaction, in the form of a dictionary (key-value pair)
      * @return array
@@ -592,6 +648,12 @@ class Transaction
 
         if(! empty($data['processout_fee']))
             $this->setProcessoutFee($data['processout_fee']);
+
+        if(! empty($data['estimated_fee']))
+            $this->setEstimatedFee($data['estimated_fee']);
+
+        if(! empty($data['gateway_fee']))
+            $this->setGatewayFee($data['gateway_fee']);
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);

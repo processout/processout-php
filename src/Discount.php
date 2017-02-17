@@ -47,6 +47,12 @@ class Discount
     protected $amount;
 
     /**
+     * Percentage discounted
+     * @var integer
+     */
+    protected $percent;
+
+    /**
      * Date at which the discount will expire
      * @var string
      */
@@ -218,6 +224,28 @@ class Discount
     }
     
     /**
+     * Get Percent
+     * Percentage discounted
+     * @return int
+     */
+    public function getPercent()
+    {
+        return $this->percent;
+    }
+
+    /**
+     * Set Percent
+     * Percentage discounted
+     * @param  int $value
+     * @return $this
+     */
+    public function setPercent($value)
+    {
+        $this->percent = $value;
+        return $this;
+    }
+    
+    /**
      * Get ExpiresAt
      * Date at which the discount will expire
      * @return string
@@ -327,6 +355,9 @@ class Discount
 
         if(! empty($data['amount']))
             $this->setAmount($data['amount']);
+
+        if(! empty($data['percent']))
+            $this->setPercent($data['percent']);
 
         if(! empty($data['expires_at']))
             $this->setExpiresAt($data['expires_at']);

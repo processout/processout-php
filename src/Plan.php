@@ -29,6 +29,12 @@ class Plan
     protected $project;
 
     /**
+     * URL to which you may redirect your customer to activate the subscription plan
+     * @var string
+     */
+    protected $url;
+
+    /**
      * Name of the plan
      * @var string
      */
@@ -152,6 +158,28 @@ class Plan
             $obj->fillWithData($value);
             $this->project = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get Url
+     * URL to which you may redirect your customer to activate the subscription plan
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set Url
+     * URL to which you may redirect your customer to activate the subscription plan
+     * @param  string $value
+     * @return $this
+     */
+    public function setUrl($value)
+    {
+        $this->url = $value;
         return $this;
     }
     
@@ -388,6 +416,9 @@ class Plan
 
         if(! empty($data['project']))
             $this->setProject($data['project']);
+
+        if(! empty($data['url']))
+            $this->setUrl($data['url']);
 
         if(! empty($data['name']))
             $this->setName($data['name']);
