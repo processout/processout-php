@@ -540,9 +540,9 @@ class Card
         $returnValues = array();
 
         
-        // Handling for field card_information
+        // Handling for field card
         $body = $response->getBody();
-        $body = $body['card_information'];
+        $body = $body['card'];
         $returnValues['find'] = $this->fillWithData($body);
         
         return array_values($returnValues)[0];

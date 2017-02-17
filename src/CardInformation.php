@@ -250,9 +250,9 @@ class CardInformation
         $returnValues = array();
 
         
-        // Handling for field coupon
+        // Handling for field card_information
         $body = $response->getBody();
-        $body = $body['coupon'];
+        $body = $body['card_information'];
         $returnValues['fetch'] = $this->fillWithData($body);
         
         return array_values($returnValues)[0];
