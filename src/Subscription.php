@@ -1095,7 +1095,7 @@ class Subscription
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl(), 
             "source" => (!empty($options["source"])) ? $options["source"] : null, 
-            "prorate" => (!empty($options["prorate"])) ? $options["prorate"] : null, 
+            "coupon_id" => (!empty($options["coupon_id"])) ? $options["coupon_id"] : null, 
             "customer_id" => $customerId
         );
 
@@ -1136,6 +1136,7 @@ class Subscription
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl(), 
             "source" => (!empty($options["source"])) ? $options["source"] : null, 
+            "coupon_id" => (!empty($options["coupon_id"])) ? $options["coupon_id"] : null, 
             "customer_id" => $customerId, 
             "plan_id" => $planId
         );
