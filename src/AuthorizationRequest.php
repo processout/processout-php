@@ -29,10 +29,22 @@ class AuthorizationRequest
     protected $project;
 
     /**
+     * ID of the project to which the authorization request belongs
+     * @var string
+     */
+    protected $projectId;
+
+    /**
      * Customer linked to the authorization request
      * @var object
      */
     protected $customer;
+
+    /**
+     * ID of the customer linked to the authorization request
+     * @var string
+     */
+    protected $customerId;
 
     /**
      * Token linked to the authorization request, once authorized
@@ -41,16 +53,10 @@ class AuthorizationRequest
     protected $token;
 
     /**
-     * URL to which you may redirect your customer to proceed with the authorization
+     * ID of the token linked to the authorization request, once authorized
      * @var string
      */
-    protected $url;
-
-    /**
-     * Whether or not the authorization request was authorized
-     * @var boolean
-     */
-    protected $authorized;
+    protected $tokenId;
 
     /**
      * Name of the authorization
@@ -77,10 +83,22 @@ class AuthorizationRequest
     protected $cancelUrl;
 
     /**
+     * Whether or not the authorization request was authorized
+     * @var boolean
+     */
+    protected $authorized;
+
+    /**
      * Define whether or not the authorization is in sandbox environment
      * @var boolean
      */
     protected $sandbox;
+
+    /**
+     * URL to which you may redirect your customer to proceed with the authorization
+     * @var string
+     */
+    protected $url;
 
     /**
      * Date at which the authorization was created
@@ -96,8 +114,6 @@ class AuthorizationRequest
     public function __construct(ProcessOut $client, $prefill = array())
     {
         $this->client = $client;
-
-        
 
         $this->fillWithData($prefill);
     }
@@ -155,6 +171,28 @@ class AuthorizationRequest
     }
     
     /**
+     * Get ProjectId
+     * ID of the project to which the authorization request belongs
+     * @return string
+     */
+    public function getProjectId()
+    {
+        return $this->projectId;
+    }
+
+    /**
+     * Set ProjectId
+     * ID of the project to which the authorization request belongs
+     * @param  string $value
+     * @return $this
+     */
+    public function setProjectId($value)
+    {
+        $this->projectId = $value;
+        return $this;
+    }
+    
+    /**
      * Get Customer
      * Customer linked to the authorization request
      * @return object
@@ -180,6 +218,28 @@ class AuthorizationRequest
             $obj->fillWithData($value);
             $this->customer = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get CustomerId
+     * ID of the customer linked to the authorization request
+     * @return string
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * Set CustomerId
+     * ID of the customer linked to the authorization request
+     * @param  string $value
+     * @return $this
+     */
+    public function setCustomerId($value)
+    {
+        $this->customerId = $value;
         return $this;
     }
     
@@ -213,46 +273,24 @@ class AuthorizationRequest
     }
     
     /**
-     * Get Url
-     * URL to which you may redirect your customer to proceed with the authorization
+     * Get TokenId
+     * ID of the token linked to the authorization request, once authorized
      * @return string
      */
-    public function getUrl()
+    public function getTokenId()
     {
-        return $this->url;
+        return $this->tokenId;
     }
 
     /**
-     * Set Url
-     * URL to which you may redirect your customer to proceed with the authorization
+     * Set TokenId
+     * ID of the token linked to the authorization request, once authorized
      * @param  string $value
      * @return $this
      */
-    public function setUrl($value)
+    public function setTokenId($value)
     {
-        $this->url = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Authorized
-     * Whether or not the authorization request was authorized
-     * @return bool
-     */
-    public function getAuthorized()
-    {
-        return $this->authorized;
-    }
-
-    /**
-     * Set Authorized
-     * Whether or not the authorization request was authorized
-     * @param  bool $value
-     * @return $this
-     */
-    public function setAuthorized($value)
-    {
-        $this->authorized = $value;
+        $this->tokenId = $value;
         return $this;
     }
     
@@ -345,6 +383,28 @@ class AuthorizationRequest
     }
     
     /**
+     * Get Authorized
+     * Whether or not the authorization request was authorized
+     * @return bool
+     */
+    public function getAuthorized()
+    {
+        return $this->authorized;
+    }
+
+    /**
+     * Set Authorized
+     * Whether or not the authorization request was authorized
+     * @param  bool $value
+     * @return $this
+     */
+    public function setAuthorized($value)
+    {
+        $this->authorized = $value;
+        return $this;
+    }
+    
+    /**
      * Get Sandbox
      * Define whether or not the authorization is in sandbox environment
      * @return bool
@@ -363,6 +423,28 @@ class AuthorizationRequest
     public function setSandbox($value)
     {
         $this->sandbox = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Url
+     * URL to which you may redirect your customer to proceed with the authorization
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set Url
+     * URL to which you may redirect your customer to proceed with the authorization
+     * @param  string $value
+     * @return $this
+     */
+    public function setUrl($value)
+    {
+        $this->url = $value;
         return $this;
     }
     
@@ -402,17 +484,20 @@ class AuthorizationRequest
         if(! empty($data['project']))
             $this->setProject($data['project']);
 
+        if(! empty($data['project_id']))
+            $this->setProjectId($data['project_id']);
+
         if(! empty($data['customer']))
             $this->setCustomer($data['customer']);
+
+        if(! empty($data['customer_id']))
+            $this->setCustomerId($data['customer_id']);
 
         if(! empty($data['token']))
             $this->setToken($data['token']);
 
-        if(! empty($data['url']))
-            $this->setUrl($data['url']);
-
-        if(! empty($data['authorized']))
-            $this->setAuthorized($data['authorized']);
+        if(! empty($data['token_id']))
+            $this->setTokenId($data['token_id']);
 
         if(! empty($data['name']))
             $this->setName($data['name']);
@@ -426,8 +511,14 @@ class AuthorizationRequest
         if(! empty($data['cancel_url']))
             $this->setCancelUrl($data['cancel_url']);
 
+        if(! empty($data['authorized']))
+            $this->setAuthorized($data['authorized']);
+
         if(! empty($data['sandbox']))
             $this->setSandbox($data['sandbox']);
+
+        if(! empty($data['url']))
+            $this->setUrl($data['url']);
 
         if(! empty($data['created_at']))
             $this->setCreatedAt($data['created_at']);

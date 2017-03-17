@@ -29,6 +29,54 @@ class Customer
     protected $project;
 
     /**
+     * ID of the project to which the customer belongs
+     * @var string
+     */
+    protected $projectId;
+
+    /**
+     * Default token of the customer
+     * @var object
+     */
+    protected $defaultToken;
+
+    /**
+     * ID of the default token of the customer
+     * @var string
+     */
+    protected $defaultTokenId;
+
+    /**
+     * List of the customer tokens
+     * @var list
+     */
+    protected $tokens;
+
+    /**
+     * List of the customer subscriptions
+     * @var list
+     */
+    protected $subscriptions;
+
+    /**
+     * List of the customer transactions
+     * @var list
+     */
+    protected $transactions;
+
+    /**
+     * Customer balance. Can be positive or negative
+     * @var decimal
+     */
+    protected $balance;
+
+    /**
+     * Currency of the customer balance. Once the currency is set it cannot be modified
+     * @var string
+     */
+    protected $currency;
+
+    /**
      * Email of the customer
      * @var string
      */
@@ -77,22 +125,34 @@ class Customer
     protected $zip;
 
     /**
-     * Country code of the customer
+     * Country code of the customer (ISO-3166, 2 characters format)
      * @var string
      */
     protected $country;
 
     /**
-     * Customer balance. Can be positive or negative
-     * @var string
+     * Number of transactions processed by the customer
+     * @var integer
      */
-    protected $balance;
+    protected $transactionsCount;
 
     /**
-     * Currency of the customer balance. Once the currency is set it cannot be modified
-     * @var string
+     * Number of active subscriptions linked to the customer
+     * @var integer
      */
-    protected $currency;
+    protected $subscriptionsCount;
+
+    /**
+     * MRR provided by the customer, converted to the currency of the Project
+     * @var float
+     */
+    protected $mrrLocal;
+
+    /**
+     * Total revenue provided by the customer, converted to the currency of the Project
+     * @var float
+     */
+    protected $totalRevenueLocal;
 
     /**
      * Metadata related to the customer, in the form of a dictionary (key-value pair)
@@ -120,9 +180,6 @@ class Customer
     public function __construct(ProcessOut $client, $prefill = array())
     {
         $this->client = $client;
-
-        $this->setMetadata(null);
-        
 
         $this->fillWithData($prefill);
     }
@@ -176,6 +233,225 @@ class Customer
             $obj->fillWithData($value);
             $this->project = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get ProjectId
+     * ID of the project to which the customer belongs
+     * @return string
+     */
+    public function getProjectId()
+    {
+        return $this->projectId;
+    }
+
+    /**
+     * Set ProjectId
+     * ID of the project to which the customer belongs
+     * @param  string $value
+     * @return $this
+     */
+    public function setProjectId($value)
+    {
+        $this->projectId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get DefaultToken
+     * Default token of the customer
+     * @return object
+     */
+    public function getDefaultToken()
+    {
+        return $this->defaultToken;
+    }
+
+    /**
+     * Set DefaultToken
+     * Default token of the customer
+     * @param  object $value
+     * @return $this
+     */
+    public function setDefaultToken($value)
+    {
+        if (is_object($value))
+            $this->defaultToken = $value;
+        else
+        {
+            $obj = new Token($this->client);
+            $obj->fillWithData($value);
+            $this->defaultToken = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get DefaultTokenId
+     * ID of the default token of the customer
+     * @return string
+     */
+    public function getDefaultTokenId()
+    {
+        return $this->defaultTokenId;
+    }
+
+    /**
+     * Set DefaultTokenId
+     * ID of the default token of the customer
+     * @param  string $value
+     * @return $this
+     */
+    public function setDefaultTokenId($value)
+    {
+        $this->defaultTokenId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Tokens
+     * List of the customer tokens
+     * @return array
+     */
+    public function getTokens()
+    {
+        return $this->tokens;
+    }
+
+    /**
+     * Set Tokens
+     * List of the customer tokens
+     * @param  array $value
+     * @return $this
+     */
+    public function setTokens($value)
+    {
+        if (count($value) > 0 && is_object($value[0]))
+            $this->tokens = $value;
+        else
+        {
+            $a = array();
+            foreach ($value as $v)
+            {
+                $obj = new Token($this->client);
+                $obj->fillWithData($v);
+                $a[] = $obj;
+            }
+            $this->tokens = $a;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get Subscriptions
+     * List of the customer subscriptions
+     * @return array
+     */
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
+    }
+
+    /**
+     * Set Subscriptions
+     * List of the customer subscriptions
+     * @param  array $value
+     * @return $this
+     */
+    public function setSubscriptions($value)
+    {
+        if (count($value) > 0 && is_object($value[0]))
+            $this->subscriptions = $value;
+        else
+        {
+            $a = array();
+            foreach ($value as $v)
+            {
+                $obj = new Subscription($this->client);
+                $obj->fillWithData($v);
+                $a[] = $obj;
+            }
+            $this->subscriptions = $a;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get Transactions
+     * List of the customer transactions
+     * @return array
+     */
+    public function getTransactions()
+    {
+        return $this->transactions;
+    }
+
+    /**
+     * Set Transactions
+     * List of the customer transactions
+     * @param  array $value
+     * @return $this
+     */
+    public function setTransactions($value)
+    {
+        if (count($value) > 0 && is_object($value[0]))
+            $this->transactions = $value;
+        else
+        {
+            $a = array();
+            foreach ($value as $v)
+            {
+                $obj = new Transaction($this->client);
+                $obj->fillWithData($v);
+                $a[] = $obj;
+            }
+            $this->transactions = $a;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get Balance
+     * Customer balance. Can be positive or negative
+     * @return string
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * Set Balance
+     * Customer balance. Can be positive or negative
+     * @param  string $value
+     * @return $this
+     */
+    public function setBalance($value)
+    {
+        $this->balance = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Currency
+     * Currency of the customer balance. Once the currency is set it cannot be modified
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * Set Currency
+     * Currency of the customer balance. Once the currency is set it cannot be modified
+     * @param  string $value
+     * @return $this
+     */
+    public function setCurrency($value)
+    {
+        $this->currency = $value;
         return $this;
     }
     
@@ -357,7 +633,7 @@ class Customer
     
     /**
      * Get Country
-     * Country code of the customer
+     * Country code of the customer (ISO-3166, 2 characters format)
      * @return string
      */
     public function getCountry()
@@ -367,7 +643,7 @@ class Customer
 
     /**
      * Set Country
-     * Country code of the customer
+     * Country code of the customer (ISO-3166, 2 characters format)
      * @param  string $value
      * @return $this
      */
@@ -378,46 +654,90 @@ class Customer
     }
     
     /**
-     * Get Balance
-     * Customer balance. Can be positive or negative
-     * @return string
+     * Get TransactionsCount
+     * Number of transactions processed by the customer
+     * @return int
      */
-    public function getBalance()
+    public function getTransactionsCount()
     {
-        return $this->balance;
+        return $this->transactionsCount;
     }
 
     /**
-     * Set Balance
-     * Customer balance. Can be positive or negative
-     * @param  string $value
+     * Set TransactionsCount
+     * Number of transactions processed by the customer
+     * @param  int $value
      * @return $this
      */
-    public function setBalance($value)
+    public function setTransactionsCount($value)
     {
-        $this->balance = $value;
+        $this->transactionsCount = $value;
         return $this;
     }
     
     /**
-     * Get Currency
-     * Currency of the customer balance. Once the currency is set it cannot be modified
-     * @return string
+     * Get SubscriptionsCount
+     * Number of active subscriptions linked to the customer
+     * @return int
      */
-    public function getCurrency()
+    public function getSubscriptionsCount()
     {
-        return $this->currency;
+        return $this->subscriptionsCount;
     }
 
     /**
-     * Set Currency
-     * Currency of the customer balance. Once the currency is set it cannot be modified
-     * @param  string $value
+     * Set SubscriptionsCount
+     * Number of active subscriptions linked to the customer
+     * @param  int $value
      * @return $this
      */
-    public function setCurrency($value)
+    public function setSubscriptionsCount($value)
     {
-        $this->currency = $value;
+        $this->subscriptionsCount = $value;
+        return $this;
+    }
+    
+    /**
+     * Get MrrLocal
+     * MRR provided by the customer, converted to the currency of the Project
+     * @return double
+     */
+    public function getMrrLocal()
+    {
+        return $this->mrrLocal;
+    }
+
+    /**
+     * Set MrrLocal
+     * MRR provided by the customer, converted to the currency of the Project
+     * @param  double $value
+     * @return $this
+     */
+    public function setMrrLocal($value)
+    {
+        $this->mrrLocal = $value;
+        return $this;
+    }
+    
+    /**
+     * Get TotalRevenueLocal
+     * Total revenue provided by the customer, converted to the currency of the Project
+     * @return double
+     */
+    public function getTotalRevenueLocal()
+    {
+        return $this->totalRevenueLocal;
+    }
+
+    /**
+     * Set TotalRevenueLocal
+     * Total revenue provided by the customer, converted to the currency of the Project
+     * @param  double $value
+     * @return $this
+     */
+    public function setTotalRevenueLocal($value)
+    {
+        $this->totalRevenueLocal = $value;
         return $this;
     }
     
@@ -501,6 +821,30 @@ class Customer
         if(! empty($data['project']))
             $this->setProject($data['project']);
 
+        if(! empty($data['project_id']))
+            $this->setProjectId($data['project_id']);
+
+        if(! empty($data['default_token']))
+            $this->setDefaultToken($data['default_token']);
+
+        if(! empty($data['default_token_id']))
+            $this->setDefaultTokenId($data['default_token_id']);
+
+        if(! empty($data['tokens']))
+            $this->setTokens($data['tokens']);
+
+        if(! empty($data['subscriptions']))
+            $this->setSubscriptions($data['subscriptions']);
+
+        if(! empty($data['transactions']))
+            $this->setTransactions($data['transactions']);
+
+        if(! empty($data['balance']))
+            $this->setBalance($data['balance']);
+
+        if(! empty($data['currency']))
+            $this->setCurrency($data['currency']);
+
         if(! empty($data['email']))
             $this->setEmail($data['email']);
 
@@ -528,11 +872,17 @@ class Customer
         if(! empty($data['country']))
             $this->setCountry($data['country']);
 
-        if(! empty($data['balance']))
-            $this->setBalance($data['balance']);
+        if(! empty($data['transactions_count']))
+            $this->setTransactionsCount($data['transactions_count']);
 
-        if(! empty($data['currency']))
-            $this->setCurrency($data['currency']);
+        if(! empty($data['subscriptions_count']))
+            $this->setSubscriptionsCount($data['subscriptions_count']);
+
+        if(! empty($data['mrr_local']))
+            $this->setMrrLocal($data['mrr_local']);
+
+        if(! empty($data['total_revenue_local']))
+            $this->setTotalRevenueLocal($data['total_revenue_local']);
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
@@ -821,6 +1171,7 @@ class Customer
 
         $data = array(
             "balance" => $this->getBalance(), 
+            "default_token_id" => $this->getDefaultTokenId(), 
             "email" => $this->getEmail(), 
             "first_name" => $this->getFirstName(), 
             "last_name" => $this->getLastName(), 

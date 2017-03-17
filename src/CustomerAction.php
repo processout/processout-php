@@ -37,8 +37,6 @@ class CustomerAction
     {
         $this->client = $client;
 
-        
-
         $this->fillWithData($prefill);
     }
 

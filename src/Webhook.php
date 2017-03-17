@@ -17,7 +17,7 @@ class Webhook
     protected $client;
 
     /**
-     * ID of the recurring invoice
+     * ID of the webhook
      * @var string
      */
     protected $id;
@@ -29,10 +29,22 @@ class Webhook
     protected $project;
 
     /**
+     * ID of the project to which the webhook belongs
+     * @var string
+     */
+    protected $projectId;
+
+    /**
      * Event the webhook is linked to
      * @var object
      */
     protected $event;
+
+    /**
+     * ID of the event the webhook is linked to
+     * @var string
+     */
+    protected $eventId;
 
     /**
      * URL to which the webhook will be posted
@@ -97,15 +109,13 @@ class Webhook
     {
         $this->client = $client;
 
-        
-
         $this->fillWithData($prefill);
     }
 
     
     /**
      * Get Id
-     * ID of the recurring invoice
+     * ID of the webhook
      * @return string
      */
     public function getId()
@@ -115,7 +125,7 @@ class Webhook
 
     /**
      * Set Id
-     * ID of the recurring invoice
+     * ID of the webhook
      * @param  string $value
      * @return $this
      */
@@ -155,6 +165,28 @@ class Webhook
     }
     
     /**
+     * Get ProjectId
+     * ID of the project to which the webhook belongs
+     * @return string
+     */
+    public function getProjectId()
+    {
+        return $this->projectId;
+    }
+
+    /**
+     * Set ProjectId
+     * ID of the project to which the webhook belongs
+     * @param  string $value
+     * @return $this
+     */
+    public function setProjectId($value)
+    {
+        $this->projectId = $value;
+        return $this;
+    }
+    
+    /**
      * Get Event
      * Event the webhook is linked to
      * @return object
@@ -180,6 +212,28 @@ class Webhook
             $obj->fillWithData($value);
             $this->event = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get EventId
+     * ID of the event the webhook is linked to
+     * @return string
+     */
+    public function getEventId()
+    {
+        return $this->eventId;
+    }
+
+    /**
+     * Set EventId
+     * ID of the event the webhook is linked to
+     * @param  string $value
+     * @return $this
+     */
+    public function setEventId($value)
+    {
+        $this->eventId = $value;
         return $this;
     }
     
@@ -395,8 +449,14 @@ class Webhook
         if(! empty($data['project']))
             $this->setProject($data['project']);
 
+        if(! empty($data['project_id']))
+            $this->setProjectId($data['project_id']);
+
         if(! empty($data['event']))
             $this->setEvent($data['event']);
+
+        if(! empty($data['event_id']))
+            $this->setEventId($data['event_id']);
 
         if(! empty($data['request_url']))
             $this->setRequestUrl($data['request_url']);

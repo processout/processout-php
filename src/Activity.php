@@ -29,6 +29,12 @@ class Activity
     protected $project;
 
     /**
+     * ID of the project to which the activity belongs
+     * @var string
+     */
+    protected $projectId;
+
+    /**
      * Title of the activity
      * @var string
      */
@@ -60,8 +66,6 @@ class Activity
     public function __construct(ProcessOut $client, $prefill = array())
     {
         $this->client = $client;
-
-        
 
         $this->fillWithData($prefill);
     }
@@ -115,6 +119,28 @@ class Activity
             $obj->fillWithData($value);
             $this->project = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get ProjectId
+     * ID of the project to which the activity belongs
+     * @return string
+     */
+    public function getProjectId()
+    {
+        return $this->projectId;
+    }
+
+    /**
+     * Set ProjectId
+     * ID of the project to which the activity belongs
+     * @param  string $value
+     * @return $this
+     */
+    public function setProjectId($value)
+    {
+        $this->projectId = $value;
         return $this;
     }
     
@@ -219,6 +245,9 @@ class Activity
 
         if(! empty($data['project']))
             $this->setProject($data['project']);
+
+        if(! empty($data['project_id']))
+            $this->setProjectId($data['project_id']);
 
         if(! empty($data['title']))
             $this->setTitle($data['title']);

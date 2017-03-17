@@ -29,16 +29,34 @@ class Token
     protected $customer;
 
     /**
-     * ID of the customer linked to the token, if any
+     * ID of the customer linked to the token
      * @var string
      */
     protected $customerId;
+
+    /**
+     * Gateway configuration to which the token is linked, if any
+     * @var object
+     */
+    protected $gatewayConfiguration;
+
+    /**
+     * ID of the gateway configuration to which the token is linked, if any
+     * @var string
+     */
+    protected $gatewayConfigurationId;
 
     /**
      * Card used to create this token, if any
      * @var object
      */
     protected $card;
+
+    /**
+     * ID of the card used to create the token, if any
+     * @var string
+     */
+    protected $cardId;
 
     /**
      * Type of the token. Can be card or gateway_token
@@ -59,6 +77,12 @@ class Token
     protected $isSubscriptionOnly;
 
     /**
+     * True if the card it the default card of the customer, false otherwise
+     * @var boolean
+     */
+    protected $isDefault;
+
+    /**
      * Date at which the customer token was created
      * @var string
      */
@@ -72,9 +96,6 @@ class Token
     public function __construct(ProcessOut $client, $prefill = array())
     {
         $this->client = $client;
-
-        $this->setMetadata(null);
-        
 
         $this->fillWithData($prefill);
     }
@@ -133,7 +154,7 @@ class Token
     
     /**
      * Get CustomerId
-     * ID of the customer linked to the token, if any
+     * ID of the customer linked to the token
      * @return string
      */
     public function getCustomerId()
@@ -143,13 +164,64 @@ class Token
 
     /**
      * Set CustomerId
-     * ID of the customer linked to the token, if any
+     * ID of the customer linked to the token
      * @param  string $value
      * @return $this
      */
     public function setCustomerId($value)
     {
         $this->customerId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get GatewayConfiguration
+     * Gateway configuration to which the token is linked, if any
+     * @return object
+     */
+    public function getGatewayConfiguration()
+    {
+        return $this->gatewayConfiguration;
+    }
+
+    /**
+     * Set GatewayConfiguration
+     * Gateway configuration to which the token is linked, if any
+     * @param  object $value
+     * @return $this
+     */
+    public function setGatewayConfiguration($value)
+    {
+        if (is_object($value))
+            $this->gatewayConfiguration = $value;
+        else
+        {
+            $obj = new GatewayConfiguration($this->client);
+            $obj->fillWithData($value);
+            $this->gatewayConfiguration = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get GatewayConfigurationId
+     * ID of the gateway configuration to which the token is linked, if any
+     * @return string
+     */
+    public function getGatewayConfigurationId()
+    {
+        return $this->gatewayConfigurationId;
+    }
+
+    /**
+     * Set GatewayConfigurationId
+     * ID of the gateway configuration to which the token is linked, if any
+     * @param  string $value
+     * @return $this
+     */
+    public function setGatewayConfigurationId($value)
+    {
+        $this->gatewayConfigurationId = $value;
         return $this;
     }
     
@@ -179,6 +251,28 @@ class Token
             $obj->fillWithData($value);
             $this->card = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get CardId
+     * ID of the card used to create the token, if any
+     * @return string
+     */
+    public function getCardId()
+    {
+        return $this->cardId;
+    }
+
+    /**
+     * Set CardId
+     * ID of the card used to create the token, if any
+     * @param  string $value
+     * @return $this
+     */
+    public function setCardId($value)
+    {
+        $this->cardId = $value;
         return $this;
     }
     
@@ -249,6 +343,28 @@ class Token
     }
     
     /**
+     * Get IsDefault
+     * True if the card it the default card of the customer, false otherwise
+     * @return bool
+     */
+    public function getIsDefault()
+    {
+        return $this->isDefault;
+    }
+
+    /**
+     * Set IsDefault
+     * True if the card it the default card of the customer, false otherwise
+     * @param  bool $value
+     * @return $this
+     */
+    public function setIsDefault($value)
+    {
+        $this->isDefault = $value;
+        return $this;
+    }
+    
+    /**
      * Get CreatedAt
      * Date at which the customer token was created
      * @return string
@@ -287,8 +403,17 @@ class Token
         if(! empty($data['customer_id']))
             $this->setCustomerId($data['customer_id']);
 
+        if(! empty($data['gateway_configuration']))
+            $this->setGatewayConfiguration($data['gateway_configuration']);
+
+        if(! empty($data['gateway_configuration_id']))
+            $this->setGatewayConfigurationId($data['gateway_configuration_id']);
+
         if(! empty($data['card']))
             $this->setCard($data['card']);
+
+        if(! empty($data['card_id']))
+            $this->setCardId($data['card_id']);
 
         if(! empty($data['type']))
             $this->setType($data['type']);
@@ -298,6 +423,9 @@ class Token
 
         if(! empty($data['is_subscription_only']))
             $this->setIsSubscriptionOnly($data['is_subscription_only']);
+
+        if(! empty($data['is_default']))
+            $this->setIsDefault($data['is_default']);
 
         if(! empty($data['created_at']))
             $this->setCreatedAt($data['created_at']);
@@ -354,7 +482,6 @@ class Token
             "metadata" => $this->getMetadata(), 
             "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
             "target" => (!empty($options["target"])) ? $options["target"] : null, 
-            "replace" => (!empty($options["replace"])) ? $options["replace"] : null, 
             "source" => $source
         );
 
@@ -388,7 +515,6 @@ class Token
         $data = array(
             "metadata" => $this->getMetadata(), 
             "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
-            "replace" => (!empty($options["replace"])) ? $options["replace"] : null, 
             "source" => $source, 
             "target" => $target
         );

@@ -23,7 +23,7 @@ class NotFoundException extends Exception
         $this->errorCode = $errorCode;
     }
 
-    public function getCode() {
+    public function getErrorCode() {
         return $this->errorCode;
     }
 

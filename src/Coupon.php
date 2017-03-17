@@ -29,14 +29,14 @@ class Coupon
     protected $project;
 
     /**
-     * Name of the coupon
+     * ID of the project to which the coupon belongs
      * @var string
      */
-    protected $name;
+    protected $projectId;
 
     /**
      * Amount to be removed from the subscription price
-     * @var string
+     * @var decimal
      */
     protected $amountOff;
 
@@ -51,6 +51,12 @@ class Coupon
      * @var string
      */
     protected $currency;
+
+    /**
+     * Number billing cycles the coupon will last when applied to a subscription. If 0, will last forever
+     * @var integer
+     */
+    protected $iterationCount;
 
     /**
      * Number of time the coupon can be redeemed. If 0, there's no limit
@@ -71,25 +77,19 @@ class Coupon
     protected $metadata;
 
     /**
-     * Number billing cycles the coupon will last when applied to a subscription. If 0, will last forever
-     * @var integer
-     */
-    protected $iterationCount;
-
-    /**
-     * Number of time the coupon was redeemed
+     * Number of times the coupon was already redeemed
      * @var integer
      */
     protected $redeemedNumber;
 
     /**
-     * Define whether or not the plan is in sandbox environment
+     * True if the coupon was created in the sandbox environment, false otherwise
      * @var boolean
      */
     protected $sandbox;
 
     /**
-     * Date at which the plan was created
+     * Date at which the coupon was created
      * @var string
      */
     protected $createdAt;
@@ -102,9 +102,6 @@ class Coupon
     public function __construct(ProcessOut $client, $prefill = array())
     {
         $this->client = $client;
-
-        $this->setMetadata(null);
-        
 
         $this->fillWithData($prefill);
     }
@@ -162,24 +159,24 @@ class Coupon
     }
     
     /**
-     * Get Name
-     * Name of the coupon
+     * Get ProjectId
+     * ID of the project to which the coupon belongs
      * @return string
      */
-    public function getName()
+    public function getProjectId()
     {
-        return $this->name;
+        return $this->projectId;
     }
 
     /**
-     * Set Name
-     * Name of the coupon
+     * Set ProjectId
+     * ID of the project to which the coupon belongs
      * @param  string $value
      * @return $this
      */
-    public function setName($value)
+    public function setProjectId($value)
     {
-        $this->name = $value;
+        $this->projectId = $value;
         return $this;
     }
     
@@ -250,6 +247,28 @@ class Coupon
     }
     
     /**
+     * Get IterationCount
+     * Number billing cycles the coupon will last when applied to a subscription. If 0, will last forever
+     * @return int
+     */
+    public function getIterationCount()
+    {
+        return $this->iterationCount;
+    }
+
+    /**
+     * Set IterationCount
+     * Number billing cycles the coupon will last when applied to a subscription. If 0, will last forever
+     * @param  int $value
+     * @return $this
+     */
+    public function setIterationCount($value)
+    {
+        $this->iterationCount = $value;
+        return $this;
+    }
+    
+    /**
      * Get MaxRedemptions
      * Number of time the coupon can be redeemed. If 0, there's no limit
      * @return int
@@ -316,30 +335,8 @@ class Coupon
     }
     
     /**
-     * Get IterationCount
-     * Number billing cycles the coupon will last when applied to a subscription. If 0, will last forever
-     * @return int
-     */
-    public function getIterationCount()
-    {
-        return $this->iterationCount;
-    }
-
-    /**
-     * Set IterationCount
-     * Number billing cycles the coupon will last when applied to a subscription. If 0, will last forever
-     * @param  int $value
-     * @return $this
-     */
-    public function setIterationCount($value)
-    {
-        $this->iterationCount = $value;
-        return $this;
-    }
-    
-    /**
      * Get RedeemedNumber
-     * Number of time the coupon was redeemed
+     * Number of times the coupon was already redeemed
      * @return int
      */
     public function getRedeemedNumber()
@@ -349,7 +346,7 @@ class Coupon
 
     /**
      * Set RedeemedNumber
-     * Number of time the coupon was redeemed
+     * Number of times the coupon was already redeemed
      * @param  int $value
      * @return $this
      */
@@ -361,7 +358,7 @@ class Coupon
     
     /**
      * Get Sandbox
-     * Define whether or not the plan is in sandbox environment
+     * True if the coupon was created in the sandbox environment, false otherwise
      * @return bool
      */
     public function getSandbox()
@@ -371,7 +368,7 @@ class Coupon
 
     /**
      * Set Sandbox
-     * Define whether or not the plan is in sandbox environment
+     * True if the coupon was created in the sandbox environment, false otherwise
      * @param  bool $value
      * @return $this
      */
@@ -383,7 +380,7 @@ class Coupon
     
     /**
      * Get CreatedAt
-     * Date at which the plan was created
+     * Date at which the coupon was created
      * @return string
      */
     public function getCreatedAt()
@@ -393,7 +390,7 @@ class Coupon
 
     /**
      * Set CreatedAt
-     * Date at which the plan was created
+     * Date at which the coupon was created
      * @param  string $value
      * @return $this
      */
@@ -417,8 +414,8 @@ class Coupon
         if(! empty($data['project']))
             $this->setProject($data['project']);
 
-        if(! empty($data['name']))
-            $this->setName($data['name']);
+        if(! empty($data['project_id']))
+            $this->setProjectId($data['project_id']);
 
         if(! empty($data['amount_off']))
             $this->setAmountOff($data['amount_off']);
@@ -429,6 +426,9 @@ class Coupon
         if(! empty($data['currency']))
             $this->setCurrency($data['currency']);
 
+        if(! empty($data['iteration_count']))
+            $this->setIterationCount($data['iteration_count']);
+
         if(! empty($data['max_redemptions']))
             $this->setMaxRedemptions($data['max_redemptions']);
 
@@ -437,9 +437,6 @@ class Coupon
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
-
-        if(! empty($data['iteration_count']))
-            $this->setIterationCount($data['iteration_count']);
 
         if(! empty($data['redeemed_number']))
             $this->setRedeemedNumber($data['redeemed_number']);

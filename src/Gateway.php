@@ -59,6 +59,24 @@ class Gateway
     protected $tags;
 
     /**
+     * True if the gateway can pull old transactions into ProcessOut, false otherwise
+     * @var boolean
+     */
+    protected $canPullTransactions;
+
+    /**
+     * True if the gateway supports refunds, false otherwise
+     * @var boolean
+     */
+    protected $canRefund;
+
+    /**
+     * True if the gateway supports oauth authentication, false otherwise
+     * @var boolean
+     */
+    protected $isOauthAuthentication;
+
+    /**
      * Description of the payment gateway
      * @var string
      */
@@ -72,8 +90,6 @@ class Gateway
     public function __construct(ProcessOut $client, $prefill = array())
     {
         $this->client = $client;
-
-        
 
         $this->fillWithData($prefill);
     }
@@ -234,6 +250,72 @@ class Gateway
     }
     
     /**
+     * Get CanPullTransactions
+     * True if the gateway can pull old transactions into ProcessOut, false otherwise
+     * @return bool
+     */
+    public function getCanPullTransactions()
+    {
+        return $this->canPullTransactions;
+    }
+
+    /**
+     * Set CanPullTransactions
+     * True if the gateway can pull old transactions into ProcessOut, false otherwise
+     * @param  bool $value
+     * @return $this
+     */
+    public function setCanPullTransactions($value)
+    {
+        $this->canPullTransactions = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CanRefund
+     * True if the gateway supports refunds, false otherwise
+     * @return bool
+     */
+    public function getCanRefund()
+    {
+        return $this->canRefund;
+    }
+
+    /**
+     * Set CanRefund
+     * True if the gateway supports refunds, false otherwise
+     * @param  bool $value
+     * @return $this
+     */
+    public function setCanRefund($value)
+    {
+        $this->canRefund = $value;
+        return $this;
+    }
+    
+    /**
+     * Get IsOauthAuthentication
+     * True if the gateway supports oauth authentication, false otherwise
+     * @return bool
+     */
+    public function getIsOauthAuthentication()
+    {
+        return $this->isOauthAuthentication;
+    }
+
+    /**
+     * Set IsOauthAuthentication
+     * True if the gateway supports oauth authentication, false otherwise
+     * @param  bool $value
+     * @return $this
+     */
+    public function setIsOauthAuthentication($value)
+    {
+        $this->isOauthAuthentication = $value;
+        return $this;
+    }
+    
+    /**
      * Get Description
      * Description of the payment gateway
      * @return string
@@ -283,6 +365,15 @@ class Gateway
 
         if(! empty($data['tags']))
             $this->setTags($data['tags']);
+
+        if(! empty($data['can_pull_transactions']))
+            $this->setCanPullTransactions($data['can_pull_transactions']);
+
+        if(! empty($data['can_refund']))
+            $this->setCanRefund($data['can_refund']);
+
+        if(! empty($data['is_oauth_authentication']))
+            $this->setIsOauthAuthentication($data['is_oauth_authentication']);
 
         if(! empty($data['description']))
             $this->setDescription($data['description']);

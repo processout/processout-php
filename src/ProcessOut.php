@@ -83,6 +83,33 @@ class ProcessOut
     }
 	
     /**
+     * Create a new Addon instance
+     * @param array|null $prefill array used to prefill the object
+     * @return Addon
+     */
+	public function newAddon($prefill = array()) {
+        return new Addon($this, $prefill);
+    }
+	
+    /**
+     * Create a new APIRequest instance
+     * @param array|null $prefill array used to prefill the object
+     * @return APIRequest
+     */
+	public function newAPIRequest($prefill = array()) {
+        return new APIRequest($this, $prefill);
+    }
+	
+    /**
+     * Create a new APIVersion instance
+     * @param array|null $prefill array used to prefill the object
+     * @return APIVersion
+     */
+	public function newAPIVersion($prefill = array()) {
+        return new APIVersion($this, $prefill);
+    }
+	
+    /**
      * Create a new AuthorizationRequest instance
      * @param array|null $prefill array used to prefill the object
      * @return AuthorizationRequest
@@ -200,6 +227,15 @@ class ProcessOut
     }
 	
     /**
+     * Create a new DunningAction instance
+     * @param array|null $prefill array used to prefill the object
+     * @return DunningAction
+     */
+	public function newDunningAction($prefill = array()) {
+        return new DunningAction($this, $prefill);
+    }
+	
+    /**
      * Create a new Plan instance
      * @param array|null $prefill array used to prefill the object
      * @return Plan
@@ -254,12 +290,30 @@ class ProcessOut
     }
 	
     /**
+     * Create a new TransactionOperation instance
+     * @param array|null $prefill array used to prefill the object
+     * @return TransactionOperation
+     */
+	public function newTransactionOperation($prefill = array()) {
+        return new TransactionOperation($this, $prefill);
+    }
+	
+    /**
      * Create a new Webhook instance
      * @param array|null $prefill array used to prefill the object
      * @return Webhook
      */
 	public function newWebhook($prefill = array()) {
         return new Webhook($this, $prefill);
+    }
+	
+    /**
+     * Create a new WebhookEndpoint instance
+     * @param array|null $prefill array used to prefill the object
+     * @return WebhookEndpoint
+     */
+	public function newWebhookEndpoint($prefill = array()) {
+        return new WebhookEndpoint($this, $prefill);
     }
 	
 }

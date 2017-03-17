@@ -29,6 +29,12 @@ class Event
     protected $project;
 
     /**
+     * ID of the project to which the event belongs
+     * @var string
+     */
+    protected $projectId;
+
+    /**
      * Name of the event
      * @var string
      */
@@ -60,8 +66,6 @@ class Event
     public function __construct(ProcessOut $client, $prefill = array())
     {
         $this->client = $client;
-
-        
 
         $this->fillWithData($prefill);
     }
@@ -115,6 +119,28 @@ class Event
             $obj->fillWithData($value);
             $this->project = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get ProjectId
+     * ID of the project to which the event belongs
+     * @return string
+     */
+    public function getProjectId()
+    {
+        return $this->projectId;
+    }
+
+    /**
+     * Set ProjectId
+     * ID of the project to which the event belongs
+     * @param  string $value
+     * @return $this
+     */
+    public function setProjectId($value)
+    {
+        $this->projectId = $value;
         return $this;
     }
     
@@ -219,6 +245,9 @@ class Event
 
         if(! empty($data['project']))
             $this->setProject($data['project']);
+
+        if(! empty($data['project_id']))
+            $this->setProjectId($data['project_id']);
 
         if(! empty($data['name']))
             $this->setName($data['name']);

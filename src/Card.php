@@ -29,6 +29,18 @@ class Card
     protected $project;
 
     /**
+     * ID of the project to which the card belongs
+     * @var string
+     */
+    protected $projectId;
+
+    /**
+     * Token linked to the card, which can be used to process payments
+     * @var object
+     */
+    protected $token;
+
+    /**
      * Scheme of the card, such as visa or mastercard
      * @var string
      */
@@ -51,12 +63,6 @@ class Card
      * @var string
      */
     protected $brand;
-
-    /**
-     * Country that issued the card
-     * @var string
-     */
-    protected $country;
 
     /**
      * First 6 digits of the card
@@ -83,10 +89,70 @@ class Card
     protected $expYear;
 
     /**
+     * Status of the CVC check initially made on the card when the CVC was provided
+     * @var string
+     */
+    protected $cvcCheck;
+
+    /**
+     * Status of the AVS check initially made on the card when the AVS was provided
+     * @var string
+     */
+    protected $avsCheck;
+
+    /**
+     * Name of the card holder
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * Address line of the card holder
+     * @var string
+     */
+    protected $address1;
+
+    /**
+     * Secondary address line of the card holder
+     * @var string
+     */
+    protected $address2;
+
+    /**
+     * City of the card holder
+     * @var string
+     */
+    protected $city;
+
+    /**
+     * State of the card holder
+     * @var string
+     */
+    protected $state;
+
+    /**
+     * Country code of the card holder (ISO-3166, 2 characters format)
+     * @var string
+     */
+    protected $country;
+
+    /**
+     * ZIP code of the card holder
+     * @var string
+     */
+    protected $zip;
+
+    /**
      * Metadata related to the card, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
     protected $metadata;
+
+    /**
+     * Contains true if the card will expire soon, false otherwise
+     * @var boolean
+     */
+    protected $expiresSoon;
 
     /**
      * Define whether or not the card is in sandbox environment
@@ -108,9 +174,6 @@ class Card
     public function __construct(ProcessOut $client, $prefill = array())
     {
         $this->client = $client;
-
-        $this->setMetadata(null);
-        
 
         $this->fillWithData($prefill);
     }
@@ -163,6 +226,57 @@ class Card
             $obj = new Project($this->client);
             $obj->fillWithData($value);
             $this->project = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get ProjectId
+     * ID of the project to which the card belongs
+     * @return string
+     */
+    public function getProjectId()
+    {
+        return $this->projectId;
+    }
+
+    /**
+     * Set ProjectId
+     * ID of the project to which the card belongs
+     * @param  string $value
+     * @return $this
+     */
+    public function setProjectId($value)
+    {
+        $this->projectId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Token
+     * Token linked to the card, which can be used to process payments
+     * @return object
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set Token
+     * Token linked to the card, which can be used to process payments
+     * @param  object $value
+     * @return $this
+     */
+    public function setToken($value)
+    {
+        if (is_object($value))
+            $this->token = $value;
+        else
+        {
+            $obj = new Token($this->client);
+            $obj->fillWithData($value);
+            $this->token = $obj;
         }
         return $this;
     }
@@ -256,28 +370,6 @@ class Card
     }
     
     /**
-     * Get Country
-     * Country that issued the card
-     * @return string
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * Set Country
-     * Country that issued the card
-     * @param  string $value
-     * @return $this
-     */
-    public function setCountry($value)
-    {
-        $this->country = $value;
-        return $this;
-    }
-    
-    /**
      * Get Iin
      * First 6 digits of the card
      * @return string
@@ -366,6 +458,204 @@ class Card
     }
     
     /**
+     * Get CvcCheck
+     * Status of the CVC check initially made on the card when the CVC was provided
+     * @return string
+     */
+    public function getCvcCheck()
+    {
+        return $this->cvcCheck;
+    }
+
+    /**
+     * Set CvcCheck
+     * Status of the CVC check initially made on the card when the CVC was provided
+     * @param  string $value
+     * @return $this
+     */
+    public function setCvcCheck($value)
+    {
+        $this->cvcCheck = $value;
+        return $this;
+    }
+    
+    /**
+     * Get AvsCheck
+     * Status of the AVS check initially made on the card when the AVS was provided
+     * @return string
+     */
+    public function getAvsCheck()
+    {
+        return $this->avsCheck;
+    }
+
+    /**
+     * Set AvsCheck
+     * Status of the AVS check initially made on the card when the AVS was provided
+     * @param  string $value
+     * @return $this
+     */
+    public function setAvsCheck($value)
+    {
+        $this->avsCheck = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Name
+     * Name of the card holder
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set Name
+     * Name of the card holder
+     * @param  string $value
+     * @return $this
+     */
+    public function setName($value)
+    {
+        $this->name = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Address1
+     * Address line of the card holder
+     * @return string
+     */
+    public function getAddress1()
+    {
+        return $this->address1;
+    }
+
+    /**
+     * Set Address1
+     * Address line of the card holder
+     * @param  string $value
+     * @return $this
+     */
+    public function setAddress1($value)
+    {
+        $this->address1 = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Address2
+     * Secondary address line of the card holder
+     * @return string
+     */
+    public function getAddress2()
+    {
+        return $this->address2;
+    }
+
+    /**
+     * Set Address2
+     * Secondary address line of the card holder
+     * @param  string $value
+     * @return $this
+     */
+    public function setAddress2($value)
+    {
+        $this->address2 = $value;
+        return $this;
+    }
+    
+    /**
+     * Get City
+     * City of the card holder
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set City
+     * City of the card holder
+     * @param  string $value
+     * @return $this
+     */
+    public function setCity($value)
+    {
+        $this->city = $value;
+        return $this;
+    }
+    
+    /**
+     * Get State
+     * State of the card holder
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set State
+     * State of the card holder
+     * @param  string $value
+     * @return $this
+     */
+    public function setState($value)
+    {
+        $this->state = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Country
+     * Country code of the card holder (ISO-3166, 2 characters format)
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Set Country
+     * Country code of the card holder (ISO-3166, 2 characters format)
+     * @param  string $value
+     * @return $this
+     */
+    public function setCountry($value)
+    {
+        $this->country = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Zip
+     * ZIP code of the card holder
+     * @return string
+     */
+    public function getZip()
+    {
+        return $this->zip;
+    }
+
+    /**
+     * Set Zip
+     * ZIP code of the card holder
+     * @param  string $value
+     * @return $this
+     */
+    public function setZip($value)
+    {
+        $this->zip = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the card, in the form of a dictionary (key-value pair)
      * @return array
@@ -384,6 +674,28 @@ class Card
     public function setMetadata($value)
     {
         $this->metadata = $value;
+        return $this;
+    }
+    
+    /**
+     * Get ExpiresSoon
+     * Contains true if the card will expire soon, false otherwise
+     * @return bool
+     */
+    public function getExpiresSoon()
+    {
+        return $this->expiresSoon;
+    }
+
+    /**
+     * Set ExpiresSoon
+     * Contains true if the card will expire soon, false otherwise
+     * @param  bool $value
+     * @return $this
+     */
+    public function setExpiresSoon($value)
+    {
+        $this->expiresSoon = $value;
         return $this;
     }
     
@@ -445,6 +757,12 @@ class Card
         if(! empty($data['project']))
             $this->setProject($data['project']);
 
+        if(! empty($data['project_id']))
+            $this->setProjectId($data['project_id']);
+
+        if(! empty($data['token']))
+            $this->setToken($data['token']);
+
         if(! empty($data['scheme']))
             $this->setScheme($data['scheme']);
 
@@ -456,9 +774,6 @@ class Card
 
         if(! empty($data['brand']))
             $this->setBrand($data['brand']);
-
-        if(! empty($data['country']))
-            $this->setCountry($data['country']);
 
         if(! empty($data['iin']))
             $this->setIin($data['iin']);
@@ -472,8 +787,38 @@ class Card
         if(! empty($data['exp_year']))
             $this->setExpYear($data['exp_year']);
 
+        if(! empty($data['cvc_check']))
+            $this->setCvcCheck($data['cvc_check']);
+
+        if(! empty($data['avs_check']))
+            $this->setAvsCheck($data['avs_check']);
+
+        if(! empty($data['name']))
+            $this->setName($data['name']);
+
+        if(! empty($data['address1']))
+            $this->setAddress1($data['address1']);
+
+        if(! empty($data['address2']))
+            $this->setAddress2($data['address2']);
+
+        if(! empty($data['city']))
+            $this->setCity($data['city']);
+
+        if(! empty($data['state']))
+            $this->setState($data['state']);
+
+        if(! empty($data['country']))
+            $this->setCountry($data['country']);
+
+        if(! empty($data['zip']))
+            $this->setZip($data['zip']);
+
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
+
+        if(! empty($data['expires_soon']))
+            $this->setExpiresSoon($data['expires_soon']);
 
         if(! empty($data['sandbox']))
             $this->setSandbox($data['sandbox']);

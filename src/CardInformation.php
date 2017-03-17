@@ -61,8 +61,6 @@ class CardInformation
     {
         $this->client = $client;
 
-        
-
         $this->fillWithData($prefill);
     }
 

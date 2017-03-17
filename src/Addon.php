@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class Discount
+class Addon
 {
 
     /**
@@ -17,25 +17,25 @@ class Discount
     protected $client;
 
     /**
-     * ID of the discount
+     * ID of the addon
      * @var string
      */
     protected $id;
 
     /**
-     * Project to which the discount belongs
+     * Project to which the addon belongs
      * @var object
      */
     protected $project;
 
     /**
-     * ID of the project to which the discount belongs
+     * ID of the project to which the addon belongs
      * @var string
      */
     protected $projectId;
 
     /**
-     * Subscription to which the discount belongs
+     * Subscription to which the addon belongs
      * @var object
      */
     protected $subscription;
@@ -47,61 +47,61 @@ class Discount
     protected $subscriptionId;
 
     /**
-     * Coupon used to create the discount, if any
+     * Plan used to create the addon, if any
      * @var object
      */
-    protected $coupon;
+    protected $plan;
 
     /**
-     * ID of the coupon used to create the discount, if any
+     * ID of the plan used to create the addon, if any
      * @var string
      */
-    protected $couponId;
+    protected $planId;
 
     /**
-     * Name of the discount
+     * Type of the addon. Can be either metered or recurring
+     * @var string
+     */
+    protected $type;
+
+    /**
+     * Name of the addon
      * @var string
      */
     protected $name;
 
     /**
-     * Amount discounted
+     * Amount of the addon
      * @var decimal
      */
     protected $amount;
 
     /**
-     * Percentage discounted
+     * Quantity of the addon
      * @var integer
      */
-    protected $percent;
+    protected $quantity;
 
     /**
-     * Date at which the discount will expire
-     * @var string
-     */
-    protected $expiresAt;
-
-    /**
-     * Metadata related to the discount, in the form of a dictionary (key-value pair)
+     * Metadata related to the addon, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
     protected $metadata;
 
     /**
-     * Define whether or not the discount is in sandbox environment
+     * Define whether or not the addon is in sandbox environment
      * @var boolean
      */
     protected $sandbox;
 
     /**
-     * Date at which the discount was created
+     * Date at which the addon was created
      * @var string
      */
     protected $createdAt;
 
     /**
-     * Discount constructor
+     * Addon constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
      */
@@ -115,7 +115,7 @@ class Discount
     
     /**
      * Get Id
-     * ID of the discount
+     * ID of the addon
      * @return string
      */
     public function getId()
@@ -125,7 +125,7 @@ class Discount
 
     /**
      * Set Id
-     * ID of the discount
+     * ID of the addon
      * @param  string $value
      * @return $this
      */
@@ -137,7 +137,7 @@ class Discount
     
     /**
      * Get Project
-     * Project to which the discount belongs
+     * Project to which the addon belongs
      * @return object
      */
     public function getProject()
@@ -147,7 +147,7 @@ class Discount
 
     /**
      * Set Project
-     * Project to which the discount belongs
+     * Project to which the addon belongs
      * @param  object $value
      * @return $this
      */
@@ -166,7 +166,7 @@ class Discount
     
     /**
      * Get ProjectId
-     * ID of the project to which the discount belongs
+     * ID of the project to which the addon belongs
      * @return string
      */
     public function getProjectId()
@@ -176,7 +176,7 @@ class Discount
 
     /**
      * Set ProjectId
-     * ID of the project to which the discount belongs
+     * ID of the project to which the addon belongs
      * @param  string $value
      * @return $this
      */
@@ -188,7 +188,7 @@ class Discount
     
     /**
      * Get Subscription
-     * Subscription to which the discount belongs
+     * Subscription to which the addon belongs
      * @return object
      */
     public function getSubscription()
@@ -198,7 +198,7 @@ class Discount
 
     /**
      * Set Subscription
-     * Subscription to which the discount belongs
+     * Subscription to which the addon belongs
      * @param  object $value
      * @return $this
      */
@@ -238,59 +238,81 @@ class Discount
     }
     
     /**
-     * Get Coupon
-     * Coupon used to create the discount, if any
+     * Get Plan
+     * Plan used to create the addon, if any
      * @return object
      */
-    public function getCoupon()
+    public function getPlan()
     {
-        return $this->coupon;
+        return $this->plan;
     }
 
     /**
-     * Set Coupon
-     * Coupon used to create the discount, if any
+     * Set Plan
+     * Plan used to create the addon, if any
      * @param  object $value
      * @return $this
      */
-    public function setCoupon($value)
+    public function setPlan($value)
     {
         if (is_object($value))
-            $this->coupon = $value;
+            $this->plan = $value;
         else
         {
-            $obj = new Coupon($this->client);
+            $obj = new Plan($this->client);
             $obj->fillWithData($value);
-            $this->coupon = $obj;
+            $this->plan = $obj;
         }
         return $this;
     }
     
     /**
-     * Get CouponId
-     * ID of the coupon used to create the discount, if any
+     * Get PlanId
+     * ID of the plan used to create the addon, if any
      * @return string
      */
-    public function getCouponId()
+    public function getPlanId()
     {
-        return $this->couponId;
+        return $this->planId;
     }
 
     /**
-     * Set CouponId
-     * ID of the coupon used to create the discount, if any
+     * Set PlanId
+     * ID of the plan used to create the addon, if any
      * @param  string $value
      * @return $this
      */
-    public function setCouponId($value)
+    public function setPlanId($value)
     {
-        $this->couponId = $value;
+        $this->planId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Type
+     * Type of the addon. Can be either metered or recurring
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set Type
+     * Type of the addon. Can be either metered or recurring
+     * @param  string $value
+     * @return $this
+     */
+    public function setType($value)
+    {
+        $this->type = $value;
         return $this;
     }
     
     /**
      * Get Name
-     * Name of the discount
+     * Name of the addon
      * @return string
      */
     public function getName()
@@ -300,7 +322,7 @@ class Discount
 
     /**
      * Set Name
-     * Name of the discount
+     * Name of the addon
      * @param  string $value
      * @return $this
      */
@@ -312,7 +334,7 @@ class Discount
     
     /**
      * Get Amount
-     * Amount discounted
+     * Amount of the addon
      * @return string
      */
     public function getAmount()
@@ -322,7 +344,7 @@ class Discount
 
     /**
      * Set Amount
-     * Amount discounted
+     * Amount of the addon
      * @param  string $value
      * @return $this
      */
@@ -333,52 +355,30 @@ class Discount
     }
     
     /**
-     * Get Percent
-     * Percentage discounted
+     * Get Quantity
+     * Quantity of the addon
      * @return int
      */
-    public function getPercent()
+    public function getQuantity()
     {
-        return $this->percent;
+        return $this->quantity;
     }
 
     /**
-     * Set Percent
-     * Percentage discounted
+     * Set Quantity
+     * Quantity of the addon
      * @param  int $value
      * @return $this
      */
-    public function setPercent($value)
+    public function setQuantity($value)
     {
-        $this->percent = $value;
-        return $this;
-    }
-    
-    /**
-     * Get ExpiresAt
-     * Date at which the discount will expire
-     * @return string
-     */
-    public function getExpiresAt()
-    {
-        return $this->expiresAt;
-    }
-
-    /**
-     * Set ExpiresAt
-     * Date at which the discount will expire
-     * @param  string $value
-     * @return $this
-     */
-    public function setExpiresAt($value)
-    {
-        $this->expiresAt = $value;
+        $this->quantity = $value;
         return $this;
     }
     
     /**
      * Get Metadata
-     * Metadata related to the discount, in the form of a dictionary (key-value pair)
+     * Metadata related to the addon, in the form of a dictionary (key-value pair)
      * @return array
      */
     public function getMetadata()
@@ -388,7 +388,7 @@ class Discount
 
     /**
      * Set Metadata
-     * Metadata related to the discount, in the form of a dictionary (key-value pair)
+     * Metadata related to the addon, in the form of a dictionary (key-value pair)
      * @param  array $value
      * @return $this
      */
@@ -400,7 +400,7 @@ class Discount
     
     /**
      * Get Sandbox
-     * Define whether or not the discount is in sandbox environment
+     * Define whether or not the addon is in sandbox environment
      * @return bool
      */
     public function getSandbox()
@@ -410,7 +410,7 @@ class Discount
 
     /**
      * Set Sandbox
-     * Define whether or not the discount is in sandbox environment
+     * Define whether or not the addon is in sandbox environment
      * @param  bool $value
      * @return $this
      */
@@ -422,7 +422,7 @@ class Discount
     
     /**
      * Get CreatedAt
-     * Date at which the discount was created
+     * Date at which the addon was created
      * @return string
      */
     public function getCreatedAt()
@@ -432,7 +432,7 @@ class Discount
 
     /**
      * Set CreatedAt
-     * Date at which the discount was created
+     * Date at which the addon was created
      * @param  string $value
      * @return $this
      */
@@ -446,7 +446,7 @@ class Discount
     /**
      * Fills the current object with the new values pulled from the data
      * @param  array $data
-     * @return Discount
+     * @return Addon
      */
     public function fillWithData($data)
     {
@@ -465,11 +465,14 @@ class Discount
         if(! empty($data['subscription_id']))
             $this->setSubscriptionId($data['subscription_id']);
 
-        if(! empty($data['coupon']))
-            $this->setCoupon($data['coupon']);
+        if(! empty($data['plan']))
+            $this->setPlan($data['plan']);
 
-        if(! empty($data['coupon_id']))
-            $this->setCouponId($data['coupon_id']);
+        if(! empty($data['plan_id']))
+            $this->setPlanId($data['plan_id']);
+
+        if(! empty($data['type']))
+            $this->setType($data['type']);
 
         if(! empty($data['name']))
             $this->setName($data['name']);
@@ -477,11 +480,8 @@ class Discount
         if(! empty($data['amount']))
             $this->setAmount($data['amount']);
 
-        if(! empty($data['percent']))
-            $this->setPercent($data['percent']);
-
-        if(! empty($data['expires_at']))
-            $this->setExpiresAt($data['expires_at']);
+        if(! empty($data['quantity']))
+            $this->setQuantity($data['quantity']);
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
@@ -497,7 +497,7 @@ class Discount
 
     
     /**
-     * Apply a new discount to the given subscription ID.
+     * Apply a new addon to the given subscription ID.
      * @param string $subscriptionId
      * @param array $options
      * @return $this
@@ -507,41 +507,45 @@ class Discount
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts";
+        $path    = "/subscriptions/" . urlencode($subscriptionId) . "/addons";
 
         $data = array(
-            "coupon_id" => $this->getCouponId(), 
+            "plan_id" => $this->getPlanId(), 
+            "type" => $this->getType(), 
             "name" => $this->getName(), 
             "amount" => $this->getAmount(), 
-            "expires_at" => $this->getExpiresAt(), 
-            "metadata" => $this->getMetadata()
+            "quantity" => $this->getQuantity(), 
+            "metadata" => $this->getMetadata(), 
+            "prorate" => (!empty($options["prorate"])) ? $options["prorate"] : null, 
+            "proration_date" => (!empty($options["proration_date"])) ? $options["proration_date"] : null, 
+            "preview" => (!empty($options["preview"])) ? $options["preview"] : null
         );
 
         $response = $request->post($path, $data, $options);
         $returnValues = array();
 
         
-        // Handling for field discount
+        // Handling for field addon
         $body = $response->getBody();
-        $body = $body['discount'];
+        $body = $body['addon'];
         $returnValues['apply'] = $this->fillWithData($body);
         
         return array_values($returnValues)[0];
     }
     
     /**
-     * Find a subscription's discount by its ID.
+     * Find a subscription's addon by its ID.
      * @param string $subscriptionId
-     * @param string $discountId
+     * @param string $addonId
      * @param array $options
      * @return $this
      */
-    public function find($subscriptionId, $discountId, $options = array())
+    public function find($subscriptionId, $addonId, $options = array())
     {
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts/" . urlencode($discountId) . "";
+        $path    = "/subscriptions/" . urlencode($subscriptionId) . "/addons/" . urlencode($addonId) . "";
 
         $data = array(
 
@@ -551,30 +555,69 @@ class Discount
         $returnValues = array();
 
         
-        // Handling for field discount
+        // Handling for field addon
         $body = $response->getBody();
-        $body = $body['discount'];
+        $body = $body['addon'];
         $returnValues['find'] = $this->fillWithData($body);
         
         return array_values($returnValues)[0];
     }
     
     /**
-     * Remove a discount applied to a subscription.
-     * @param string $subscriptionId
-     * @param string $discountId
+     * Save the updated addon attributes.
      * @param array $options
-     * @return bool
+     * @return $this
      */
-    public function remove($subscriptionId, $discountId, $options = array())
+    public function save($options = array())
     {
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts/" . urlencode($discountId) . "";
+        $path    = "/subscriptions/" . urlencode($this->getSubscriptionId()) . "/addons/" . urlencode($this->getId()) . "";
 
         $data = array(
+            "plan_id" => $this->getPlanId(), 
+            "type" => $this->getType(), 
+            "name" => $this->getName(), 
+            "amount" => $this->getAmount(), 
+            "quantity" => $this->getQuantity(), 
+            "metadata" => $this->getMetadata(), 
+            "prorate" => (!empty($options["prorate"])) ? $options["prorate"] : null, 
+            "proration_date" => (!empty($options["proration_date"])) ? $options["proration_date"] : null, 
+            "preview" => (!empty($options["preview"])) ? $options["preview"] : null, 
+            "increment_quantity_by" => (!empty($options["increment_quantity_by"])) ? $options["increment_quantity_by"] : null
+        );
 
+        $response = $request->put($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field addon
+        $body = $response->getBody();
+        $body = $body['addon'];
+        $returnValues['save'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Remove an addon applied to a subscription.
+     * @param string $subscriptionId
+     * @param string $addonId
+     * @param array $options
+     * @return bool
+     */
+    public function remove($subscriptionId, $addonId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/subscriptions/" . urlencode($subscriptionId) . "/addons/" . urlencode($addonId) . "";
+
+        $data = array(
+            "prorate" => (!empty($options["prorate"])) ? $options["prorate"] : null, 
+            "proration_date" => (!empty($options["proration_date"])) ? $options["proration_date"] : null, 
+            "preview" => (!empty($options["preview"])) ? $options["preview"] : null
         );
 
         $response = $request->delete($path, $data, $options);

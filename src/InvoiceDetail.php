@@ -17,6 +17,12 @@ class InvoiceDetail
     protected $client;
 
     /**
+     * Name of the invoice detail
+     * @var string
+     */
+    protected $name;
+
+    /**
      * Type of the invoice detail. Can be a string containing anything, up to 30 characters
      * @var string
      */
@@ -24,9 +30,15 @@ class InvoiceDetail
 
     /**
      * Amount represented by the invoice detail
-     * @var string
+     * @var decimal
      */
     protected $amount;
+
+    /**
+     * Quantity of items represented by the invoice detail
+     * @var integer
+     */
+    protected $quantity;
 
     /**
      * Metadata related to the invoice detail, in the form of a dictionary (key-value pair)
@@ -43,12 +55,31 @@ class InvoiceDetail
     {
         $this->client = $client;
 
-        $this->setMetadata(null);
-        
-
         $this->fillWithData($prefill);
     }
 
+    
+    /**
+     * Get Name
+     * Name of the invoice detail
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set Name
+     * Name of the invoice detail
+     * @param  string $value
+     * @return $this
+     */
+    public function setName($value)
+    {
+        $this->name = $value;
+        return $this;
+    }
     
     /**
      * Get Type
@@ -95,6 +126,28 @@ class InvoiceDetail
     }
     
     /**
+     * Get Quantity
+     * Quantity of items represented by the invoice detail
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * Set Quantity
+     * Quantity of items represented by the invoice detail
+     * @param  int $value
+     * @return $this
+     */
+    public function setQuantity($value)
+    {
+        $this->quantity = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the invoice detail, in the form of a dictionary (key-value pair)
      * @return array
@@ -124,11 +177,17 @@ class InvoiceDetail
      */
     public function fillWithData($data)
     {
+        if(! empty($data['name']))
+            $this->setName($data['name']);
+
         if(! empty($data['type']))
             $this->setType($data['type']);
 
         if(! empty($data['amount']))
             $this->setAmount($data['amount']);
+
+        if(! empty($data['quantity']))
+            $this->setQuantity($data['quantity']);
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);

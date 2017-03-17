@@ -29,7 +29,7 @@ class Request
     {
         $request = curl_init(); 
         $headers = array(
-            'API-Version: 1.3.0.0',
+            'API-Version: 1.4.0.0',
             'Content-Type: application/json'
         );
         if (! empty($options['idempotency_key']))
@@ -65,8 +65,6 @@ class Request
             $data['filter'] = $options['filter'];
         if (! empty($options['limit']))
             $data['limit'] = $options['limit'];
-        if (! empty($options['page']))
-            $data['page'] = $options['page'];
         if (! empty($options['end_before']))
             $data['end_before'] = $options['end_before'];
         if (! empty($options['start_after']))

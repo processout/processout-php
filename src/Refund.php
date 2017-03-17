@@ -29,6 +29,18 @@ class Refund
     protected $transaction;
 
     /**
+     * ID of the transaction to which the refund is applied
+     * @var string
+     */
+    protected $transactionId;
+
+    /**
+     * Amount to be refunded. Must not be greater than the amount still available on the transaction
+     * @var decimal
+     */
+    protected $amount;
+
+    /**
      * Reason for the refund. Either customer_request, duplicate or fraud
      * @var string
      */
@@ -41,10 +53,10 @@ class Refund
     protected $information;
 
     /**
-     * Amount to be refunded. Must not be greater than the amount still available on the transaction
-     * @var string
+     * True if the refund was asynchronously failed, false otherwise
+     * @var boolean
      */
-    protected $amount;
+    protected $hasFailed;
 
     /**
      * Metadata related to the refund, in the form of a dictionary (key-value pair)
@@ -72,9 +84,6 @@ class Refund
     public function __construct(ProcessOut $client, $prefill = array())
     {
         $this->client = $client;
-
-        $this->setMetadata(null);
-        
 
         $this->fillWithData($prefill);
     }
@@ -132,6 +141,50 @@ class Refund
     }
     
     /**
+     * Get TransactionId
+     * ID of the transaction to which the refund is applied
+     * @return string
+     */
+    public function getTransactionId()
+    {
+        return $this->transactionId;
+    }
+
+    /**
+     * Set TransactionId
+     * ID of the transaction to which the refund is applied
+     * @param  string $value
+     * @return $this
+     */
+    public function setTransactionId($value)
+    {
+        $this->transactionId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Amount
+     * Amount to be refunded. Must not be greater than the amount still available on the transaction
+     * @return string
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * Set Amount
+     * Amount to be refunded. Must not be greater than the amount still available on the transaction
+     * @param  string $value
+     * @return $this
+     */
+    public function setAmount($value)
+    {
+        $this->amount = $value;
+        return $this;
+    }
+    
+    /**
      * Get Reason
      * Reason for the refund. Either customer_request, duplicate or fraud
      * @return string
@@ -176,24 +229,24 @@ class Refund
     }
     
     /**
-     * Get Amount
-     * Amount to be refunded. Must not be greater than the amount still available on the transaction
-     * @return string
+     * Get HasFailed
+     * True if the refund was asynchronously failed, false otherwise
+     * @return bool
      */
-    public function getAmount()
+    public function getHasFailed()
     {
-        return $this->amount;
+        return $this->hasFailed;
     }
 
     /**
-     * Set Amount
-     * Amount to be refunded. Must not be greater than the amount still available on the transaction
-     * @param  string $value
+     * Set HasFailed
+     * True if the refund was asynchronously failed, false otherwise
+     * @param  bool $value
      * @return $this
      */
-    public function setAmount($value)
+    public function setHasFailed($value)
     {
-        $this->amount = $value;
+        $this->hasFailed = $value;
         return $this;
     }
     
@@ -277,14 +330,20 @@ class Refund
         if(! empty($data['transaction']))
             $this->setTransaction($data['transaction']);
 
+        if(! empty($data['transaction_id']))
+            $this->setTransactionId($data['transaction_id']);
+
+        if(! empty($data['amount']))
+            $this->setAmount($data['amount']);
+
         if(! empty($data['reason']))
             $this->setReason($data['reason']);
 
         if(! empty($data['information']))
             $this->setInformation($data['information']);
 
-        if(! empty($data['amount']))
-            $this->setAmount($data['amount']);
+        if(! empty($data['has_failed']))
+            $this->setHasFailed($data['has_failed']);
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);

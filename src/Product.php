@@ -29,6 +29,12 @@ class Product
     protected $project;
 
     /**
+     * ID of the project to which the product belongs
+     * @var string
+     */
+    protected $projectId;
+
+    /**
      * URL to which you may redirect your customer to proceed with the payment
      * @var string
      */
@@ -42,7 +48,7 @@ class Product
 
     /**
      * Amount of the product
-     * @var string
+     * @var decimal
      */
     protected $amount;
 
@@ -103,9 +109,6 @@ class Product
     {
         $this->client = $client;
 
-        $this->setMetadata(null);
-        
-
         $this->fillWithData($prefill);
     }
 
@@ -158,6 +161,28 @@ class Product
             $obj->fillWithData($value);
             $this->project = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get ProjectId
+     * ID of the project to which the product belongs
+     * @return string
+     */
+    public function getProjectId()
+    {
+        return $this->projectId;
+    }
+
+    /**
+     * Set ProjectId
+     * ID of the project to which the product belongs
+     * @param  string $value
+     * @return $this
+     */
+    public function setProjectId($value)
+    {
+        $this->projectId = $value;
         return $this;
     }
     
@@ -416,6 +441,9 @@ class Product
 
         if(! empty($data['project']))
             $this->setProject($data['project']);
+
+        if(! empty($data['project_id']))
+            $this->setProjectId($data['project_id']);
 
         if(! empty($data['url']))
             $this->setUrl($data['url']);

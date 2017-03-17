@@ -29,10 +29,34 @@ class Transaction
     protected $project;
 
     /**
-     * Customer that was linked to this transaction
+     * ID of the project to which the transaction belongs
+     * @var string
+     */
+    protected $projectId;
+
+    /**
+     * Invoice used to generate this transaction, if any
+     * @var object
+     */
+    protected $invoice;
+
+    /**
+     * ID of the invoice used to generate this transaction, if any
+     * @var string
+     */
+    protected $invoiceId;
+
+    /**
+     * Customer that was linked to this transaction, if any
      * @var object
      */
     protected $customer;
+
+    /**
+     * ID of the customer that was linked to the transaction, if any
+     * @var string
+     */
+    protected $customerId;
 
     /**
      * Subscription to which this transaction belongs
@@ -41,16 +65,46 @@ class Transaction
     protected $subscription;
 
     /**
-     * Token that was used to capture the payment of this transaction, if any
+     * ID of the subscription to which the transaction belongs, if any
+     * @var string
+     */
+    protected $subscriptionId;
+
+    /**
+     * Token that was used to capture the payment of the transaction, if any
      * @var object
      */
     protected $token;
 
     /**
-     * Card that was used to capture the payment of this transaction, if any
+     * ID of the token was used to capture the payment of the transaction, if any
+     * @var string
+     */
+    protected $tokenId;
+
+    /**
+     * Card that was used to capture the payment of the transaction, if any
      * @var object
      */
     protected $card;
+
+    /**
+     * ID of the card that was used to capture the payment of the transaction, if any
+     * @var string
+     */
+    protected $cardId;
+
+    /**
+     * Operations linked to the transaction
+     * @var list
+     */
+    protected $operations;
+
+    /**
+     * List of the transaction refunds
+     * @var list
+     */
+    protected $refunds;
 
     /**
      * Name of the transaction
@@ -60,13 +114,13 @@ class Transaction
 
     /**
      * Amount that was successfully authorized on the transaction
-     * @var string
+     * @var decimal
      */
     protected $authorizedAmount;
 
     /**
      * Amount that was successfully captured on the transaction
-     * @var string
+     * @var decimal
      */
     protected $capturedAmount;
 
@@ -96,19 +150,19 @@ class Transaction
 
     /**
      * ProcessOut fee applied on the transaction
-     * @var string
+     * @var decimal
      */
     protected $processoutFee;
 
     /**
      * Gateway fee estimated before processing the payment
-     * @var string
+     * @var decimal
      */
     protected $estimatedFee;
 
     /**
      * Fee taken by the payment gateway to process the payment
-     * @var string
+     * @var decimal
      */
     protected $gatewayFee;
 
@@ -138,9 +192,6 @@ class Transaction
     public function __construct(ProcessOut $client, $prefill = array())
     {
         $this->client = $client;
-
-        $this->setMetadata(null);
-        
 
         $this->fillWithData($prefill);
     }
@@ -198,8 +249,81 @@ class Transaction
     }
     
     /**
+     * Get ProjectId
+     * ID of the project to which the transaction belongs
+     * @return string
+     */
+    public function getProjectId()
+    {
+        return $this->projectId;
+    }
+
+    /**
+     * Set ProjectId
+     * ID of the project to which the transaction belongs
+     * @param  string $value
+     * @return $this
+     */
+    public function setProjectId($value)
+    {
+        $this->projectId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Invoice
+     * Invoice used to generate this transaction, if any
+     * @return object
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+
+    /**
+     * Set Invoice
+     * Invoice used to generate this transaction, if any
+     * @param  object $value
+     * @return $this
+     */
+    public function setInvoice($value)
+    {
+        if (is_object($value))
+            $this->invoice = $value;
+        else
+        {
+            $obj = new Customer($this->client);
+            $obj->fillWithData($value);
+            $this->invoice = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get InvoiceId
+     * ID of the invoice used to generate this transaction, if any
+     * @return string
+     */
+    public function getInvoiceId()
+    {
+        return $this->invoiceId;
+    }
+
+    /**
+     * Set InvoiceId
+     * ID of the invoice used to generate this transaction, if any
+     * @param  string $value
+     * @return $this
+     */
+    public function setInvoiceId($value)
+    {
+        $this->invoiceId = $value;
+        return $this;
+    }
+    
+    /**
      * Get Customer
-     * Customer that was linked to this transaction
+     * Customer that was linked to this transaction, if any
      * @return object
      */
     public function getCustomer()
@@ -209,7 +333,7 @@ class Transaction
 
     /**
      * Set Customer
-     * Customer that was linked to this transaction
+     * Customer that was linked to this transaction, if any
      * @param  object $value
      * @return $this
      */
@@ -223,6 +347,28 @@ class Transaction
             $obj->fillWithData($value);
             $this->customer = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get CustomerId
+     * ID of the customer that was linked to the transaction, if any
+     * @return string
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * Set CustomerId
+     * ID of the customer that was linked to the transaction, if any
+     * @param  string $value
+     * @return $this
+     */
+    public function setCustomerId($value)
+    {
+        $this->customerId = $value;
         return $this;
     }
     
@@ -256,8 +402,30 @@ class Transaction
     }
     
     /**
+     * Get SubscriptionId
+     * ID of the subscription to which the transaction belongs, if any
+     * @return string
+     */
+    public function getSubscriptionId()
+    {
+        return $this->subscriptionId;
+    }
+
+    /**
+     * Set SubscriptionId
+     * ID of the subscription to which the transaction belongs, if any
+     * @param  string $value
+     * @return $this
+     */
+    public function setSubscriptionId($value)
+    {
+        $this->subscriptionId = $value;
+        return $this;
+    }
+    
+    /**
      * Get Token
-     * Token that was used to capture the payment of this transaction, if any
+     * Token that was used to capture the payment of the transaction, if any
      * @return object
      */
     public function getToken()
@@ -267,7 +435,7 @@ class Transaction
 
     /**
      * Set Token
-     * Token that was used to capture the payment of this transaction, if any
+     * Token that was used to capture the payment of the transaction, if any
      * @param  object $value
      * @return $this
      */
@@ -285,8 +453,30 @@ class Transaction
     }
     
     /**
+     * Get TokenId
+     * ID of the token was used to capture the payment of the transaction, if any
+     * @return string
+     */
+    public function getTokenId()
+    {
+        return $this->tokenId;
+    }
+
+    /**
+     * Set TokenId
+     * ID of the token was used to capture the payment of the transaction, if any
+     * @param  string $value
+     * @return $this
+     */
+    public function setTokenId($value)
+    {
+        $this->tokenId = $value;
+        return $this;
+    }
+    
+    /**
      * Get Card
-     * Card that was used to capture the payment of this transaction, if any
+     * Card that was used to capture the payment of the transaction, if any
      * @return object
      */
     public function getCard()
@@ -296,7 +486,7 @@ class Transaction
 
     /**
      * Set Card
-     * Card that was used to capture the payment of this transaction, if any
+     * Card that was used to capture the payment of the transaction, if any
      * @param  object $value
      * @return $this
      */
@@ -309,6 +499,96 @@ class Transaction
             $obj = new Card($this->client);
             $obj->fillWithData($value);
             $this->card = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get CardId
+     * ID of the card that was used to capture the payment of the transaction, if any
+     * @return string
+     */
+    public function getCardId()
+    {
+        return $this->cardId;
+    }
+
+    /**
+     * Set CardId
+     * ID of the card that was used to capture the payment of the transaction, if any
+     * @param  string $value
+     * @return $this
+     */
+    public function setCardId($value)
+    {
+        $this->cardId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Operations
+     * Operations linked to the transaction
+     * @return array
+     */
+    public function getOperations()
+    {
+        return $this->operations;
+    }
+
+    /**
+     * Set Operations
+     * Operations linked to the transaction
+     * @param  array $value
+     * @return $this
+     */
+    public function setOperations($value)
+    {
+        if (count($value) > 0 && is_object($value[0]))
+            $this->operations = $value;
+        else
+        {
+            $a = array();
+            foreach ($value as $v)
+            {
+                $obj = new TransactionOperation($this->client);
+                $obj->fillWithData($v);
+                $a[] = $obj;
+            }
+            $this->operations = $a;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get Refunds
+     * List of the transaction refunds
+     * @return array
+     */
+    public function getRefunds()
+    {
+        return $this->refunds;
+    }
+
+    /**
+     * Set Refunds
+     * List of the transaction refunds
+     * @param  array $value
+     * @return $this
+     */
+    public function setRefunds($value)
+    {
+        if (count($value) > 0 && is_object($value[0]))
+            $this->refunds = $value;
+        else
+        {
+            $a = array();
+            foreach ($value as $v)
+            {
+                $obj = new Refund($this->client);
+                $obj->fillWithData($v);
+                $a[] = $obj;
+            }
+            $this->refunds = $a;
         }
         return $this;
     }
@@ -613,17 +893,44 @@ class Transaction
         if(! empty($data['project']))
             $this->setProject($data['project']);
 
+        if(! empty($data['project_id']))
+            $this->setProjectId($data['project_id']);
+
+        if(! empty($data['invoice']))
+            $this->setInvoice($data['invoice']);
+
+        if(! empty($data['invoice_id']))
+            $this->setInvoiceId($data['invoice_id']);
+
         if(! empty($data['customer']))
             $this->setCustomer($data['customer']);
+
+        if(! empty($data['customer_id']))
+            $this->setCustomerId($data['customer_id']);
 
         if(! empty($data['subscription']))
             $this->setSubscription($data['subscription']);
 
+        if(! empty($data['subscription_id']))
+            $this->setSubscriptionId($data['subscription_id']);
+
         if(! empty($data['token']))
             $this->setToken($data['token']);
 
+        if(! empty($data['token_id']))
+            $this->setTokenId($data['token_id']);
+
         if(! empty($data['card']))
             $this->setCard($data['card']);
+
+        if(! empty($data['card_id']))
+            $this->setCardId($data['card_id']);
+
+        if(! empty($data['operations']))
+            $this->setOperations($data['operations']);
+
+        if(! empty($data['refunds']))
+            $this->setRefunds($data['refunds']);
 
         if(! empty($data['name']))
             $this->setName($data['name']);

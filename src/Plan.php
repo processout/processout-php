@@ -29,6 +29,12 @@ class Plan
     protected $project;
 
     /**
+     * ID of the project to which the plan belongs
+     * @var string
+     */
+    protected $projectId;
+
+    /**
      * URL to which you may redirect your customer to activate the subscription plan
      * @var string
      */
@@ -42,7 +48,7 @@ class Plan
 
     /**
      * Amount of the plan
-     * @var string
+     * @var decimal
      */
     protected $amount;
 
@@ -71,13 +77,13 @@ class Plan
     protected $trialPeriod;
 
     /**
-     * URL where the customer will be redirected when he activates the subscription created using this plan
+     * URL where the customer will be redirected when activating the subscription created using this plan
      * @var string
      */
     protected $returnUrl;
 
     /**
-     * URL where the customer will be redirected when he cancelling the subscription created using this plan
+     * URL where the customer will be redirected when cancelling the subscription created using this plan
      * @var string
      */
     protected $cancelUrl;
@@ -102,9 +108,6 @@ class Plan
     public function __construct(ProcessOut $client, $prefill = array())
     {
         $this->client = $client;
-
-        $this->setMetadata(null);
-        
 
         $this->fillWithData($prefill);
     }
@@ -158,6 +161,28 @@ class Plan
             $obj->fillWithData($value);
             $this->project = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get ProjectId
+     * ID of the project to which the plan belongs
+     * @return string
+     */
+    public function getProjectId()
+    {
+        return $this->projectId;
+    }
+
+    /**
+     * Set ProjectId
+     * ID of the project to which the plan belongs
+     * @param  string $value
+     * @return $this
+     */
+    public function setProjectId($value)
+    {
+        $this->projectId = $value;
         return $this;
     }
     
@@ -317,7 +342,7 @@ class Plan
     
     /**
      * Get ReturnUrl
-     * URL where the customer will be redirected when he activates the subscription created using this plan
+     * URL where the customer will be redirected when activating the subscription created using this plan
      * @return string
      */
     public function getReturnUrl()
@@ -327,7 +352,7 @@ class Plan
 
     /**
      * Set ReturnUrl
-     * URL where the customer will be redirected when he activates the subscription created using this plan
+     * URL where the customer will be redirected when activating the subscription created using this plan
      * @param  string $value
      * @return $this
      */
@@ -339,7 +364,7 @@ class Plan
     
     /**
      * Get CancelUrl
-     * URL where the customer will be redirected when he cancelling the subscription created using this plan
+     * URL where the customer will be redirected when cancelling the subscription created using this plan
      * @return string
      */
     public function getCancelUrl()
@@ -349,7 +374,7 @@ class Plan
 
     /**
      * Set CancelUrl
-     * URL where the customer will be redirected when he cancelling the subscription created using this plan
+     * URL where the customer will be redirected when cancelling the subscription created using this plan
      * @param  string $value
      * @return $this
      */
@@ -416,6 +441,9 @@ class Plan
 
         if(! empty($data['project']))
             $this->setProject($data['project']);
+
+        if(! empty($data['project_id']))
+            $this->setProjectId($data['project_id']);
 
         if(! empty($data['url']))
             $this->setUrl($data['url']);
