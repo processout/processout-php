@@ -32,10 +32,10 @@ class Request
             'API-Version: 1.4.0.0',
             'Content-Type: application/json'
         );
-        if (! empty($options['idempotency_key']))
-            $headers[] = 'Idempotency-Key: ' . $options['idempotency_key'];
-        if (! empty($options['disable_logging']))
-            $headers[] = 'Disable-Logging' . $options['disable_logging'] ? 'true' : '';
+        if (! empty($options['idempotencyKey']))
+            $headers[] = 'Idempotency-Key: ' . $options['idempotencyKey'];
+        if (! empty($options['disableLogging']))
+            $headers[] = 'Disable-Logging' . $options['disableLogging'] ? 'true' : '';
         if ($len != null)
             $headers[] = 'Content-Length' . ((string) $len);
         
@@ -65,10 +65,10 @@ class Request
             $data['filter'] = $options['filter'];
         if (! empty($options['limit']))
             $data['limit'] = $options['limit'];
-        if (! empty($options['end_before']))
-            $data['end_before'] = $options['end_before'];
-        if (! empty($options['start_after']))
-            $data['start_after'] = $options['start_after'];
+        if (! empty($options['endBefore']))
+            $data['end_before'] = $options['endBefore'];
+        if (! empty($options['startAfter']))
+            $data['start_after'] = $options['startAfter'];
 
         return $data;
     }
