@@ -497,17 +497,51 @@ class Addon
 
     
     /**
-     * Apply a new addon to the given subscription ID.
+     * Get the addons applied to the subscription.
      * @param string $subscriptionId
      * @param array $options
-     * @return $this
+     * @return array
      */
-    public function apply($subscriptionId, $options = array())
+    public function fetchSubscriptionAddons($subscriptionId, $options = array())
     {
         $this->fillWithData($options);
 
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($subscriptionId) . "/addons";
+
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field addons
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['addons'] as $v)
+        {
+            $tmp = new Addon($this->client);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+        $returnValues['Addons'] = $a;
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Create a new addon to the given subscription ID.
+     * @param array $options
+     * @return $this
+     */
+    public function create($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/subscriptions/" . urlencode($this->getSubscriptionId()) . "/addons";
 
         $data = array(
             "plan_id" => $this->getPlanId(), 
@@ -528,7 +562,7 @@ class Addon
         // Handling for field addon
         $body = $response->getBody();
         $body = $body['addon'];
-        $returnValues['apply'] = $this->fillWithData($body);
+        $returnValues['create'] = $this->fillWithData($body);
         
         return array_values($returnValues)[0];
     }
@@ -601,18 +635,16 @@ class Addon
     }
     
     /**
-     * Remove an addon applied to a subscription.
-     * @param string $subscriptionId
-     * @param string $addonId
+     * Delete an addon applied to a subscription.
      * @param array $options
      * @return bool
      */
-    public function remove($subscriptionId, $addonId, $options = array())
+    public function delete($options = array())
     {
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/subscriptions/" . urlencode($subscriptionId) . "/addons/" . urlencode($addonId) . "";
+        $path    = "/subscriptions/" . urlencode($this->getSubscriptionId()) . "/addons/" . urlencode($this->getId()) . "";
 
         $data = array(
             "prorate" => (!empty($options["prorate"])) ? $options["prorate"] : null, 

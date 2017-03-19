@@ -559,11 +559,10 @@ class AuthorizationRequest
     
     /**
      * Create a new authorization request for the given customer ID.
-     * @param string $customerId
      * @param array $options
      * @return $this
      */
-    public function create($customerId, $options = array())
+    public function create($options = array())
     {
         $this->fillWithData($options);
 
@@ -571,11 +570,11 @@ class AuthorizationRequest
         $path    = "/authorization-requests";
 
         $data = array(
+            "customer_id" => $this->getCustomerId(), 
             "name" => $this->getName(), 
             "currency" => $this->getCurrency(), 
             "return_url" => $this->getReturnUrl(), 
-            "cancel_url" => $this->getCancelUrl(), 
-            "customer_id" => $customerId
+            "cancel_url" => $this->getCancelUrl()
         );
 
         $response = $request->post($path, $data, $options);

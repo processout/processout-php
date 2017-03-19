@@ -1256,12 +1256,12 @@ class Subscription
     }
     
     /**
-     * Remove an addon applied to a subscription.
+     * Delete an addon applied to a subscription.
      * @param string $addonId
      * @param array $options
      * @return bool
      */
-    public function removeAddon($addonId, $options = array())
+    public function deleteAddon($addonId, $options = array())
     {
         $this->fillWithData($options);
 
@@ -1378,12 +1378,12 @@ class Subscription
     }
     
     /**
-     * Remove a discount applied to a subscription.
+     * Delete a discount applied to a subscription.
      * @param string $discountId
      * @param array $options
      * @return bool
      */
-    public function removeDiscount($discountId, $options = array())
+    public function deleteDiscount($discountId, $options = array())
     {
         $this->fillWithData($options);
 
@@ -1472,11 +1472,10 @@ class Subscription
     
     /**
      * Create a new subscription for the given customer.
-     * @param string $customerId
      * @param array $options
      * @return $this
      */
-    public function create($customerId, $options = array())
+    public function create($options = array())
     {
         $this->fillWithData($options);
 
@@ -1492,11 +1491,11 @@ class Subscription
             "metadata" => $this->getMetadata(), 
             "interval" => $this->getInterval(), 
             "trial_end_at" => $this->getTrialEndAt(), 
+            "customer_id" => $this->getCustomerId(), 
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl(), 
             "source" => (!empty($options["source"])) ? $options["source"] : null, 
-            "coupon_id" => (!empty($options["coupon_id"])) ? $options["coupon_id"] : null, 
-            "customer_id" => $customerId
+            "coupon_id" => (!empty($options["coupon_id"])) ? $options["coupon_id"] : null
         );
 
         $response = $request->post($path, $data, $options);
@@ -1580,11 +1579,10 @@ class Subscription
     
     /**
      * Cancel a subscription. The reason may be provided as well.
-     * @param string $cancellationReason
      * @param array $options
      * @return $this
      */
-    public function cancel($cancellationReason, $options = array())
+    public function cancel($options = array())
     {
         $this->fillWithData($options);
 
@@ -1593,8 +1591,8 @@ class Subscription
 
         $data = array(
             "cancel_at" => $this->getCancelAt(), 
-            "cancel_at_end" => (!empty($options["cancel_at_end"])) ? $options["cancel_at_end"] : null, 
-            "cancellation_reason" => $cancellationReason
+            "cancellation_reason" => $this->getCancellationReason(), 
+            "cancel_at_end" => (!empty($options["cancel_at_end"])) ? $options["cancel_at_end"] : null
         );
 
         $response = $request->delete($path, $data, $options);

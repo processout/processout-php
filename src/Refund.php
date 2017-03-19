@@ -359,6 +359,41 @@ class Refund
 
     
     /**
+     * Get the transaction's refunds.
+     * @param string $transactionId
+     * @param array $options
+     * @return array
+     */
+    public function fetchTransactionRefunds($transactionId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/transactions/" . urlencode($transactionId) . "/refunds";
+
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field refunds
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['refunds'] as $v)
+        {
+            $tmp = new Refund($this->client);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+        $returnValues['Refunds'] = $a;
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
      * Find a transaction's refund by its ID.
      * @param string $transactionId
      * @param string $refundId
@@ -389,17 +424,16 @@ class Refund
     }
     
     /**
-     * Apply a refund to a transaction.
-     * @param string $transactionId
+     * Create a refund for a transaction.
      * @param array $options
      * @return bool
      */
-    public function apply($transactionId, $options = array())
+    public function create($options = array())
     {
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/transactions/" . urlencode($transactionId) . "/refunds";
+        $path    = "/transactions/" . urlencode($this->getTransactionId()) . "/refunds";
 
         $data = array(
             "amount" => $this->getAmount(), 

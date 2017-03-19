@@ -435,6 +435,41 @@ class Token
 
     
     /**
+     * Get the customer's tokens.
+     * @param string $customerId
+     * @param array $options
+     * @return array
+     */
+    public function fetchCustomerTokens($customerId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/customers/" . urlencode($customerId) . "/tokens";
+
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field tokens
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['tokens'] as $v)
+        {
+            $tmp = new Token($this->client);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+        $returnValues['Tokens'] = $a;
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
      * Find a customer's token by its ID.
      * @param string $customerId
      * @param string $tokenId
@@ -466,23 +501,22 @@ class Token
     
     /**
      * Create a new token for the given customer ID.
-     * @param string $customerId
-     * @param string $source
      * @param array $options
      * @return $this
      */
-    public function create($customerId, $source, $options = array())
+    public function create($options = array())
     {
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/customers/" . urlencode($customerId) . "/tokens";
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens";
 
         $data = array(
             "metadata" => $this->getMetadata(), 
+            "source" => (!empty($options["source"])) ? $options["source"] : null, 
             "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
             "target" => (!empty($options["target"])) ? $options["target"] : null, 
-            "source" => $source
+            "set_default" => (!empty($options["set_default"])) ? $options["set_default"] : null
         );
 
         $response = $request->post($path, $data, $options);
@@ -493,40 +527,6 @@ class Token
         $body = $response->getBody();
         $body = $body['token'];
         $returnValues['create'] = $this->fillWithData($body);
-        
-        return array_values($returnValues)[0];
-    }
-    
-    /**
-     * Create a new token for the given customer ID from an authorization request
-     * @param string $customerId
-     * @param string $source
-     * @param string $target
-     * @param array $options
-     * @return $this
-     */
-    public function createFromRequest($customerId, $source, $target, $options = array())
-    {
-        $this->fillWithData($options);
-
-        $request = new Request($this->client);
-        $path    = "/customers/" . urlencode($customerId) . "/tokens";
-
-        $data = array(
-            "metadata" => $this->getMetadata(), 
-            "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
-            "source" => $source, 
-            "target" => $target
-        );
-
-        $response = $request->post($path, $data, $options);
-        $returnValues = array();
-
-        
-        // Handling for field token
-        $body = $response->getBody();
-        $body = $body['token'];
-        $returnValues['createFromRequest'] = $this->fillWithData($body);
         
         return array_values($returnValues)[0];
     }

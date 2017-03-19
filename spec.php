@@ -36,11 +36,12 @@ $customer = $client->newCustomer()->create();
 assert(!empty($customer->getId()), 'The created customer ID should not be empty');
 
 $subscription = $client->newSubscription(array(
+    'customer_id' => $customer->getId(),
     'amount' => '9.99',
     'currency' => 'USD',
     'interval' => '1d',
     'name' => 'great subscription'
-))->create($customer->getId());
+))->create();
 assert(!empty($subscription->getId()), 'The created subscription ID should not be empty');
 
 // Expand a customers' project and fetch gateways

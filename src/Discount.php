@@ -497,17 +497,51 @@ class Discount
 
     
     /**
-     * Apply a new discount to the given subscription ID.
+     * Get the discounts applied to the subscription.
      * @param string $subscriptionId
      * @param array $options
-     * @return $this
+     * @return array
      */
-    public function apply($subscriptionId, $options = array())
+    public function fetchSubscriptionDiscounts($subscriptionId, $options = array())
     {
         $this->fillWithData($options);
 
         $request = new Request($this->client);
         $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts";
+
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field discounts
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['discounts'] as $v)
+        {
+            $tmp = new Discount($this->client);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+        $returnValues['Discounts'] = $a;
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Create a new discount for the given subscription ID.
+     * @param array $options
+     * @return $this
+     */
+    public function create($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/subscriptions/" . urlencode($this->getSubscriptionId()) . "/discounts";
 
         $data = array(
             "coupon_id" => $this->getCouponId(), 
@@ -524,7 +558,7 @@ class Discount
         // Handling for field discount
         $body = $response->getBody();
         $body = $body['discount'];
-        $returnValues['apply'] = $this->fillWithData($body);
+        $returnValues['create'] = $this->fillWithData($body);
         
         return array_values($returnValues)[0];
     }
@@ -560,18 +594,16 @@ class Discount
     }
     
     /**
-     * Remove a discount applied to a subscription.
-     * @param string $subscriptionId
-     * @param string $discountId
+     * Delete a discount applied to a subscription.
      * @param array $options
      * @return bool
      */
-    public function remove($subscriptionId, $discountId, $options = array())
+    public function delete($options = array())
     {
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/subscriptions/" . urlencode($subscriptionId) . "/discounts/" . urlencode($discountId) . "";
+        $path    = "/subscriptions/" . urlencode($this->getSubscriptionId()) . "/discounts/" . urlencode($this->getId()) . "";
 
         $data = array(
 
