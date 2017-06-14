@@ -179,7 +179,7 @@ class Subscription
     protected $cancellationReason;
 
     /**
-     * Wheither or not the subscription is pending cancellation (meaning a cancel_at date was set)
+     * Whether or not the subscription is pending cancellation (meaning a cancel_at date was set)
      * @var boolean
      */
     protected $pendingCancellation;
@@ -197,7 +197,7 @@ class Subscription
     protected $cancelUrl;
 
     /**
-     * When the subscription has unpaid invoices, defines the dunning logic of the subscription (as specified in the project setting)
+     * When the subscription has unpaid invoices, defines the dunning logic of the subscription (as specified in the project settings)
      * @var string
      */
     protected $unpaidState;
@@ -899,7 +899,7 @@ class Subscription
     
     /**
      * Get PendingCancellation
-     * Wheither or not the subscription is pending cancellation (meaning a cancel_at date was set)
+     * Whether or not the subscription is pending cancellation (meaning a cancel_at date was set)
      * @return bool
      */
     public function getPendingCancellation()
@@ -909,7 +909,7 @@ class Subscription
 
     /**
      * Set PendingCancellation
-     * Wheither or not the subscription is pending cancellation (meaning a cancel_at date was set)
+     * Whether or not the subscription is pending cancellation (meaning a cancel_at date was set)
      * @param  bool $value
      * @return $this
      */
@@ -965,7 +965,7 @@ class Subscription
     
     /**
      * Get UnpaidState
-     * When the subscription has unpaid invoices, defines the dunning logic of the subscription (as specified in the project setting)
+     * When the subscription has unpaid invoices, defines the dunning logic of the subscription (as specified in the project settings)
      * @return string
      */
     public function getUnpaidState()
@@ -975,7 +975,7 @@ class Subscription
 
     /**
      * Set UnpaidState
-     * When the subscription has unpaid invoices, defines the dunning logic of the subscription (as specified in the project setting)
+     * When the subscription has unpaid invoices, defines the dunning logic of the subscription (as specified in the project settings)
      * @param  string $value
      * @return $this
      */

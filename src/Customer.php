@@ -128,7 +128,7 @@ class Customer
      * Country code of the customer (ISO-3166, 2 characters format)
      * @var string
      */
-    protected $country;
+    protected $countryCode;
 
     /**
      * Number of transactions processed by the customer
@@ -632,24 +632,24 @@ class Customer
     }
     
     /**
-     * Get Country
+     * Get CountryCode
      * Country code of the customer (ISO-3166, 2 characters format)
      * @return string
      */
-    public function getCountry()
+    public function getCountryCode()
     {
-        return $this->country;
+        return $this->countryCode;
     }
 
     /**
-     * Set Country
+     * Set CountryCode
      * Country code of the customer (ISO-3166, 2 characters format)
      * @param  string $value
      * @return $this
      */
-    public function setCountry($value)
+    public function setCountryCode($value)
     {
-        $this->country = $value;
+        $this->countryCode = $value;
         return $this;
     }
     
@@ -869,8 +869,8 @@ class Customer
         if(! empty($data['zip']))
             $this->setZip($data['zip']);
 
-        if(! empty($data['country']))
-            $this->setCountry($data['country']);
+        if(! empty($data['country_code']))
+            $this->setCountryCode($data['country_code']);
 
         if(! empty($data['transactions_count']))
             $this->setTransactionsCount($data['transactions_count']);
@@ -1112,7 +1112,7 @@ class Customer
             "city" => $this->getCity(), 
             "state" => $this->getState(), 
             "zip" => $this->getZip(), 
-            "country" => $this->getCountry(), 
+            "country_code" => $this->getCountryCode(), 
             "metadata" => $this->getMetadata()
         );
 
@@ -1180,7 +1180,7 @@ class Customer
             "city" => $this->getCity(), 
             "state" => $this->getState(), 
             "zip" => $this->getZip(), 
-            "country" => $this->getCountry(), 
+            "country_code" => $this->getCountryCode(), 
             "metadata" => $this->getMetadata()
         );
 

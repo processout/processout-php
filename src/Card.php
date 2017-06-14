@@ -134,7 +134,7 @@ class Card
      * Country code of the card holder (ISO-3166, 2 characters format)
      * @var string
      */
-    protected $country;
+    protected $countryCode;
 
     /**
      * ZIP code of the card holder
@@ -612,24 +612,24 @@ class Card
     }
     
     /**
-     * Get Country
+     * Get CountryCode
      * Country code of the card holder (ISO-3166, 2 characters format)
      * @return string
      */
-    public function getCountry()
+    public function getCountryCode()
     {
-        return $this->country;
+        return $this->countryCode;
     }
 
     /**
-     * Set Country
+     * Set CountryCode
      * Country code of the card holder (ISO-3166, 2 characters format)
      * @param  string $value
      * @return $this
      */
-    public function setCountry($value)
+    public function setCountryCode($value)
     {
-        $this->country = $value;
+        $this->countryCode = $value;
         return $this;
     }
     
@@ -808,8 +808,8 @@ class Card
         if(! empty($data['state']))
             $this->setState($data['state']);
 
-        if(! empty($data['country']))
-            $this->setCountry($data['country']);
+        if(! empty($data['country_code']))
+            $this->setCountryCode($data['country_code']);
 
         if(! empty($data['zip']))
             $this->setZip($data['zip']);

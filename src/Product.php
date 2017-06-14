@@ -65,18 +65,6 @@ class Product
     protected $metadata;
 
     /**
-     * Choose whether or not to request the email during the checkout process
-     * @var boolean
-     */
-    protected $requestEmail;
-
-    /**
-     * Choose whether or not to request the shipping address during the checkout process
-     * @var boolean
-     */
-    protected $requestShipping;
-
-    /**
      * URL where the customer will be redirected upon payment
      * @var string
      */
@@ -297,50 +285,6 @@ class Product
     }
     
     /**
-     * Get RequestEmail
-     * Choose whether or not to request the email during the checkout process
-     * @return bool
-     */
-    public function getRequestEmail()
-    {
-        return $this->requestEmail;
-    }
-
-    /**
-     * Set RequestEmail
-     * Choose whether or not to request the email during the checkout process
-     * @param  bool $value
-     * @return $this
-     */
-    public function setRequestEmail($value)
-    {
-        $this->requestEmail = $value;
-        return $this;
-    }
-    
-    /**
-     * Get RequestShipping
-     * Choose whether or not to request the shipping address during the checkout process
-     * @return bool
-     */
-    public function getRequestShipping()
-    {
-        return $this->requestShipping;
-    }
-
-    /**
-     * Set RequestShipping
-     * Choose whether or not to request the shipping address during the checkout process
-     * @param  bool $value
-     * @return $this
-     */
-    public function setRequestShipping($value)
-    {
-        $this->requestShipping = $value;
-        return $this;
-    }
-    
-    /**
      * Get ReturnUrl
      * URL where the customer will be redirected upon payment
      * @return string
@@ -460,12 +404,6 @@ class Product
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
 
-        if(! empty($data['request_email']))
-            $this->setRequestEmail($data['request_email']);
-
-        if(! empty($data['request_shipping']))
-            $this->setRequestShipping($data['request_shipping']);
-
         if(! empty($data['return_url']))
             $this->setReturnUrl($data['return_url']);
 
@@ -563,8 +501,6 @@ class Product
             "amount" => $this->getAmount(), 
             "currency" => $this->getCurrency(), 
             "metadata" => $this->getMetadata(), 
-            "request_email" => $this->getRequestEmail(), 
-            "request_shipping" => $this->getRequestShipping(), 
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl()
         );
@@ -627,8 +563,6 @@ class Product
             "amount" => $this->getAmount(), 
             "currency" => $this->getCurrency(), 
             "metadata" => $this->getMetadata(), 
-            "request_email" => $this->getRequestEmail(), 
-            "request_shipping" => $this->getRequestShipping(), 
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl()
         );

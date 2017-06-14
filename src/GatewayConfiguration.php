@@ -42,7 +42,7 @@ class GatewayConfiguration
 
     /**
      * ID of the gateway to which the gateway configuration belongs
-     * @var string
+     * @var integer
      */
     protected $gatewayId;
 
@@ -212,7 +212,7 @@ class GatewayConfiguration
     /**
      * Get GatewayId
      * ID of the gateway to which the gateway configuration belongs
-     * @return string
+     * @return int
      */
     public function getGatewayId()
     {
@@ -222,7 +222,7 @@ class GatewayConfiguration
     /**
      * Set GatewayId
      * ID of the gateway to which the gateway configuration belongs
-     * @param  string $value
+     * @param  int $value
      * @return $this
      */
     public function setGatewayId($value)

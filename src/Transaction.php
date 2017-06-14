@@ -113,6 +113,12 @@ class Transaction
     protected $name;
 
     /**
+     * Amount requested when creating the transaction
+     * @var decimal
+     */
+    protected $amount;
+
+    /**
      * Amount that was successfully authorized on the transaction
      * @var decimal
      */
@@ -129,6 +135,12 @@ class Transaction
      * @var string
      */
     protected $currency;
+
+    /**
+     * Error code of the transaction, when the payment has failed
+     * @var string
+     */
+    protected $errorCode;
 
     /**
      * Status of the transaction
@@ -616,6 +628,28 @@ class Transaction
     }
     
     /**
+     * Get Amount
+     * Amount requested when creating the transaction
+     * @return string
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * Set Amount
+     * Amount requested when creating the transaction
+     * @param  string $value
+     * @return $this
+     */
+    public function setAmount($value)
+    {
+        $this->amount = $value;
+        return $this;
+    }
+    
+    /**
      * Get AuthorizedAmount
      * Amount that was successfully authorized on the transaction
      * @return string
@@ -678,6 +712,28 @@ class Transaction
     public function setCurrency($value)
     {
         $this->currency = $value;
+        return $this;
+    }
+    
+    /**
+     * Get ErrorCode
+     * Error code of the transaction, when the payment has failed
+     * @return string
+     */
+    public function getErrorCode()
+    {
+        return $this->errorCode;
+    }
+
+    /**
+     * Set ErrorCode
+     * Error code of the transaction, when the payment has failed
+     * @param  string $value
+     * @return $this
+     */
+    public function setErrorCode($value)
+    {
+        $this->errorCode = $value;
         return $this;
     }
     
@@ -935,6 +991,9 @@ class Transaction
         if(! empty($data['name']))
             $this->setName($data['name']);
 
+        if(! empty($data['amount']))
+            $this->setAmount($data['amount']);
+
         if(! empty($data['authorized_amount']))
             $this->setAuthorizedAmount($data['authorized_amount']);
 
@@ -943,6 +1002,9 @@ class Transaction
 
         if(! empty($data['currency']))
             $this->setCurrency($data['currency']);
+
+        if(! empty($data['error_code']))
+            $this->setErrorCode($data['error_code']);
 
         if(! empty($data['status']))
             $this->setStatus($data['status']);
