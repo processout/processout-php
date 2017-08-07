@@ -160,7 +160,7 @@ class Request
     public function delete($path, $data, $options)
     {
         $req = $this->prepare($options);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        curl_setopt($req, CURLOPT_CUSTOMREQUEST, 'DELETE');
         curl_setopt($req, CURLOPT_URL, $this->client->getHost() . $path . '?' .
             http_build_query($this->getData($data, $options))); 
         $r = curl_exec($req); 
