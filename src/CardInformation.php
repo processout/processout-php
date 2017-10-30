@@ -47,6 +47,12 @@ class CardInformation
     protected $brand;
 
     /**
+     * Category of the card (consumer, commercial, ...)
+     * @var string
+     */
+    protected $category;
+
+    /**
      * Country that issued the card
      * @var string
      */
@@ -176,6 +182,28 @@ class CardInformation
     }
     
     /**
+     * Get Category
+     * Category of the card (consumer, commercial, ...)
+     * @return string
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set Category
+     * Category of the card (consumer, commercial, ...)
+     * @param  string $value
+     * @return $this
+     */
+    public function setCategory($value)
+    {
+        $this->category = $value;
+        return $this;
+    }
+    
+    /**
      * Get Country
      * Country that issued the card
      * @return string
@@ -219,6 +247,9 @@ class CardInformation
 
         if(! empty($data['brand']))
             $this->setBrand($data['brand']);
+
+        if(! empty($data['category']))
+            $this->setCategory($data['category']);
 
         if(! empty($data['country']))
             $this->setCountry($data['country']);
