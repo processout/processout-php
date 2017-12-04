@@ -1021,6 +1021,37 @@ class Invoice
     }
     
     /**
+     * Initiate a 3-D Secure authentication
+     * @param string $source
+     * @param array $options
+     * @return CustomerAction
+     */
+    public function initiateThreeDS($source, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/invoices/" . urlencode($this->getId()) . "/three-d-s";
+
+        $data = array(
+            "source" => $source
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field customer_action
+        $body = $response->getBody();
+        $body = $body['customer_action'];
+        $customerAction = new CustomerAction($this->client);
+        $returnValues['customerAction'] = $customerAction->fillWithData($body);
+                
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
      * Get the transaction of the invoice.
      * @param array $options
      * @return Transaction
