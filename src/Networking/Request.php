@@ -52,6 +52,27 @@ class Request
     }
 
     /**
+     * Encode the given data
+     * @param  object $queryData
+     * @return string $data
+     */
+    protected function httpBuildQuery($queryData) {
+        $data = array();
+        foreach ($queryData as $key => $value) {
+            if (is_scalar($value)) {
+                $data[] = $key . '=' . rawurlencode($value);
+            } else {
+                foreach ($value as $subK => $val) {
+                    if (is_numeric($subK)) $subK = '';
+                    $k = $key . "[$subK]";
+                    $data[] = $k . '=' . rawurlencode($val);
+                }
+            }
+        }
+        return implode('&', $data);
+    }
+
+    /**
      * Prepare the request data
      * @param  array $data
      * @param  array $options
@@ -84,7 +105,7 @@ class Request
     {
         $req = $this->prepare($options);
         curl_setopt($req, CURLOPT_URL, $this->client->getHost() . $path . '?' .
-            http_build_query($this->getData($data, $options))); 
+            $this->httpBuildQuery($this->getData($data, $options))); 
         $r = curl_exec($req); 
         if (!$r)
             throw new \Exception('curl exception: '.curl_error($req).

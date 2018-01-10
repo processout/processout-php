@@ -909,6 +909,7 @@ class Invoice
 
         $data = array(
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
+            "prioritized_gateway_configuration_id" => (!empty($options["prioritized_gateway_configuration_id"])) ? $options["prioritized_gateway_configuration_id"] : null, 
             "source" => $source
         );
 
@@ -942,6 +943,7 @@ class Invoice
         $data = array(
             "authorize_only" => (!empty($options["authorize_only"])) ? $options["authorize_only"] : null, 
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
+            "prioritized_gateway_configuration_id" => (!empty($options["prioritized_gateway_configuration_id"])) ? $options["prioritized_gateway_configuration_id"] : null, 
             "source" => $source
         );
 

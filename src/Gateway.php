@@ -382,4 +382,38 @@ class Gateway
     }
 
     
+    /**
+     * Get all the gateway configurations of the gateway
+     * @param array $options
+     * @return array
+     */
+    public function fetchGatewayConfigurations($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/gateways/" . urlencode($this->getName()) . "/gateway-configurations";
+
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field gateway_configurations
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['gateway_configurations'] as $v)
+        {
+            $tmp = new GatewayConfiguration($this->client);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+        $returnValues['GatewayConfigurations'] = $a;
+        
+        return array_values($returnValues)[0];
+    }
+    
 }

@@ -409,16 +409,44 @@ class Project
 
     
     /**
-     * Get all the gateway configurations of the project
+     * Regenerate the project private key. Make sure to store the new private key and use it in any future request.
      * @param array $options
-     * @return array
+     * @return $this
      */
-    public function fetchGatewayConfigurations($options = array())
+    public function regeneratePrivateKey($options = array())
     {
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/projects/" . urlencode($this->getId()) . "/gateway-configurations";
+        $path    = "/projects/{project_id}/private-key";
+
+        $data = array(
+
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field project
+        $body = $response->getBody();
+        $body = $body['project'];
+        $returnValues['regeneratePrivateKey'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Get all the supervised projects.
+     * @param array $options
+     * @return array
+     */
+    public function allSupervised($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/supervised-projects";
 
         $data = array(
 
@@ -428,16 +456,48 @@ class Project
         $returnValues = array();
 
         
-        // Handling for field gateway_configurations
+        // Handling for field projects
         $a    = array();
         $body = $response->getBody();
-        foreach($body['gateway_configurations'] as $v)
+        foreach($body['projects'] as $v)
         {
-            $tmp = new GatewayConfiguration($this->client);
+            $tmp = new Project($this->client);
             $tmp->fillWithData($v);
             $a[] = $tmp;
         }
-        $returnValues['GatewayConfigurations'] = $a;
+        $returnValues['Projects'] = $a;
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Create a new supervised project.
+     * @param array $options
+     * @return $this
+     */
+    public function createSupervised($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/supervised-projects";
+
+        $data = array(
+            "id" => $this->getId(), 
+            "name" => $this->getName(), 
+            "default_currency" => $this->getDefaultCurrency(), 
+            "dunning_configuration" => $this->getDunningConfiguration(), 
+            "applepay_settings" => (!empty($options["applepay_settings"])) ? $options["applepay_settings"] : null
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field project
+        $body = $response->getBody();
+        $body = $body['project'];
+        $returnValues['createSupervised'] = $this->fillWithData($body);
         
         return array_values($returnValues)[0];
     }

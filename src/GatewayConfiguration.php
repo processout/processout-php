@@ -458,4 +458,160 @@ class GatewayConfiguration
     }
 
     
+    /**
+     * Get all the gateway configurations.
+     * @param array $options
+     * @return array
+     */
+    public function all($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/gateway-configurations";
+
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field gateway_configurations
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['gateway_configurations'] as $v)
+        {
+            $tmp = new GatewayConfiguration($this->client);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+        $returnValues['GatewayConfigurations'] = $a;
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Find a gateway configuration by its ID.
+     * @param string $configurationId
+     * @param array $options
+     * @return $this
+     */
+    public function find($configurationId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/gateway-configurations/" . urlencode($configurationId) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field gateway_configuration
+        $body = $response->getBody();
+        $body = $body['gateway_configuration'];
+        $returnValues['find'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Save the updated gateway configuration attributes and settings.
+     * @param array $options
+     * @return $this
+     */
+    public function save($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/gateway-configurations/" . urlencode($this->getId()) . "";
+
+        $data = array(
+            "id" => $this->getId(), 
+            "name" => $this->getName(), 
+            "enabled" => $this->getEnabled(), 
+            "fee_fixed" => $this->getFeeFixed(), 
+            "fee_percentage" => $this->getFeePercentage(), 
+            "default_currency" => $this->getDefaultCurrency(), 
+            "settings" => (!empty($options["settings"])) ? $options["settings"] : null
+        );
+
+        $response = $request->put($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field gateway_configuration
+        $body = $response->getBody();
+        $body = $body['gateway_configuration'];
+        $returnValues['save'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Delete the gateway configuration.
+     * @param array $options
+     * @return bool
+     */
+    public function delete($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/gateway-configurations/" . urlencode($this->getId()) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->delete($path, $data, $options);
+        $returnValues = array();
+
+        $returnValues['success'] = $response->isSuccess();
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Create a new gateway configuration.
+     * @param string $gatewayName
+     * @param array $options
+     * @return $this
+     */
+    public function create($gatewayName, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/gateways/" . urlencode($gatewayName) . "/gateway-configurations";
+
+        $data = array(
+            "id" => $this->getId(), 
+            "name" => $this->getName(), 
+            "enabled" => $this->getEnabled(), 
+            "fee_fixed" => $this->getFeeFixed(), 
+            "fee_percentage" => $this->getFeePercentage(), 
+            "default_currency" => $this->getDefaultCurrency(), 
+            "settings" => (!empty($options["settings"])) ? $options["settings"] : null
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field gateway_configuration
+        $body = $response->getBody();
+        $body = $body['gateway_configuration'];
+        $returnValues['create'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
 }

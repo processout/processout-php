@@ -95,6 +95,18 @@ class Transaction
     protected $cardId;
 
     /**
+     * Gateway Configuration is the last gateway configuration that was used to process the payment, if any
+     * @var object
+     */
+    protected $gatewayConfiguration;
+
+    /**
+     * ID of the last gateway configuration that was used to process the payment, if any
+     * @var string
+     */
+    protected $gatewayConfigurationId;
+
+    /**
      * Operations linked to the transaction
      * @var list
      */
@@ -141,6 +153,12 @@ class Transaction
      * @var string
      */
     protected $errorCode;
+
+    /**
+     * Status of the potential 3-D Secure authentication
+     * @var string
+     */
+    protected $threeDSStatus;
 
     /**
      * Status of the transaction
@@ -538,6 +556,57 @@ class Transaction
     }
     
     /**
+     * Get GatewayConfiguration
+     * Gateway Configuration is the last gateway configuration that was used to process the payment, if any
+     * @return object
+     */
+    public function getGatewayConfiguration()
+    {
+        return $this->gatewayConfiguration;
+    }
+
+    /**
+     * Set GatewayConfiguration
+     * Gateway Configuration is the last gateway configuration that was used to process the payment, if any
+     * @param  object $value
+     * @return $this
+     */
+    public function setGatewayConfiguration($value)
+    {
+        if (is_object($value))
+            $this->gatewayConfiguration = $value;
+        else
+        {
+            $obj = new GatewayConfiguration($this->client);
+            $obj->fillWithData($value);
+            $this->gatewayConfiguration = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get GatewayConfigurationId
+     * ID of the last gateway configuration that was used to process the payment, if any
+     * @return string
+     */
+    public function getGatewayConfigurationId()
+    {
+        return $this->gatewayConfigurationId;
+    }
+
+    /**
+     * Set GatewayConfigurationId
+     * ID of the last gateway configuration that was used to process the payment, if any
+     * @param  string $value
+     * @return $this
+     */
+    public function setGatewayConfigurationId($value)
+    {
+        $this->gatewayConfigurationId = $value;
+        return $this;
+    }
+    
+    /**
      * Get Operations
      * Operations linked to the transaction
      * @return array
@@ -734,6 +803,28 @@ class Transaction
     public function setErrorCode($value)
     {
         $this->errorCode = $value;
+        return $this;
+    }
+    
+    /**
+     * Get ThreeDSStatus
+     * Status of the potential 3-D Secure authentication
+     * @return string
+     */
+    public function getThreeDSStatus()
+    {
+        return $this->threeDSStatus;
+    }
+
+    /**
+     * Set ThreeDSStatus
+     * Status of the potential 3-D Secure authentication
+     * @param  string $value
+     * @return $this
+     */
+    public function setThreeDSStatus($value)
+    {
+        $this->threeDSStatus = $value;
         return $this;
     }
     
@@ -982,6 +1073,12 @@ class Transaction
         if(! empty($data['card_id']))
             $this->setCardId($data['card_id']);
 
+        if(! empty($data['gateway_configuration']))
+            $this->setGatewayConfiguration($data['gateway_configuration']);
+
+        if(! empty($data['gateway_configuration_id']))
+            $this->setGatewayConfigurationId($data['gateway_configuration_id']);
+
         if(! empty($data['operations']))
             $this->setOperations($data['operations']);
 
@@ -1005,6 +1102,9 @@ class Transaction
 
         if(! empty($data['error_code']))
             $this->setErrorCode($data['error_code']);
+
+        if(! empty($data['three_d_s_status']))
+            $this->setThreeDSStatus($data['three_d_s_status']);
 
         if(! empty($data['status']))
             $this->setStatus($data['status']);

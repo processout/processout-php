@@ -28,6 +28,12 @@ $gr->body = '{"token":"test-valid"}';
 $transaction = $invoice->capture($gr->getString());
 assert($transaction->getStatus() == 'completed', 'The transactions status was not completed');
 
+// Expand the transaction gateway configuration
+$transaction = $transaction->find($transaction->getId(), array(
+    'expand' => array('gateway_configuration')
+));
+assert(!empty($transaction->getGatewayConfiguration()->getId()), 'The transaction gateway configuration ID was empty');
+
 // Fetch the customers
 $customers = $client->newCustomer()->all();
 
@@ -45,10 +51,9 @@ $subscription = $client->newSubscription(array(
 assert(!empty($subscription->getId()), 'The created subscription ID should not be empty');
 
 // Expand a customers' project and fetch gateways
-$customer = $client->newCustomer()->create(array("expand" => array("project")));
+$customer = $client->newCustomer()->create(array('expand' => array('project')));
 assert(!empty($customer->getProject()), 'The customer project should be expanded');
-
-$confs = $customer->getProject()->fetchGatewayConfigurations();
+assert(!empty($customer->getProject()->getId()), 'The customer project ID should be expanded');
 
 // Make sure the error code is correctly fetched
 try {
