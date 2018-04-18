@@ -43,6 +43,7 @@ class Request
             $this->client->getProjectSecret());
         curl_setopt($request, CURLOPT_HTTPHEADER, $headers); 
 
+        curl_setopt($request, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         curl_setopt($request, CURLOPT_TIMEOUT, 30); 
         curl_setopt($request, CURLOPT_MAXREDIRS, 4); 
         curl_setopt($request, CURLOPT_RETURNTRANSFER, true); 
