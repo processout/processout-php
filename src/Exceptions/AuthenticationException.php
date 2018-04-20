@@ -4,7 +4,7 @@ namespace ProcessOut\Exceptions;
 
 use \Exception;
 
-class AuthenticationException extends Exception
+class AuthenticationException extends Exception implements ProcessOutExceptionInterface
 {
 
     protected $errorCode;

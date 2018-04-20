@@ -4,7 +4,7 @@ namespace ProcessOut\Exceptions;
 
 use \Exception;
 
-class ValidationException extends Exception
+class ValidationException extends Exception implements ProcessOutExceptionInterface
 {
 
     protected $errorCode;

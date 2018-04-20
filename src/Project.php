@@ -409,6 +409,86 @@ class Project
 
     
     /**
+     * Fetch the current project information.
+     * @param array $options
+     * @return $this
+     */
+    public function fetch($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/projects/" . urlencode($this->getId()) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field project
+        $body = $response->getBody();
+        $body = $body['project'];
+        $returnValues['fetch'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Save the updated project's attributes.
+     * @param array $options
+     * @return $this
+     */
+    public function save($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/projects/" . urlencode($this->getId()) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->put($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field project
+        $body = $response->getBody();
+        $body = $body['project'];
+        $returnValues['save'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Delete the project. Be careful! Executing this request will prevent any further interaction with the API that uses this project.
+     * @param array $options
+     * @return bool
+     */
+    public function delete($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/projects/{project_id}";
+
+        $data = array(
+
+        );
+
+        $response = $request->delete($path, $data, $options);
+        $returnValues = array();
+
+        $returnValues['success'] = $response->isSuccess();
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
      * Regenerate the project private key. Make sure to store the new private key and use it in any future request.
      * @param array $options
      * @return $this
@@ -441,7 +521,7 @@ class Project
      * @param array $options
      * @return array
      */
-    public function allSupervised($options = array())
+    public function fetchSupervised($options = array())
     {
         $this->fillWithData($options);
 

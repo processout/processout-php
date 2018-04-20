@@ -4,7 +4,7 @@ namespace ProcessOut\Exceptions;
 
 use \Exception;
 
-class InternalException extends Exception
+class InternalException extends Exception implements ProcessOutExceptionInterface
 {
 
     protected $errorCode;

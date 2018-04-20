@@ -89,6 +89,12 @@ class TransactionOperation
     protected $type;
 
     /**
+     * ID of the operation done through the PSP
+     * @var string
+     */
+    protected $gatewayOperationId;
+
+    /**
      * Error code returned when attempting the operation, if any
      * @var string
      */
@@ -411,6 +417,28 @@ class TransactionOperation
     }
     
     /**
+     * Get GatewayOperationId
+     * ID of the operation done through the PSP
+     * @return string
+     */
+    public function getGatewayOperationId()
+    {
+        return $this->gatewayOperationId;
+    }
+
+    /**
+     * Set GatewayOperationId
+     * ID of the operation done through the PSP
+     * @param  string $value
+     * @return $this
+     */
+    public function setGatewayOperationId($value)
+    {
+        $this->gatewayOperationId = $value;
+        return $this;
+    }
+    
+    /**
      * Get ErrorCode
      * Error code returned when attempting the operation, if any
      * @return string
@@ -541,6 +569,9 @@ class TransactionOperation
 
         if(! empty($data['type']))
             $this->setType($data['type']);
+
+        if(! empty($data['gateway_operation_id']))
+            $this->setGatewayOperationId($data['gateway_operation_id']);
 
         if(! empty($data['error_code']))
             $this->setErrorCode($data['error_code']);

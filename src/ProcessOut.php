@@ -236,6 +236,24 @@ class ProcessOut
     }
 	
     /**
+     * Create a new Payout instance
+     * @param array|null $prefill array used to prefill the object
+     * @return Payout
+     */
+	public function newPayout($prefill = array()) {
+        return new Payout($this, $prefill);
+    }
+	
+    /**
+     * Create a new PayoutItem instance
+     * @param array|null $prefill array used to prefill the object
+     * @return PayoutItem
+     */
+	public function newPayoutItem($prefill = array()) {
+        return new PayoutItem($this, $prefill);
+    }
+	
+    /**
      * Create a new Plan instance
      * @param array|null $prefill array used to prefill the object
      * @return Plan
