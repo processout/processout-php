@@ -308,6 +308,33 @@ class ProcessOut
     }
 	
     /**
+     * Create a new PaymentDataThreeDSRequest instance
+     * @param array|null $prefill array used to prefill the object
+     * @return PaymentDataThreeDSRequest
+     */
+	public function newPaymentDataThreeDSRequest($prefill = array()) {
+        return new PaymentDataThreeDSRequest($this, $prefill);
+    }
+	
+    /**
+     * Create a new PaymentDataNetworkAuthentication instance
+     * @param array|null $prefill array used to prefill the object
+     * @return PaymentDataNetworkAuthentication
+     */
+	public function newPaymentDataNetworkAuthentication($prefill = array()) {
+        return new PaymentDataNetworkAuthentication($this, $prefill);
+    }
+	
+    /**
+     * Create a new PaymentDataThreeDSAuthentication instance
+     * @param array|null $prefill array used to prefill the object
+     * @return PaymentDataThreeDSAuthentication
+     */
+	public function newPaymentDataThreeDSAuthentication($prefill = array()) {
+        return new PaymentDataThreeDSAuthentication($this, $prefill);
+    }
+	
+    /**
      * Create a new TransactionOperation instance
      * @param array|null $prefill array used to prefill the object
      * @return TransactionOperation

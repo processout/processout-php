@@ -30,7 +30,8 @@ class Request
         $request = curl_init(); 
         $headers = array(
             'API-Version: 1.4.0.0',
-            'Content-Type: application/json'
+            'Content-Type: application/json',
+            'User-Agent: ProcessOut PHP-Bindings/6.7.0'
         );
         if (! empty($options['idempotencyKey']))
             $headers[] = 'Idempotency-Key: ' . $options['idempotencyKey'];

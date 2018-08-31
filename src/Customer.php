@@ -131,6 +131,12 @@ class Customer
     protected $countryCode;
 
     /**
+     * IP address of the customer (IPv4 or IPv6)
+     * @var string
+     */
+    protected $ipAddress;
+
+    /**
      * Number of transactions processed by the customer
      * @var integer
      */
@@ -654,6 +660,28 @@ class Customer
     }
     
     /**
+     * Get IpAddress
+     * IP address of the customer (IPv4 or IPv6)
+     * @return string
+     */
+    public function getIpAddress()
+    {
+        return $this->ipAddress;
+    }
+
+    /**
+     * Set IpAddress
+     * IP address of the customer (IPv4 or IPv6)
+     * @param  string $value
+     * @return $this
+     */
+    public function setIpAddress($value)
+    {
+        $this->ipAddress = $value;
+        return $this;
+    }
+    
+    /**
      * Get TransactionsCount
      * Number of transactions processed by the customer
      * @return int
@@ -871,6 +899,9 @@ class Customer
 
         if(! empty($data['country_code']))
             $this->setCountryCode($data['country_code']);
+
+        if(! empty($data['ip_address']))
+            $this->setIpAddress($data['ip_address']);
 
         if(! empty($data['transactions_count']))
             $this->setTransactionsCount($data['transactions_count']);
@@ -1113,6 +1144,7 @@ class Customer
             "state" => $this->getState(), 
             "zip" => $this->getZip(), 
             "country_code" => $this->getCountryCode(), 
+            "ip_address" => $this->getIpAddress(), 
             "metadata" => $this->getMetadata()
         );
 
@@ -1181,6 +1213,7 @@ class Customer
             "state" => $this->getState(), 
             "zip" => $this->getZip(), 
             "country_code" => $this->getCountryCode(), 
+            "ip_address" => $this->getIpAddress(), 
             "metadata" => $this->getMetadata()
         );
 

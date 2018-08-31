@@ -131,16 +131,22 @@ class Card
     protected $state;
 
     /**
+     * ZIP code of the card holder
+     * @var string
+     */
+    protected $zip;
+
+    /**
      * Country code of the card holder (ISO-3166, 2 characters format)
      * @var string
      */
     protected $countryCode;
 
     /**
-     * ZIP code of the card holder
+     * IP address of the card (IPv4 or IPv6)
      * @var string
      */
-    protected $zip;
+    protected $ipAddress;
 
     /**
      * Metadata related to the card, in the form of a dictionary (key-value pair)
@@ -612,6 +618,28 @@ class Card
     }
     
     /**
+     * Get Zip
+     * ZIP code of the card holder
+     * @return string
+     */
+    public function getZip()
+    {
+        return $this->zip;
+    }
+
+    /**
+     * Set Zip
+     * ZIP code of the card holder
+     * @param  string $value
+     * @return $this
+     */
+    public function setZip($value)
+    {
+        $this->zip = $value;
+        return $this;
+    }
+    
+    /**
      * Get CountryCode
      * Country code of the card holder (ISO-3166, 2 characters format)
      * @return string
@@ -634,24 +662,24 @@ class Card
     }
     
     /**
-     * Get Zip
-     * ZIP code of the card holder
+     * Get IpAddress
+     * IP address of the card (IPv4 or IPv6)
      * @return string
      */
-    public function getZip()
+    public function getIpAddress()
     {
-        return $this->zip;
+        return $this->ipAddress;
     }
 
     /**
-     * Set Zip
-     * ZIP code of the card holder
+     * Set IpAddress
+     * IP address of the card (IPv4 or IPv6)
      * @param  string $value
      * @return $this
      */
-    public function setZip($value)
+    public function setIpAddress($value)
     {
-        $this->zip = $value;
+        $this->ipAddress = $value;
         return $this;
     }
     
@@ -808,11 +836,14 @@ class Card
         if(! empty($data['state']))
             $this->setState($data['state']);
 
+        if(! empty($data['zip']))
+            $this->setZip($data['zip']);
+
         if(! empty($data['country_code']))
             $this->setCountryCode($data['country_code']);
 
-        if(! empty($data['zip']))
-            $this->setZip($data['zip']);
+        if(! empty($data['ip_address']))
+            $this->setIpAddress($data['ip_address']);
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);

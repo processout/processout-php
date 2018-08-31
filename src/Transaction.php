@@ -143,6 +143,18 @@ class Transaction
     protected $capturedAmount;
 
     /**
+     * Amount that was successfully refunded on the transaction
+     * @var decimal
+     */
+    protected $refundedAmount;
+
+    /**
+     * Amount available on the transaction (captured - refunded)
+     * @var decimal
+     */
+    protected $availableAmount;
+
+    /**
      * Currency of the transaction
      * @var string
      */
@@ -763,6 +775,50 @@ class Transaction
     }
     
     /**
+     * Get RefundedAmount
+     * Amount that was successfully refunded on the transaction
+     * @return string
+     */
+    public function getRefundedAmount()
+    {
+        return $this->refundedAmount;
+    }
+
+    /**
+     * Set RefundedAmount
+     * Amount that was successfully refunded on the transaction
+     * @param  string $value
+     * @return $this
+     */
+    public function setRefundedAmount($value)
+    {
+        $this->refundedAmount = $value;
+        return $this;
+    }
+    
+    /**
+     * Get AvailableAmount
+     * Amount available on the transaction (captured - refunded)
+     * @return string
+     */
+    public function getAvailableAmount()
+    {
+        return $this->availableAmount;
+    }
+
+    /**
+     * Set AvailableAmount
+     * Amount available on the transaction (captured - refunded)
+     * @param  string $value
+     * @return $this
+     */
+    public function setAvailableAmount($value)
+    {
+        $this->availableAmount = $value;
+        return $this;
+    }
+    
+    /**
      * Get Currency
      * Currency of the transaction
      * @return string
@@ -1096,6 +1152,12 @@ class Transaction
 
         if(! empty($data['captured_amount']))
             $this->setCapturedAmount($data['captured_amount']);
+
+        if(! empty($data['refunded_amount']))
+            $this->setRefundedAmount($data['refunded_amount']);
+
+        if(! empty($data['available_amount']))
+            $this->setAvailableAmount($data['available_amount']);
 
         if(! empty($data['currency']))
             $this->setCurrency($data['currency']);

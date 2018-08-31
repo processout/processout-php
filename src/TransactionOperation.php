@@ -101,6 +101,24 @@ class TransactionOperation
     protected $errorCode;
 
     /**
+     * ThreeDS request payment data (read-only)
+     * @var object
+     */
+    protected $paymentDataThreeDSRequest;
+
+    /**
+     * 3-D Secure authentication payment data (read-only)
+     * @var object
+     */
+    protected $paymentDataThreeDSAuthentication;
+
+    /**
+     * Network authentication payment data (read-only)
+     * @var object
+     */
+    protected $paymentDataNetworkAuthentication;
+
+    /**
      * Metadata related to the operation, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -461,6 +479,93 @@ class TransactionOperation
     }
     
     /**
+     * Get PaymentDataThreeDSRequest
+     * ThreeDS request payment data (read-only)
+     * @return object
+     */
+    public function getPaymentDataThreeDSRequest()
+    {
+        return $this->paymentDataThreeDSRequest;
+    }
+
+    /**
+     * Set PaymentDataThreeDSRequest
+     * ThreeDS request payment data (read-only)
+     * @param  object $value
+     * @return $this
+     */
+    public function setPaymentDataThreeDSRequest($value)
+    {
+        if (is_object($value))
+            $this->paymentDataThreeDSRequest = $value;
+        else
+        {
+            $obj = new PaymentDataThreeDSRequest($this->client);
+            $obj->fillWithData($value);
+            $this->paymentDataThreeDSRequest = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get PaymentDataThreeDSAuthentication
+     * 3-D Secure authentication payment data (read-only)
+     * @return object
+     */
+    public function getPaymentDataThreeDSAuthentication()
+    {
+        return $this->paymentDataThreeDSAuthentication;
+    }
+
+    /**
+     * Set PaymentDataThreeDSAuthentication
+     * 3-D Secure authentication payment data (read-only)
+     * @param  object $value
+     * @return $this
+     */
+    public function setPaymentDataThreeDSAuthentication($value)
+    {
+        if (is_object($value))
+            $this->paymentDataThreeDSAuthentication = $value;
+        else
+        {
+            $obj = new PaymentDataThreeDSAuthentication($this->client);
+            $obj->fillWithData($value);
+            $this->paymentDataThreeDSAuthentication = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get PaymentDataNetworkAuthentication
+     * Network authentication payment data (read-only)
+     * @return object
+     */
+    public function getPaymentDataNetworkAuthentication()
+    {
+        return $this->paymentDataNetworkAuthentication;
+    }
+
+    /**
+     * Set PaymentDataNetworkAuthentication
+     * Network authentication payment data (read-only)
+     * @param  object $value
+     * @return $this
+     */
+    public function setPaymentDataNetworkAuthentication($value)
+    {
+        if (is_object($value))
+            $this->paymentDataNetworkAuthentication = $value;
+        else
+        {
+            $obj = new PaymentDataNetworkAuthentication($this->client);
+            $obj->fillWithData($value);
+            $this->paymentDataNetworkAuthentication = $obj;
+        }
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the operation, in the form of a dictionary (key-value pair)
      * @return array
@@ -575,6 +680,15 @@ class TransactionOperation
 
         if(! empty($data['error_code']))
             $this->setErrorCode($data['error_code']);
+
+        if(! empty($data['payment_data_three_d_s_request']))
+            $this->setPaymentDataThreeDSRequest($data['payment_data_three_d_s_request']);
+
+        if(! empty($data['payment_data_three_d_s_authentication']))
+            $this->setPaymentDataThreeDSAuthentication($data['payment_data_three_d_s_authentication']);
+
+        if(! empty($data['payment_data_network_authentication']))
+            $this->setPaymentDataNetworkAuthentication($data['payment_data_network_authentication']);
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);

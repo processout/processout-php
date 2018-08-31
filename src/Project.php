@@ -409,6 +409,34 @@ class Project
 
     
     /**
+     * Regenerate the project private key. Make sure to store the new private key and use it in any future request.
+     * @param array $options
+     * @return $this
+     */
+    public function regeneratePrivateKey($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/private-keys";
+
+        $data = array(
+
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field project
+        $body = $response->getBody();
+        $body = $body['project'];
+        $returnValues['regeneratePrivateKey'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
      * Fetch the current project information.
      * @param array $options
      * @return $this
@@ -484,34 +512,6 @@ class Project
         $returnValues = array();
 
         $returnValues['success'] = $response->isSuccess();
-        
-        return array_values($returnValues)[0];
-    }
-    
-    /**
-     * Regenerate the project private key. Make sure to store the new private key and use it in any future request.
-     * @param array $options
-     * @return $this
-     */
-    public function regeneratePrivateKey($options = array())
-    {
-        $this->fillWithData($options);
-
-        $request = new Request($this->client);
-        $path    = "/projects/{project_id}/private-key";
-
-        $data = array(
-
-        );
-
-        $response = $request->post($path, $data, $options);
-        $returnValues = array();
-
-        
-        // Handling for field project
-        $body = $response->getBody();
-        $body = $body['project'];
-        $returnValues['regeneratePrivateKey'] = $this->fillWithData($body);
         
         return array_values($returnValues)[0];
     }
