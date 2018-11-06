@@ -137,6 +137,18 @@ class Customer
     protected $ipAddress;
 
     /**
+     * Phone number of the customer
+     * @var string
+     */
+    protected $phoneNumber;
+
+    /**
+     * Legal document number
+     * @var string
+     */
+    protected $legalDocument;
+
+    /**
      * Number of transactions processed by the customer
      * @var integer
      */
@@ -682,6 +694,50 @@ class Customer
     }
     
     /**
+     * Get PhoneNumber
+     * Phone number of the customer
+     * @return string
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * Set PhoneNumber
+     * Phone number of the customer
+     * @param  string $value
+     * @return $this
+     */
+    public function setPhoneNumber($value)
+    {
+        $this->phoneNumber = $value;
+        return $this;
+    }
+    
+    /**
+     * Get LegalDocument
+     * Legal document number
+     * @return string
+     */
+    public function getLegalDocument()
+    {
+        return $this->legalDocument;
+    }
+
+    /**
+     * Set LegalDocument
+     * Legal document number
+     * @param  string $value
+     * @return $this
+     */
+    public function setLegalDocument($value)
+    {
+        $this->legalDocument = $value;
+        return $this;
+    }
+    
+    /**
      * Get TransactionsCount
      * Number of transactions processed by the customer
      * @return int
@@ -902,6 +958,12 @@ class Customer
 
         if(! empty($data['ip_address']))
             $this->setIpAddress($data['ip_address']);
+
+        if(! empty($data['phone_number']))
+            $this->setPhoneNumber($data['phone_number']);
+
+        if(! empty($data['legal_document']))
+            $this->setLegalDocument($data['legal_document']);
 
         if(! empty($data['transactions_count']))
             $this->setTransactionsCount($data['transactions_count']);
@@ -1145,6 +1207,8 @@ class Customer
             "zip" => $this->getZip(), 
             "country_code" => $this->getCountryCode(), 
             "ip_address" => $this->getIpAddress(), 
+            "phone_number" => $this->getPhoneNumber(), 
+            "legal_document" => $this->getLegalDocument(), 
             "metadata" => $this->getMetadata()
         );
 
@@ -1214,6 +1278,8 @@ class Customer
             "zip" => $this->getZip(), 
             "country_code" => $this->getCountryCode(), 
             "ip_address" => $this->getIpAddress(), 
+            "phone_number" => $this->getPhoneNumber(), 
+            "legal_document" => $this->getLegalDocument(), 
             "metadata" => $this->getMetadata()
         );
 
