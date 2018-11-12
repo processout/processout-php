@@ -910,6 +910,7 @@ class Invoice
         $data = array(
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
+            "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
             "source" => $source
         );
 
@@ -944,6 +945,7 @@ class Invoice
             "authorize_only" => (!empty($options["authorize_only"])) ? $options["authorize_only"] : null, 
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
+            "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
             "source" => $source
         );
 
