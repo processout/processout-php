@@ -149,30 +149,6 @@ class Customer
     protected $legalDocument;
 
     /**
-     * Number of transactions processed by the customer
-     * @var integer
-     */
-    protected $transactionsCount;
-
-    /**
-     * Number of active subscriptions linked to the customer
-     * @var integer
-     */
-    protected $subscriptionsCount;
-
-    /**
-     * MRR provided by the customer, converted to the currency of the Project
-     * @var float
-     */
-    protected $mrrLocal;
-
-    /**
-     * Total revenue provided by the customer, converted to the currency of the Project
-     * @var float
-     */
-    protected $totalRevenueLocal;
-
-    /**
      * Metadata related to the customer, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -738,94 +714,6 @@ class Customer
     }
     
     /**
-     * Get TransactionsCount
-     * Number of transactions processed by the customer
-     * @return int
-     */
-    public function getTransactionsCount()
-    {
-        return $this->transactionsCount;
-    }
-
-    /**
-     * Set TransactionsCount
-     * Number of transactions processed by the customer
-     * @param  int $value
-     * @return $this
-     */
-    public function setTransactionsCount($value)
-    {
-        $this->transactionsCount = $value;
-        return $this;
-    }
-    
-    /**
-     * Get SubscriptionsCount
-     * Number of active subscriptions linked to the customer
-     * @return int
-     */
-    public function getSubscriptionsCount()
-    {
-        return $this->subscriptionsCount;
-    }
-
-    /**
-     * Set SubscriptionsCount
-     * Number of active subscriptions linked to the customer
-     * @param  int $value
-     * @return $this
-     */
-    public function setSubscriptionsCount($value)
-    {
-        $this->subscriptionsCount = $value;
-        return $this;
-    }
-    
-    /**
-     * Get MrrLocal
-     * MRR provided by the customer, converted to the currency of the Project
-     * @return double
-     */
-    public function getMrrLocal()
-    {
-        return $this->mrrLocal;
-    }
-
-    /**
-     * Set MrrLocal
-     * MRR provided by the customer, converted to the currency of the Project
-     * @param  double $value
-     * @return $this
-     */
-    public function setMrrLocal($value)
-    {
-        $this->mrrLocal = $value;
-        return $this;
-    }
-    
-    /**
-     * Get TotalRevenueLocal
-     * Total revenue provided by the customer, converted to the currency of the Project
-     * @return double
-     */
-    public function getTotalRevenueLocal()
-    {
-        return $this->totalRevenueLocal;
-    }
-
-    /**
-     * Set TotalRevenueLocal
-     * Total revenue provided by the customer, converted to the currency of the Project
-     * @param  double $value
-     * @return $this
-     */
-    public function setTotalRevenueLocal($value)
-    {
-        $this->totalRevenueLocal = $value;
-        return $this;
-    }
-    
-    /**
      * Get Metadata
      * Metadata related to the customer, in the form of a dictionary (key-value pair)
      * @return array
@@ -965,18 +853,6 @@ class Customer
         if(! empty($data['legal_document']))
             $this->setLegalDocument($data['legal_document']);
 
-        if(! empty($data['transactions_count']))
-            $this->setTransactionsCount($data['transactions_count']);
-
-        if(! empty($data['subscriptions_count']))
-            $this->setSubscriptionsCount($data['subscriptions_count']);
-
-        if(! empty($data['mrr_local']))
-            $this->setMrrLocal($data['mrr_local']);
-
-        if(! empty($data['total_revenue_local']))
-            $this->setTotalRevenueLocal($data['total_revenue_local']);
-
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
 
@@ -1020,6 +896,31 @@ class Customer
             $a[] = $tmp;
         }
         $returnValues['Subscriptions'] = $a;
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Verify a customer token's card is valid.
+     * @param string $tokenId
+     * @param array $options
+     * @return bool
+     */
+    public function verifyToken($tokenId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "/verify";
+
+        $data = array(
+
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        $returnValues['success'] = $response->isSuccess();
         
         return array_values($returnValues)[0];
     }

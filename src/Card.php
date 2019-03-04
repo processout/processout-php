@@ -149,6 +149,12 @@ class Card
     protected $ipAddress;
 
     /**
+     * Fingerprint of the card (stays the same if the same card gets tokenized multiple times). Scoped per ProcessOut project
+     * @var string
+     */
+    protected $fingerprint;
+
+    /**
      * Metadata related to the card, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -684,6 +690,28 @@ class Card
     }
     
     /**
+     * Get Fingerprint
+     * Fingerprint of the card (stays the same if the same card gets tokenized multiple times). Scoped per ProcessOut project
+     * @return string
+     */
+    public function getFingerprint()
+    {
+        return $this->fingerprint;
+    }
+
+    /**
+     * Set Fingerprint
+     * Fingerprint of the card (stays the same if the same card gets tokenized multiple times). Scoped per ProcessOut project
+     * @param  string $value
+     * @return $this
+     */
+    public function setFingerprint($value)
+    {
+        $this->fingerprint = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the card, in the form of a dictionary (key-value pair)
      * @return array
@@ -844,6 +872,9 @@ class Card
 
         if(! empty($data['ip_address']))
             $this->setIpAddress($data['ip_address']);
+
+        if(! empty($data['fingerprint']))
+            $this->setFingerprint($data['fingerprint']);
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);

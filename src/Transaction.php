@@ -131,10 +131,22 @@ class Transaction
     protected $amount;
 
     /**
+     * Amount requested when creating the transaction, in the currency of the project
+     * @var decimal
+     */
+    protected $amountLocal;
+
+    /**
      * Amount that was successfully authorized on the transaction
      * @var decimal
      */
     protected $authorizedAmount;
+
+    /**
+     * Amount that was successfully authorized on the transaction, in the currency of the project
+     * @var decimal
+     */
+    protected $authorizedAmountLocal;
 
     /**
      * Amount that was successfully captured on the transaction
@@ -143,16 +155,34 @@ class Transaction
     protected $capturedAmount;
 
     /**
+     * Amount that was successfully captured on the transaction, in the currency of the project
+     * @var decimal
+     */
+    protected $capturedAmountLocal;
+
+    /**
      * Amount that was successfully refunded on the transaction
      * @var decimal
      */
     protected $refundedAmount;
 
     /**
+     * Amount that was successfully refunded on the transaction, in the currency of the project
+     * @var decimal
+     */
+    protected $refundedAmountLocal;
+
+    /**
      * Amount available on the transaction (captured - refunded)
      * @var decimal
      */
     protected $availableAmount;
+
+    /**
+     * Amount available on the transaction (captured - refunded), in the currency of the project
+     * @var decimal
+     */
+    protected $availableAmountLocal;
 
     /**
      * Currency of the transaction
@@ -207,6 +237,18 @@ class Transaction
      * @var decimal
      */
     protected $gatewayFee;
+
+    /**
+     * Fee taken by the payment gateway to process the payment, in the currency of the project
+     * @var decimal
+     */
+    protected $gatewayFeeLocal;
+
+    /**
+     * Currency of the fee taken on the transaction (field `gateway_fee`)
+     * @var string
+     */
+    protected $currencyFee;
 
     /**
      * Metadata related to the transaction, in the form of a dictionary (key-value pair)
@@ -731,6 +773,28 @@ class Transaction
     }
     
     /**
+     * Get AmountLocal
+     * Amount requested when creating the transaction, in the currency of the project
+     * @return string
+     */
+    public function getAmountLocal()
+    {
+        return $this->amountLocal;
+    }
+
+    /**
+     * Set AmountLocal
+     * Amount requested when creating the transaction, in the currency of the project
+     * @param  string $value
+     * @return $this
+     */
+    public function setAmountLocal($value)
+    {
+        $this->amountLocal = $value;
+        return $this;
+    }
+    
+    /**
      * Get AuthorizedAmount
      * Amount that was successfully authorized on the transaction
      * @return string
@@ -749,6 +813,28 @@ class Transaction
     public function setAuthorizedAmount($value)
     {
         $this->authorizedAmount = $value;
+        return $this;
+    }
+    
+    /**
+     * Get AuthorizedAmountLocal
+     * Amount that was successfully authorized on the transaction, in the currency of the project
+     * @return string
+     */
+    public function getAuthorizedAmountLocal()
+    {
+        return $this->authorizedAmountLocal;
+    }
+
+    /**
+     * Set AuthorizedAmountLocal
+     * Amount that was successfully authorized on the transaction, in the currency of the project
+     * @param  string $value
+     * @return $this
+     */
+    public function setAuthorizedAmountLocal($value)
+    {
+        $this->authorizedAmountLocal = $value;
         return $this;
     }
     
@@ -775,6 +861,28 @@ class Transaction
     }
     
     /**
+     * Get CapturedAmountLocal
+     * Amount that was successfully captured on the transaction, in the currency of the project
+     * @return string
+     */
+    public function getCapturedAmountLocal()
+    {
+        return $this->capturedAmountLocal;
+    }
+
+    /**
+     * Set CapturedAmountLocal
+     * Amount that was successfully captured on the transaction, in the currency of the project
+     * @param  string $value
+     * @return $this
+     */
+    public function setCapturedAmountLocal($value)
+    {
+        $this->capturedAmountLocal = $value;
+        return $this;
+    }
+    
+    /**
      * Get RefundedAmount
      * Amount that was successfully refunded on the transaction
      * @return string
@@ -797,6 +905,28 @@ class Transaction
     }
     
     /**
+     * Get RefundedAmountLocal
+     * Amount that was successfully refunded on the transaction, in the currency of the project
+     * @return string
+     */
+    public function getRefundedAmountLocal()
+    {
+        return $this->refundedAmountLocal;
+    }
+
+    /**
+     * Set RefundedAmountLocal
+     * Amount that was successfully refunded on the transaction, in the currency of the project
+     * @param  string $value
+     * @return $this
+     */
+    public function setRefundedAmountLocal($value)
+    {
+        $this->refundedAmountLocal = $value;
+        return $this;
+    }
+    
+    /**
      * Get AvailableAmount
      * Amount available on the transaction (captured - refunded)
      * @return string
@@ -815,6 +945,28 @@ class Transaction
     public function setAvailableAmount($value)
     {
         $this->availableAmount = $value;
+        return $this;
+    }
+    
+    /**
+     * Get AvailableAmountLocal
+     * Amount available on the transaction (captured - refunded), in the currency of the project
+     * @return string
+     */
+    public function getAvailableAmountLocal()
+    {
+        return $this->availableAmountLocal;
+    }
+
+    /**
+     * Set AvailableAmountLocal
+     * Amount available on the transaction (captured - refunded), in the currency of the project
+     * @param  string $value
+     * @return $this
+     */
+    public function setAvailableAmountLocal($value)
+    {
+        $this->availableAmountLocal = $value;
         return $this;
     }
     
@@ -1017,6 +1169,50 @@ class Transaction
     }
     
     /**
+     * Get GatewayFeeLocal
+     * Fee taken by the payment gateway to process the payment, in the currency of the project
+     * @return string
+     */
+    public function getGatewayFeeLocal()
+    {
+        return $this->gatewayFeeLocal;
+    }
+
+    /**
+     * Set GatewayFeeLocal
+     * Fee taken by the payment gateway to process the payment, in the currency of the project
+     * @param  string $value
+     * @return $this
+     */
+    public function setGatewayFeeLocal($value)
+    {
+        $this->gatewayFeeLocal = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CurrencyFee
+     * Currency of the fee taken on the transaction (field `gateway_fee`)
+     * @return string
+     */
+    public function getCurrencyFee()
+    {
+        return $this->currencyFee;
+    }
+
+    /**
+     * Set CurrencyFee
+     * Currency of the fee taken on the transaction (field `gateway_fee`)
+     * @param  string $value
+     * @return $this
+     */
+    public function setCurrencyFee($value)
+    {
+        $this->currencyFee = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the transaction, in the form of a dictionary (key-value pair)
      * @return array
@@ -1147,17 +1343,32 @@ class Transaction
         if(! empty($data['amount']))
             $this->setAmount($data['amount']);
 
+        if(! empty($data['amount_local']))
+            $this->setAmountLocal($data['amount_local']);
+
         if(! empty($data['authorized_amount']))
             $this->setAuthorizedAmount($data['authorized_amount']);
+
+        if(! empty($data['authorized_amount_local']))
+            $this->setAuthorizedAmountLocal($data['authorized_amount_local']);
 
         if(! empty($data['captured_amount']))
             $this->setCapturedAmount($data['captured_amount']);
 
+        if(! empty($data['captured_amount_local']))
+            $this->setCapturedAmountLocal($data['captured_amount_local']);
+
         if(! empty($data['refunded_amount']))
             $this->setRefundedAmount($data['refunded_amount']);
 
+        if(! empty($data['refunded_amount_local']))
+            $this->setRefundedAmountLocal($data['refunded_amount_local']);
+
         if(! empty($data['available_amount']))
             $this->setAvailableAmount($data['available_amount']);
+
+        if(! empty($data['available_amount_local']))
+            $this->setAvailableAmountLocal($data['available_amount_local']);
 
         if(! empty($data['currency']))
             $this->setCurrency($data['currency']);
@@ -1185,6 +1396,12 @@ class Transaction
 
         if(! empty($data['gateway_fee']))
             $this->setGatewayFee($data['gateway_fee']);
+
+        if(! empty($data['gateway_fee_local']))
+            $this->setGatewayFeeLocal($data['gateway_fee_local']);
+
+        if(! empty($data['currency_fee']))
+            $this->setCurrencyFee($data['currency_fee']);
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);

@@ -68,13 +68,19 @@ class PayoutItem
      * ID of the payout item from the payment gateway
      * @var string
      */
-    protected $gatewayId;
+    protected $gatewayResourceId;
+
+    /**
+     * Amount related to this specific payout item. Can be null or 0.
+     * @var decimal
+     */
+    protected $amount;
 
     /**
      * Fee linked to this specific payout item. Can be null or 0.
      * @var decimal
      */
-    protected $fee;
+    protected $fees;
 
     /**
      * Metadata related to the payout item, in the form of a dictionary (key-value pair)
@@ -299,46 +305,68 @@ class PayoutItem
     }
     
     /**
-     * Get GatewayId
+     * Get GatewayResourceId
      * ID of the payout item from the payment gateway
      * @return string
      */
-    public function getGatewayId()
+    public function getGatewayResourceId()
     {
-        return $this->gatewayId;
+        return $this->gatewayResourceId;
     }
 
     /**
-     * Set GatewayId
+     * Set GatewayResourceId
      * ID of the payout item from the payment gateway
      * @param  string $value
      * @return $this
      */
-    public function setGatewayId($value)
+    public function setGatewayResourceId($value)
     {
-        $this->gatewayId = $value;
+        $this->gatewayResourceId = $value;
         return $this;
     }
     
     /**
-     * Get Fee
-     * Fee linked to this specific payout item. Can be null or 0.
+     * Get Amount
+     * Amount related to this specific payout item. Can be null or 0.
      * @return string
      */
-    public function getFee()
+    public function getAmount()
     {
-        return $this->fee;
+        return $this->amount;
     }
 
     /**
-     * Set Fee
+     * Set Amount
+     * Amount related to this specific payout item. Can be null or 0.
+     * @param  string $value
+     * @return $this
+     */
+    public function setAmount($value)
+    {
+        $this->amount = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Fees
+     * Fee linked to this specific payout item. Can be null or 0.
+     * @return string
+     */
+    public function getFees()
+    {
+        return $this->fees;
+    }
+
+    /**
+     * Set Fees
      * Fee linked to this specific payout item. Can be null or 0.
      * @param  string $value
      * @return $this
      */
-    public function setFee($value)
+    public function setFees($value)
     {
-        $this->fee = $value;
+        $this->fees = $value;
         return $this;
     }
     
@@ -418,11 +446,14 @@ class PayoutItem
         if(! empty($data['type']))
             $this->setType($data['type']);
 
-        if(! empty($data['gateway_id']))
-            $this->setGatewayId($data['gateway_id']);
+        if(! empty($data['gateway_resource_id']))
+            $this->setGatewayResourceId($data['gateway_resource_id']);
 
-        if(! empty($data['fee']))
-            $this->setFee($data['fee']);
+        if(! empty($data['amount']))
+            $this->setAmount($data['amount']);
+
+        if(! empty($data['fees']))
+            $this->setFees($data['fees']);
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);

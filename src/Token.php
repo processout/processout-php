@@ -435,6 +435,30 @@ class Token
 
     
     /**
+     * Verify a customer token's card is valid.
+     * @param array $options
+     * @return bool
+     */
+    public function verify($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($this->getId()) . "/verify";
+
+        $data = array(
+
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        $returnValues['success'] = $response->isSuccess();
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
      * Get the customer's tokens.
      * @param string $customerId
      * @param array $options
@@ -516,6 +540,8 @@ class Token
             "source" => (!empty($options["source"])) ? $options["source"] : null, 
             "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
             "target" => (!empty($options["target"])) ? $options["target"] : null, 
+            "verify" => (!empty($options["verify"])) ? $options["verify"] : null, 
+            "verify_metadata" => (!empty($options["verify_metadata"])) ? $options["verify_metadata"] : null, 
             "set_default" => (!empty($options["set_default"])) ? $options["set_default"] : null
         );
 
