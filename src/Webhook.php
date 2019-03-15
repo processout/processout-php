@@ -83,8 +83,8 @@ class Webhook
     protected $responseTimeMs;
 
     /**
-     * The status of the webhook. 0: pending, 1: success, 2: error
-     * @var integer
+     * The status of the webhook. Either delivered or failed
+     * @var string
      */
     protected $status;
 
@@ -371,8 +371,8 @@ class Webhook
     
     /**
      * Get Status
-     * The status of the webhook. 0: pending, 1: success, 2: error
-     * @return int
+     * The status of the webhook. Either delivered or failed
+     * @return string
      */
     public function getStatus()
     {
@@ -381,8 +381,8 @@ class Webhook
 
     /**
      * Set Status
-     * The status of the webhook. 0: pending, 1: success, 2: error
-     * @param  int $value
+     * The status of the webhook. Either delivered or failed
+     * @param  string $value
      * @return $this
      */
     public function setStatus($value)

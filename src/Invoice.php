@@ -161,6 +161,12 @@ class Invoice
     protected $cancelUrl;
 
     /**
+     * Custom webhook URL where updates about this specific payment will be sent, on top of your project-wide URLs
+     * @var string
+     */
+    protected $webhookUrl;
+
+    /**
      * Define whether or not the invoice is in sandbox environment
      * @var boolean
      */
@@ -761,6 +767,28 @@ class Invoice
     }
     
     /**
+     * Get WebhookUrl
+     * Custom webhook URL where updates about this specific payment will be sent, on top of your project-wide URLs
+     * @return string
+     */
+    public function getWebhookUrl()
+    {
+        return $this->webhookUrl;
+    }
+
+    /**
+     * Set WebhookUrl
+     * Custom webhook URL where updates about this specific payment will be sent, on top of your project-wide URLs
+     * @param  string $value
+     * @return $this
+     */
+    public function setWebhookUrl($value)
+    {
+        $this->webhookUrl = $value;
+        return $this;
+    }
+    
+    /**
      * Get Sandbox
      * Define whether or not the invoice is in sandbox environment
      * @return bool
@@ -883,6 +911,9 @@ class Invoice
 
         if(! empty($data['cancel_url']))
             $this->setCancelUrl($data['cancel_url']);
+
+        if(! empty($data['webhook_url']))
+            $this->setWebhookUrl($data['webhook_url']);
 
         if(! empty($data['sandbox']))
             $this->setSandbox($data['sandbox']);
@@ -1174,7 +1205,8 @@ class Invoice
             "statement_descriptor_company" => $this->getStatementDescriptorCompany(), 
             "statement_descriptor_url" => $this->getStatementDescriptorUrl(), 
             "return_url" => $this->getReturnUrl(), 
-            "cancel_url" => $this->getCancelUrl()
+            "cancel_url" => $this->getCancelUrl(), 
+            "webhook_url" => $this->getWebhookUrl()
         );
 
         $response = $request->post($path, $data, $options);

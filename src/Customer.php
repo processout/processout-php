@@ -1110,7 +1110,8 @@ class Customer
             "ip_address" => $this->getIpAddress(), 
             "phone_number" => $this->getPhoneNumber(), 
             "legal_document" => $this->getLegalDocument(), 
-            "metadata" => $this->getMetadata()
+            "metadata" => $this->getMetadata(), 
+            "id" => $this->getId()
         );
 
         $response = $request->post($path, $data, $options);
