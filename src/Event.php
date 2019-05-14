@@ -275,7 +275,7 @@ class Event
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/events/ev_" . urlencode($this->getId()) . "/webhooks";
+        $path    = "/events/" . urlencode($this->getId()) . "/webhooks";
 
         $data = array(
 
@@ -344,7 +344,7 @@ class Event
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/events/ev_" . urlencode($eventId) . "";
+        $path    = "/events/" . urlencode($eventId) . "";
 
         $data = array(
 
