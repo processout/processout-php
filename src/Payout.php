@@ -125,6 +125,12 @@ class Payout
     protected $reserve;
 
     /**
+     * Date at which the payout was settled
+     * @var string
+     */
+    protected $settledAt;
+
+    /**
      * Date at which the payout was created
      * @var string
      */
@@ -547,6 +553,28 @@ class Payout
     }
     
     /**
+     * Get SettledAt
+     * Date at which the payout was settled
+     * @return string
+     */
+    public function getSettledAt()
+    {
+        return $this->settledAt;
+    }
+
+    /**
+     * Set SettledAt
+     * Date at which the payout was settled
+     * @param  string $value
+     * @return $this
+     */
+    public function setSettledAt($value)
+    {
+        $this->settledAt = $value;
+        return $this;
+    }
+    
+    /**
      * Get CreatedAt
      * Date at which the payout was created
      * @return string
@@ -629,6 +657,9 @@ class Payout
 
         if(! empty($data['reserve']))
             $this->setReserve($data['reserve']);
+
+        if(! empty($data['settled_at']))
+            $this->setSettledAt($data['settled_at']);
 
         if(! empty($data['created_at']))
             $this->setCreatedAt($data['created_at']);

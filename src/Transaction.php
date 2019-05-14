@@ -197,6 +197,12 @@ class Transaction
     protected $errorCode;
 
     /**
+     * Name of the last gateway the transaction was attempted on (successfully or not). Use the operations list to get the full transaction's history
+     * @var string
+     */
+    protected $gatewayName;
+
+    /**
      * Status of the potential 3-D Secure authentication
      * @var string
      */
@@ -219,6 +225,36 @@ class Transaction
      * @var boolean
      */
     protected $captured;
+
+    /**
+     * Whether the transaction was voided or not
+     * @var boolean
+     */
+    protected $voided;
+
+    /**
+     * Whether the transaction was refunded or not
+     * @var boolean
+     */
+    protected $refunded;
+
+    /**
+     * Whether the transaction was charged back or not
+     * @var boolean
+     */
+    protected $chargedback;
+
+    /**
+     * Whether the transaction received a fraud notification event or not
+     * @var boolean
+     */
+    protected $receivedFraudNotification;
+
+    /**
+     * Whether the transaction received a retrieval request event or not
+     * @var boolean
+     */
+    protected $receivedRetrievalRequest;
 
     /**
      * ProcessOut fee applied on the transaction
@@ -267,6 +303,18 @@ class Transaction
      * @var string
      */
     protected $createdAt;
+
+    /**
+     * Date at which the transaction was charged back
+     * @var string
+     */
+    protected $chargedbackAt;
+
+    /**
+     * Date at which the transaction was refunded
+     * @var string
+     */
+    protected $refundedAt;
 
     /**
      * Transaction constructor
@@ -376,7 +424,7 @@ class Transaction
             $this->invoice = $value;
         else
         {
-            $obj = new Customer($this->client);
+            $obj = new Invoice($this->client);
             $obj->fillWithData($value);
             $this->invoice = $obj;
         }
@@ -1015,6 +1063,28 @@ class Transaction
     }
     
     /**
+     * Get GatewayName
+     * Name of the last gateway the transaction was attempted on (successfully or not). Use the operations list to get the full transaction's history
+     * @return string
+     */
+    public function getGatewayName()
+    {
+        return $this->gatewayName;
+    }
+
+    /**
+     * Set GatewayName
+     * Name of the last gateway the transaction was attempted on (successfully or not). Use the operations list to get the full transaction's history
+     * @param  string $value
+     * @return $this
+     */
+    public function setGatewayName($value)
+    {
+        $this->gatewayName = $value;
+        return $this;
+    }
+    
+    /**
      * Get ThreeDSStatus
      * Status of the potential 3-D Secure authentication
      * @return string
@@ -1099,6 +1169,116 @@ class Transaction
     public function setCaptured($value)
     {
         $this->captured = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Voided
+     * Whether the transaction was voided or not
+     * @return bool
+     */
+    public function getVoided()
+    {
+        return $this->voided;
+    }
+
+    /**
+     * Set Voided
+     * Whether the transaction was voided or not
+     * @param  bool $value
+     * @return $this
+     */
+    public function setVoided($value)
+    {
+        $this->voided = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Refunded
+     * Whether the transaction was refunded or not
+     * @return bool
+     */
+    public function getRefunded()
+    {
+        return $this->refunded;
+    }
+
+    /**
+     * Set Refunded
+     * Whether the transaction was refunded or not
+     * @param  bool $value
+     * @return $this
+     */
+    public function setRefunded($value)
+    {
+        $this->refunded = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Chargedback
+     * Whether the transaction was charged back or not
+     * @return bool
+     */
+    public function getChargedback()
+    {
+        return $this->chargedback;
+    }
+
+    /**
+     * Set Chargedback
+     * Whether the transaction was charged back or not
+     * @param  bool $value
+     * @return $this
+     */
+    public function setChargedback($value)
+    {
+        $this->chargedback = $value;
+        return $this;
+    }
+    
+    /**
+     * Get ReceivedFraudNotification
+     * Whether the transaction received a fraud notification event or not
+     * @return bool
+     */
+    public function getReceivedFraudNotification()
+    {
+        return $this->receivedFraudNotification;
+    }
+
+    /**
+     * Set ReceivedFraudNotification
+     * Whether the transaction received a fraud notification event or not
+     * @param  bool $value
+     * @return $this
+     */
+    public function setReceivedFraudNotification($value)
+    {
+        $this->receivedFraudNotification = $value;
+        return $this;
+    }
+    
+    /**
+     * Get ReceivedRetrievalRequest
+     * Whether the transaction received a retrieval request event or not
+     * @return bool
+     */
+    public function getReceivedRetrievalRequest()
+    {
+        return $this->receivedRetrievalRequest;
+    }
+
+    /**
+     * Set ReceivedRetrievalRequest
+     * Whether the transaction received a retrieval request event or not
+     * @param  bool $value
+     * @return $this
+     */
+    public function setReceivedRetrievalRequest($value)
+    {
+        $this->receivedRetrievalRequest = $value;
         return $this;
     }
     
@@ -1278,6 +1458,50 @@ class Transaction
         return $this;
     }
     
+    /**
+     * Get ChargedbackAt
+     * Date at which the transaction was charged back
+     * @return string
+     */
+    public function getChargedbackAt()
+    {
+        return $this->chargedbackAt;
+    }
+
+    /**
+     * Set ChargedbackAt
+     * Date at which the transaction was charged back
+     * @param  string $value
+     * @return $this
+     */
+    public function setChargedbackAt($value)
+    {
+        $this->chargedbackAt = $value;
+        return $this;
+    }
+    
+    /**
+     * Get RefundedAt
+     * Date at which the transaction was refunded
+     * @return string
+     */
+    public function getRefundedAt()
+    {
+        return $this->refundedAt;
+    }
+
+    /**
+     * Set RefundedAt
+     * Date at which the transaction was refunded
+     * @param  string $value
+     * @return $this
+     */
+    public function setRefundedAt($value)
+    {
+        $this->refundedAt = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1376,6 +1600,9 @@ class Transaction
         if(! empty($data['error_code']))
             $this->setErrorCode($data['error_code']);
 
+        if(! empty($data['gateway_name']))
+            $this->setGatewayName($data['gateway_name']);
+
         if(! empty($data['three_d_s_status']))
             $this->setThreeDSStatus($data['three_d_s_status']);
 
@@ -1387,6 +1614,21 @@ class Transaction
 
         if(! empty($data['captured']))
             $this->setCaptured($data['captured']);
+
+        if(! empty($data['voided']))
+            $this->setVoided($data['voided']);
+
+        if(! empty($data['refunded']))
+            $this->setRefunded($data['refunded']);
+
+        if(! empty($data['chargedback']))
+            $this->setChargedback($data['chargedback']);
+
+        if(! empty($data['received_fraud_notification']))
+            $this->setReceivedFraudNotification($data['received_fraud_notification']);
+
+        if(! empty($data['received_retrieval_request']))
+            $this->setReceivedRetrievalRequest($data['received_retrieval_request']);
 
         if(! empty($data['processout_fee']))
             $this->setProcessoutFee($data['processout_fee']);
@@ -1411,6 +1653,12 @@ class Transaction
 
         if(! empty($data['created_at']))
             $this->setCreatedAt($data['created_at']);
+
+        if(! empty($data['chargedback_at']))
+            $this->setChargedbackAt($data['chargedback_at']);
+
+        if(! empty($data['refunded_at']))
+            $this->setRefundedAt($data['refunded_at']);
 
         return $this;
     }

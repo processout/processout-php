@@ -275,7 +275,7 @@ class Event
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/events/" . urlencode($this->getId()) . "/webhooks";
+        $path    = "/events/ev_" . urlencode($this->getId()) . "/webhooks";
 
         $data = array(
 
@@ -344,7 +344,7 @@ class Event
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/events/" . urlencode($eventId) . "";
+        $path    = "/events/ev_" . urlencode($eventId) . "";
 
         $data = array(
 
@@ -358,6 +358,41 @@ class Event
         $body = $response->getBody();
         $body = $body['event'];
         $returnValues['find'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Find an event by the Resource ID that generated it.
+     * @param string $resourceId
+     * @param array $options
+     * @return array
+     */
+    public function findByResourceId($resourceId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/events/by_resource_id/" . urlencode($resourceId) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field events
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['events'] as $v)
+        {
+            $tmp = new Event($this->client);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+        $returnValues['Events'] = $a;
         
         return array_values($returnValues)[0];
     }

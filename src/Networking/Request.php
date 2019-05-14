@@ -31,7 +31,7 @@ class Request
         $headers = array(
             'API-Version: 1.4.0.0',
             'Content-Type: application/json',
-            'User-Agent: ProcessOut PHP-Bindings/6.11.0'
+            'User-Agent: ProcessOut PHP-Bindings/6.12.0'
         );
         if (! empty($options['idempotencyKey']))
             $headers[] = 'Idempotency-Key: ' . $options['idempotencyKey'];
@@ -45,7 +45,7 @@ class Request
         curl_setopt($request, CURLOPT_HTTPHEADER, $headers); 
 
         curl_setopt($request, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
-        curl_setopt($request, CURLOPT_TIMEOUT, 30); 
+        curl_setopt($request, CURLOPT_TIMEOUT, 65);
         curl_setopt($request, CURLOPT_MAXREDIRS, 4); 
         curl_setopt($request, CURLOPT_RETURNTRANSFER, true); 
         curl_setopt($request, CURLOPT_FOLLOWLOCATION, true); 
