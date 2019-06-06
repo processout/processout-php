@@ -209,6 +209,33 @@ class ProcessOut
     }
 	
     /**
+     * Create a new InvoiceRisk instance
+     * @param array|null $prefill array used to prefill the object
+     * @return InvoiceRisk
+     */
+	public function newInvoiceRisk($prefill = array()) {
+        return new InvoiceRisk($this, $prefill);
+    }
+	
+    /**
+     * Create a new InvoiceDevice instance
+     * @param array|null $prefill array used to prefill the object
+     * @return InvoiceDevice
+     */
+	public function newInvoiceDevice($prefill = array()) {
+        return new InvoiceDevice($this, $prefill);
+    }
+	
+    /**
+     * Create a new InvoiceShipping instance
+     * @param array|null $prefill array used to prefill the object
+     * @return InvoiceShipping
+     */
+	public function newInvoiceShipping($prefill = array()) {
+        return new InvoiceShipping($this, $prefill);
+    }
+	
+    /**
      * Create a new InvoiceDetail instance
      * @param array|null $prefill array used to prefill the object
      * @return InvoiceDetail

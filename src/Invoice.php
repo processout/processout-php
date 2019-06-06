@@ -179,6 +179,24 @@ class Invoice
     protected $createdAt;
 
     /**
+     * Risk information
+     * @var object
+     */
+    protected $risk;
+
+    /**
+     * Shipping information
+     * @var object
+     */
+    protected $shipping;
+
+    /**
+     * Device information
+     * @var object
+     */
+    protected $device;
+
+    /**
      * Invoice constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -832,6 +850,93 @@ class Invoice
         return $this;
     }
     
+    /**
+     * Get Risk
+     * Risk information
+     * @return object
+     */
+    public function getRisk()
+    {
+        return $this->risk;
+    }
+
+    /**
+     * Set Risk
+     * Risk information
+     * @param  object $value
+     * @return $this
+     */
+    public function setRisk($value)
+    {
+        if (is_object($value))
+            $this->risk = $value;
+        else
+        {
+            $obj = new InvoiceRisk($this->client);
+            $obj->fillWithData($value);
+            $this->risk = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get Shipping
+     * Shipping information
+     * @return object
+     */
+    public function getShipping()
+    {
+        return $this->shipping;
+    }
+
+    /**
+     * Set Shipping
+     * Shipping information
+     * @param  object $value
+     * @return $this
+     */
+    public function setShipping($value)
+    {
+        if (is_object($value))
+            $this->shipping = $value;
+        else
+        {
+            $obj = new InvoiceShipping($this->client);
+            $obj->fillWithData($value);
+            $this->shipping = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get Device
+     * Device information
+     * @return object
+     */
+    public function getDevice()
+    {
+        return $this->device;
+    }
+
+    /**
+     * Set Device
+     * Device information
+     * @param  object $value
+     * @return $this
+     */
+    public function setDevice($value)
+    {
+        if (is_object($value))
+            $this->device = $value;
+        else
+        {
+            $obj = new InvoiceDevice($this->client);
+            $obj->fillWithData($value);
+            $this->device = $obj;
+        }
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -921,6 +1026,15 @@ class Invoice
         if(! empty($data['created_at']))
             $this->setCreatedAt($data['created_at']);
 
+        if(! empty($data['risk']))
+            $this->setRisk($data['risk']);
+
+        if(! empty($data['shipping']))
+            $this->setShipping($data['shipping']);
+
+        if(! empty($data['device']))
+            $this->setDevice($data['device']);
+
         return $this;
     }
 
@@ -943,6 +1057,7 @@ class Invoice
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
             "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
             "enable_three_d_s_2" => (!empty($options["enable_three_d_s_2"])) ? $options["enable_three_d_s_2"] : null, 
+            "auto_capture_at" => (!empty($options["auto_capture_at"])) ? $options["auto_capture_at"] : null, 
             "source" => $source
         );
 
@@ -978,6 +1093,7 @@ class Invoice
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
             "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
+            "auto_capture_at" => (!empty($options["auto_capture_at"])) ? $options["auto_capture_at"] : null, 
             "enable_three_d_s_2" => (!empty($options["enable_three_d_s_2"])) ? $options["enable_three_d_s_2"] : null, 
             "source" => $source
         );
@@ -1209,7 +1325,10 @@ class Invoice
             "statement_descriptor_url" => $this->getStatementDescriptorUrl(), 
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl(), 
-            "webhook_url" => $this->getWebhookUrl()
+            "webhook_url" => $this->getWebhookUrl(), 
+            "risk" => $this->getRisk(), 
+            "shipping" => $this->getShipping(), 
+            "device" => $this->getDevice()
         );
 
         $response = $request->post($path, $data, $options);

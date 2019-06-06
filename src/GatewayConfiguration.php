@@ -53,18 +53,6 @@ class GatewayConfiguration
     protected $name;
 
     /**
-     * Fixed fee of the gateway configuration, if specified
-     * @var float
-     */
-    protected $feeFixed;
-
-    /**
-     * Percentage fee of the gateway configuration, if specified
-     * @var float
-     */
-    protected $feePercentage;
-
-    /**
      * Default currency of the gateway configuration
      * @var string
      */
@@ -254,50 +242,6 @@ class GatewayConfiguration
     }
     
     /**
-     * Get FeeFixed
-     * Fixed fee of the gateway configuration, if specified
-     * @return double
-     */
-    public function getFeeFixed()
-    {
-        return $this->feeFixed;
-    }
-
-    /**
-     * Set FeeFixed
-     * Fixed fee of the gateway configuration, if specified
-     * @param  double $value
-     * @return $this
-     */
-    public function setFeeFixed($value)
-    {
-        $this->feeFixed = $value;
-        return $this;
-    }
-    
-    /**
-     * Get FeePercentage
-     * Percentage fee of the gateway configuration, if specified
-     * @return double
-     */
-    public function getFeePercentage()
-    {
-        return $this->feePercentage;
-    }
-
-    /**
-     * Set FeePercentage
-     * Percentage fee of the gateway configuration, if specified
-     * @param  double $value
-     * @return $this
-     */
-    public function setFeePercentage($value)
-    {
-        $this->feePercentage = $value;
-        return $this;
-    }
-    
-    /**
      * Get DefaultCurrency
      * Default currency of the gateway configuration
      * @return string
@@ -433,12 +377,6 @@ class GatewayConfiguration
         if(! empty($data['name']))
             $this->setName($data['name']);
 
-        if(! empty($data['fee_fixed']))
-            $this->setFeeFixed($data['fee_fixed']);
-
-        if(! empty($data['fee_percentage']))
-            $this->setFeePercentage($data['fee_percentage']);
-
         if(! empty($data['default_currency']))
             $this->setDefaultCurrency($data['default_currency']);
 
@@ -537,10 +475,9 @@ class GatewayConfiguration
             "id" => $this->getId(), 
             "name" => $this->getName(), 
             "enabled" => $this->getEnabled(), 
-            "fee_fixed" => $this->getFeeFixed(), 
-            "fee_percentage" => $this->getFeePercentage(), 
             "default_currency" => $this->getDefaultCurrency(), 
-            "settings" => (!empty($options["settings"])) ? $options["settings"] : null
+            "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
+            "sub_accounts_enabled" => (!empty($options["sub_accounts_enabled"])) ? $options["sub_accounts_enabled"] : null
         );
 
         $response = $request->put($path, $data, $options);
@@ -596,10 +533,9 @@ class GatewayConfiguration
             "id" => $this->getId(), 
             "name" => $this->getName(), 
             "enabled" => $this->getEnabled(), 
-            "fee_fixed" => $this->getFeeFixed(), 
-            "fee_percentage" => $this->getFeePercentage(), 
             "default_currency" => $this->getDefaultCurrency(), 
-            "settings" => (!empty($options["settings"])) ? $options["settings"] : null
+            "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
+            "sub_accounts_enabled" => (!empty($options["sub_accounts_enabled"])) ? $options["sub_accounts_enabled"] : null
         );
 
         $response = $request->post($path, $data, $options);

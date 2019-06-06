@@ -149,6 +149,18 @@ class Customer
     protected $legalDocument;
 
     /**
+     * Sex of the customer
+     * @var string
+     */
+    protected $sex;
+
+    /**
+     * Define whether or not the customer is a business
+     * @var boolean
+     */
+    protected $isBusiness;
+
+    /**
      * Metadata related to the customer, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -714,6 +726,50 @@ class Customer
     }
     
     /**
+     * Get Sex
+     * Sex of the customer
+     * @return string
+     */
+    public function getSex()
+    {
+        return $this->sex;
+    }
+
+    /**
+     * Set Sex
+     * Sex of the customer
+     * @param  string $value
+     * @return $this
+     */
+    public function setSex($value)
+    {
+        $this->sex = $value;
+        return $this;
+    }
+    
+    /**
+     * Get IsBusiness
+     * Define whether or not the customer is a business
+     * @return bool
+     */
+    public function getIsBusiness()
+    {
+        return $this->isBusiness;
+    }
+
+    /**
+     * Set IsBusiness
+     * Define whether or not the customer is a business
+     * @param  bool $value
+     * @return $this
+     */
+    public function setIsBusiness($value)
+    {
+        $this->isBusiness = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the customer, in the form of a dictionary (key-value pair)
      * @return array
@@ -852,6 +908,12 @@ class Customer
 
         if(! empty($data['legal_document']))
             $this->setLegalDocument($data['legal_document']);
+
+        if(! empty($data['sex']))
+            $this->setSex($data['sex']);
+
+        if(! empty($data['is_business']))
+            $this->setIsBusiness($data['is_business']);
 
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
@@ -1110,6 +1172,8 @@ class Customer
             "ip_address" => $this->getIpAddress(), 
             "phone_number" => $this->getPhoneNumber(), 
             "legal_document" => $this->getLegalDocument(), 
+            "is_business" => $this->getIsBusiness(), 
+            "sex" => $this->getSex(), 
             "metadata" => $this->getMetadata(), 
             "id" => $this->getId()
         );
@@ -1182,6 +1246,8 @@ class Customer
             "ip_address" => $this->getIpAddress(), 
             "phone_number" => $this->getPhoneNumber(), 
             "legal_document" => $this->getLegalDocument(), 
+            "is_business" => $this->getIsBusiness(), 
+            "sex" => $this->getSex(), 
             "metadata" => $this->getMetadata()
         );
 

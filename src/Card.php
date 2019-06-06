@@ -47,6 +47,18 @@ class Card
     protected $scheme;
 
     /**
+     * Co-scheme of the card, such as carte bancaire
+     * @var string
+     */
+    protected $coScheme;
+
+    /**
+     * Customer preferred scheme, such as carte bancaire vs visa
+     * @var string
+     */
+    protected $preferredScheme;
+
+    /**
      * Type of the card (Credit, Debit, ...)
      * @var string
      */
@@ -312,6 +324,50 @@ class Card
     public function setScheme($value)
     {
         $this->scheme = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CoScheme
+     * Co-scheme of the card, such as carte bancaire
+     * @return string
+     */
+    public function getCoScheme()
+    {
+        return $this->coScheme;
+    }
+
+    /**
+     * Set CoScheme
+     * Co-scheme of the card, such as carte bancaire
+     * @param  string $value
+     * @return $this
+     */
+    public function setCoScheme($value)
+    {
+        $this->coScheme = $value;
+        return $this;
+    }
+    
+    /**
+     * Get PreferredScheme
+     * Customer preferred scheme, such as carte bancaire vs visa
+     * @return string
+     */
+    public function getPreferredScheme()
+    {
+        return $this->preferredScheme;
+    }
+
+    /**
+     * Set PreferredScheme
+     * Customer preferred scheme, such as carte bancaire vs visa
+     * @param  string $value
+     * @return $this
+     */
+    public function setPreferredScheme($value)
+    {
+        $this->preferredScheme = $value;
         return $this;
     }
     
@@ -821,6 +877,12 @@ class Card
 
         if(! empty($data['scheme']))
             $this->setScheme($data['scheme']);
+
+        if(! empty($data['co_scheme']))
+            $this->setCoScheme($data['co_scheme']);
+
+        if(! empty($data['preferred_scheme']))
+            $this->setPreferredScheme($data['preferred_scheme']);
 
         if(! empty($data['type']))
             $this->setType($data['type']);
