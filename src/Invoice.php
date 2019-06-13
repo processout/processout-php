@@ -113,6 +113,12 @@ class Invoice
     protected $currency;
 
     /**
+     * Type of the transaction initiated by the merchant (off-session). Can be either one-off or recurring, depending on the nature of the merchant initiated transaction.
+     * @var string
+     */
+    protected $merchantInitiatorType;
+
+    /**
      * Statement to be shown on the bank statement of your customer
      * @var string
      */
@@ -609,6 +615,28 @@ class Invoice
     }
     
     /**
+     * Get MerchantInitiatorType
+     * Type of the transaction initiated by the merchant (off-session). Can be either one-off or recurring, depending on the nature of the merchant initiated transaction.
+     * @return string
+     */
+    public function getMerchantInitiatorType()
+    {
+        return $this->merchantInitiatorType;
+    }
+
+    /**
+     * Set MerchantInitiatorType
+     * Type of the transaction initiated by the merchant (off-session). Can be either one-off or recurring, depending on the nature of the merchant initiated transaction.
+     * @param  string $value
+     * @return $this
+     */
+    public function setMerchantInitiatorType($value)
+    {
+        $this->merchantInitiatorType = $value;
+        return $this;
+    }
+    
+    /**
      * Get StatementDescriptor
      * Statement to be shown on the bank statement of your customer
      * @return string
@@ -993,6 +1021,9 @@ class Invoice
         if(! empty($data['currency']))
             $this->setCurrency($data['currency']);
 
+        if(! empty($data['merchant_initiator_type']))
+            $this->setMerchantInitiatorType($data['merchant_initiator_type']);
+
         if(! empty($data['statement_descriptor']))
             $this->setStatementDescriptor($data['statement_descriptor']);
 
@@ -1318,6 +1349,7 @@ class Invoice
             "currency" => $this->getCurrency(), 
             "metadata" => $this->getMetadata(), 
             "details" => $this->getDetails(), 
+            "merchant_initiator_type" => $this->getMerchantInitiatorType(), 
             "statement_descriptor" => $this->getStatementDescriptor(), 
             "statement_descriptor_phone" => $this->getStatementDescriptorPhone(), 
             "statement_descriptor_city" => $this->getStatementDescriptorCity(), 
