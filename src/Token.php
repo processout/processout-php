@@ -77,10 +77,16 @@ class Token
     protected $isSubscriptionOnly;
 
     /**
-     * True if the card it the default card of the customer, false otherwise
+     * True if the token it the default token of the customer, false otherwise
      * @var boolean
      */
     protected $isDefault;
+
+    /**
+     * True if the token is chargeable, false otherwise
+     * @var boolean
+     */
+    protected $isChargeable;
 
     /**
      * Date at which the customer token was created
@@ -344,7 +350,7 @@ class Token
     
     /**
      * Get IsDefault
-     * True if the card it the default card of the customer, false otherwise
+     * True if the token it the default token of the customer, false otherwise
      * @return bool
      */
     public function getIsDefault()
@@ -354,13 +360,35 @@ class Token
 
     /**
      * Set IsDefault
-     * True if the card it the default card of the customer, false otherwise
+     * True if the token it the default token of the customer, false otherwise
      * @param  bool $value
      * @return $this
      */
     public function setIsDefault($value)
     {
         $this->isDefault = $value;
+        return $this;
+    }
+    
+    /**
+     * Get IsChargeable
+     * True if the token is chargeable, false otherwise
+     * @return bool
+     */
+    public function getIsChargeable()
+    {
+        return $this->isChargeable;
+    }
+
+    /**
+     * Set IsChargeable
+     * True if the token is chargeable, false otherwise
+     * @param  bool $value
+     * @return $this
+     */
+    public function setIsChargeable($value)
+    {
+        $this->isChargeable = $value;
         return $this;
     }
     
@@ -426,6 +454,9 @@ class Token
 
         if(! empty($data['is_default']))
             $this->setIsDefault($data['is_default']);
+
+        if(! empty($data['is_chargeable']))
+            $this->setIsChargeable($data['is_chargeable']);
 
         if(! empty($data['created_at']))
             $this->setCreatedAt($data['created_at']);
@@ -553,6 +584,30 @@ class Token
         $body = $response->getBody();
         $body = $body['token'];
         $returnValues['create'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Save the updated customer attributes.
+     * @param array $options
+     * @return bool
+     */
+    public function save($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($this->getId()) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->put($path, $data, $options);
+        $returnValues = array();
+
+        $returnValues['success'] = $response->isSuccess();
         
         return array_values($returnValues)[0];
     }

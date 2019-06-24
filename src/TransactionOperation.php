@@ -101,6 +101,12 @@ class TransactionOperation
     protected $errorCode;
 
     /**
+     * Additionnal context saved when processing the transaction on the specific PSP
+     * @var dictionary
+     */
+    protected $gatewayData;
+
+    /**
      * ThreeDS request payment data (read-only)
      * @var object
      */
@@ -479,6 +485,28 @@ class TransactionOperation
     }
     
     /**
+     * Get GatewayData
+     * Additionnal context saved when processing the transaction on the specific PSP
+     * @return array
+     */
+    public function getGatewayData()
+    {
+        return $this->gatewayData;
+    }
+
+    /**
+     * Set GatewayData
+     * Additionnal context saved when processing the transaction on the specific PSP
+     * @param  array $value
+     * @return $this
+     */
+    public function setGatewayData($value)
+    {
+        $this->gatewayData = $value;
+        return $this;
+    }
+    
+    /**
      * Get PaymentDataThreeDSRequest
      * ThreeDS request payment data (read-only)
      * @return object
@@ -680,6 +708,9 @@ class TransactionOperation
 
         if(! empty($data['error_code']))
             $this->setErrorCode($data['error_code']);
+
+        if(! empty($data['gateway_data']))
+            $this->setGatewayData($data['gateway_data']);
 
         if(! empty($data['payment_data_three_d_s_request']))
             $this->setPaymentDataThreeDSRequest($data['payment_data_three_d_s_request']);

@@ -110,15 +110,6 @@ class ProcessOut
     }
 	
     /**
-     * Create a new AuthorizationRequest instance
-     * @param array|null $prefill array used to prefill the object
-     * @return AuthorizationRequest
-     */
-	public function newAuthorizationRequest($prefill = array()) {
-        return new AuthorizationRequest($this, $prefill);
-    }
-	
-    /**
      * Create a new Card instance
      * @param array|null $prefill array used to prefill the object
      * @return Card
