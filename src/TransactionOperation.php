@@ -95,6 +95,18 @@ class TransactionOperation
     protected $gatewayOperationId;
 
     /**
+     * Gateway Configuration is the gateway configuration that was used to process the payment, if any
+     * @var object
+     */
+    protected $gatewayConfiguration;
+
+    /**
+     * ID of the gateway configuration that was used to process the payment, if any
+     * @var string
+     */
+    protected $gatewayConfigurationId;
+
+    /**
      * Error code returned when attempting the operation, if any
      * @var string
      */
@@ -461,7 +473,59 @@ class TransactionOperation
         $this->gatewayOperationId = $value;
         return $this;
     }
-    
+
+
+    /**
+     * Get GatewayConfiguration
+     * Gateway Configuration is the gateway configuration that was used to process the payment, if any
+     * @return object
+     */
+    public function getGatewayConfiguration()
+    {
+        return $this->gatewayConfiguration;
+    }
+
+    /**
+     * Set GatewayConfiguration
+     * Gateway Configuration is the gateway configuration that was used to process the payment, if any
+     * @param  object $value
+     * @return $this
+     */
+    public function setGatewayConfiguration($value)
+    {
+        if (is_object($value))
+            $this->gatewayConfiguration = $value;
+        else
+        {
+            $obj = new GatewayConfiguration($this->client);
+            $obj->fillWithData($value);
+            $this->gatewayConfiguration = $obj;
+        }
+        return $this;
+    }
+
+    /**
+     * Get GatewayConfigurationId
+     * ID of the gateway configuration that was used to process the payment, if any
+     * @return string
+     */
+    public function getGatewayConfigurationId()
+    {
+        return $this->gatewayConfigurationId;
+    }
+
+    /**
+     * Set GatewayConfigurationId
+     * ID of the gateway configuration that was used to process the payment, if any
+     * @param  string $value
+     * @return $this
+     */
+    public function setGatewayConfigurationId($value)
+    {
+        $this->gatewayConfigurationId = $value;
+        return $this;
+    }
+
     /**
      * Get ErrorCode
      * Error code returned when attempting the operation, if any
@@ -705,6 +769,12 @@ class TransactionOperation
 
         if(! empty($data['gateway_operation_id']))
             $this->setGatewayOperationId($data['gateway_operation_id']);
+
+        if(! empty($data['gateway_configuration']))
+            $this->setGatewayConfiguration($data['gateway_configuration']);
+
+        if(! empty($data['gateway_configuration_id']))
+            $this->setGatewayConfigurationId($data['gateway_configuration_id']);
 
         if(! empty($data['error_code']))
             $this->setErrorCode($data['error_code']);
