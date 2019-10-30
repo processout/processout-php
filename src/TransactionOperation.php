@@ -59,6 +59,18 @@ class TransactionOperation
     protected $cardId;
 
     /**
+     * Gateway configuration that was used to process the operation
+     * @var object
+     */
+    protected $gatewayConfiguration;
+
+    /**
+     * ID of the gateway configuration that was used to process the operation
+     * @var string
+     */
+    protected $gatewayConfigurationId;
+
+    /**
      * Amount of the operation
      * @var decimal
      */
@@ -327,6 +339,57 @@ class TransactionOperation
     public function setCardId($value)
     {
         $this->cardId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get GatewayConfiguration
+     * Gateway configuration that was used to process the operation
+     * @return object
+     */
+    public function getGatewayConfiguration()
+    {
+        return $this->gatewayConfiguration;
+    }
+
+    /**
+     * Set GatewayConfiguration
+     * Gateway configuration that was used to process the operation
+     * @param  object $value
+     * @return $this
+     */
+    public function setGatewayConfiguration($value)
+    {
+        if (is_object($value))
+            $this->gatewayConfiguration = $value;
+        else
+        {
+            $obj = new GatewayConfiguration($this->client);
+            $obj->fillWithData($value);
+            $this->gatewayConfiguration = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get GatewayConfigurationId
+     * ID of the gateway configuration that was used to process the operation
+     * @return string
+     */
+    public function getGatewayConfigurationId()
+    {
+        return $this->gatewayConfigurationId;
+    }
+
+    /**
+     * Set GatewayConfigurationId
+     * ID of the gateway configuration that was used to process the operation
+     * @param  string $value
+     * @return $this
+     */
+    public function setGatewayConfigurationId($value)
+    {
+        $this->gatewayConfigurationId = $value;
         return $this;
     }
     
@@ -687,6 +750,12 @@ class TransactionOperation
 
         if(! empty($data['card_id']))
             $this->setCardId($data['card_id']);
+
+        if(! empty($data['gateway_configuration']))
+            $this->setGatewayConfiguration($data['gateway_configuration']);
+
+        if(! empty($data['gateway_configuration_id']))
+            $this->setGatewayConfigurationId($data['gateway_configuration_id']);
 
         if(! empty($data['amount']))
             $this->setAmount($data['amount']);

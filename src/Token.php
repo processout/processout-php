@@ -77,6 +77,18 @@ class Token
     protected $isSubscriptionOnly;
 
     /**
+     * URL where the customer will be redirected upon payment authentication (if required by tokenization method)
+     * @var string
+     */
+    protected $returnUrl;
+
+    /**
+     * URL where the customer will be redirected if the tokenization was canceled (if required by tokenization method)
+     * @var string
+     */
+    protected $cancelUrl;
+
+    /**
      * True if the token it the default token of the customer, false otherwise
      * @var boolean
      */
@@ -349,6 +361,50 @@ class Token
     }
     
     /**
+     * Get ReturnUrl
+     * URL where the customer will be redirected upon payment authentication (if required by tokenization method)
+     * @return string
+     */
+    public function getReturnUrl()
+    {
+        return $this->returnUrl;
+    }
+
+    /**
+     * Set ReturnUrl
+     * URL where the customer will be redirected upon payment authentication (if required by tokenization method)
+     * @param  string $value
+     * @return $this
+     */
+    public function setReturnUrl($value)
+    {
+        $this->returnUrl = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CancelUrl
+     * URL where the customer will be redirected if the tokenization was canceled (if required by tokenization method)
+     * @return string
+     */
+    public function getCancelUrl()
+    {
+        return $this->cancelUrl;
+    }
+
+    /**
+     * Set CancelUrl
+     * URL where the customer will be redirected if the tokenization was canceled (if required by tokenization method)
+     * @param  string $value
+     * @return $this
+     */
+    public function setCancelUrl($value)
+    {
+        $this->cancelUrl = $value;
+        return $this;
+    }
+    
+    /**
      * Get IsDefault
      * True if the token it the default token of the customer, false otherwise
      * @return bool
@@ -451,6 +507,12 @@ class Token
 
         if(! empty($data['is_subscription_only']))
             $this->setIsSubscriptionOnly($data['is_subscription_only']);
+
+        if(! empty($data['return_url']))
+            $this->setReturnUrl($data['return_url']);
+
+        if(! empty($data['cancel_url']))
+            $this->setCancelUrl($data['cancel_url']);
 
         if(! empty($data['is_default']))
             $this->setIsDefault($data['is_default']);
@@ -568,6 +630,8 @@ class Token
 
         $data = array(
             "metadata" => $this->getMetadata(), 
+            "return_url" => $this->getReturnUrl(), 
+            "cancel_url" => $this->getCancelUrl(), 
             "source" => (!empty($options["source"])) ? $options["source"] : null, 
             "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
             "target" => (!empty($options["target"])) ? $options["target"] : null, 
