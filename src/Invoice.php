@@ -155,6 +155,12 @@ class Invoice
     protected $metadata;
 
     /**
+     * Additionnal context saved when processing the transaction on the specific PSP
+     * @var dictionary
+     */
+    protected $gatewayData;
+
+    /**
      * URL where the customer will be redirected upon payment
      * @var string
      */
@@ -171,6 +177,12 @@ class Invoice
      * @var string
      */
     protected $webhookUrl;
+
+    /**
+     * Define whether the invoice can be captured from the front-end or not
+     * @var boolean
+     */
+    protected $requireBackendCapture;
 
     /**
      * Define whether or not the invoice is in sandbox environment
@@ -769,6 +781,28 @@ class Invoice
     }
     
     /**
+     * Get GatewayData
+     * Additionnal context saved when processing the transaction on the specific PSP
+     * @return array
+     */
+    public function getGatewayData()
+    {
+        return $this->gatewayData;
+    }
+
+    /**
+     * Set GatewayData
+     * Additionnal context saved when processing the transaction on the specific PSP
+     * @param  array $value
+     * @return $this
+     */
+    public function setGatewayData($value)
+    {
+        $this->gatewayData = $value;
+        return $this;
+    }
+    
+    /**
      * Get ReturnUrl
      * URL where the customer will be redirected upon payment
      * @return string
@@ -831,6 +865,28 @@ class Invoice
     public function setWebhookUrl($value)
     {
         $this->webhookUrl = $value;
+        return $this;
+    }
+    
+    /**
+     * Get RequireBackendCapture
+     * Define whether the invoice can be captured from the front-end or not
+     * @return bool
+     */
+    public function getRequireBackendCapture()
+    {
+        return $this->requireBackendCapture;
+    }
+
+    /**
+     * Set RequireBackendCapture
+     * Define whether the invoice can be captured from the front-end or not
+     * @param  bool $value
+     * @return $this
+     */
+    public function setRequireBackendCapture($value)
+    {
+        $this->requireBackendCapture = $value;
         return $this;
     }
     
@@ -1042,6 +1098,9 @@ class Invoice
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
 
+        if(! empty($data['gateway_data']))
+            $this->setGatewayData($data['gateway_data']);
+
         if(! empty($data['return_url']))
             $this->setReturnUrl($data['return_url']);
 
@@ -1050,6 +1109,9 @@ class Invoice
 
         if(! empty($data['webhook_url']))
             $this->setWebhookUrl($data['webhook_url']);
+
+        if(! empty($data['require_backend_capture']))
+            $this->setRequireBackendCapture($data['require_backend_capture']);
 
         if(! empty($data['sandbox']))
             $this->setSandbox($data['sandbox']);
@@ -1347,6 +1409,7 @@ class Invoice
             "name" => $this->getName(), 
             "amount" => $this->getAmount(), 
             "currency" => $this->getCurrency(), 
+            "gateway_data" => $this->getGatewayData(), 
             "metadata" => $this->getMetadata(), 
             "details" => $this->getDetails(), 
             "merchant_initiator_type" => $this->getMerchantInitiatorType(), 
@@ -1360,7 +1423,8 @@ class Invoice
             "webhook_url" => $this->getWebhookUrl(), 
             "risk" => $this->getRisk(), 
             "shipping" => $this->getShipping(), 
-            "device" => $this->getDevice()
+            "device" => $this->getDevice(), 
+            "require_backend_capture" => $this->getRequireBackendCapture()
         );
 
         $response = $request->post($path, $data, $options);

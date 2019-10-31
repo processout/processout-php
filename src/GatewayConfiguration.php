@@ -409,7 +409,7 @@ class GatewayConfiguration
         $path    = "/gateway-configurations";
 
         $data = array(
-
+            "expand_merchant_accounts" => (!empty($options["expand_merchant_accounts"])) ? $options["expand_merchant_accounts"] : null
         );
 
         $response = $request->get($path, $data, $options);

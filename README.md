@@ -20,7 +20,7 @@ The package's installation is done using composer. Simply add these lines to you
 ```json
 {
     "require": {
-        "processOut/processout-php": "^6.14.0"
+        "processOut/processout-php": "^6.15.1"
     }
 }
 ```

@@ -20,10 +20,11 @@ assert($invoice->getId() == $fetched->getId(), 'The invoices ID should be equal'
 
 // Capture an invoice
 $gr = new \ProcessOut\GatewayRequest('sandbox');
-$gr->url = 'https://processout.com?token=test-valid';
-$gr->method = 'POST';
-$gr->headers = array('Content-Type' => 'application/json');
-$gr->body = '{}';
+$gr->url                    = 'https://processout.com?token=test-valid';
+$gr->method                 = 'POST';
+$gr->headers                = array('Content-Type' => 'application/json');
+$gr->body                   = '{}';
+$gr->gatewayConfigurationID = 'gway_conf_44ae90db0a62f819a404ef6a8ff994ca';
 
 $transaction = $invoice->capture($gr->getString());
 assert($transaction->getStatus() == 'completed', 'The transactions status was not completed');
