@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class Transaction
+class Transaction implements \JsonSerializable
 {
 
     /**
@@ -1661,6 +1661,65 @@ class Transaction
             $this->setRefundedAt($data['refunded_at']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "id" => $this->getId(),
+            "project" => $this->getProject(),
+            "project_id" => $this->getProjectId(),
+            "invoice" => $this->getInvoice(),
+            "invoice_id" => $this->getInvoiceId(),
+            "customer" => $this->getCustomer(),
+            "customer_id" => $this->getCustomerId(),
+            "subscription" => $this->getSubscription(),
+            "subscription_id" => $this->getSubscriptionId(),
+            "token" => $this->getToken(),
+            "token_id" => $this->getTokenId(),
+            "card" => $this->getCard(),
+            "card_id" => $this->getCardId(),
+            "gateway_configuration" => $this->getGatewayConfiguration(),
+            "gateway_configuration_id" => $this->getGatewayConfigurationId(),
+            "operations" => $this->getOperations(),
+            "refunds" => $this->getRefunds(),
+            "name" => $this->getName(),
+            "amount" => $this->getAmount(),
+            "amount_local" => $this->getAmountLocal(),
+            "authorized_amount" => $this->getAuthorizedAmount(),
+            "authorized_amount_local" => $this->getAuthorizedAmountLocal(),
+            "captured_amount" => $this->getCapturedAmount(),
+            "captured_amount_local" => $this->getCapturedAmountLocal(),
+            "refunded_amount" => $this->getRefundedAmount(),
+            "refunded_amount_local" => $this->getRefundedAmountLocal(),
+            "available_amount" => $this->getAvailableAmount(),
+            "available_amount_local" => $this->getAvailableAmountLocal(),
+            "currency" => $this->getCurrency(),
+            "error_code" => $this->getErrorCode(),
+            "gateway_name" => $this->getGatewayName(),
+            "three_d_s_status" => $this->getThreeDSStatus(),
+            "status" => $this->getStatus(),
+            "authorized" => $this->getAuthorized(),
+            "captured" => $this->getCaptured(),
+            "voided" => $this->getVoided(),
+            "refunded" => $this->getRefunded(),
+            "chargedback" => $this->getChargedback(),
+            "received_fraud_notification" => $this->getReceivedFraudNotification(),
+            "received_retrieval_request" => $this->getReceivedRetrievalRequest(),
+            "processout_fee" => $this->getProcessoutFee(),
+            "estimated_fee" => $this->getEstimatedFee(),
+            "gateway_fee" => $this->getGatewayFee(),
+            "gateway_fee_local" => $this->getGatewayFeeLocal(),
+            "currency_fee" => $this->getCurrencyFee(),
+            "metadata" => $this->getMetadata(),
+            "sandbox" => $this->getSandbox(),
+            "created_at" => $this->getCreatedAt(),
+            "chargedback_at" => $this->getChargedbackAt(),
+            "refunded_at" => $this->getRefundedAt(),
+            );
     }
 
     

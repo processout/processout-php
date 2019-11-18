@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class PaymentDataNetworkAuthentication
+class PaymentDataNetworkAuthentication implements \JsonSerializable
 {
 
     /**
@@ -69,6 +69,16 @@ class PaymentDataNetworkAuthentication
             $this->setCavv($data['cavv']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "cavv" => $this->getCavv(),
+            );
     }
 
     

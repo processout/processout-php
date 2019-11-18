@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class Customer
+class Customer implements \JsonSerializable
 {
 
     /**
@@ -925,6 +925,42 @@ class Customer
             $this->setCreatedAt($data['created_at']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "id" => $this->getId(),
+            "project" => $this->getProject(),
+            "project_id" => $this->getProjectId(),
+            "default_token" => $this->getDefaultToken(),
+            "default_token_id" => $this->getDefaultTokenId(),
+            "tokens" => $this->getTokens(),
+            "subscriptions" => $this->getSubscriptions(),
+            "transactions" => $this->getTransactions(),
+            "balance" => $this->getBalance(),
+            "currency" => $this->getCurrency(),
+            "email" => $this->getEmail(),
+            "first_name" => $this->getFirstName(),
+            "last_name" => $this->getLastName(),
+            "address1" => $this->getAddress1(),
+            "address2" => $this->getAddress2(),
+            "city" => $this->getCity(),
+            "state" => $this->getState(),
+            "zip" => $this->getZip(),
+            "country_code" => $this->getCountryCode(),
+            "ip_address" => $this->getIpAddress(),
+            "phone_number" => $this->getPhoneNumber(),
+            "legal_document" => $this->getLegalDocument(),
+            "sex" => $this->getSex(),
+            "is_business" => $this->getIsBusiness(),
+            "metadata" => $this->getMetadata(),
+            "sandbox" => $this->getSandbox(),
+            "created_at" => $this->getCreatedAt(),
+            );
     }
 
     

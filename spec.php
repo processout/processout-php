@@ -9,10 +9,15 @@ $client = new \ProcessOut\ProcessOut('test-proj_gAO1Uu0ysZJvDuUpOGPkUBeE3pGalk3x
 $invoice = $client->newInvoice(array(
     'name' => 'Test invoice',
     'amount' => '9.99',
-    'currency' => 'USD'
+    'currency' => 'USD',
+    'shipping' => new \ProcessOut\InvoiceShipping($client, array(
+        'address1' => 'test'
+    ))
 ))->create();
 
 assert(!empty($invoice->getId()), 'The invoice ID should not be empty');
+assert(!empty($invoice->getShipping()), 'The invoice shipping info is empty');
+assert($invoice->getShipping()->getAddress1() == 'test', 'The invoice shipping address1 isnt test');
 
 $fetched = $client->newInvoice()->find($invoice->getId());
 assert(!empty($fetched->getId()), 'The fetched invoice ID should not be empty');

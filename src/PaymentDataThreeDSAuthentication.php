@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class PaymentDataThreeDSAuthentication
+class PaymentDataThreeDSAuthentication implements \JsonSerializable
 {
 
     /**
@@ -69,6 +69,16 @@ class PaymentDataThreeDSAuthentication
             $this->setXID($data['XID']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "XID" => $this->getXID(),
+            );
     }
 
     

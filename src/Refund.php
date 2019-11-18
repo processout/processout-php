@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class Refund
+class Refund implements \JsonSerializable
 {
 
     /**
@@ -355,6 +355,25 @@ class Refund
             $this->setCreatedAt($data['created_at']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "id" => $this->getId(),
+            "transaction" => $this->getTransaction(),
+            "transaction_id" => $this->getTransactionId(),
+            "amount" => $this->getAmount(),
+            "reason" => $this->getReason(),
+            "information" => $this->getInformation(),
+            "has_failed" => $this->getHasFailed(),
+            "metadata" => $this->getMetadata(),
+            "sandbox" => $this->getSandbox(),
+            "created_at" => $this->getCreatedAt(),
+            );
     }
 
     

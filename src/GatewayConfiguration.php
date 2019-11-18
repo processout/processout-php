@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class GatewayConfiguration
+class GatewayConfiguration implements \JsonSerializable
 {
 
     /**
@@ -393,6 +393,26 @@ class GatewayConfiguration
             $this->setEnabledAt($data['enabled_at']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "id" => $this->getId(),
+            "project" => $this->getProject(),
+            "project_id" => $this->getProjectId(),
+            "gateway" => $this->getGateway(),
+            "gateway_id" => $this->getGatewayId(),
+            "name" => $this->getName(),
+            "default_currency" => $this->getDefaultCurrency(),
+            "enabled" => $this->getEnabled(),
+            "public_keys" => $this->getPublicKeys(),
+            "created_at" => $this->getCreatedAt(),
+            "enabled_at" => $this->getEnabledAt(),
+            );
     }
 
     

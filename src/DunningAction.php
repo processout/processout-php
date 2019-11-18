@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class DunningAction
+class DunningAction implements \JsonSerializable
 {
 
     /**
@@ -100,6 +100,17 @@ class DunningAction
             $this->setDelayInDays($data['delay_in_days']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "action" => $this->getAction(),
+            "delay_in_days" => $this->getDelayInDays(),
+            );
     }
 
     

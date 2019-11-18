@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class InvoiceDevice
+class InvoiceDevice implements \JsonSerializable
 {
 
     /**
@@ -100,6 +100,17 @@ class InvoiceDevice
             $this->setIpAddress($data['ip_address']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "channel" => $this->getChannel(),
+            "ip_address" => $this->getIpAddress(),
+            );
     }
 
     

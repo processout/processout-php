@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class WebhookEndpoint
+class WebhookEndpoint implements \JsonSerializable
 {
 
     /**
@@ -262,6 +262,22 @@ class WebhookEndpoint
             $this->setCreatedAt($data['created_at']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "id" => $this->getId(),
+            "project" => $this->getProject(),
+            "project_id" => $this->getProjectId(),
+            "url" => $this->getUrl(),
+            "events_whitelist" => $this->getEventsWhitelist(),
+            "sandbox" => $this->getSandbox(),
+            "created_at" => $this->getCreatedAt(),
+            );
     }
 
     

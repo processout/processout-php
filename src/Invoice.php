@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class Invoice
+class Invoice implements \JsonSerializable
 {
 
     /**
@@ -1129,6 +1129,48 @@ class Invoice
             $this->setDevice($data['device']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "id" => $this->getId(),
+            "project" => $this->getProject(),
+            "project_id" => $this->getProjectId(),
+            "transaction" => $this->getTransaction(),
+            "transaction_id" => $this->getTransactionId(),
+            "customer" => $this->getCustomer(),
+            "customer_id" => $this->getCustomerId(),
+            "subscription" => $this->getSubscription(),
+            "subscription_id" => $this->getSubscriptionId(),
+            "token" => $this->getToken(),
+            "token_id" => $this->getTokenId(),
+            "details" => $this->getDetails(),
+            "url" => $this->getUrl(),
+            "name" => $this->getName(),
+            "amount" => $this->getAmount(),
+            "currency" => $this->getCurrency(),
+            "merchant_initiator_type" => $this->getMerchantInitiatorType(),
+            "statement_descriptor" => $this->getStatementDescriptor(),
+            "statement_descriptor_phone" => $this->getStatementDescriptorPhone(),
+            "statement_descriptor_city" => $this->getStatementDescriptorCity(),
+            "statement_descriptor_company" => $this->getStatementDescriptorCompany(),
+            "statement_descriptor_url" => $this->getStatementDescriptorUrl(),
+            "metadata" => $this->getMetadata(),
+            "gateway_data" => $this->getGatewayData(),
+            "return_url" => $this->getReturnUrl(),
+            "cancel_url" => $this->getCancelUrl(),
+            "webhook_url" => $this->getWebhookUrl(),
+            "require_backend_capture" => $this->getRequireBackendCapture(),
+            "sandbox" => $this->getSandbox(),
+            "created_at" => $this->getCreatedAt(),
+            "risk" => $this->getRisk(),
+            "shipping" => $this->getShipping(),
+            "device" => $this->getDevice(),
+            );
     }
 
     

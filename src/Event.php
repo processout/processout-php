@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class Event
+class Event implements \JsonSerializable
 {
 
     /**
@@ -262,6 +262,22 @@ class Event
             $this->setFiredAt($data['fired_at']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "id" => $this->getId(),
+            "project" => $this->getProject(),
+            "project_id" => $this->getProjectId(),
+            "name" => $this->getName(),
+            "data" => $this->getData(),
+            "sandbox" => $this->getSandbox(),
+            "fired_at" => $this->getFiredAt(),
+            );
     }
 
     

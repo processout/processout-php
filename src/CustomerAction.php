@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class CustomerAction
+class CustomerAction implements \JsonSerializable
 {
 
     /**
@@ -100,6 +100,17 @@ class CustomerAction
             $this->setValue($data['value']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "type" => $this->getType(),
+            "value" => $this->getValue(),
+            );
     }
 
     

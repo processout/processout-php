@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class Discount
+class Discount implements \JsonSerializable
 {
 
     /**
@@ -493,6 +493,29 @@ class Discount
             $this->setCreatedAt($data['created_at']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "id" => $this->getId(),
+            "project" => $this->getProject(),
+            "project_id" => $this->getProjectId(),
+            "subscription" => $this->getSubscription(),
+            "subscription_id" => $this->getSubscriptionId(),
+            "coupon" => $this->getCoupon(),
+            "coupon_id" => $this->getCouponId(),
+            "name" => $this->getName(),
+            "amount" => $this->getAmount(),
+            "percent" => $this->getPercent(),
+            "expires_at" => $this->getExpiresAt(),
+            "metadata" => $this->getMetadata(),
+            "sandbox" => $this->getSandbox(),
+            "created_at" => $this->getCreatedAt(),
+            );
     }
 
     

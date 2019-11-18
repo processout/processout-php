@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class APIVersion
+class APIVersion implements \JsonSerializable
 {
 
     /**
@@ -131,6 +131,18 @@ class APIVersion
             $this->setCreatedAt($data['created_at']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "name" => $this->getName(),
+            "description" => $this->getDescription(),
+            "created_at" => $this->getCreatedAt(),
+            );
     }
 
     

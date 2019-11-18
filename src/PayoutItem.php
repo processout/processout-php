@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class PayoutItem
+class PayoutItem implements \JsonSerializable
 {
 
     /**
@@ -462,6 +462,28 @@ class PayoutItem
             $this->setCreatedAt($data['created_at']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "id" => $this->getId(),
+            "project" => $this->getProject(),
+            "project_id" => $this->getProjectId(),
+            "payout" => $this->getPayout(),
+            "payout_id" => $this->getPayoutId(),
+            "transaction" => $this->getTransaction(),
+            "transaction_id" => $this->getTransactionId(),
+            "type" => $this->getType(),
+            "gateway_resource_id" => $this->getGatewayResourceId(),
+            "amount" => $this->getAmount(),
+            "fees" => $this->getFees(),
+            "metadata" => $this->getMetadata(),
+            "created_at" => $this->getCreatedAt(),
+            );
     }
 
     

@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class TransactionOperation
+class TransactionOperation implements \JsonSerializable
 {
 
     /**
@@ -800,6 +800,38 @@ class TransactionOperation
             $this->setCreatedAt($data['created_at']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "id" => $this->getId(),
+            "transaction" => $this->getTransaction(),
+            "transaction_id" => $this->getTransactionId(),
+            "token" => $this->getToken(),
+            "token_id" => $this->getTokenId(),
+            "card" => $this->getCard(),
+            "card_id" => $this->getCardId(),
+            "gateway_configuration" => $this->getGatewayConfiguration(),
+            "gateway_configuration_id" => $this->getGatewayConfigurationId(),
+            "amount" => $this->getAmount(),
+            "is_attempt" => $this->getIsAttempt(),
+            "has_failed" => $this->getHasFailed(),
+            "is_accountable" => $this->getIsAccountable(),
+            "type" => $this->getType(),
+            "gateway_operation_id" => $this->getGatewayOperationId(),
+            "error_code" => $this->getErrorCode(),
+            "gateway_data" => $this->getGatewayData(),
+            "payment_data_three_d_s_request" => $this->getPaymentDataThreeDSRequest(),
+            "payment_data_three_d_s_authentication" => $this->getPaymentDataThreeDSAuthentication(),
+            "payment_data_network_authentication" => $this->getPaymentDataNetworkAuthentication(),
+            "metadata" => $this->getMetadata(),
+            "gateway_fee" => $this->getGatewayFee(),
+            "created_at" => $this->getCreatedAt(),
+            );
     }
 
     

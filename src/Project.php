@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class Project
+class Project implements \JsonSerializable
 {
 
     /**
@@ -405,6 +405,26 @@ class Project
             $this->setCreatedAt($data['created_at']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "id" => $this->getId(),
+            "supervisor_project" => $this->getSupervisorProject(),
+            "supervisor_project_id" => $this->getSupervisorProjectId(),
+            "api_version" => $this->getApiVersion(),
+            "name" => $this->getName(),
+            "logo_url" => $this->getLogoUrl(),
+            "email" => $this->getEmail(),
+            "default_currency" => $this->getDefaultCurrency(),
+            "private_key" => $this->getPrivateKey(),
+            "dunning_configuration" => $this->getDunningConfiguration(),
+            "created_at" => $this->getCreatedAt(),
+            );
     }
 
     

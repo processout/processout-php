@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class PaymentDataThreeDSRequest
+class PaymentDataThreeDSRequest implements \JsonSerializable
 {
 
     /**
@@ -162,6 +162,19 @@ class PaymentDataThreeDSRequest
             $this->setTermUrl($data['term_url']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "acs_url" => $this->getAcsUrl(),
+            "pareq" => $this->getPareq(),
+            "md" => $this->getMd(),
+            "term_url" => $this->getTermUrl(),
+            );
     }
 
     

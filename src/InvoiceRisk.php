@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class InvoiceRisk
+class InvoiceRisk implements \JsonSerializable
 {
 
     /**
@@ -100,6 +100,17 @@ class InvoiceRisk
             $this->setIsLegit($data['is_legit']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "score" => $this->getScore(),
+            "is_legit" => $this->getIsLegit(),
+            );
     }
 
     

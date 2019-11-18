@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class Token
+class Token implements \JsonSerializable
 {
 
     /**
@@ -524,6 +524,30 @@ class Token
             $this->setCreatedAt($data['created_at']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "id" => $this->getId(),
+            "customer" => $this->getCustomer(),
+            "customer_id" => $this->getCustomerId(),
+            "gateway_configuration" => $this->getGatewayConfiguration(),
+            "gateway_configuration_id" => $this->getGatewayConfigurationId(),
+            "card" => $this->getCard(),
+            "card_id" => $this->getCardId(),
+            "type" => $this->getType(),
+            "metadata" => $this->getMetadata(),
+            "is_subscription_only" => $this->getIsSubscriptionOnly(),
+            "return_url" => $this->getReturnUrl(),
+            "cancel_url" => $this->getCancelUrl(),
+            "is_default" => $this->getIsDefault(),
+            "is_chargeable" => $this->getIsChargeable(),
+            "created_at" => $this->getCreatedAt(),
+            );
     }
 
     

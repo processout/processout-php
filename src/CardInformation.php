@@ -7,7 +7,7 @@ namespace ProcessOut;
 use ProcessOut\ProcessOut;
 use ProcessOut\Networking\Request;
 
-class CardInformation
+class CardInformation implements \JsonSerializable
 {
 
     /**
@@ -255,6 +255,22 @@ class CardInformation
             $this->setCountry($data['country']);
 
         return $this;
+    }
+
+    /**
+     * Implements the JsonSerializable interface
+     * @return object
+     */
+    public function jsonSerialize() {
+        return array(
+            "iin" => $this->getIin(),
+            "scheme" => $this->getScheme(),
+            "type" => $this->getType(),
+            "bank_name" => $this->getBankName(),
+            "brand" => $this->getBrand(),
+            "category" => $this->getCategory(),
+            "country" => $this->getCountry(),
+            );
     }
 
     
