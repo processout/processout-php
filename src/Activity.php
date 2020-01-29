@@ -271,13 +271,13 @@ class Activity implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-            "project" => $this->getProject(),
-            "project_id" => $this->getProjectId(),
-            "title" => $this->getTitle(),
-            "content" => $this->getContent(),
-            "level" => $this->getLevel(),
-            "created_at" => $this->getCreatedAt(),
-            );
+        "project" => $this->getProject(),
+        "project_id" => $this->getProjectId(),
+        "title" => $this->getTitle(),
+        "content" => $this->getContent(),
+        "level" => $this->getLevel(),
+        "created_at" => $this->getCreatedAt(),
+        );
     }
 
     

@@ -109,8 +109,8 @@ class DunningAction implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "action" => $this->getAction(),
-            "delay_in_days" => $this->getDelayInDays(),
-            );
+        "delay_in_days" => $this->getDelayInDays(),
+        );
     }
 
     

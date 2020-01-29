@@ -78,7 +78,7 @@ class PaymentDataThreeDSAuthentication implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "XID" => $this->getXID(),
-            );
+        );
     }
 
     

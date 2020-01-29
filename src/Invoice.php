@@ -155,7 +155,7 @@ class Invoice implements \JsonSerializable
     protected $metadata;
 
     /**
-     * Additionnal context saved when processing the transaction on the specific PSP
+     * Dictionary that transmit specific informations to gateways (key-value pair)
      * @var dictionary
      */
     protected $gatewayData;
@@ -782,7 +782,7 @@ class Invoice implements \JsonSerializable
     
     /**
      * Get GatewayData
-     * Additionnal context saved when processing the transaction on the specific PSP
+     * Dictionary that transmit specific informations to gateways (key-value pair)
      * @return array
      */
     public function getGatewayData()
@@ -792,7 +792,7 @@ class Invoice implements \JsonSerializable
 
     /**
      * Set GatewayData
-     * Additionnal context saved when processing the transaction on the specific PSP
+     * Dictionary that transmit specific informations to gateways (key-value pair)
      * @param  array $value
      * @return $this
      */
@@ -1138,39 +1138,39 @@ class Invoice implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-            "project" => $this->getProject(),
-            "project_id" => $this->getProjectId(),
-            "transaction" => $this->getTransaction(),
-            "transaction_id" => $this->getTransactionId(),
-            "customer" => $this->getCustomer(),
-            "customer_id" => $this->getCustomerId(),
-            "subscription" => $this->getSubscription(),
-            "subscription_id" => $this->getSubscriptionId(),
-            "token" => $this->getToken(),
-            "token_id" => $this->getTokenId(),
-            "details" => $this->getDetails(),
-            "url" => $this->getUrl(),
-            "name" => $this->getName(),
-            "amount" => $this->getAmount(),
-            "currency" => $this->getCurrency(),
-            "merchant_initiator_type" => $this->getMerchantInitiatorType(),
-            "statement_descriptor" => $this->getStatementDescriptor(),
-            "statement_descriptor_phone" => $this->getStatementDescriptorPhone(),
-            "statement_descriptor_city" => $this->getStatementDescriptorCity(),
-            "statement_descriptor_company" => $this->getStatementDescriptorCompany(),
-            "statement_descriptor_url" => $this->getStatementDescriptorUrl(),
-            "metadata" => $this->getMetadata(),
-            "gateway_data" => $this->getGatewayData(),
-            "return_url" => $this->getReturnUrl(),
-            "cancel_url" => $this->getCancelUrl(),
-            "webhook_url" => $this->getWebhookUrl(),
-            "require_backend_capture" => $this->getRequireBackendCapture(),
-            "sandbox" => $this->getSandbox(),
-            "created_at" => $this->getCreatedAt(),
-            "risk" => $this->getRisk(),
-            "shipping" => $this->getShipping(),
-            "device" => $this->getDevice(),
-            );
+        "project" => $this->getProject(),
+        "project_id" => $this->getProjectId(),
+        "transaction" => $this->getTransaction(),
+        "transaction_id" => $this->getTransactionId(),
+        "customer" => $this->getCustomer(),
+        "customer_id" => $this->getCustomerId(),
+        "subscription" => $this->getSubscription(),
+        "subscription_id" => $this->getSubscriptionId(),
+        "token" => $this->getToken(),
+        "token_id" => $this->getTokenId(),
+        "details" => $this->getDetails(),
+        "url" => $this->getUrl(),
+        "name" => $this->getName(),
+        "amount" => $this->getAmount(),
+        "currency" => $this->getCurrency(),
+        "merchant_initiator_type" => $this->getMerchantInitiatorType(),
+        "statement_descriptor" => $this->getStatementDescriptor(),
+        "statement_descriptor_phone" => $this->getStatementDescriptorPhone(),
+        "statement_descriptor_city" => $this->getStatementDescriptorCity(),
+        "statement_descriptor_company" => $this->getStatementDescriptorCompany(),
+        "statement_descriptor_url" => $this->getStatementDescriptorUrl(),
+        "metadata" => $this->getMetadata(),
+        "gateway_data" => $this->getGatewayData(),
+        "return_url" => $this->getReturnUrl(),
+        "cancel_url" => $this->getCancelUrl(),
+        "webhook_url" => $this->getWebhookUrl(),
+        "require_backend_capture" => $this->getRequireBackendCapture(),
+        "sandbox" => $this->getSandbox(),
+        "created_at" => $this->getCreatedAt(),
+        "risk" => $this->getRisk(),
+        "shipping" => $this->getShipping(),
+        "device" => $this->getDevice(),
+        );
     }
 
     
@@ -1188,6 +1188,7 @@ class Invoice implements \JsonSerializable
         $path    = "/invoices/" . urlencode($this->getId()) . "/authorize";
 
         $data = array(
+            "device" => $this->getDevice(), 
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
             "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
@@ -1224,6 +1225,7 @@ class Invoice implements \JsonSerializable
         $path    = "/invoices/" . urlencode($this->getId()) . "/capture";
 
         $data = array(
+            "device" => $this->getDevice(), 
             "authorize_only" => (!empty($options["authorize_only"])) ? $options["authorize_only"] : null, 
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
@@ -1451,9 +1453,9 @@ class Invoice implements \JsonSerializable
             "name" => $this->getName(), 
             "amount" => $this->getAmount(), 
             "currency" => $this->getCurrency(), 
-            "gateway_data" => $this->getGatewayData(), 
             "metadata" => $this->getMetadata(), 
             "details" => $this->getDetails(), 
+            "gateway_data" => $this->getGatewayData(), 
             "merchant_initiator_type" => $this->getMerchantInitiatorType(), 
             "statement_descriptor" => $this->getStatementDescriptor(), 
             "statement_descriptor_phone" => $this->getStatementDescriptorPhone(), 

@@ -934,33 +934,33 @@ class Customer implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-            "project" => $this->getProject(),
-            "project_id" => $this->getProjectId(),
-            "default_token" => $this->getDefaultToken(),
-            "default_token_id" => $this->getDefaultTokenId(),
-            "tokens" => $this->getTokens(),
-            "subscriptions" => $this->getSubscriptions(),
-            "transactions" => $this->getTransactions(),
-            "balance" => $this->getBalance(),
-            "currency" => $this->getCurrency(),
-            "email" => $this->getEmail(),
-            "first_name" => $this->getFirstName(),
-            "last_name" => $this->getLastName(),
-            "address1" => $this->getAddress1(),
-            "address2" => $this->getAddress2(),
-            "city" => $this->getCity(),
-            "state" => $this->getState(),
-            "zip" => $this->getZip(),
-            "country_code" => $this->getCountryCode(),
-            "ip_address" => $this->getIpAddress(),
-            "phone_number" => $this->getPhoneNumber(),
-            "legal_document" => $this->getLegalDocument(),
-            "sex" => $this->getSex(),
-            "is_business" => $this->getIsBusiness(),
-            "metadata" => $this->getMetadata(),
-            "sandbox" => $this->getSandbox(),
-            "created_at" => $this->getCreatedAt(),
-            );
+        "project" => $this->getProject(),
+        "project_id" => $this->getProjectId(),
+        "default_token" => $this->getDefaultToken(),
+        "default_token_id" => $this->getDefaultTokenId(),
+        "tokens" => $this->getTokens(),
+        "subscriptions" => $this->getSubscriptions(),
+        "transactions" => $this->getTransactions(),
+        "balance" => $this->getBalance(),
+        "currency" => $this->getCurrency(),
+        "email" => $this->getEmail(),
+        "first_name" => $this->getFirstName(),
+        "last_name" => $this->getLastName(),
+        "address1" => $this->getAddress1(),
+        "address2" => $this->getAddress2(),
+        "city" => $this->getCity(),
+        "state" => $this->getState(),
+        "zip" => $this->getZip(),
+        "country_code" => $this->getCountryCode(),
+        "ip_address" => $this->getIpAddress(),
+        "phone_number" => $this->getPhoneNumber(),
+        "legal_document" => $this->getLegalDocument(),
+        "sex" => $this->getSex(),
+        "is_business" => $this->getIsBusiness(),
+        "metadata" => $this->getMetadata(),
+        "sandbox" => $this->getSandbox(),
+        "created_at" => $this->getCreatedAt(),
+        );
     }
 
     
@@ -994,31 +994,6 @@ class Customer implements \JsonSerializable
             $a[] = $tmp;
         }
         $returnValues['Subscriptions'] = $a;
-        
-        return array_values($returnValues)[0];
-    }
-    
-    /**
-     * Verify a customer token's card is valid.
-     * @param string $tokenId
-     * @param array $options
-     * @return bool
-     */
-    public function verifyToken($tokenId, $options = array())
-    {
-        $this->fillWithData($options);
-
-        $request = new Request($this->client);
-        $path    = "/customers/" . urlencode($this->getId()) . "/tokens/" . urlencode($tokenId) . "/verify";
-
-        $data = array(
-
-        );
-
-        $response = $request->post($path, $data, $options);
-        $returnValues = array();
-
-        $returnValues['success'] = $response->isSuccess();
         
         return array_values($returnValues)[0];
     }

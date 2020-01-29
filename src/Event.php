@@ -271,13 +271,13 @@ class Event implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-            "project" => $this->getProject(),
-            "project_id" => $this->getProjectId(),
-            "name" => $this->getName(),
-            "data" => $this->getData(),
-            "sandbox" => $this->getSandbox(),
-            "fired_at" => $this->getFiredAt(),
-            );
+        "project" => $this->getProject(),
+        "project_id" => $this->getProjectId(),
+        "name" => $this->getName(),
+        "data" => $this->getData(),
+        "sandbox" => $this->getSandbox(),
+        "fired_at" => $this->getFiredAt(),
+        );
     }
 
     

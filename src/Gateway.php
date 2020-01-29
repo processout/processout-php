@@ -388,17 +388,17 @@ class Gateway implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-            "name" => $this->getName(),
-            "display_name" => $this->getDisplayName(),
-            "logo_url" => $this->getLogoUrl(),
-            "url" => $this->getUrl(),
-            "flows" => $this->getFlows(),
-            "tags" => $this->getTags(),
-            "can_pull_transactions" => $this->getCanPullTransactions(),
-            "can_refund" => $this->getCanRefund(),
-            "is_oauth_authentication" => $this->getIsOauthAuthentication(),
-            "description" => $this->getDescription(),
-            );
+        "name" => $this->getName(),
+        "display_name" => $this->getDisplayName(),
+        "logo_url" => $this->getLogoUrl(),
+        "url" => $this->getUrl(),
+        "flows" => $this->getFlows(),
+        "tags" => $this->getTags(),
+        "can_pull_transactions" => $this->getCanPullTransactions(),
+        "can_refund" => $this->getCanRefund(),
+        "is_oauth_authentication" => $this->getIsOauthAuthentication(),
+        "description" => $this->getDescription(),
+        );
     }
 
     

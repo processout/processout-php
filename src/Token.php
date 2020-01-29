@@ -77,6 +77,12 @@ class Token implements \JsonSerializable
     protected $isSubscriptionOnly;
 
     /**
+     * True if the token it the default token of the customer, false otherwise
+     * @var boolean
+     */
+    protected $isDefault;
+
+    /**
      * URL where the customer will be redirected upon payment authentication (if required by tokenization method)
      * @var string
      */
@@ -87,12 +93,6 @@ class Token implements \JsonSerializable
      * @var string
      */
     protected $cancelUrl;
-
-    /**
-     * True if the token it the default token of the customer, false otherwise
-     * @var boolean
-     */
-    protected $isDefault;
 
     /**
      * True if the token is chargeable, false otherwise
@@ -361,6 +361,28 @@ class Token implements \JsonSerializable
     }
     
     /**
+     * Get IsDefault
+     * True if the token it the default token of the customer, false otherwise
+     * @return bool
+     */
+    public function getIsDefault()
+    {
+        return $this->isDefault;
+    }
+
+    /**
+     * Set IsDefault
+     * True if the token it the default token of the customer, false otherwise
+     * @param  bool $value
+     * @return $this
+     */
+    public function setIsDefault($value)
+    {
+        $this->isDefault = $value;
+        return $this;
+    }
+    
+    /**
      * Get ReturnUrl
      * URL where the customer will be redirected upon payment authentication (if required by tokenization method)
      * @return string
@@ -401,28 +423,6 @@ class Token implements \JsonSerializable
     public function setCancelUrl($value)
     {
         $this->cancelUrl = $value;
-        return $this;
-    }
-    
-    /**
-     * Get IsDefault
-     * True if the token it the default token of the customer, false otherwise
-     * @return bool
-     */
-    public function getIsDefault()
-    {
-        return $this->isDefault;
-    }
-
-    /**
-     * Set IsDefault
-     * True if the token it the default token of the customer, false otherwise
-     * @param  bool $value
-     * @return $this
-     */
-    public function setIsDefault($value)
-    {
-        $this->isDefault = $value;
         return $this;
     }
     
@@ -508,14 +508,14 @@ class Token implements \JsonSerializable
         if(! empty($data['is_subscription_only']))
             $this->setIsSubscriptionOnly($data['is_subscription_only']);
 
+        if(! empty($data['is_default']))
+            $this->setIsDefault($data['is_default']);
+
         if(! empty($data['return_url']))
             $this->setReturnUrl($data['return_url']);
 
         if(! empty($data['cancel_url']))
             $this->setCancelUrl($data['cancel_url']);
-
-        if(! empty($data['is_default']))
-            $this->setIsDefault($data['is_default']);
 
         if(! empty($data['is_chargeable']))
             $this->setIsChargeable($data['is_chargeable']);
@@ -533,47 +533,23 @@ class Token implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-            "customer" => $this->getCustomer(),
-            "customer_id" => $this->getCustomerId(),
-            "gateway_configuration" => $this->getGatewayConfiguration(),
-            "gateway_configuration_id" => $this->getGatewayConfigurationId(),
-            "card" => $this->getCard(),
-            "card_id" => $this->getCardId(),
-            "type" => $this->getType(),
-            "metadata" => $this->getMetadata(),
-            "is_subscription_only" => $this->getIsSubscriptionOnly(),
-            "return_url" => $this->getReturnUrl(),
-            "cancel_url" => $this->getCancelUrl(),
-            "is_default" => $this->getIsDefault(),
-            "is_chargeable" => $this->getIsChargeable(),
-            "created_at" => $this->getCreatedAt(),
-            );
-    }
-
-    
-    /**
-     * Verify a customer token's card is valid.
-     * @param array $options
-     * @return bool
-     */
-    public function verify($options = array())
-    {
-        $this->fillWithData($options);
-
-        $request = new Request($this->client);
-        $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($this->getId()) . "/verify";
-
-        $data = array(
-
+        "customer" => $this->getCustomer(),
+        "customer_id" => $this->getCustomerId(),
+        "gateway_configuration" => $this->getGatewayConfiguration(),
+        "gateway_configuration_id" => $this->getGatewayConfigurationId(),
+        "card" => $this->getCard(),
+        "card_id" => $this->getCardId(),
+        "type" => $this->getType(),
+        "metadata" => $this->getMetadata(),
+        "is_subscription_only" => $this->getIsSubscriptionOnly(),
+        "is_default" => $this->getIsDefault(),
+        "return_url" => $this->getReturnUrl(),
+        "cancel_url" => $this->getCancelUrl(),
+        "is_chargeable" => $this->getIsChargeable(),
+        "created_at" => $this->getCreatedAt(),
         );
-
-        $response = $request->post($path, $data, $options);
-        $returnValues = array();
-
-        $returnValues['success'] = $response->isSuccess();
-        
-        return array_values($returnValues)[0];
     }
+
     
     /**
      * Get the customer's tokens.
@@ -658,7 +634,7 @@ class Token implements \JsonSerializable
             "cancel_url" => $this->getCancelUrl(), 
             "source" => (!empty($options["source"])) ? $options["source"] : null, 
             "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
-            "target" => (!empty($options["target"])) ? $options["target"] : null, 
+            "device" => (!empty($options["device"])) ? $options["device"] : null, 
             "verify" => (!empty($options["verify"])) ? $options["verify"] : null, 
             "verify_metadata" => (!empty($options["verify_metadata"])) ? $options["verify_metadata"] : null, 
             "set_default" => (!empty($options["set_default"])) ? $options["set_default"] : null
@@ -689,7 +665,12 @@ class Token implements \JsonSerializable
         $path    = "/customers/" . urlencode($this->getCustomerId()) . "/tokens/" . urlencode($this->getId()) . "";
 
         $data = array(
-
+            "source" => (!empty($options["source"])) ? $options["source"] : null, 
+            "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
+            "device" => (!empty($options["device"])) ? $options["device"] : null, 
+            "verify" => (!empty($options["verify"])) ? $options["verify"] : null, 
+            "verify_metadata" => (!empty($options["verify_metadata"])) ? $options["verify_metadata"] : null, 
+            "set_default" => (!empty($options["set_default"])) ? $options["set_default"] : null
         );
 
         $response = $request->put($path, $data, $options);

@@ -140,9 +140,9 @@ class APIVersion implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "name" => $this->getName(),
-            "description" => $this->getDescription(),
-            "created_at" => $this->getCreatedAt(),
-            );
+        "description" => $this->getDescription(),
+        "created_at" => $this->getCreatedAt(),
+        );
     }
 
     

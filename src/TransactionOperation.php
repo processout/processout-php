@@ -77,6 +77,12 @@ class TransactionOperation implements \JsonSerializable
     protected $amount;
 
     /**
+     * Currency of the operation
+     * @var string
+     */
+    protected $currency;
+
+    /**
      * True if the operation is an attempt, false otherwise
      * @var boolean
      */
@@ -105,6 +111,12 @@ class TransactionOperation implements \JsonSerializable
      * @var string
      */
     protected $gatewayOperationId;
+
+    /**
+     * Acquirer Routing Number, can be used to track a payment or refund at the issuer
+     * @var string
+     */
+    protected $arn;
 
     /**
      * Error code returned when attempting the operation, if any
@@ -416,6 +428,28 @@ class TransactionOperation implements \JsonSerializable
     }
     
     /**
+     * Get Currency
+     * Currency of the operation
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * Set Currency
+     * Currency of the operation
+     * @param  string $value
+     * @return $this
+     */
+    public function setCurrency($value)
+    {
+        $this->currency = $value;
+        return $this;
+    }
+    
+    /**
      * Get IsAttempt
      * True if the operation is an attempt, false otherwise
      * @return bool
@@ -522,6 +556,28 @@ class TransactionOperation implements \JsonSerializable
     public function setGatewayOperationId($value)
     {
         $this->gatewayOperationId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Arn
+     * Acquirer Routing Number, can be used to track a payment or refund at the issuer
+     * @return string
+     */
+    public function getArn()
+    {
+        return $this->arn;
+    }
+
+    /**
+     * Set Arn
+     * Acquirer Routing Number, can be used to track a payment or refund at the issuer
+     * @param  string $value
+     * @return $this
+     */
+    public function setArn($value)
+    {
+        $this->arn = $value;
         return $this;
     }
     
@@ -760,6 +816,9 @@ class TransactionOperation implements \JsonSerializable
         if(! empty($data['amount']))
             $this->setAmount($data['amount']);
 
+        if(! empty($data['currency']))
+            $this->setCurrency($data['currency']);
+
         if(! empty($data['is_attempt']))
             $this->setIsAttempt($data['is_attempt']);
 
@@ -774,6 +833,9 @@ class TransactionOperation implements \JsonSerializable
 
         if(! empty($data['gateway_operation_id']))
             $this->setGatewayOperationId($data['gateway_operation_id']);
+
+        if(! empty($data['arn']))
+            $this->setArn($data['arn']);
 
         if(! empty($data['error_code']))
             $this->setErrorCode($data['error_code']);
@@ -809,29 +871,31 @@ class TransactionOperation implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-            "transaction" => $this->getTransaction(),
-            "transaction_id" => $this->getTransactionId(),
-            "token" => $this->getToken(),
-            "token_id" => $this->getTokenId(),
-            "card" => $this->getCard(),
-            "card_id" => $this->getCardId(),
-            "gateway_configuration" => $this->getGatewayConfiguration(),
-            "gateway_configuration_id" => $this->getGatewayConfigurationId(),
-            "amount" => $this->getAmount(),
-            "is_attempt" => $this->getIsAttempt(),
-            "has_failed" => $this->getHasFailed(),
-            "is_accountable" => $this->getIsAccountable(),
-            "type" => $this->getType(),
-            "gateway_operation_id" => $this->getGatewayOperationId(),
-            "error_code" => $this->getErrorCode(),
-            "gateway_data" => $this->getGatewayData(),
-            "payment_data_three_d_s_request" => $this->getPaymentDataThreeDSRequest(),
-            "payment_data_three_d_s_authentication" => $this->getPaymentDataThreeDSAuthentication(),
-            "payment_data_network_authentication" => $this->getPaymentDataNetworkAuthentication(),
-            "metadata" => $this->getMetadata(),
-            "gateway_fee" => $this->getGatewayFee(),
-            "created_at" => $this->getCreatedAt(),
-            );
+        "transaction" => $this->getTransaction(),
+        "transaction_id" => $this->getTransactionId(),
+        "token" => $this->getToken(),
+        "token_id" => $this->getTokenId(),
+        "card" => $this->getCard(),
+        "card_id" => $this->getCardId(),
+        "gateway_configuration" => $this->getGatewayConfiguration(),
+        "gateway_configuration_id" => $this->getGatewayConfigurationId(),
+        "amount" => $this->getAmount(),
+        "currency" => $this->getCurrency(),
+        "is_attempt" => $this->getIsAttempt(),
+        "has_failed" => $this->getHasFailed(),
+        "is_accountable" => $this->getIsAccountable(),
+        "type" => $this->getType(),
+        "gateway_operation_id" => $this->getGatewayOperationId(),
+        "arn" => $this->getArn(),
+        "error_code" => $this->getErrorCode(),
+        "gateway_data" => $this->getGatewayData(),
+        "payment_data_three_d_s_request" => $this->getPaymentDataThreeDSRequest(),
+        "payment_data_three_d_s_authentication" => $this->getPaymentDataThreeDSAuthentication(),
+        "payment_data_network_authentication" => $this->getPaymentDataNetworkAuthentication(),
+        "metadata" => $this->getMetadata(),
+        "gateway_fee" => $this->getGatewayFee(),
+        "created_at" => $this->getCreatedAt(),
+        );
     }
 
     

@@ -419,18 +419,18 @@ class InvoiceShipping implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "amount" => $this->getAmount(),
-            "method" => $this->getMethod(),
-            "provider" => $this->getProvider(),
-            "delay" => $this->getDelay(),
-            "address1" => $this->getAddress1(),
-            "address2" => $this->getAddress2(),
-            "city" => $this->getCity(),
-            "state" => $this->getState(),
-            "country_code" => $this->getCountryCode(),
-            "zip" => $this->getZip(),
-            "phone_number" => $this->getPhoneNumber(),
-            "expects_shipping_at" => $this->getExpectsShippingAt(),
-            );
+        "method" => $this->getMethod(),
+        "provider" => $this->getProvider(),
+        "delay" => $this->getDelay(),
+        "address1" => $this->getAddress1(),
+        "address2" => $this->getAddress2(),
+        "city" => $this->getCity(),
+        "state" => $this->getState(),
+        "country_code" => $this->getCountryCode(),
+        "zip" => $this->getZip(),
+        "phone_number" => $this->getPhoneNumber(),
+        "expects_shipping_at" => $this->getExpectsShippingAt(),
+        );
     }
 
     

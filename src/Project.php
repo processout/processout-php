@@ -414,47 +414,19 @@ class Project implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-            "supervisor_project" => $this->getSupervisorProject(),
-            "supervisor_project_id" => $this->getSupervisorProjectId(),
-            "api_version" => $this->getApiVersion(),
-            "name" => $this->getName(),
-            "logo_url" => $this->getLogoUrl(),
-            "email" => $this->getEmail(),
-            "default_currency" => $this->getDefaultCurrency(),
-            "private_key" => $this->getPrivateKey(),
-            "dunning_configuration" => $this->getDunningConfiguration(),
-            "created_at" => $this->getCreatedAt(),
-            );
-    }
-
-    
-    /**
-     * Regenerate the project private key. Make sure to store the new private key and use it in any future request.
-     * @param array $options
-     * @return $this
-     */
-    public function regeneratePrivateKey($options = array())
-    {
-        $this->fillWithData($options);
-
-        $request = new Request($this->client);
-        $path    = "/private-keys";
-
-        $data = array(
-
+        "supervisor_project" => $this->getSupervisorProject(),
+        "supervisor_project_id" => $this->getSupervisorProjectId(),
+        "api_version" => $this->getApiVersion(),
+        "name" => $this->getName(),
+        "logo_url" => $this->getLogoUrl(),
+        "email" => $this->getEmail(),
+        "default_currency" => $this->getDefaultCurrency(),
+        "private_key" => $this->getPrivateKey(),
+        "dunning_configuration" => $this->getDunningConfiguration(),
+        "created_at" => $this->getCreatedAt(),
         );
-
-        $response = $request->post($path, $data, $options);
-        $returnValues = array();
-
-        
-        // Handling for field project
-        $body = $response->getBody();
-        $body = $body['project'];
-        $returnValues['regeneratePrivateKey'] = $this->fillWithData($body);
-        
-        return array_values($returnValues)[0];
     }
+
     
     /**
      * Fetch the current project information.

@@ -457,19 +457,19 @@ class Coupon implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-            "project" => $this->getProject(),
-            "project_id" => $this->getProjectId(),
-            "amount_off" => $this->getAmountOff(),
-            "percent_off" => $this->getPercentOff(),
-            "currency" => $this->getCurrency(),
-            "iteration_count" => $this->getIterationCount(),
-            "max_redemptions" => $this->getMaxRedemptions(),
-            "expires_at" => $this->getExpiresAt(),
-            "metadata" => $this->getMetadata(),
-            "redeemed_number" => $this->getRedeemedNumber(),
-            "sandbox" => $this->getSandbox(),
-            "created_at" => $this->getCreatedAt(),
-            );
+        "project" => $this->getProject(),
+        "project_id" => $this->getProjectId(),
+        "amount_off" => $this->getAmountOff(),
+        "percent_off" => $this->getPercentOff(),
+        "currency" => $this->getCurrency(),
+        "iteration_count" => $this->getIterationCount(),
+        "max_redemptions" => $this->getMaxRedemptions(),
+        "expires_at" => $this->getExpiresAt(),
+        "metadata" => $this->getMetadata(),
+        "redeemed_number" => $this->getRedeemedNumber(),
+        "sandbox" => $this->getSandbox(),
+        "created_at" => $this->getCreatedAt(),
+        );
     }
 
     
