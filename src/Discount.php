@@ -502,19 +502,19 @@ class Discount implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-        "project" => $this->getProject(),
-        "project_id" => $this->getProjectId(),
-        "subscription" => $this->getSubscription(),
-        "subscription_id" => $this->getSubscriptionId(),
-        "coupon" => $this->getCoupon(),
-        "coupon_id" => $this->getCouponId(),
-        "name" => $this->getName(),
-        "amount" => $this->getAmount(),
-        "percent" => $this->getPercent(),
-        "expires_at" => $this->getExpiresAt(),
-        "metadata" => $this->getMetadata(),
-        "sandbox" => $this->getSandbox(),
-        "created_at" => $this->getCreatedAt(),
+            "project" => $this->getProject(),
+            "project_id" => $this->getProjectId(),
+            "subscription" => $this->getSubscription(),
+            "subscription_id" => $this->getSubscriptionId(),
+            "coupon" => $this->getCoupon(),
+            "coupon_id" => $this->getCouponId(),
+            "name" => $this->getName(),
+            "amount" => $this->getAmount(),
+            "percent" => $this->getPercent(),
+            "expires_at" => $this->getExpiresAt(),
+            "metadata" => $this->getMetadata(),
+            "sandbox" => $this->getSandbox(),
+            "created_at" => $this->getCreatedAt(),
         );
     }
 

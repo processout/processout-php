@@ -264,12 +264,12 @@ class CardInformation implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "iin" => $this->getIin(),
-        "scheme" => $this->getScheme(),
-        "type" => $this->getType(),
-        "bank_name" => $this->getBankName(),
-        "brand" => $this->getBrand(),
-        "category" => $this->getCategory(),
-        "country" => $this->getCountry(),
+            "scheme" => $this->getScheme(),
+            "type" => $this->getType(),
+            "bank_name" => $this->getBankName(),
+            "brand" => $this->getBrand(),
+            "category" => $this->getCategory(),
+            "country" => $this->getCountry(),
         );
     }
 

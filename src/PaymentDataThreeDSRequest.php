@@ -171,9 +171,9 @@ class PaymentDataThreeDSRequest implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "acs_url" => $this->getAcsUrl(),
-        "pareq" => $this->getPareq(),
-        "md" => $this->getMd(),
-        "term_url" => $this->getTermUrl(),
+            "pareq" => $this->getPareq(),
+            "md" => $this->getMd(),
+            "term_url" => $this->getTermUrl(),
         );
     }
 

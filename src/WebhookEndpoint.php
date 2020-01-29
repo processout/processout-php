@@ -271,12 +271,12 @@ class WebhookEndpoint implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-        "project" => $this->getProject(),
-        "project_id" => $this->getProjectId(),
-        "url" => $this->getUrl(),
-        "events_whitelist" => $this->getEventsWhitelist(),
-        "sandbox" => $this->getSandbox(),
-        "created_at" => $this->getCreatedAt(),
+            "project" => $this->getProject(),
+            "project_id" => $this->getProjectId(),
+            "url" => $this->getUrl(),
+            "events_whitelist" => $this->getEventsWhitelist(),
+            "sandbox" => $this->getSandbox(),
+            "created_at" => $this->getCreatedAt(),
         );
     }
 

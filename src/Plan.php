@@ -488,19 +488,19 @@ class Plan implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-        "project" => $this->getProject(),
-        "project_id" => $this->getProjectId(),
-        "url" => $this->getUrl(),
-        "name" => $this->getName(),
-        "amount" => $this->getAmount(),
-        "currency" => $this->getCurrency(),
-        "metadata" => $this->getMetadata(),
-        "interval" => $this->getInterval(),
-        "trial_period" => $this->getTrialPeriod(),
-        "return_url" => $this->getReturnUrl(),
-        "cancel_url" => $this->getCancelUrl(),
-        "sandbox" => $this->getSandbox(),
-        "created_at" => $this->getCreatedAt(),
+            "project" => $this->getProject(),
+            "project_id" => $this->getProjectId(),
+            "url" => $this->getUrl(),
+            "name" => $this->getName(),
+            "amount" => $this->getAmount(),
+            "currency" => $this->getCurrency(),
+            "metadata" => $this->getMetadata(),
+            "interval" => $this->getInterval(),
+            "trial_period" => $this->getTrialPeriod(),
+            "return_url" => $this->getReturnUrl(),
+            "cancel_url" => $this->getCancelUrl(),
+            "sandbox" => $this->getSandbox(),
+            "created_at" => $this->getCreatedAt(),
         );
     }
 

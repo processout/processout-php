@@ -364,15 +364,15 @@ class Refund implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "id" => $this->getId(),
-        "transaction" => $this->getTransaction(),
-        "transaction_id" => $this->getTransactionId(),
-        "amount" => $this->getAmount(),
-        "reason" => $this->getReason(),
-        "information" => $this->getInformation(),
-        "has_failed" => $this->getHasFailed(),
-        "metadata" => $this->getMetadata(),
-        "sandbox" => $this->getSandbox(),
-        "created_at" => $this->getCreatedAt(),
+            "transaction" => $this->getTransaction(),
+            "transaction_id" => $this->getTransactionId(),
+            "amount" => $this->getAmount(),
+            "reason" => $this->getReason(),
+            "information" => $this->getInformation(),
+            "has_failed" => $this->getHasFailed(),
+            "metadata" => $this->getMetadata(),
+            "sandbox" => $this->getSandbox(),
+            "created_at" => $this->getCreatedAt(),
         );
     }
 

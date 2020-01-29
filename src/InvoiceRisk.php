@@ -109,7 +109,7 @@ class InvoiceRisk implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "score" => $this->getScore(),
-        "is_legit" => $this->getIsLegit(),
+            "is_legit" => $this->getIsLegit(),
         );
     }
 

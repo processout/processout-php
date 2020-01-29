@@ -109,7 +109,7 @@ class InvoiceDevice implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "channel" => $this->getChannel(),
-        "ip_address" => $this->getIpAddress(),
+            "ip_address" => $this->getIpAddress(),
         );
     }
 

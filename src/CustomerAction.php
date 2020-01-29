@@ -109,7 +109,7 @@ class CustomerAction implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "type" => $this->getType(),
-        "value" => $this->getValue(),
+            "value" => $this->getValue(),
         );
     }
 
