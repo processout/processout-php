@@ -17,6 +17,12 @@ class InvoiceDevice implements \JsonSerializable
     protected $client;
 
     /**
+     * ID of the device
+     * @var string
+     */
+    protected $id;
+
+    /**
      * Channel of the device
      * @var string
      */
@@ -40,6 +46,28 @@ class InvoiceDevice implements \JsonSerializable
         $this->fillWithData($prefill);
     }
 
+    
+    /**
+     * Get Id
+     * ID of the device
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set Id
+     * ID of the device
+     * @param  string $value
+     * @return $this
+     */
+    public function setId($value)
+    {
+        $this->id = $value;
+        return $this;
+    }
     
     /**
      * Get Channel
@@ -93,6 +121,9 @@ class InvoiceDevice implements \JsonSerializable
      */
     public function fillWithData($data)
     {
+        if(! empty($data['id']))
+            $this->setId($data['id']);
+
         if(! empty($data['channel']))
             $this->setChannel($data['channel']);
 
@@ -108,6 +139,7 @@ class InvoiceDevice implements \JsonSerializable
      */
     public function jsonSerialize() {
         return array(
+            "id" => $this->getId(),
             "channel" => $this->getChannel(),
             "ip_address" => $this->getIpAddress(),
         );

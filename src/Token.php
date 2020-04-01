@@ -95,6 +95,12 @@ class Token implements \JsonSerializable
     protected $cancelUrl;
 
     /**
+     * Summary of the customer token, such as a description of the card used or the email of a PayPal account
+     * @var string
+     */
+    protected $summary;
+
+    /**
      * True if the token is chargeable, false otherwise
      * @var boolean
      */
@@ -427,6 +433,28 @@ class Token implements \JsonSerializable
     }
     
     /**
+     * Get Summary
+     * Summary of the customer token, such as a description of the card used or the email of a PayPal account
+     * @return string
+     */
+    public function getSummary()
+    {
+        return $this->summary;
+    }
+
+    /**
+     * Set Summary
+     * Summary of the customer token, such as a description of the card used or the email of a PayPal account
+     * @param  string $value
+     * @return $this
+     */
+    public function setSummary($value)
+    {
+        $this->summary = $value;
+        return $this;
+    }
+    
+    /**
      * Get IsChargeable
      * True if the token is chargeable, false otherwise
      * @return bool
@@ -517,6 +545,9 @@ class Token implements \JsonSerializable
         if(! empty($data['cancel_url']))
             $this->setCancelUrl($data['cancel_url']);
 
+        if(! empty($data['summary']))
+            $this->setSummary($data['summary']);
+
         if(! empty($data['is_chargeable']))
             $this->setIsChargeable($data['is_chargeable']);
 
@@ -545,6 +576,7 @@ class Token implements \JsonSerializable
             "is_default" => $this->getIsDefault(),
             "return_url" => $this->getReturnUrl(),
             "cancel_url" => $this->getCancelUrl(),
+            "summary" => $this->getSummary(),
             "is_chargeable" => $this->getIsChargeable(),
             "created_at" => $this->getCreatedAt(),
         );
