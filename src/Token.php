@@ -113,6 +113,24 @@ class Token implements \JsonSerializable
     protected $createdAt;
 
     /**
+     * Description of the created token
+     * @var string
+     */
+    protected $description;
+
+    /**
+     * Invoice used to verify this token, if any
+     * @var object
+     */
+    protected $invoice;
+
+    /**
+     * ID of the invoice used to verify that token
+     * @var string
+     */
+    protected $invoiceId;
+
+    /**
      * Token constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -498,6 +516,79 @@ class Token implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get Description
+     * Description of the created token
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set Description
+     * Description of the created token
+     * @param  string $value
+     * @return $this
+     */
+    public function setDescription($value)
+    {
+        $this->description = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Invoice
+     * Invoice used to verify this token, if any
+     * @return object
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+
+    /**
+     * Set Invoice
+     * Invoice used to verify this token, if any
+     * @param  object $value
+     * @return $this
+     */
+    public function setInvoice($value)
+    {
+        if (is_object($value))
+            $this->invoice = $value;
+        else
+        {
+            $obj = new Invoice($this->client);
+            $obj->fillWithData($value);
+            $this->invoice = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get InvoiceId
+     * ID of the invoice used to verify that token
+     * @return string
+     */
+    public function getInvoiceId()
+    {
+        return $this->invoiceId;
+    }
+
+    /**
+     * Set InvoiceId
+     * ID of the invoice used to verify that token
+     * @param  string $value
+     * @return $this
+     */
+    public function setInvoiceId($value)
+    {
+        $this->invoiceId = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -554,6 +645,15 @@ class Token implements \JsonSerializable
         if(! empty($data['created_at']))
             $this->setCreatedAt($data['created_at']);
 
+        if(! empty($data['description']))
+            $this->setDescription($data['description']);
+
+        if(! empty($data['invoice']))
+            $this->setInvoice($data['invoice']);
+
+        if(! empty($data['invoice_id']))
+            $this->setInvoiceId($data['invoice_id']);
+
         return $this;
     }
 
@@ -579,6 +679,9 @@ class Token implements \JsonSerializable
             "summary" => $this->getSummary(),
             "is_chargeable" => $this->getIsChargeable(),
             "created_at" => $this->getCreatedAt(),
+            "description" => $this->getDescription(),
+            "invoice" => $this->getInvoice(),
+            "invoice_id" => $this->getInvoiceId(),
         );
     }
 
@@ -664,6 +767,7 @@ class Token implements \JsonSerializable
             "metadata" => $this->getMetadata(), 
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl(), 
+            "description" => $this->getDescription(), 
             "source" => (!empty($options["source"])) ? $options["source"] : null, 
             "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
             "device" => (!empty($options["device"])) ? $options["device"] : null, 

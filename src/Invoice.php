@@ -215,6 +215,12 @@ class Invoice implements \JsonSerializable
     protected $device;
 
     /**
+     * Contain objects that'll be forwarded to external fraud tools
+     * @var object
+     */
+    protected $externalFraudTools;
+
+    /**
      * Invoice constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -1021,6 +1027,35 @@ class Invoice implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get ExternalFraudTools
+     * Contain objects that'll be forwarded to external fraud tools
+     * @return object
+     */
+    public function getExternalFraudTools()
+    {
+        return $this->externalFraudTools;
+    }
+
+    /**
+     * Set ExternalFraudTools
+     * Contain objects that'll be forwarded to external fraud tools
+     * @param  object $value
+     * @return $this
+     */
+    public function setExternalFraudTools($value)
+    {
+        if (is_object($value))
+            $this->externalFraudTools = $value;
+        else
+        {
+            $obj = new InvoiceExternalFraudTools($this->client);
+            $obj->fillWithData($value);
+            $this->externalFraudTools = $obj;
+        }
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1128,6 +1163,9 @@ class Invoice implements \JsonSerializable
         if(! empty($data['device']))
             $this->setDevice($data['device']);
 
+        if(! empty($data['external_fraud_tools']))
+            $this->setExternalFraudTools($data['external_fraud_tools']);
+
         return $this;
     }
 
@@ -1170,6 +1208,7 @@ class Invoice implements \JsonSerializable
             "risk" => $this->getRisk(),
             "shipping" => $this->getShipping(),
             "device" => $this->getDevice(),
+            "external_fraud_tools" => $this->getExternalFraudTools(),
         );
     }
 
@@ -1468,7 +1507,8 @@ class Invoice implements \JsonSerializable
             "risk" => $this->getRisk(), 
             "shipping" => $this->getShipping(), 
             "device" => $this->getDevice(), 
-            "require_backend_capture" => $this->getRequireBackendCapture()
+            "require_backend_capture" => $this->getRequireBackendCapture(), 
+            "external_fraud_tools" => $this->getExternalFraudTools()
         );
 
         $response = $request->post($path, $data, $options);

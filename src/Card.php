@@ -1055,4 +1055,28 @@ class Card implements \JsonSerializable
         return array_values($returnValues)[0];
     }
     
+    /**
+     * Anonymize the card.
+     * @param array $options
+     * @return bool
+     */
+    public function anonymize($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/cards/" . urlencode($this->getId()) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->delete($path, $data, $options);
+        $returnValues = array();
+
+        $returnValues['success'] = $response->isSuccess();
+        
+        return array_values($returnValues)[0];
+    }
+    
 }

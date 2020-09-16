@@ -291,7 +291,7 @@ class Event implements \JsonSerializable
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/events/" . urlencode($this->getId()) . "/webhooks";
+        $path    = "/events/ev_" . urlencode($this->getId()) . "/webhooks";
 
         $data = array(
 
@@ -360,7 +360,7 @@ class Event implements \JsonSerializable
         $this->fillWithData($options);
 
         $request = new Request($this->client);
-        $path    = "/events/" . urlencode($eventId) . "";
+        $path    = "/events/ev_" . urlencode($eventId) . "";
 
         $data = array(
 

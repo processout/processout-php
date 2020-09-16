@@ -173,10 +173,16 @@ class Customer implements \JsonSerializable
     protected $sandbox;
 
     /**
-     * Date at which the customer was created
+     * Date at which the customer was created at ProcessOut
      * @var string
      */
     protected $createdAt;
+
+    /**
+     * Date at which the customer was registered on your platform
+     * @var string
+     */
+    protected $registeredAt;
 
     /**
      * Customer constructor
@@ -815,7 +821,7 @@ class Customer implements \JsonSerializable
     
     /**
      * Get CreatedAt
-     * Date at which the customer was created
+     * Date at which the customer was created at ProcessOut
      * @return string
      */
     public function getCreatedAt()
@@ -825,13 +831,35 @@ class Customer implements \JsonSerializable
 
     /**
      * Set CreatedAt
-     * Date at which the customer was created
+     * Date at which the customer was created at ProcessOut
      * @param  string $value
      * @return $this
      */
     public function setCreatedAt($value)
     {
         $this->createdAt = $value;
+        return $this;
+    }
+    
+    /**
+     * Get RegisteredAt
+     * Date at which the customer was registered on your platform
+     * @return string
+     */
+    public function getRegisteredAt()
+    {
+        return $this->registeredAt;
+    }
+
+    /**
+     * Set RegisteredAt
+     * Date at which the customer was registered on your platform
+     * @param  string $value
+     * @return $this
+     */
+    public function setRegisteredAt($value)
+    {
+        $this->registeredAt = $value;
         return $this;
     }
     
@@ -924,6 +952,9 @@ class Customer implements \JsonSerializable
         if(! empty($data['created_at']))
             $this->setCreatedAt($data['created_at']);
 
+        if(! empty($data['registered_at']))
+            $this->setRegisteredAt($data['registered_at']);
+
         return $this;
     }
 
@@ -960,6 +991,7 @@ class Customer implements \JsonSerializable
             "metadata" => $this->getMetadata(),
             "sandbox" => $this->getSandbox(),
             "created_at" => $this->getCreatedAt(),
+            "registered_at" => $this->getRegisteredAt(),
         );
     }
 
@@ -1186,7 +1218,8 @@ class Customer implements \JsonSerializable
             "is_business" => $this->getIsBusiness(), 
             "sex" => $this->getSex(), 
             "metadata" => $this->getMetadata(), 
-            "id" => $this->getId()
+            "id" => $this->getId(), 
+            "registered_at" => $this->getRegisteredAt()
         );
 
         $response = $request->post($path, $data, $options);
@@ -1259,7 +1292,8 @@ class Customer implements \JsonSerializable
             "legal_document" => $this->getLegalDocument(), 
             "is_business" => $this->getIsBusiness(), 
             "sex" => $this->getSex(), 
-            "metadata" => $this->getMetadata()
+            "metadata" => $this->getMetadata(), 
+            "registered_at" => $this->getRegisteredAt()
         );
 
         $response = $request->put($path, $data, $options);
