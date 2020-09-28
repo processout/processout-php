@@ -167,6 +167,12 @@ class Card implements \JsonSerializable
     protected $fingerprint;
 
     /**
+     * This field defines if the card was tokenized with a 3rd party tokenization method such as applepay
+     * @var string
+     */
+    protected $tokenType;
+
+    /**
      * Metadata related to the card, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -768,6 +774,28 @@ class Card implements \JsonSerializable
     }
     
     /**
+     * Get TokenType
+     * This field defines if the card was tokenized with a 3rd party tokenization method such as applepay
+     * @return string
+     */
+    public function getTokenType()
+    {
+        return $this->tokenType;
+    }
+
+    /**
+     * Set TokenType
+     * This field defines if the card was tokenized with a 3rd party tokenization method such as applepay
+     * @param  string $value
+     * @return $this
+     */
+    public function setTokenType($value)
+    {
+        $this->tokenType = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the card, in the form of a dictionary (key-value pair)
      * @return array
@@ -938,6 +966,9 @@ class Card implements \JsonSerializable
         if(! empty($data['fingerprint']))
             $this->setFingerprint($data['fingerprint']);
 
+        if(! empty($data['token_type']))
+            $this->setTokenType($data['token_type']);
+
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
 
@@ -984,6 +1015,7 @@ class Card implements \JsonSerializable
             "country_code" => $this->getCountryCode(),
             "ip_address" => $this->getIpAddress(),
             "fingerprint" => $this->getFingerprint(),
+            "token_type" => $this->getTokenType(),
             "metadata" => $this->getMetadata(),
             "expires_soon" => $this->getExpiresSoon(),
             "sandbox" => $this->getSandbox(),
