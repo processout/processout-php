@@ -335,6 +335,15 @@ class ProcessOut
     }
 	
     /**
+     * Create a new ThreeDS instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ThreeDS
+     */
+	public function newThreeDS($prefill = array()) {
+        return new ThreeDS($this, $prefill);
+    }
+	
+    /**
      * Create a new PaymentDataThreeDSRequest instance
      * @param array|null $prefill array used to prefill the object
      * @return PaymentDataThreeDSRequest

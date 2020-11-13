@@ -197,6 +197,12 @@ class Transaction implements \JsonSerializable
     protected $errorCode;
 
     /**
+     * Error message of the transaction, when the payment has failed
+     * @var string
+     */
+    protected $errorMessage;
+
+    /**
      * Name of the last gateway the transaction was attempted on (successfully or not). Use the operations list to get the full transaction's history
      * @var string
      */
@@ -315,6 +321,12 @@ class Transaction implements \JsonSerializable
      * @var string
      */
     protected $refundedAt;
+
+    /**
+     * 3DS data of a transaction if it was authenticated
+     * @var object
+     */
+    protected $threeDS;
 
     /**
      * Transaction constructor
@@ -1063,6 +1075,28 @@ class Transaction implements \JsonSerializable
     }
     
     /**
+     * Get ErrorMessage
+     * Error message of the transaction, when the payment has failed
+     * @return string
+     */
+    public function getErrorMessage()
+    {
+        return $this->errorMessage;
+    }
+
+    /**
+     * Set ErrorMessage
+     * Error message of the transaction, when the payment has failed
+     * @param  string $value
+     * @return $this
+     */
+    public function setErrorMessage($value)
+    {
+        $this->errorMessage = $value;
+        return $this;
+    }
+    
+    /**
      * Get GatewayName
      * Name of the last gateway the transaction was attempted on (successfully or not). Use the operations list to get the full transaction's history
      * @return string
@@ -1502,6 +1536,35 @@ class Transaction implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get ThreeDS
+     * 3DS data of a transaction if it was authenticated
+     * @return object
+     */
+    public function getThreeDS()
+    {
+        return $this->threeDS;
+    }
+
+    /**
+     * Set ThreeDS
+     * 3DS data of a transaction if it was authenticated
+     * @param  object $value
+     * @return $this
+     */
+    public function setThreeDS($value)
+    {
+        if (is_object($value))
+            $this->threeDS = $value;
+        else
+        {
+            $obj = new ThreeDS($this->client);
+            $obj->fillWithData($value);
+            $this->threeDS = $obj;
+        }
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1600,6 +1663,9 @@ class Transaction implements \JsonSerializable
         if(! empty($data['error_code']))
             $this->setErrorCode($data['error_code']);
 
+        if(! empty($data['error_message']))
+            $this->setErrorMessage($data['error_message']);
+
         if(! empty($data['gateway_name']))
             $this->setGatewayName($data['gateway_name']);
 
@@ -1660,6 +1726,9 @@ class Transaction implements \JsonSerializable
         if(! empty($data['refunded_at']))
             $this->setRefundedAt($data['refunded_at']);
 
+        if(! empty($data['three_d_s']))
+            $this->setThreeDS($data['three_d_s']);
+
         return $this;
     }
 
@@ -1699,6 +1768,7 @@ class Transaction implements \JsonSerializable
             "available_amount_local" => $this->getAvailableAmountLocal(),
             "currency" => $this->getCurrency(),
             "error_code" => $this->getErrorCode(),
+            "error_message" => $this->getErrorMessage(),
             "gateway_name" => $this->getGatewayName(),
             "three_d_s_status" => $this->getThreeDSStatus(),
             "status" => $this->getStatus(),
@@ -1719,6 +1789,7 @@ class Transaction implements \JsonSerializable
             "created_at" => $this->getCreatedAt(),
             "chargedback_at" => $this->getChargedbackAt(),
             "refunded_at" => $this->getRefundedAt(),
+            "three_d_s" => $this->getThreeDS(),
         );
     }
 

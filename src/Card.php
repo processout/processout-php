@@ -77,6 +77,12 @@ class Card implements \JsonSerializable
     protected $brand;
 
     /**
+     * Category of the card (consumer, commercial, ...)
+     * @var string
+     */
+    protected $category;
+
+    /**
      * First 6 digits of the card
      * @var string
      */
@@ -440,6 +446,28 @@ class Card implements \JsonSerializable
     public function setBrand($value)
     {
         $this->brand = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Category
+     * Category of the card (consumer, commercial, ...)
+     * @return string
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set Category
+     * Category of the card (consumer, commercial, ...)
+     * @param  string $value
+     * @return $this
+     */
+    public function setCategory($value)
+    {
+        $this->category = $value;
         return $this;
     }
     
@@ -921,6 +949,9 @@ class Card implements \JsonSerializable
         if(! empty($data['brand']))
             $this->setBrand($data['brand']);
 
+        if(! empty($data['category']))
+            $this->setCategory($data['category']);
+
         if(! empty($data['iin']))
             $this->setIin($data['iin']);
 
@@ -1000,6 +1031,7 @@ class Card implements \JsonSerializable
             "type" => $this->getType(),
             "bank_name" => $this->getBankName(),
             "brand" => $this->getBrand(),
+            "category" => $this->getCategory(),
             "iin" => $this->getIin(),
             "last_4_digits" => $this->getLast4Digits(),
             "exp_month" => $this->getExpMonth(),

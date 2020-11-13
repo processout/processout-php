@@ -41,6 +41,7 @@ include_once(dirname(__FILE__) . "/src/Project.php");
 include_once(dirname(__FILE__) . "/src/Refund.php");
 include_once(dirname(__FILE__) . "/src/Subscription.php");
 include_once(dirname(__FILE__) . "/src/Transaction.php");
+include_once(dirname(__FILE__) . "/src/ThreeDS.php");
 include_once(dirname(__FILE__) . "/src/PaymentDataThreeDSRequest.php");
 include_once(dirname(__FILE__) . "/src/PaymentDataNetworkAuthentication.php");
 include_once(dirname(__FILE__) . "/src/PaymentDataThreeDSAuthentication.php");
