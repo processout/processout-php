@@ -31,7 +31,7 @@ class Request
         $headers = array(
             'API-Version: 1.4.0.0',
             'Content-Type: application/json',
-            'User-Agent: ProcessOut PHP-Bindings/6.16.6'
+            'User-Agent: ProcessOut PHP-Bindings/6.16.7'
         );
         if (! empty($options['idempotencyKey']))
             $headers[] = 'Idempotency-Key: ' . $options['idempotencyKey'];
@@ -61,6 +61,9 @@ class Request
     protected function httpBuildQuery($queryData) {
         $data = array();
         foreach ($queryData as $key => $value) {
+            if (null === $value) {
+                continue;
+            }
             if (is_scalar($value)) {
                 $data[] = $key . '=' . rawurlencode($value);
             } else {
