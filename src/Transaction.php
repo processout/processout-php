@@ -329,6 +329,18 @@ class Transaction implements \JsonSerializable
     protected $threeDS;
 
     /**
+     * CVC check done during the transaction
+     * @var string
+     */
+    protected $cvcCheck;
+
+    /**
+     * AVS check done during the transaction
+     * @var string
+     */
+    protected $avsCheck;
+
+    /**
      * Transaction constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -1565,6 +1577,50 @@ class Transaction implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get CvcCheck
+     * CVC check done during the transaction
+     * @return string
+     */
+    public function getCvcCheck()
+    {
+        return $this->cvcCheck;
+    }
+
+    /**
+     * Set CvcCheck
+     * CVC check done during the transaction
+     * @param  string $value
+     * @return $this
+     */
+    public function setCvcCheck($value)
+    {
+        $this->cvcCheck = $value;
+        return $this;
+    }
+    
+    /**
+     * Get AvsCheck
+     * AVS check done during the transaction
+     * @return string
+     */
+    public function getAvsCheck()
+    {
+        return $this->avsCheck;
+    }
+
+    /**
+     * Set AvsCheck
+     * AVS check done during the transaction
+     * @param  string $value
+     * @return $this
+     */
+    public function setAvsCheck($value)
+    {
+        $this->avsCheck = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1729,6 +1785,12 @@ class Transaction implements \JsonSerializable
         if(! empty($data['three_d_s']))
             $this->setThreeDS($data['three_d_s']);
 
+        if(! empty($data['cvc_check']))
+            $this->setCvcCheck($data['cvc_check']);
+
+        if(! empty($data['avs_check']))
+            $this->setAvsCheck($data['avs_check']);
+
         return $this;
     }
 
@@ -1790,6 +1852,8 @@ class Transaction implements \JsonSerializable
             "chargedback_at" => $this->getChargedbackAt(),
             "refunded_at" => $this->getRefundedAt(),
             "three_d_s" => $this->getThreeDS(),
+            "cvc_check" => $this->getCvcCheck(),
+            "avs_check" => $this->getAvsCheck(),
         );
     }
 

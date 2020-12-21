@@ -185,6 +185,12 @@ class Customer implements \JsonSerializable
     protected $registeredAt;
 
     /**
+     * Date of birth of the customer
+     * @var string
+     */
+    protected $dateOfBirth;
+
+    /**
      * Customer constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -863,6 +869,28 @@ class Customer implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get DateOfBirth
+     * Date of birth of the customer
+     * @return string
+     */
+    public function getDateOfBirth()
+    {
+        return $this->dateOfBirth;
+    }
+
+    /**
+     * Set DateOfBirth
+     * Date of birth of the customer
+     * @param  string $value
+     * @return $this
+     */
+    public function setDateOfBirth($value)
+    {
+        $this->dateOfBirth = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -955,6 +983,9 @@ class Customer implements \JsonSerializable
         if(! empty($data['registered_at']))
             $this->setRegisteredAt($data['registered_at']);
 
+        if(! empty($data['date_of_birth']))
+            $this->setDateOfBirth($data['date_of_birth']);
+
         return $this;
     }
 
@@ -992,6 +1023,7 @@ class Customer implements \JsonSerializable
             "sandbox" => $this->getSandbox(),
             "created_at" => $this->getCreatedAt(),
             "registered_at" => $this->getRegisteredAt(),
+            "date_of_birth" => $this->getDateOfBirth(),
         );
     }
 
@@ -1215,6 +1247,7 @@ class Customer implements \JsonSerializable
             "ip_address" => $this->getIpAddress(), 
             "phone_number" => $this->getPhoneNumber(), 
             "legal_document" => $this->getLegalDocument(), 
+            "date_of_birth" => $this->getDateOfBirth(), 
             "is_business" => $this->getIsBusiness(), 
             "sex" => $this->getSex(), 
             "metadata" => $this->getMetadata(), 
@@ -1290,6 +1323,7 @@ class Customer implements \JsonSerializable
             "ip_address" => $this->getIpAddress(), 
             "phone_number" => $this->getPhoneNumber(), 
             "legal_document" => $this->getLegalDocument(), 
+            "date_of_birth" => $this->getDateOfBirth(), 
             "is_business" => $this->getIsBusiness(), 
             "sex" => $this->getSex(), 
             "metadata" => $this->getMetadata(), 

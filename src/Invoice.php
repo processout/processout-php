@@ -221,6 +221,12 @@ class Invoice implements \JsonSerializable
     protected $externalFraudTools;
 
     /**
+     * Reason provided to request 3DS2 exemption
+     * @var string
+     */
+    protected $exemptionReason3ds2;
+
+    /**
      * Invoice constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -1056,6 +1062,28 @@ class Invoice implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get ExemptionReason3ds2
+     * Reason provided to request 3DS2 exemption
+     * @return string
+     */
+    public function getExemptionReason3ds2()
+    {
+        return $this->exemptionReason3ds2;
+    }
+
+    /**
+     * Set ExemptionReason3ds2
+     * Reason provided to request 3DS2 exemption
+     * @param  string $value
+     * @return $this
+     */
+    public function setExemptionReason3ds2($value)
+    {
+        $this->exemptionReason3ds2 = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1166,6 +1194,9 @@ class Invoice implements \JsonSerializable
         if(! empty($data['external_fraud_tools']))
             $this->setExternalFraudTools($data['external_fraud_tools']);
 
+        if(! empty($data['exemption_reason_3ds2']))
+            $this->setExemptionReason3ds2($data['exemption_reason_3ds2']);
+
         return $this;
     }
 
@@ -1209,6 +1240,7 @@ class Invoice implements \JsonSerializable
             "shipping" => $this->getShipping(),
             "device" => $this->getDevice(),
             "external_fraud_tools" => $this->getExternalFraudTools(),
+            "exemption_reason_3ds2" => $this->getExemptionReason3ds2(),
         );
     }
 
@@ -1494,6 +1526,7 @@ class Invoice implements \JsonSerializable
             "currency" => $this->getCurrency(), 
             "metadata" => $this->getMetadata(), 
             "details" => $this->getDetails(), 
+            "exemption_reason_3ds2" => $this->getExemptionReason3ds2(), 
             "gateway_data" => $this->getGatewayData(), 
             "merchant_initiator_type" => $this->getMerchantInitiatorType(), 
             "statement_descriptor" => $this->getStatementDescriptor(), 
