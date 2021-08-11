@@ -221,10 +221,34 @@ class Invoice implements \JsonSerializable
     protected $externalFraudTools;
 
     /**
-     * Reason provided to request 3DS2 exemption
+     * (Deprecated - use sca_exemption_reason) Reason provided to request 3DS2 exemption
      * @var string
      */
     protected $exemptionReason3ds2;
+
+    /**
+     * Reason provided to request SCA exemption
+     * @var string
+     */
+    protected $scaExemptionReason;
+
+    /**
+     * Challenge indicator when requesting 3DS2
+     * @var string
+     */
+    protected $challengeIndicator;
+
+    /**
+     * A boolean to indicate if an invoice can have incremental authorizations created for it.
+     * @var boolean
+     */
+    protected $incremental;
+
+    /**
+     * Tax for an invoice
+     * @var object
+     */
+    protected $tax;
 
     /**
      * Invoice constructor
@@ -1064,7 +1088,7 @@ class Invoice implements \JsonSerializable
     
     /**
      * Get ExemptionReason3ds2
-     * Reason provided to request 3DS2 exemption
+     * (Deprecated - use sca_exemption_reason) Reason provided to request 3DS2 exemption
      * @return string
      */
     public function getExemptionReason3ds2()
@@ -1074,13 +1098,108 @@ class Invoice implements \JsonSerializable
 
     /**
      * Set ExemptionReason3ds2
-     * Reason provided to request 3DS2 exemption
+     * (Deprecated - use sca_exemption_reason) Reason provided to request 3DS2 exemption
      * @param  string $value
      * @return $this
      */
     public function setExemptionReason3ds2($value)
     {
         $this->exemptionReason3ds2 = $value;
+        return $this;
+    }
+    
+    /**
+     * Get ScaExemptionReason
+     * Reason provided to request SCA exemption
+     * @return string
+     */
+    public function getScaExemptionReason()
+    {
+        return $this->scaExemptionReason;
+    }
+
+    /**
+     * Set ScaExemptionReason
+     * Reason provided to request SCA exemption
+     * @param  string $value
+     * @return $this
+     */
+    public function setScaExemptionReason($value)
+    {
+        $this->scaExemptionReason = $value;
+        return $this;
+    }
+    
+    /**
+     * Get ChallengeIndicator
+     * Challenge indicator when requesting 3DS2
+     * @return string
+     */
+    public function getChallengeIndicator()
+    {
+        return $this->challengeIndicator;
+    }
+
+    /**
+     * Set ChallengeIndicator
+     * Challenge indicator when requesting 3DS2
+     * @param  string $value
+     * @return $this
+     */
+    public function setChallengeIndicator($value)
+    {
+        $this->challengeIndicator = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Incremental
+     * A boolean to indicate if an invoice can have incremental authorizations created for it.
+     * @return bool
+     */
+    public function getIncremental()
+    {
+        return $this->incremental;
+    }
+
+    /**
+     * Set Incremental
+     * A boolean to indicate if an invoice can have incremental authorizations created for it.
+     * @param  bool $value
+     * @return $this
+     */
+    public function setIncremental($value)
+    {
+        $this->incremental = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Tax
+     * Tax for an invoice
+     * @return object
+     */
+    public function getTax()
+    {
+        return $this->tax;
+    }
+
+    /**
+     * Set Tax
+     * Tax for an invoice
+     * @param  object $value
+     * @return $this
+     */
+    public function setTax($value)
+    {
+        if (is_object($value))
+            $this->tax = $value;
+        else
+        {
+            $obj = new InvoiceTax($this->client);
+            $obj->fillWithData($value);
+            $this->tax = $obj;
+        }
         return $this;
     }
     
@@ -1197,6 +1316,18 @@ class Invoice implements \JsonSerializable
         if(! empty($data['exemption_reason_3ds2']))
             $this->setExemptionReason3ds2($data['exemption_reason_3ds2']);
 
+        if(! empty($data['sca_exemption_reason']))
+            $this->setScaExemptionReason($data['sca_exemption_reason']);
+
+        if(! empty($data['challenge_indicator']))
+            $this->setChallengeIndicator($data['challenge_indicator']);
+
+        if(! empty($data['incremental']))
+            $this->setIncremental($data['incremental']);
+
+        if(! empty($data['tax']))
+            $this->setTax($data['tax']);
+
         return $this;
     }
 
@@ -1241,9 +1372,44 @@ class Invoice implements \JsonSerializable
             "device" => $this->getDevice(),
             "external_fraud_tools" => $this->getExternalFraudTools(),
             "exemption_reason_3ds2" => $this->getExemptionReason3ds2(),
+            "sca_exemption_reason" => $this->getScaExemptionReason(),
+            "challenge_indicator" => $this->getChallengeIndicator(),
+            "incremental" => $this->getIncremental(),
+            "tax" => $this->getTax(),
         );
     }
 
+    
+    /**
+     * Create an incremental authorization
+     * @param string $amount
+     * @param array $options
+     * @return Transaction
+     */
+    public function incrementAuthorization($amount, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/invoices/" . urlencode($this->getId()) . "/increment_authorization";
+
+        $data = array(
+            "amount" => $amount
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field transaction
+        $body = $response->getBody();
+        $body = $body['transaction'];
+        $transaction = new Transaction($this->client);
+        $returnValues['transaction'] = $transaction->fillWithData($body);
+                
+        
+        return array_values($returnValues)[0];
+    }
     
     /**
      * Authorize the invoice using the given source (customer or token)
@@ -1260,6 +1426,7 @@ class Invoice implements \JsonSerializable
 
         $data = array(
             "device" => $this->getDevice(), 
+            "incremental" => $this->getIncremental(), 
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
             "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
@@ -1297,6 +1464,7 @@ class Invoice implements \JsonSerializable
 
         $data = array(
             "device" => $this->getDevice(), 
+            "incremental" => $this->getIncremental(), 
             "authorize_only" => (!empty($options["authorize_only"])) ? $options["authorize_only"] : null, 
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
@@ -1527,6 +1695,8 @@ class Invoice implements \JsonSerializable
             "metadata" => $this->getMetadata(), 
             "details" => $this->getDetails(), 
             "exemption_reason_3ds2" => $this->getExemptionReason3ds2(), 
+            "sca_exemption_reason" => $this->getScaExemptionReason(), 
+            "challenge_indicator" => $this->getChallengeIndicator(), 
             "gateway_data" => $this->getGatewayData(), 
             "merchant_initiator_type" => $this->getMerchantInitiatorType(), 
             "statement_descriptor" => $this->getStatementDescriptor(), 
@@ -1541,7 +1711,8 @@ class Invoice implements \JsonSerializable
             "shipping" => $this->getShipping(), 
             "device" => $this->getDevice(), 
             "require_backend_capture" => $this->getRequireBackendCapture(), 
-            "external_fraud_tools" => $this->getExternalFraudTools()
+            "external_fraud_tools" => $this->getExternalFraudTools(), 
+            "tax" => $this->getTax()
         );
 
         $response = $request->post($path, $data, $options);

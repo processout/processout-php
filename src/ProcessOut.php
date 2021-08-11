@@ -200,6 +200,15 @@ class ProcessOut
     }
 	
     /**
+     * Create a new InvoiceTax instance
+     * @param array|null $prefill array used to prefill the object
+     * @return InvoiceTax
+     */
+	public function newInvoiceTax($prefill = array()) {
+        return new InvoiceTax($this, $prefill);
+    }
+	
+    /**
      * Create a new InvoiceExternalFraudTools instance
      * @param array|null $prefill array used to prefill the object
      * @return InvoiceExternalFraudTools

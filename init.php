@@ -26,6 +26,7 @@ include_once(dirname(__FILE__) . "/src/Event.php");
 include_once(dirname(__FILE__) . "/src/Gateway.php");
 include_once(dirname(__FILE__) . "/src/GatewayConfiguration.php");
 include_once(dirname(__FILE__) . "/src/Invoice.php");
+include_once(dirname(__FILE__) . "/src/InvoiceTax.php");
 include_once(dirname(__FILE__) . "/src/InvoiceExternalFraudTools.php");
 include_once(dirname(__FILE__) . "/src/InvoiceRisk.php");
 include_once(dirname(__FILE__) . "/src/InvoiceDevice.php");
