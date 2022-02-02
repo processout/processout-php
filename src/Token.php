@@ -131,6 +131,12 @@ class Token implements \JsonSerializable
     protected $invoiceId;
 
     /**
+     * Allow to refund or void the invoice manually
+     * @var boolean
+     */
+    protected $manualInvoiceCancellation;
+
+    /**
      * Token constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -589,6 +595,28 @@ class Token implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get ManualInvoiceCancellation
+     * Allow to refund or void the invoice manually
+     * @return bool
+     */
+    public function getManualInvoiceCancellation()
+    {
+        return $this->manualInvoiceCancellation;
+    }
+
+    /**
+     * Set ManualInvoiceCancellation
+     * Allow to refund or void the invoice manually
+     * @param  bool $value
+     * @return $this
+     */
+    public function setManualInvoiceCancellation($value)
+    {
+        $this->manualInvoiceCancellation = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -654,6 +682,9 @@ class Token implements \JsonSerializable
         if(! empty($data['invoice_id']))
             $this->setInvoiceId($data['invoice_id']);
 
+        if(! empty($data['manual_invoice_cancellation']))
+            $this->setManualInvoiceCancellation($data['manual_invoice_cancellation']);
+
         return $this;
     }
 
@@ -682,6 +713,7 @@ class Token implements \JsonSerializable
             "description" => $this->getDescription(),
             "invoice" => $this->getInvoice(),
             "invoice_id" => $this->getInvoiceId(),
+            "manual_invoice_cancellation" => $this->getManualInvoiceCancellation(),
         );
     }
 
@@ -768,6 +800,8 @@ class Token implements \JsonSerializable
             "return_url" => $this->getReturnUrl(), 
             "cancel_url" => $this->getCancelUrl(), 
             "description" => $this->getDescription(), 
+            "invoice_id" => $this->getInvoiceId(), 
+            "manual_invoice_cancellation" => $this->getManualInvoiceCancellation(), 
             "source" => (!empty($options["source"])) ? $options["source"] : null, 
             "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
             "device" => (!empty($options["device"])) ? $options["device"] : null, 

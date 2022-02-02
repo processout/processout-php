@@ -110,6 +110,24 @@ class ProcessOut
     }
 	
     /**
+     * Create a new Balances instance
+     * @param array|null $prefill array used to prefill the object
+     * @return Balances
+     */
+	public function newBalances($prefill = array()) {
+        return new Balances($this, $prefill);
+    }
+	
+    /**
+     * Create a new Balance instance
+     * @param array|null $prefill array used to prefill the object
+     * @return Balance
+     */
+	public function newBalance($prefill = array()) {
+        return new Balance($this, $prefill);
+    }
+	
+    /**
      * Create a new Card instance
      * @param array|null $prefill array used to prefill the object
      * @return Card
