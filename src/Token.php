@@ -131,10 +131,16 @@ class Token implements \JsonSerializable
     protected $invoiceId;
 
     /**
-     * Allow to refund or void the invoice manually
+     * If true, allows to refund or void the invoice manually following the token verification process
      * @var boolean
      */
     protected $manualInvoiceCancellation;
+
+    /**
+     * If true, the balance can be retrieved from the balances endpoint
+     * @var boolean
+     */
+    protected $canGetBalance;
 
     /**
      * Token constructor
@@ -597,7 +603,7 @@ class Token implements \JsonSerializable
     
     /**
      * Get ManualInvoiceCancellation
-     * Allow to refund or void the invoice manually
+     * If true, allows to refund or void the invoice manually following the token verification process
      * @return bool
      */
     public function getManualInvoiceCancellation()
@@ -607,13 +613,35 @@ class Token implements \JsonSerializable
 
     /**
      * Set ManualInvoiceCancellation
-     * Allow to refund or void the invoice manually
+     * If true, allows to refund or void the invoice manually following the token verification process
      * @param  bool $value
      * @return $this
      */
     public function setManualInvoiceCancellation($value)
     {
         $this->manualInvoiceCancellation = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CanGetBalance
+     * If true, the balance can be retrieved from the balances endpoint
+     * @return bool
+     */
+    public function getCanGetBalance()
+    {
+        return $this->canGetBalance;
+    }
+
+    /**
+     * Set CanGetBalance
+     * If true, the balance can be retrieved from the balances endpoint
+     * @param  bool $value
+     * @return $this
+     */
+    public function setCanGetBalance($value)
+    {
+        $this->canGetBalance = $value;
         return $this;
     }
     
@@ -685,6 +713,9 @@ class Token implements \JsonSerializable
         if(! empty($data['manual_invoice_cancellation']))
             $this->setManualInvoiceCancellation($data['manual_invoice_cancellation']);
 
+        if(! empty($data['can_get_balance']))
+            $this->setCanGetBalance($data['can_get_balance']);
+
         return $this;
     }
 
@@ -714,6 +745,7 @@ class Token implements \JsonSerializable
             "invoice" => $this->getInvoice(),
             "invoice_id" => $this->getInvoiceId(),
             "manual_invoice_cancellation" => $this->getManualInvoiceCancellation(),
+            "can_get_balance" => $this->getCanGetBalance(),
         );
     }
 
