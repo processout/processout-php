@@ -137,6 +137,12 @@ class Token implements \JsonSerializable
     protected $manualInvoiceCancellation;
 
     /**
+     * When a token has been requested to be verified, the status will be displayed using this field. The status can have the following values: `success`, `pending`, `failed`, `not-requested` and `unknown`
+     * @var string
+     */
+    protected $verificationStatus;
+
+    /**
      * If true, the balance can be retrieved from the balances endpoint
      * @var boolean
      */
@@ -624,6 +630,28 @@ class Token implements \JsonSerializable
     }
     
     /**
+     * Get VerificationStatus
+     * When a token has been requested to be verified, the status will be displayed using this field. The status can have the following values: `success`, `pending`, `failed`, `not-requested` and `unknown`
+     * @return string
+     */
+    public function getVerificationStatus()
+    {
+        return $this->verificationStatus;
+    }
+
+    /**
+     * Set VerificationStatus
+     * When a token has been requested to be verified, the status will be displayed using this field. The status can have the following values: `success`, `pending`, `failed`, `not-requested` and `unknown`
+     * @param  string $value
+     * @return $this
+     */
+    public function setVerificationStatus($value)
+    {
+        $this->verificationStatus = $value;
+        return $this;
+    }
+    
+    /**
      * Get CanGetBalance
      * If true, the balance can be retrieved from the balances endpoint
      * @return bool
@@ -713,6 +741,9 @@ class Token implements \JsonSerializable
         if(! empty($data['manual_invoice_cancellation']))
             $this->setManualInvoiceCancellation($data['manual_invoice_cancellation']);
 
+        if(! empty($data['verification_status']))
+            $this->setVerificationStatus($data['verification_status']);
+
         if(! empty($data['can_get_balance']))
             $this->setCanGetBalance($data['can_get_balance']);
 
@@ -745,6 +776,7 @@ class Token implements \JsonSerializable
             "invoice" => $this->getInvoice(),
             "invoice_id" => $this->getInvoiceId(),
             "manual_invoice_cancellation" => $this->getManualInvoiceCancellation(),
+            "verification_status" => $this->getVerificationStatus(),
             "can_get_balance" => $this->getCanGetBalance(),
         );
     }
