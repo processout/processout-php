@@ -203,6 +203,12 @@ class Transaction implements \JsonSerializable
     protected $errorMessage;
 
     /**
+     * Name of the merchant acquirer
+     * @var string
+     */
+    protected $acquirerName;
+
+    /**
      * Name of the last gateway the transaction was attempted on (successfully or not). Use the operations list to get the full transaction's history
      * @var string
      */
@@ -1109,6 +1115,28 @@ class Transaction implements \JsonSerializable
     }
     
     /**
+     * Get AcquirerName
+     * Name of the merchant acquirer
+     * @return string
+     */
+    public function getAcquirerName()
+    {
+        return $this->acquirerName;
+    }
+
+    /**
+     * Set AcquirerName
+     * Name of the merchant acquirer
+     * @param  string $value
+     * @return $this
+     */
+    public function setAcquirerName($value)
+    {
+        $this->acquirerName = $value;
+        return $this;
+    }
+    
+    /**
      * Get GatewayName
      * Name of the last gateway the transaction was attempted on (successfully or not). Use the operations list to get the full transaction's history
      * @return string
@@ -1722,6 +1750,9 @@ class Transaction implements \JsonSerializable
         if(! empty($data['error_message']))
             $this->setErrorMessage($data['error_message']);
 
+        if(! empty($data['acquirer_name']))
+            $this->setAcquirerName($data['acquirer_name']);
+
         if(! empty($data['gateway_name']))
             $this->setGatewayName($data['gateway_name']);
 
@@ -1831,6 +1862,7 @@ class Transaction implements \JsonSerializable
             "currency" => $this->getCurrency(),
             "error_code" => $this->getErrorCode(),
             "error_message" => $this->getErrorMessage(),
+            "acquirer_name" => $this->getAcquirerName(),
             "gateway_name" => $this->getGatewayName(),
             "three_d_s_status" => $this->getThreeDSStatus(),
             "status" => $this->getStatus(),

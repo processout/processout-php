@@ -77,6 +77,12 @@ class Refund implements \JsonSerializable
     protected $createdAt;
 
     /**
+     * List of invoice details ids to refund
+     * @var slice
+     */
+    protected $invoiceDetailIds;
+
+    /**
      * Refund constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -316,6 +322,28 @@ class Refund implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get InvoiceDetailIds
+     * List of invoice details ids to refund
+     * @return array
+     */
+    public function getInvoiceDetailIds()
+    {
+        return $this->invoiceDetailIds;
+    }
+
+    /**
+     * Set InvoiceDetailIds
+     * List of invoice details ids to refund
+     * @param  array $value
+     * @return $this
+     */
+    public function setInvoiceDetailIds($value)
+    {
+        $this->invoiceDetailIds = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -354,6 +382,9 @@ class Refund implements \JsonSerializable
         if(! empty($data['created_at']))
             $this->setCreatedAt($data['created_at']);
 
+        if(! empty($data['invoice_detail_ids']))
+            $this->setInvoiceDetailIds($data['invoice_detail_ids']);
+
         return $this;
     }
 
@@ -373,6 +404,7 @@ class Refund implements \JsonSerializable
             "metadata" => $this->getMetadata(),
             "sandbox" => $this->getSandbox(),
             "created_at" => $this->getCreatedAt(),
+            "invoice_detail_ids" => $this->getInvoiceDetailIds(),
         );
     }
 
@@ -458,7 +490,8 @@ class Refund implements \JsonSerializable
             "amount" => $this->getAmount(), 
             "metadata" => $this->getMetadata(), 
             "reason" => $this->getReason(), 
-            "information" => $this->getInformation()
+            "information" => $this->getInformation(), 
+            "invoice_detail_ids" => $this->getInvoiceDetailIds()
         );
 
         $response = $request->post($path, $data, $options);

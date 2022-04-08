@@ -17,6 +17,12 @@ class InvoiceDetail implements \JsonSerializable
     protected $client;
 
     /**
+     * ID of the invoice detail
+     * @var string
+     */
+    protected $id;
+
+    /**
      * Name of the invoice detail
      * @var string
      */
@@ -118,6 +124,28 @@ class InvoiceDetail implements \JsonSerializable
         $this->fillWithData($prefill);
     }
 
+    
+    /**
+     * Get Id
+     * ID of the invoice detail
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set Id
+     * ID of the invoice detail
+     * @param  string $value
+     * @return $this
+     */
+    public function setId($value)
+    {
+        $this->id = $value;
+        return $this;
+    }
     
     /**
      * Get Name
@@ -457,6 +485,9 @@ class InvoiceDetail implements \JsonSerializable
      */
     public function fillWithData($data)
     {
+        if(! empty($data['id']))
+            $this->setId($data['id']);
+
         if(! empty($data['name']))
             $this->setName($data['name']);
 
@@ -511,6 +542,7 @@ class InvoiceDetail implements \JsonSerializable
      */
     public function jsonSerialize() {
         return array(
+            "id" => $this->getId(),
             "name" => $this->getName(),
             "type" => $this->getType(),
             "amount" => $this->getAmount(),

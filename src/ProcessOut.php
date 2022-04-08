@@ -110,6 +110,24 @@ class ProcessOut
     }
 	
     /**
+     * Create a new ApplePayAlternativeMerchantCertificates instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ApplePayAlternativeMerchantCertificates
+     */
+	public function newApplePayAlternativeMerchantCertificates($prefill = array()) {
+        return new ApplePayAlternativeMerchantCertificates($this, $prefill);
+    }
+	
+    /**
+     * Create a new AlternativeMerchantCertificate instance
+     * @param array|null $prefill array used to prefill the object
+     * @return AlternativeMerchantCertificate
+     */
+	public function newAlternativeMerchantCertificate($prefill = array()) {
+        return new AlternativeMerchantCertificate($this, $prefill);
+    }
+	
+    /**
      * Create a new Balances instance
      * @param array|null $prefill array used to prefill the object
      * @return Balances
