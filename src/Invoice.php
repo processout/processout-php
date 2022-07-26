@@ -251,6 +251,12 @@ class Invoice implements \JsonSerializable
     protected $tax;
 
     /**
+     * Payment type
+     * @var string
+     */
+    protected $paymentType;
+
+    /**
      * Invoice constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -1203,6 +1209,28 @@ class Invoice implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get PaymentType
+     * Payment type
+     * @return string
+     */
+    public function getPaymentType()
+    {
+        return $this->paymentType;
+    }
+
+    /**
+     * Set PaymentType
+     * Payment type
+     * @param  string $value
+     * @return $this
+     */
+    public function setPaymentType($value)
+    {
+        $this->paymentType = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1328,6 +1356,9 @@ class Invoice implements \JsonSerializable
         if(! empty($data['tax']))
             $this->setTax($data['tax']);
 
+        if(! empty($data['payment_type']))
+            $this->setPaymentType($data['payment_type']);
+
         return $this;
     }
 
@@ -1376,6 +1407,7 @@ class Invoice implements \JsonSerializable
             "challenge_indicator" => $this->getChallengeIndicator(),
             "incremental" => $this->getIncremental(),
             "tax" => $this->getTax(),
+            "payment_type" => $this->getPaymentType(),
         );
     }
 
@@ -1394,6 +1426,7 @@ class Invoice implements \JsonSerializable
         $path    = "/invoices/" . urlencode($this->getId()) . "/increment_authorization";
 
         $data = array(
+            "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null, 
             "amount" => $amount
         );
 
@@ -1432,6 +1465,7 @@ class Invoice implements \JsonSerializable
             "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
             "enable_three_d_s_2" => (!empty($options["enable_three_d_s_2"])) ? $options["enable_three_d_s_2"] : null, 
             "auto_capture_at" => (!empty($options["auto_capture_at"])) ? $options["auto_capture_at"] : null, 
+            "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null, 
             "source" => $source
         );
 
@@ -1471,6 +1505,7 @@ class Invoice implements \JsonSerializable
             "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
             "auto_capture_at" => (!empty($options["auto_capture_at"])) ? $options["auto_capture_at"] : null, 
             "enable_three_d_s_2" => (!empty($options["enable_three_d_s_2"])) ? $options["enable_three_d_s_2"] : null, 
+            "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null, 
             "source" => $source
         );
 
@@ -1624,7 +1659,7 @@ class Invoice implements \JsonSerializable
         $path    = "/invoices/" . urlencode($this->getId()) . "/void";
 
         $data = array(
-
+            "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null
         );
 
         $response = $request->post($path, $data, $options);
@@ -1712,7 +1747,8 @@ class Invoice implements \JsonSerializable
             "device" => $this->getDevice(), 
             "require_backend_capture" => $this->getRequireBackendCapture(), 
             "external_fraud_tools" => $this->getExternalFraudTools(), 
-            "tax" => $this->getTax()
+            "tax" => $this->getTax(), 
+            "payment_type" => $this->getPaymentType()
         );
 
         $response = $request->post($path, $data, $options);

@@ -17,6 +17,12 @@ class ApplePayAlternativeMerchantCertificates implements \JsonSerializable
     protected $client;
 
     /**
+     * number of alternative merchant certificate
+     * @var decimal
+     */
+    protected $count;
+
+    /**
      * Alternative merchant certificates available
      * @var list
      */
@@ -34,6 +40,28 @@ class ApplePayAlternativeMerchantCertificates implements \JsonSerializable
         $this->fillWithData($prefill);
     }
 
+    
+    /**
+     * Get Count
+     * number of alternative merchant certificate
+     * @return string
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    /**
+     * Set Count
+     * number of alternative merchant certificate
+     * @param  string $value
+     * @return $this
+     */
+    public function setCount($value)
+    {
+        $this->count = $value;
+        return $this;
+    }
     
     /**
      * Get AlternativeMerchantCertificates
@@ -77,6 +105,9 @@ class ApplePayAlternativeMerchantCertificates implements \JsonSerializable
      */
     public function fillWithData($data)
     {
+        if(! empty($data['count']))
+            $this->setCount($data['count']);
+
         if(! empty($data['alternative_merchant_certificates']))
             $this->setAlternativeMerchantCertificates($data['alternative_merchant_certificates']);
 
@@ -89,6 +120,7 @@ class ApplePayAlternativeMerchantCertificates implements \JsonSerializable
      */
     public function jsonSerialize() {
         return array(
+            "count" => $this->getCount(),
             "alternative_merchant_certificates" => $this->getAlternativeMerchantCertificates(),
         );
     }

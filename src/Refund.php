@@ -488,10 +488,10 @@ class Refund implements \JsonSerializable
 
         $data = array(
             "amount" => $this->getAmount(), 
-            "metadata" => $this->getMetadata(), 
             "reason" => $this->getReason(), 
             "information" => $this->getInformation(), 
-            "invoice_detail_ids" => $this->getInvoiceDetailIds()
+            "invoice_detail_ids" => $this->getInvoiceDetailIds(), 
+            "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null
         );
 
         $response = $request->post($path, $data, $options);

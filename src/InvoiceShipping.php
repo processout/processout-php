@@ -89,6 +89,12 @@ class InvoiceShipping implements \JsonSerializable
     protected $expectsShippingAt;
 
     /**
+     * Relay store name
+     * @var string
+     */
+    protected $relayStoreName;
+
+    /**
      * InvoiceShipping constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -365,6 +371,28 @@ class InvoiceShipping implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get RelayStoreName
+     * Relay store name
+     * @return string
+     */
+    public function getRelayStoreName()
+    {
+        return $this->relayStoreName;
+    }
+
+    /**
+     * Set RelayStoreName
+     * Relay store name
+     * @param  string $value
+     * @return $this
+     */
+    public function setRelayStoreName($value)
+    {
+        $this->relayStoreName = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -409,6 +437,9 @@ class InvoiceShipping implements \JsonSerializable
         if(! empty($data['expects_shipping_at']))
             $this->setExpectsShippingAt($data['expects_shipping_at']);
 
+        if(! empty($data['relay_store_name']))
+            $this->setRelayStoreName($data['relay_store_name']);
+
         return $this;
     }
 
@@ -430,6 +461,7 @@ class InvoiceShipping implements \JsonSerializable
             "zip" => $this->getZip(),
             "phone_number" => $this->getPhoneNumber(),
             "expects_shipping_at" => $this->getExpectsShippingAt(),
+            "relay_store_name" => $this->getRelayStoreName(),
         );
     }
 

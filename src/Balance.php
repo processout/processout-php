@@ -29,6 +29,12 @@ class Balance implements \JsonSerializable
     protected $currency;
 
     /**
+     * Expiry time of the voucher
+     * @var string
+     */
+    protected $expiry;
+
+    /**
      * Balance constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -85,6 +91,28 @@ class Balance implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get Expiry
+     * Expiry time of the voucher
+     * @return string
+     */
+    public function getExpiry()
+    {
+        return $this->expiry;
+    }
+
+    /**
+     * Set Expiry
+     * Expiry time of the voucher
+     * @param  string $value
+     * @return $this
+     */
+    public function setExpiry($value)
+    {
+        $this->expiry = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -99,6 +127,9 @@ class Balance implements \JsonSerializable
         if(! empty($data['currency']))
             $this->setCurrency($data['currency']);
 
+        if(! empty($data['expiry']))
+            $this->setExpiry($data['expiry']);
+
         return $this;
     }
 
@@ -110,6 +141,7 @@ class Balance implements \JsonSerializable
         return array(
             "amount" => $this->getAmount(),
             "currency" => $this->getCurrency(),
+            "expiry" => $this->getExpiry(),
         );
     }
 
