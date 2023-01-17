@@ -106,7 +106,7 @@ class CustomerAction implements \JsonSerializable
      * Implements the JsonSerializable interface
      * @return object
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): mixed {
         return array(
             "type" => $this->getType(),
             "value" => $this->getValue(),

@@ -75,7 +75,7 @@ class PaymentDataNetworkAuthentication implements \JsonSerializable
      * Implements the JsonSerializable interface
      * @return object
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): mixed {
         return array(
             "cavv" => $this->getCavv(),
         );

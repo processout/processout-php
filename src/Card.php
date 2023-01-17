@@ -1019,7 +1019,7 @@ class Card implements \JsonSerializable
      * Implements the JsonSerializable interface
      * @return object
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): mixed {
         return array(
             "id" => $this->getId(),
             "project" => $this->getProject(),

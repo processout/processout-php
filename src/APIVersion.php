@@ -137,7 +137,7 @@ class APIVersion implements \JsonSerializable
      * Implements the JsonSerializable interface
      * @return object
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): mixed {
         return array(
             "name" => $this->getName(),
             "description" => $this->getDescription(),

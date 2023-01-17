@@ -411,7 +411,7 @@ class Project implements \JsonSerializable
      * Implements the JsonSerializable interface
      * @return object
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): mixed {
         return array(
             "id" => $this->getId(),
             "supervisor_project" => $this->getSupervisorProject(),

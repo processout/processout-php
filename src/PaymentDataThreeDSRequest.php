@@ -168,7 +168,7 @@ class PaymentDataThreeDSRequest implements \JsonSerializable
      * Implements the JsonSerializable interface
      * @return object
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): mixed {
         return array(
             "acs_url" => $this->getAcsUrl(),
             "pareq" => $this->getPareq(),

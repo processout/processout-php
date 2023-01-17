@@ -137,7 +137,7 @@ class InvoiceDevice implements \JsonSerializable
      * Implements the JsonSerializable interface
      * @return object
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): mixed {
         return array(
             "channel" => $this->getChannel(),
             "ip_address" => $this->getIpAddress(),

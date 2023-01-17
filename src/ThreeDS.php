@@ -323,7 +323,7 @@ class ThreeDS implements \JsonSerializable
      * Implements the JsonSerializable interface
      * @return object
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): mixed {
         return array(
             "version" => $this->getVersion(),
             "status" => $this->getStatus(),
