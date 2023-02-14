@@ -1528,6 +1528,7 @@ class Invoice implements \JsonSerializable
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
             "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
             "enable_three_d_s_2" => (!empty($options["enable_three_d_s_2"])) ? $options["enable_three_d_s_2"] : null, 
+            "allow_fallback_to_sale" => (!empty($options["allow_fallback_to_sale"])) ? $options["allow_fallback_to_sale"] : null, 
             "auto_capture_at" => (!empty($options["auto_capture_at"])) ? $options["auto_capture_at"] : null, 
             "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null, 
             "source" => $source
