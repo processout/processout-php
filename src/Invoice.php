@@ -1571,6 +1571,7 @@ class Invoice implements \JsonSerializable
             "auto_capture_at" => (!empty($options["auto_capture_at"])) ? $options["auto_capture_at"] : null, 
             "enable_three_d_s_2" => (!empty($options["enable_three_d_s_2"])) ? $options["enable_three_d_s_2"] : null, 
             "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null, 
+            "capture_statement_descriptor" => (!empty($options["capture_statement_descriptor"])) ? $options["capture_statement_descriptor"] : null, 
             "source" => $source
         );
 
