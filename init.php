@@ -35,6 +35,7 @@ include_once(dirname(__FILE__) . "/src/InvoiceExternalFraudTools.php");
 include_once(dirname(__FILE__) . "/src/InvoiceRisk.php");
 include_once(dirname(__FILE__) . "/src/InvoiceDevice.php");
 include_once(dirname(__FILE__) . "/src/InvoiceShipping.php");
+include_once(dirname(__FILE__) . "/src/InvoiceBilling.php");
 include_once(dirname(__FILE__) . "/src/InvoiceDetail.php");
 include_once(dirname(__FILE__) . "/src/CustomerAction.php");
 include_once(dirname(__FILE__) . "/src/DunningAction.php");

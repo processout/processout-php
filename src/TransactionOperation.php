@@ -149,6 +149,24 @@ class TransactionOperation implements \JsonSerializable
     protected $paymentDataNetworkAuthentication;
 
     /**
+     * Initial scheme ID that was referenced in the request
+     * @var string
+     */
+    protected $initialSchemeTransactionId;
+
+    /**
+     * The ID assigned to the transaction by the scheme in the last successful authorization
+     * @var string
+     */
+    protected $schemeId;
+
+    /**
+     * Payment type of the transaction
+     * @var string
+     */
+    protected $paymentType;
+
+    /**
      * Metadata related to the operation, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -713,6 +731,72 @@ class TransactionOperation implements \JsonSerializable
     }
     
     /**
+     * Get InitialSchemeTransactionId
+     * Initial scheme ID that was referenced in the request
+     * @return string
+     */
+    public function getInitialSchemeTransactionId()
+    {
+        return $this->initialSchemeTransactionId;
+    }
+
+    /**
+     * Set InitialSchemeTransactionId
+     * Initial scheme ID that was referenced in the request
+     * @param  string $value
+     * @return $this
+     */
+    public function setInitialSchemeTransactionId($value)
+    {
+        $this->initialSchemeTransactionId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get SchemeId
+     * The ID assigned to the transaction by the scheme in the last successful authorization
+     * @return string
+     */
+    public function getSchemeId()
+    {
+        return $this->schemeId;
+    }
+
+    /**
+     * Set SchemeId
+     * The ID assigned to the transaction by the scheme in the last successful authorization
+     * @param  string $value
+     * @return $this
+     */
+    public function setSchemeId($value)
+    {
+        $this->schemeId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get PaymentType
+     * Payment type of the transaction
+     * @return string
+     */
+    public function getPaymentType()
+    {
+        return $this->paymentType;
+    }
+
+    /**
+     * Set PaymentType
+     * Payment type of the transaction
+     * @param  string $value
+     * @return $this
+     */
+    public function setPaymentType($value)
+    {
+        $this->paymentType = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the operation, in the form of a dictionary (key-value pair)
      * @return array
@@ -852,6 +936,15 @@ class TransactionOperation implements \JsonSerializable
         if(! empty($data['payment_data_network_authentication']))
             $this->setPaymentDataNetworkAuthentication($data['payment_data_network_authentication']);
 
+        if(! empty($data['initial_scheme_transaction_id']))
+            $this->setInitialSchemeTransactionId($data['initial_scheme_transaction_id']);
+
+        if(! empty($data['scheme_id']))
+            $this->setSchemeId($data['scheme_id']);
+
+        if(! empty($data['payment_type']))
+            $this->setPaymentType($data['payment_type']);
+
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
 
@@ -892,6 +985,9 @@ class TransactionOperation implements \JsonSerializable
             "payment_data_three_d_s_request" => $this->getPaymentDataThreeDSRequest(),
             "payment_data_three_d_s_authentication" => $this->getPaymentDataThreeDSAuthentication(),
             "payment_data_network_authentication" => $this->getPaymentDataNetworkAuthentication(),
+            "initial_scheme_transaction_id" => $this->getInitialSchemeTransactionId(),
+            "scheme_id" => $this->getSchemeId(),
+            "payment_type" => $this->getPaymentType(),
             "metadata" => $this->getMetadata(),
             "gateway_fee" => $this->getGatewayFee(),
             "created_at" => $this->getCreatedAt(),

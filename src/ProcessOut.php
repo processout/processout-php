@@ -281,6 +281,15 @@ class ProcessOut
     }
 	
     /**
+     * Create a new InvoiceBilling instance
+     * @param array|null $prefill array used to prefill the object
+     * @return InvoiceBilling
+     */
+	public function newInvoiceBilling($prefill = array()) {
+        return new InvoiceBilling($this, $prefill);
+    }
+	
+    /**
      * Create a new InvoiceDetail instance
      * @param array|null $prefill array used to prefill the object
      * @return InvoiceDetail

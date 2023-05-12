@@ -269,6 +269,12 @@ class Invoice implements \JsonSerializable
     protected $paymentIntent;
 
     /**
+     * Billing information
+     * @var object
+     */
+    protected $billing;
+
+    /**
      * Invoice constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -1287,6 +1293,35 @@ class Invoice implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get Billing
+     * Billing information
+     * @return object
+     */
+    public function getBilling()
+    {
+        return $this->billing;
+    }
+
+    /**
+     * Set Billing
+     * Billing information
+     * @param  object $value
+     * @return $this
+     */
+    public function setBilling($value)
+    {
+        if (is_object($value))
+            $this->billing = $value;
+        else
+        {
+            $obj = new InvoiceBilling($this->client);
+            $obj->fillWithData($value);
+            $this->billing = $obj;
+        }
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1421,6 +1456,9 @@ class Invoice implements \JsonSerializable
         if(! empty($data['payment_intent']))
             $this->setPaymentIntent($data['payment_intent']);
 
+        if(! empty($data['billing']))
+            $this->setBilling($data['billing']);
+
         return $this;
     }
 
@@ -1472,6 +1510,7 @@ class Invoice implements \JsonSerializable
             "payment_type" => $this->getPaymentType(),
             "initiation_type" => $this->getInitiationType(),
             "payment_intent" => $this->getPaymentIntent(),
+            "billing" => $this->getBilling(),
         );
     }
 
@@ -1531,6 +1570,7 @@ class Invoice implements \JsonSerializable
             "allow_fallback_to_sale" => (!empty($options["allow_fallback_to_sale"])) ? $options["allow_fallback_to_sale"] : null, 
             "auto_capture_at" => (!empty($options["auto_capture_at"])) ? $options["auto_capture_at"] : null, 
             "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null, 
+            "override_mac_blocking" => (!empty($options["override_mac_blocking"])) ? $options["override_mac_blocking"] : null, 
             "source" => $source
         );
 
@@ -1572,6 +1612,7 @@ class Invoice implements \JsonSerializable
             "enable_three_d_s_2" => (!empty($options["enable_three_d_s_2"])) ? $options["enable_three_d_s_2"] : null, 
             "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null, 
             "capture_statement_descriptor" => (!empty($options["capture_statement_descriptor"])) ? $options["capture_statement_descriptor"] : null, 
+            "override_mac_blocking" => (!empty($options["override_mac_blocking"])) ? $options["override_mac_blocking"] : null, 
             "source" => $source
         );
 
@@ -1816,7 +1857,8 @@ class Invoice implements \JsonSerializable
             "require_backend_capture" => $this->getRequireBackendCapture(), 
             "external_fraud_tools" => $this->getExternalFraudTools(), 
             "tax" => $this->getTax(), 
-            "payment_type" => $this->getPaymentType()
+            "payment_type" => $this->getPaymentType(), 
+            "billing" => $this->getBilling()
         );
 
         $response = $request->post($path, $data, $options);

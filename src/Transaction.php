@@ -101,6 +101,12 @@ class Transaction implements \JsonSerializable
     protected $gatewayConfiguration;
 
     /**
+     * External ThreeDS Gateway Configuration is the gateway configuration that was used to authenticate the payment, if configured
+     * @var object
+     */
+    protected $externalThreeDSGatewayConfiguration;
+
+    /**
      * ID of the last gateway configuration that was used to process the payment, if any
      * @var string
      */
@@ -345,6 +351,24 @@ class Transaction implements \JsonSerializable
      * @var string
      */
     protected $avsCheck;
+
+    /**
+     * Initial scheme ID that was referenced in the request
+     * @var string
+     */
+    protected $initialSchemeTransactionId;
+
+    /**
+     * The ID assigned to the transaction by the scheme in the last successful authorization
+     * @var string
+     */
+    protected $schemeId;
+
+    /**
+     * Payment type of the transaction
+     * @var string
+     */
+    protected $paymentType;
 
     /**
      * Transaction constructor
@@ -712,6 +736,35 @@ class Transaction implements \JsonSerializable
             $obj = new GatewayConfiguration($this->client);
             $obj->fillWithData($value);
             $this->gatewayConfiguration = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get ExternalThreeDSGatewayConfiguration
+     * External ThreeDS Gateway Configuration is the gateway configuration that was used to authenticate the payment, if configured
+     * @return object
+     */
+    public function getExternalThreeDSGatewayConfiguration()
+    {
+        return $this->externalThreeDSGatewayConfiguration;
+    }
+
+    /**
+     * Set ExternalThreeDSGatewayConfiguration
+     * External ThreeDS Gateway Configuration is the gateway configuration that was used to authenticate the payment, if configured
+     * @param  object $value
+     * @return $this
+     */
+    public function setExternalThreeDSGatewayConfiguration($value)
+    {
+        if (is_object($value))
+            $this->externalThreeDSGatewayConfiguration = $value;
+        else
+        {
+            $obj = new GatewayConfiguration($this->client);
+            $obj->fillWithData($value);
+            $this->externalThreeDSGatewayConfiguration = $obj;
         }
         return $this;
     }
@@ -1649,6 +1702,72 @@ class Transaction implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get InitialSchemeTransactionId
+     * Initial scheme ID that was referenced in the request
+     * @return string
+     */
+    public function getInitialSchemeTransactionId()
+    {
+        return $this->initialSchemeTransactionId;
+    }
+
+    /**
+     * Set InitialSchemeTransactionId
+     * Initial scheme ID that was referenced in the request
+     * @param  string $value
+     * @return $this
+     */
+    public function setInitialSchemeTransactionId($value)
+    {
+        $this->initialSchemeTransactionId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get SchemeId
+     * The ID assigned to the transaction by the scheme in the last successful authorization
+     * @return string
+     */
+    public function getSchemeId()
+    {
+        return $this->schemeId;
+    }
+
+    /**
+     * Set SchemeId
+     * The ID assigned to the transaction by the scheme in the last successful authorization
+     * @param  string $value
+     * @return $this
+     */
+    public function setSchemeId($value)
+    {
+        $this->schemeId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get PaymentType
+     * Payment type of the transaction
+     * @return string
+     */
+    public function getPaymentType()
+    {
+        return $this->paymentType;
+    }
+
+    /**
+     * Set PaymentType
+     * Payment type of the transaction
+     * @param  string $value
+     * @return $this
+     */
+    public function setPaymentType($value)
+    {
+        $this->paymentType = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1698,6 +1817,9 @@ class Transaction implements \JsonSerializable
 
         if(! empty($data['gateway_configuration']))
             $this->setGatewayConfiguration($data['gateway_configuration']);
+
+        if(! empty($data['external_three_d_s_gateway_configuration']))
+            $this->setExternalThreeDSGatewayConfiguration($data['external_three_d_s_gateway_configuration']);
 
         if(! empty($data['gateway_configuration_id']))
             $this->setGatewayConfigurationId($data['gateway_configuration_id']);
@@ -1822,6 +1944,15 @@ class Transaction implements \JsonSerializable
         if(! empty($data['avs_check']))
             $this->setAvsCheck($data['avs_check']);
 
+        if(! empty($data['initial_scheme_transaction_id']))
+            $this->setInitialSchemeTransactionId($data['initial_scheme_transaction_id']);
+
+        if(! empty($data['scheme_id']))
+            $this->setSchemeId($data['scheme_id']);
+
+        if(! empty($data['payment_type']))
+            $this->setPaymentType($data['payment_type']);
+
         return $this;
     }
 
@@ -1845,6 +1976,7 @@ class Transaction implements \JsonSerializable
             "card" => $this->getCard(),
             "card_id" => $this->getCardId(),
             "gateway_configuration" => $this->getGatewayConfiguration(),
+            "external_three_d_s_gateway_configuration" => $this->getExternalThreeDSGatewayConfiguration(),
             "gateway_configuration_id" => $this->getGatewayConfigurationId(),
             "operations" => $this->getOperations(),
             "refunds" => $this->getRefunds(),
@@ -1886,6 +2018,9 @@ class Transaction implements \JsonSerializable
             "three_d_s" => $this->getThreeDS(),
             "cvc_check" => $this->getCvcCheck(),
             "avs_check" => $this->getAvsCheck(),
+            "initial_scheme_transaction_id" => $this->getInitialSchemeTransactionId(),
+            "scheme_id" => $this->getSchemeId(),
+            "payment_type" => $this->getPaymentType(),
         );
     }
 

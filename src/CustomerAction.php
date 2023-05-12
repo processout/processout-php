@@ -29,6 +29,12 @@ class CustomerAction implements \JsonSerializable
     protected $value;
 
     /**
+     * Metadata related to the customer action, in the form of a dictionary (key-value pair)
+     * @var dictionary
+     */
+    protected $metadata;
+
+    /**
      * CustomerAction constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -85,6 +91,28 @@ class CustomerAction implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get Metadata
+     * Metadata related to the customer action, in the form of a dictionary (key-value pair)
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * Set Metadata
+     * Metadata related to the customer action, in the form of a dictionary (key-value pair)
+     * @param  array $value
+     * @return $this
+     */
+    public function setMetadata($value)
+    {
+        $this->metadata = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -99,6 +127,9 @@ class CustomerAction implements \JsonSerializable
         if(! empty($data['value']))
             $this->setValue($data['value']);
 
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
+
         return $this;
     }
 
@@ -110,6 +141,7 @@ class CustomerAction implements \JsonSerializable
         return array(
             "type" => $this->getType(),
             "value" => $this->getValue(),
+            "metadata" => $this->getMetadata(),
         );
     }
 

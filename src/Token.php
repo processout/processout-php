@@ -871,7 +871,9 @@ class Token implements \JsonSerializable
             "device" => (!empty($options["device"])) ? $options["device"] : null, 
             "verify" => (!empty($options["verify"])) ? $options["verify"] : null, 
             "verify_metadata" => (!empty($options["verify_metadata"])) ? $options["verify_metadata"] : null, 
-            "set_default" => (!empty($options["set_default"])) ? $options["set_default"] : null
+            "set_default" => (!empty($options["set_default"])) ? $options["set_default"] : null, 
+            "verify_statement_descriptor" => (!empty($options["verify_statement_descriptor"])) ? $options["verify_statement_descriptor"] : null, 
+            "invoice_return_url" => (!empty($options["invoice_return_url"])) ? $options["invoice_return_url"] : null
         );
 
         $response = $request->post($path, $data, $options);
@@ -904,7 +906,9 @@ class Token implements \JsonSerializable
             "device" => (!empty($options["device"])) ? $options["device"] : null, 
             "verify" => (!empty($options["verify"])) ? $options["verify"] : null, 
             "verify_metadata" => (!empty($options["verify_metadata"])) ? $options["verify_metadata"] : null, 
-            "set_default" => (!empty($options["set_default"])) ? $options["set_default"] : null
+            "set_default" => (!empty($options["set_default"])) ? $options["set_default"] : null, 
+            "verify_statement_descriptor" => (!empty($options["verify_statement_descriptor"])) ? $options["verify_statement_descriptor"] : null, 
+            "invoice_return_url" => (!empty($options["invoice_return_url"])) ? $options["invoice_return_url"] : null
         );
 
         $response = $request->put($path, $data, $options);

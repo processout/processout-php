@@ -23,6 +23,12 @@ class InvoiceExternalFraudTools implements \JsonSerializable
     protected $forter;
 
     /**
+     * Signifyd
+     * @var string
+     */
+    protected $signifyd;
+
+    /**
      * InvoiceExternalFraudTools constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -57,6 +63,28 @@ class InvoiceExternalFraudTools implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get Signifyd
+     * Signifyd
+     * @return string
+     */
+    public function getSignifyd()
+    {
+        return $this->signifyd;
+    }
+
+    /**
+     * Set Signifyd
+     * Signifyd
+     * @param  string $value
+     * @return $this
+     */
+    public function setSignifyd($value)
+    {
+        $this->signifyd = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -68,6 +96,9 @@ class InvoiceExternalFraudTools implements \JsonSerializable
         if(! empty($data['forter']))
             $this->setForter($data['forter']);
 
+        if(! empty($data['signifyd']))
+            $this->setSignifyd($data['signifyd']);
+
         return $this;
     }
 
@@ -78,6 +109,7 @@ class InvoiceExternalFraudTools implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "forter" => $this->getForter(),
+            "signifyd" => $this->getSignifyd(),
         );
     }
 
