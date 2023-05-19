@@ -1766,7 +1766,8 @@ class Invoice implements \JsonSerializable
         $path    = "/invoices/" . urlencode($this->getId()) . "/void";
 
         $data = array(
-            "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null
+            "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null, 
+            "amount" => (!empty($options["amount"])) ? $options["amount"] : null
         );
 
         $response = $request->post($path, $data, $options);

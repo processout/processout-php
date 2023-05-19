@@ -191,6 +191,18 @@ class Transaction implements \JsonSerializable
     protected $availableAmountLocal;
 
     /**
+     * Amount that was voided on the transaction
+     * @var decimal
+     */
+    protected $voidedAmount;
+
+    /**
+     * Amount that was voided on the transaction, in the currency of the project
+     * @var decimal
+     */
+    protected $voidedAmountLocal;
+
+    /**
      * Currency of the transaction
      * @var string
      */
@@ -1102,6 +1114,50 @@ class Transaction implements \JsonSerializable
     }
     
     /**
+     * Get VoidedAmount
+     * Amount that was voided on the transaction
+     * @return string
+     */
+    public function getVoidedAmount()
+    {
+        return $this->voidedAmount;
+    }
+
+    /**
+     * Set VoidedAmount
+     * Amount that was voided on the transaction
+     * @param  string $value
+     * @return $this
+     */
+    public function setVoidedAmount($value)
+    {
+        $this->voidedAmount = $value;
+        return $this;
+    }
+    
+    /**
+     * Get VoidedAmountLocal
+     * Amount that was voided on the transaction, in the currency of the project
+     * @return string
+     */
+    public function getVoidedAmountLocal()
+    {
+        return $this->voidedAmountLocal;
+    }
+
+    /**
+     * Set VoidedAmountLocal
+     * Amount that was voided on the transaction, in the currency of the project
+     * @param  string $value
+     * @return $this
+     */
+    public function setVoidedAmountLocal($value)
+    {
+        $this->voidedAmountLocal = $value;
+        return $this;
+    }
+    
+    /**
      * Get Currency
      * Currency of the transaction
      * @return string
@@ -1863,6 +1919,12 @@ class Transaction implements \JsonSerializable
         if(! empty($data['available_amount_local']))
             $this->setAvailableAmountLocal($data['available_amount_local']);
 
+        if(! empty($data['voided_amount']))
+            $this->setVoidedAmount($data['voided_amount']);
+
+        if(! empty($data['voided_amount_local']))
+            $this->setVoidedAmountLocal($data['voided_amount_local']);
+
         if(! empty($data['currency']))
             $this->setCurrency($data['currency']);
 
@@ -1991,6 +2053,8 @@ class Transaction implements \JsonSerializable
             "refunded_amount_local" => $this->getRefundedAmountLocal(),
             "available_amount" => $this->getAvailableAmount(),
             "available_amount_local" => $this->getAvailableAmountLocal(),
+            "voided_amount" => $this->getVoidedAmount(),
+            "voided_amount_local" => $this->getVoidedAmountLocal(),
             "currency" => $this->getCurrency(),
             "error_code" => $this->getErrorCode(),
             "error_message" => $this->getErrorMessage(),
