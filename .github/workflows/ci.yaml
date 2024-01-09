@@ -1,0 +1,12 @@
+name: "CI"
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  semver:
+    name: Semver
+    uses: processout/actions/.github/workflows/semver-release.yaml@master
+    secrets: inherit
