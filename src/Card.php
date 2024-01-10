@@ -179,6 +179,18 @@ class Card implements \JsonSerializable
     protected $tokenType;
 
     /**
+     * Contains true if the card was used to create a customer token or a direct transaction, false otherwise
+     * @var boolean
+     */
+    protected $used;
+
+    /**
+     * Contains true if the card was successfully authorized, false otherwise
+     * @var boolean
+     */
+    protected $hasBeenAuthorized;
+
+    /**
      * Metadata related to the card, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -824,6 +836,50 @@ class Card implements \JsonSerializable
     }
     
     /**
+     * Get Used
+     * Contains true if the card was used to create a customer token or a direct transaction, false otherwise
+     * @return bool
+     */
+    public function getUsed()
+    {
+        return $this->used;
+    }
+
+    /**
+     * Set Used
+     * Contains true if the card was used to create a customer token or a direct transaction, false otherwise
+     * @param  bool $value
+     * @return $this
+     */
+    public function setUsed($value)
+    {
+        $this->used = $value;
+        return $this;
+    }
+    
+    /**
+     * Get HasBeenAuthorized
+     * Contains true if the card was successfully authorized, false otherwise
+     * @return bool
+     */
+    public function getHasBeenAuthorized()
+    {
+        return $this->hasBeenAuthorized;
+    }
+
+    /**
+     * Set HasBeenAuthorized
+     * Contains true if the card was successfully authorized, false otherwise
+     * @param  bool $value
+     * @return $this
+     */
+    public function setHasBeenAuthorized($value)
+    {
+        $this->hasBeenAuthorized = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the card, in the form of a dictionary (key-value pair)
      * @return array
@@ -1000,6 +1056,12 @@ class Card implements \JsonSerializable
         if(! empty($data['token_type']))
             $this->setTokenType($data['token_type']);
 
+        if(! empty($data['used']))
+            $this->setUsed($data['used']);
+
+        if(! empty($data['has_been_authorized']))
+            $this->setHasBeenAuthorized($data['has_been_authorized']);
+
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
 
@@ -1048,6 +1110,8 @@ class Card implements \JsonSerializable
             "ip_address" => $this->getIpAddress(),
             "fingerprint" => $this->getFingerprint(),
             "token_type" => $this->getTokenType(),
+            "used" => $this->getUsed(),
+            "has_been_authorized" => $this->getHasBeenAuthorized(),
             "metadata" => $this->getMetadata(),
             "expires_soon" => $this->getExpiresSoon(),
             "sandbox" => $this->getSandbox(),

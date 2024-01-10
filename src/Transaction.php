@@ -383,6 +383,18 @@ class Transaction implements \JsonSerializable
     protected $paymentType;
 
     /**
+     * Native APM response data
+     * @var object
+     */
+    protected $nativeApm;
+
+    /**
+     * Additional data about the transaction, originating from a PSP, for example customer shipping address
+     * @var object
+     */
+    protected $externalDetails;
+
+    /**
      * Transaction constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -1824,6 +1836,57 @@ class Transaction implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get NativeApm
+     * Native APM response data
+     * @return object
+     */
+    public function getNativeApm()
+    {
+        return $this->nativeApm;
+    }
+
+    /**
+     * Set NativeApm
+     * Native APM response data
+     * @param  object $value
+     * @return $this
+     */
+    public function setNativeApm($value)
+    {
+        if (is_object($value))
+            $this->nativeApm = $value;
+        else
+        {
+            $obj = new NativeAPMResponse($this->client);
+            $obj->fillWithData($value);
+            $this->nativeApm = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get ExternalDetails
+     * Additional data about the transaction, originating from a PSP, for example customer shipping address
+     * @return object
+     */
+    public function getExternalDetails()
+    {
+        return $this->externalDetails;
+    }
+
+    /**
+     * Set ExternalDetails
+     * Additional data about the transaction, originating from a PSP, for example customer shipping address
+     * @param  object $value
+     * @return $this
+     */
+    public function setExternalDetails($value)
+    {
+        $this->externalDetails = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -2015,6 +2078,12 @@ class Transaction implements \JsonSerializable
         if(! empty($data['payment_type']))
             $this->setPaymentType($data['payment_type']);
 
+        if(! empty($data['native_apm']))
+            $this->setNativeApm($data['native_apm']);
+
+        if(! empty($data['external_details']))
+            $this->setExternalDetails($data['external_details']);
+
         return $this;
     }
 
@@ -2085,6 +2154,8 @@ class Transaction implements \JsonSerializable
             "initial_scheme_transaction_id" => $this->getInitialSchemeTransactionId(),
             "scheme_id" => $this->getSchemeId(),
             "payment_type" => $this->getPaymentType(),
+            "native_apm" => $this->getNativeApm(),
+            "external_details" => $this->getExternalDetails(),
         );
     }
 

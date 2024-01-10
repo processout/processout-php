@@ -77,10 +77,16 @@ class InvoiceShipping implements \JsonSerializable
     protected $zip;
 
     /**
-     * Phone number for the shipment
+     * Shipment full phone number, consisting of a combined dialing code and phone number
      * @var string
      */
     protected $phoneNumber;
+
+    /**
+     * Phone number for the shipment
+     * @var object
+     */
+    protected $phone;
 
     /**
      * Date at which the shipment is expected to be sent
@@ -329,7 +335,7 @@ class InvoiceShipping implements \JsonSerializable
     
     /**
      * Get PhoneNumber
-     * Phone number for the shipment
+     * Shipment full phone number, consisting of a combined dialing code and phone number
      * @return string
      */
     public function getPhoneNumber()
@@ -339,13 +345,42 @@ class InvoiceShipping implements \JsonSerializable
 
     /**
      * Set PhoneNumber
-     * Phone number for the shipment
+     * Shipment full phone number, consisting of a combined dialing code and phone number
      * @param  string $value
      * @return $this
      */
     public function setPhoneNumber($value)
     {
         $this->phoneNumber = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Phone
+     * Phone number for the shipment
+     * @return object
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set Phone
+     * Phone number for the shipment
+     * @param  object $value
+     * @return $this
+     */
+    public function setPhone($value)
+    {
+        if (is_object($value))
+            $this->phone = $value;
+        else
+        {
+            $obj = new InvoiceShippingPhone($this->client);
+            $obj->fillWithData($value);
+            $this->phone = $obj;
+        }
         return $this;
     }
     
@@ -434,6 +469,9 @@ class InvoiceShipping implements \JsonSerializable
         if(! empty($data['phone_number']))
             $this->setPhoneNumber($data['phone_number']);
 
+        if(! empty($data['phone']))
+            $this->setPhone($data['phone']);
+
         if(! empty($data['expects_shipping_at']))
             $this->setExpectsShippingAt($data['expects_shipping_at']);
 
@@ -460,6 +498,7 @@ class InvoiceShipping implements \JsonSerializable
             "country_code" => $this->getCountryCode(),
             "zip" => $this->getZip(),
             "phone_number" => $this->getPhoneNumber(),
+            "phone" => $this->getPhone(),
             "expects_shipping_at" => $this->getExpectsShippingAt(),
             "relay_store_name" => $this->getRelayStoreName(),
         );

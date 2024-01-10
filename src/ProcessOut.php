@@ -182,6 +182,15 @@ class ProcessOut
     }
 	
     /**
+     * Create a new CustomerPhone instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CustomerPhone
+     */
+	public function newCustomerPhone($prefill = array()) {
+        return new CustomerPhone($this, $prefill);
+    }
+	
+    /**
      * Create a new Token instance
      * @param array|null $prefill array used to prefill the object
      * @return Token
@@ -236,6 +245,24 @@ class ProcessOut
     }
 	
     /**
+     * Create a new NativeAPMRequest instance
+     * @param array|null $prefill array used to prefill the object
+     * @return NativeAPMRequest
+     */
+	public function newNativeAPMRequest($prefill = array()) {
+        return new NativeAPMRequest($this, $prefill);
+    }
+	
+    /**
+     * Create a new NativeAPMParameterValue instance
+     * @param array|null $prefill array used to prefill the object
+     * @return NativeAPMParameterValue
+     */
+	public function newNativeAPMParameterValue($prefill = array()) {
+        return new NativeAPMParameterValue($this, $prefill);
+    }
+	
+    /**
      * Create a new InvoiceTax instance
      * @param array|null $prefill array used to prefill the object
      * @return InvoiceTax
@@ -281,12 +308,30 @@ class ProcessOut
     }
 	
     /**
+     * Create a new InvoiceShippingPhone instance
+     * @param array|null $prefill array used to prefill the object
+     * @return InvoiceShippingPhone
+     */
+	public function newInvoiceShippingPhone($prefill = array()) {
+        return new InvoiceShippingPhone($this, $prefill);
+    }
+	
+    /**
      * Create a new InvoiceBilling instance
      * @param array|null $prefill array used to prefill the object
      * @return InvoiceBilling
      */
 	public function newInvoiceBilling($prefill = array()) {
         return new InvoiceBilling($this, $prefill);
+    }
+	
+    /**
+     * Create a new UnsupportedFeatureBypass instance
+     * @param array|null $prefill array used to prefill the object
+     * @return UnsupportedFeatureBypass
+     */
+	public function newUnsupportedFeatureBypass($prefill = array()) {
+        return new UnsupportedFeatureBypass($this, $prefill);
     }
 	
     /**
@@ -362,6 +407,15 @@ class ProcessOut
     }
 	
     /**
+     * Create a new ProjectSFTPSettings instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ProjectSFTPSettings
+     */
+	public function newProjectSFTPSettings($prefill = array()) {
+        return new ProjectSFTPSettings($this, $prefill);
+    }
+	
+    /**
      * Create a new Refund instance
      * @param array|null $prefill array used to prefill the object
      * @return Refund
@@ -386,6 +440,33 @@ class ProcessOut
      */
 	public function newTransaction($prefill = array()) {
         return new Transaction($this, $prefill);
+    }
+	
+    /**
+     * Create a new NativeAPMResponse instance
+     * @param array|null $prefill array used to prefill the object
+     * @return NativeAPMResponse
+     */
+	public function newNativeAPMResponse($prefill = array()) {
+        return new NativeAPMResponse($this, $prefill);
+    }
+	
+    /**
+     * Create a new NativeAPMParameterDefinition instance
+     * @param array|null $prefill array used to prefill the object
+     * @return NativeAPMParameterDefinition
+     */
+	public function newNativeAPMParameterDefinition($prefill = array()) {
+        return new NativeAPMParameterDefinition($this, $prefill);
+    }
+	
+    /**
+     * Create a new NativeAPMParameterValueDefinition instance
+     * @param array|null $prefill array used to prefill the object
+     * @return NativeAPMParameterValueDefinition
+     */
+	public function newNativeAPMParameterValueDefinition($prefill = array()) {
+        return new NativeAPMParameterValueDefinition($this, $prefill);
     }
 	
     /**
@@ -449,6 +530,60 @@ class ProcessOut
      */
 	public function newWebhookEndpoint($prefill = array()) {
         return new WebhookEndpoint($this, $prefill);
+    }
+	
+    /**
+     * Create a new ErrorCodes instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ErrorCodes
+     */
+	public function newErrorCodes($prefill = array()) {
+        return new ErrorCodes($this, $prefill);
+    }
+	
+    /**
+     * Create a new CategoryErrorCodes instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CategoryErrorCodes
+     */
+	public function newCategoryErrorCodes($prefill = array()) {
+        return new CategoryErrorCodes($this, $prefill);
+    }
+	
+    /**
+     * Create a new NativeAPMTransactionDetailsGateway instance
+     * @param array|null $prefill array used to prefill the object
+     * @return NativeAPMTransactionDetailsGateway
+     */
+	public function newNativeAPMTransactionDetailsGateway($prefill = array()) {
+        return new NativeAPMTransactionDetailsGateway($this, $prefill);
+    }
+	
+    /**
+     * Create a new NativeAPMTransactionDetailsInvoice instance
+     * @param array|null $prefill array used to prefill the object
+     * @return NativeAPMTransactionDetailsInvoice
+     */
+	public function newNativeAPMTransactionDetailsInvoice($prefill = array()) {
+        return new NativeAPMTransactionDetailsInvoice($this, $prefill);
+    }
+	
+    /**
+     * Create a new NativeAPMTransactionDetails instance
+     * @param array|null $prefill array used to prefill the object
+     * @return NativeAPMTransactionDetails
+     */
+	public function newNativeAPMTransactionDetails($prefill = array()) {
+        return new NativeAPMTransactionDetails($this, $prefill);
+    }
+	
+    /**
+     * Create a new InvoicesProcessNativePaymentResponse instance
+     * @param array|null $prefill array used to prefill the object
+     * @return InvoicesProcessNativePaymentResponse
+     */
+	public function newInvoicesProcessNativePaymentResponse($prefill = array()) {
+        return new InvoicesProcessNativePaymentResponse($this, $prefill);
     }
 	
 }

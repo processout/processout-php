@@ -410,6 +410,35 @@ class Refund implements \JsonSerializable
 
     
     /**
+     * Create a refund for an invoice.
+     * @param string $invoiceId
+     * @param array $options
+     * @return bool
+     */
+    public function createForInvoice($invoiceId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/invoices/" . urlencode($invoiceId) . "/refunds";
+
+        $data = array(
+            "amount" => $this->getAmount(), 
+            "reason" => $this->getReason(), 
+            "information" => $this->getInformation(), 
+            "invoice_detail_ids" => $this->getInvoiceDetailIds(), 
+            "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        $returnValues['success'] = $response->isSuccess();
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
      * Get the transaction's refunds.
      * @param string $transactionId
      * @param array $options

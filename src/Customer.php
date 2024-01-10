@@ -137,10 +137,16 @@ class Customer implements \JsonSerializable
     protected $ipAddress;
 
     /**
-     * Phone number of the customer
+     * Customer full phone number, consisting of a combined dialing code and phone number
      * @var string
      */
     protected $phoneNumber;
+
+    /**
+     * Customer phone number
+     * @var object
+     */
+    protected $phone;
 
     /**
      * Legal document number
@@ -695,7 +701,7 @@ class Customer implements \JsonSerializable
     
     /**
      * Get PhoneNumber
-     * Phone number of the customer
+     * Customer full phone number, consisting of a combined dialing code and phone number
      * @return string
      */
     public function getPhoneNumber()
@@ -705,13 +711,42 @@ class Customer implements \JsonSerializable
 
     /**
      * Set PhoneNumber
-     * Phone number of the customer
+     * Customer full phone number, consisting of a combined dialing code and phone number
      * @param  string $value
      * @return $this
      */
     public function setPhoneNumber($value)
     {
         $this->phoneNumber = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Phone
+     * Customer phone number
+     * @return object
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set Phone
+     * Customer phone number
+     * @param  object $value
+     * @return $this
+     */
+    public function setPhone($value)
+    {
+        if (is_object($value))
+            $this->phone = $value;
+        else
+        {
+            $obj = new CustomerPhone($this->client);
+            $obj->fillWithData($value);
+            $this->phone = $obj;
+        }
         return $this;
     }
     
@@ -962,6 +997,9 @@ class Customer implements \JsonSerializable
         if(! empty($data['phone_number']))
             $this->setPhoneNumber($data['phone_number']);
 
+        if(! empty($data['phone']))
+            $this->setPhone($data['phone']);
+
         if(! empty($data['legal_document']))
             $this->setLegalDocument($data['legal_document']);
 
@@ -1016,6 +1054,7 @@ class Customer implements \JsonSerializable
             "country_code" => $this->getCountryCode(),
             "ip_address" => $this->getIpAddress(),
             "phone_number" => $this->getPhoneNumber(),
+            "phone" => $this->getPhone(),
             "legal_document" => $this->getLegalDocument(),
             "sex" => $this->getSex(),
             "is_business" => $this->getIsBusiness(),
@@ -1245,14 +1284,15 @@ class Customer implements \JsonSerializable
             "zip" => $this->getZip(), 
             "country_code" => $this->getCountryCode(), 
             "ip_address" => $this->getIpAddress(), 
-            "phone_number" => $this->getPhoneNumber(), 
+            "phone" => $this->getPhone(), 
             "legal_document" => $this->getLegalDocument(), 
             "date_of_birth" => $this->getDateOfBirth(), 
             "is_business" => $this->getIsBusiness(), 
             "sex" => $this->getSex(), 
             "metadata" => $this->getMetadata(), 
             "id" => $this->getId(), 
-            "registered_at" => $this->getRegisteredAt()
+            "registered_at" => $this->getRegisteredAt(), 
+            "phone_number" => $this->getPhoneNumber()
         );
 
         $response = $request->post($path, $data, $options);
@@ -1321,13 +1361,14 @@ class Customer implements \JsonSerializable
             "zip" => $this->getZip(), 
             "country_code" => $this->getCountryCode(), 
             "ip_address" => $this->getIpAddress(), 
-            "phone_number" => $this->getPhoneNumber(), 
+            "phone" => $this->getPhone(), 
             "legal_document" => $this->getLegalDocument(), 
             "date_of_birth" => $this->getDateOfBirth(), 
             "is_business" => $this->getIsBusiness(), 
             "sex" => $this->getSex(), 
             "metadata" => $this->getMetadata(), 
-            "registered_at" => $this->getRegisteredAt()
+            "registered_at" => $this->getRegisteredAt(), 
+            "phone_number" => $this->getPhoneNumber()
         );
 
         $response = $request->put($path, $data, $options);
