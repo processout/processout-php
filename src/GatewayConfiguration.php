@@ -89,6 +89,12 @@ class GatewayConfiguration implements \JsonSerializable
     protected $processingRegion;
 
     /**
+     * Metadata related to the gateway configuration, in the form of a dictionary (key-value pair)
+     * @var dictionary
+     */
+    protected $metadata;
+
+    /**
      * GatewayConfiguration constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -379,6 +385,28 @@ class GatewayConfiguration implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get Metadata
+     * Metadata related to the gateway configuration, in the form of a dictionary (key-value pair)
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * Set Metadata
+     * Metadata related to the gateway configuration, in the form of a dictionary (key-value pair)
+     * @param  array $value
+     * @return $this
+     */
+    public function setMetadata($value)
+    {
+        $this->metadata = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -423,6 +451,9 @@ class GatewayConfiguration implements \JsonSerializable
         if(! empty($data['processing_region']))
             $this->setProcessingRegion($data['processing_region']);
 
+        if(! empty($data['metadata']))
+            $this->setMetadata($data['metadata']);
+
         return $this;
     }
 
@@ -444,6 +475,7 @@ class GatewayConfiguration implements \JsonSerializable
             "created_at" => $this->getCreatedAt(),
             "enabled_at" => $this->getEnabledAt(),
             "processing_region" => $this->getProcessingRegion(),
+            "metadata" => $this->getMetadata(),
         );
     }
 
@@ -529,6 +561,7 @@ class GatewayConfiguration implements \JsonSerializable
             "enabled" => $this->getEnabled(), 
             "default_currency" => $this->getDefaultCurrency(), 
             "processing_region" => $this->getProcessingRegion(), 
+            "metadata" => $this->getMetadata(), 
             "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
             "sub_accounts_enabled" => (!empty($options["sub_accounts_enabled"])) ? $options["sub_accounts_enabled"] : null
         );
@@ -588,6 +621,7 @@ class GatewayConfiguration implements \JsonSerializable
             "enabled" => $this->getEnabled(), 
             "default_currency" => $this->getDefaultCurrency(), 
             "processing_region" => $this->getProcessingRegion(), 
+            "metadata" => $this->getMetadata(), 
             "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
             "sub_accounts_enabled" => (!empty($options["sub_accounts_enabled"])) ? $options["sub_accounts_enabled"] : null
         );

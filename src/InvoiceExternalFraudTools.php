@@ -23,6 +23,12 @@ class InvoiceExternalFraudTools implements \JsonSerializable
     protected $forter;
 
     /**
+     * Ravelin
+     * @var string
+     */
+    protected $ravelin;
+
+    /**
      * Signifyd
      * @var string
      */
@@ -64,6 +70,28 @@ class InvoiceExternalFraudTools implements \JsonSerializable
     }
     
     /**
+     * Get Ravelin
+     * Ravelin
+     * @return string
+     */
+    public function getRavelin()
+    {
+        return $this->ravelin;
+    }
+
+    /**
+     * Set Ravelin
+     * Ravelin
+     * @param  string $value
+     * @return $this
+     */
+    public function setRavelin($value)
+    {
+        $this->ravelin = $value;
+        return $this;
+    }
+    
+    /**
      * Get Signifyd
      * Signifyd
      * @return string
@@ -96,6 +124,9 @@ class InvoiceExternalFraudTools implements \JsonSerializable
         if(! empty($data['forter']))
             $this->setForter($data['forter']);
 
+        if(! empty($data['ravelin']))
+            $this->setRavelin($data['ravelin']);
+
         if(! empty($data['signifyd']))
             $this->setSignifyd($data['signifyd']);
 
@@ -109,6 +140,7 @@ class InvoiceExternalFraudTools implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "forter" => $this->getForter(),
+            "ravelin" => $this->getRavelin(),
             "signifyd" => $this->getSignifyd(),
         );
     }

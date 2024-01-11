@@ -257,6 +257,12 @@ class Invoice implements \JsonSerializable
     protected $paymentType;
 
     /**
+     * Native APM data
+     * @var object
+     */
+    protected $nativeApm;
+
+    /**
      * Initiation type of invoice
      * @var string
      */
@@ -273,6 +279,12 @@ class Invoice implements \JsonSerializable
      * @var object
      */
     protected $billing;
+
+    /**
+     * Flags to bypass unsupported features
+     * @var object
+     */
+    protected $unsupportedFeatureBypass;
 
     /**
      * Invoice constructor
@@ -1250,6 +1262,35 @@ class Invoice implements \JsonSerializable
     }
     
     /**
+     * Get NativeApm
+     * Native APM data
+     * @return object
+     */
+    public function getNativeApm()
+    {
+        return $this->nativeApm;
+    }
+
+    /**
+     * Set NativeApm
+     * Native APM data
+     * @param  object $value
+     * @return $this
+     */
+    public function setNativeApm($value)
+    {
+        if (is_object($value))
+            $this->nativeApm = $value;
+        else
+        {
+            $obj = new NativeAPMRequest($this->client);
+            $obj->fillWithData($value);
+            $this->nativeApm = $obj;
+        }
+        return $this;
+    }
+    
+    /**
      * Get InitiationType
      * Initiation type of invoice
      * @return string
@@ -1318,6 +1359,35 @@ class Invoice implements \JsonSerializable
             $obj = new InvoiceBilling($this->client);
             $obj->fillWithData($value);
             $this->billing = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get UnsupportedFeatureBypass
+     * Flags to bypass unsupported features
+     * @return object
+     */
+    public function getUnsupportedFeatureBypass()
+    {
+        return $this->unsupportedFeatureBypass;
+    }
+
+    /**
+     * Set UnsupportedFeatureBypass
+     * Flags to bypass unsupported features
+     * @param  object $value
+     * @return $this
+     */
+    public function setUnsupportedFeatureBypass($value)
+    {
+        if (is_object($value))
+            $this->unsupportedFeatureBypass = $value;
+        else
+        {
+            $obj = new UnsupportedFeatureBypass($this->client);
+            $obj->fillWithData($value);
+            $this->unsupportedFeatureBypass = $obj;
         }
         return $this;
     }
@@ -1450,6 +1520,9 @@ class Invoice implements \JsonSerializable
         if(! empty($data['payment_type']))
             $this->setPaymentType($data['payment_type']);
 
+        if(! empty($data['native_apm']))
+            $this->setNativeApm($data['native_apm']);
+
         if(! empty($data['initiation_type']))
             $this->setInitiationType($data['initiation_type']);
 
@@ -1458,6 +1531,9 @@ class Invoice implements \JsonSerializable
 
         if(! empty($data['billing']))
             $this->setBilling($data['billing']);
+
+        if(! empty($data['unsupported_feature_bypass']))
+            $this->setUnsupportedFeatureBypass($data['unsupported_feature_bypass']);
 
         return $this;
     }
@@ -1508,9 +1584,11 @@ class Invoice implements \JsonSerializable
             "incremental" => $this->getIncremental(),
             "tax" => $this->getTax(),
             "payment_type" => $this->getPaymentType(),
+            "native_apm" => $this->getNativeApm(),
             "initiation_type" => $this->getInitiationType(),
             "payment_intent" => $this->getPaymentIntent(),
             "billing" => $this->getBilling(),
+            "unsupported_feature_bypass" => $this->getUnsupportedFeatureBypass(),
         );
     }
 
@@ -1692,6 +1770,103 @@ class Invoice implements \JsonSerializable
     }
     
     /**
+     * Process the payout invoice using the given source (customer or token)
+     * @param string $gatewayConfigurationId
+     * @param string $source
+     * @param array $options
+     * @return Transaction
+     */
+    public function payout($gatewayConfigurationId, $source, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/invoices/" . urlencode($this->getId()) . "/payout";
+
+        $data = array(
+            "force_gateway_configuration_id" => (!empty($options["force_gateway_configuration_id"])) ? $options["force_gateway_configuration_id"] : null, 
+            "gateway_configuration_id" => $gatewayConfigurationId, 
+            "source" => $source
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field transaction
+        $body = $response->getBody();
+        $body = $body['transaction'];
+        $transaction = new Transaction($this->client);
+        $returnValues['transaction'] = $transaction->fillWithData($body);
+                
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Fetches the Native APM payment
+     * @param string $invoiceId
+     * @param string $gatewayConfigurationId
+     * @param array $options
+     * @return NativeAPMTransactionDetails
+     */
+    public function showNativePaymentTransaction($invoiceId, $gatewayConfigurationId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/invoices/" . urlencode($invoiceId) . "/native-payment/" . urlencode($gatewayConfigurationId) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->get($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field native_apm
+        $body = $response->getBody();
+        $body = $body['native_apm'];
+        $nativeAPMTransactionDetails = new NativeAPMTransactionDetails($this->client);
+        $returnValues['nativeAPMTransactionDetails'] = $nativeAPMTransactionDetails->fillWithData($body);
+                
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Process the Native APM payment flow
+     * @param string $invoiceId
+     * @param array $options
+     * @return InvoicesProcessNativePaymentResponse
+     */
+    public function processNativePayment($invoiceId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/invoices/" . urlencode($invoiceId) . "/native-payment";
+
+        $data = array(
+            "gateway_configuration_id" => (!empty($options["gateway_configuration_id"])) ? $options["gateway_configuration_id"] : null, 
+            "native_apm" => (!empty($options["native_apm"])) ? $options["native_apm"] : null
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field 
+        $body = $response->getBody();
+        $invoicesProcessNativePaymentResponse = new InvoicesProcessNativePaymentResponse($this->client);
+        $returnValues['invoicesProcessNativePaymentResponse'] = $invoicesProcessNativePaymentResponse->fillWithData($body);
+                
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
      * Initiate a 3-D Secure authentication
      * @param string $source
      * @param array $options
@@ -1859,7 +2034,8 @@ class Invoice implements \JsonSerializable
             "external_fraud_tools" => $this->getExternalFraudTools(), 
             "tax" => $this->getTax(), 
             "payment_type" => $this->getPaymentType(), 
-            "billing" => $this->getBilling()
+            "billing" => $this->getBilling(), 
+            "unsupported_feature_bypass" => $this->getUnsupportedFeatureBypass()
         );
 
         $response = $request->post($path, $data, $options);
