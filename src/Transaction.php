@@ -383,6 +383,12 @@ class Transaction implements \JsonSerializable
     protected $paymentType;
 
     /**
+     * The Electronic Commerce Indicator
+     * @var string
+     */
+    protected $eci;
+
+    /**
      * Native APM response data
      * @var object
      */
@@ -1837,6 +1843,28 @@ class Transaction implements \JsonSerializable
     }
     
     /**
+     * Get Eci
+     * The Electronic Commerce Indicator
+     * @return string
+     */
+    public function getEci()
+    {
+        return $this->eci;
+    }
+
+    /**
+     * Set Eci
+     * The Electronic Commerce Indicator
+     * @param  string $value
+     * @return $this
+     */
+    public function setEci($value)
+    {
+        $this->eci = $value;
+        return $this;
+    }
+    
+    /**
      * Get NativeApm
      * Native APM response data
      * @return object
@@ -2078,6 +2106,9 @@ class Transaction implements \JsonSerializable
         if(! empty($data['payment_type']))
             $this->setPaymentType($data['payment_type']);
 
+        if(! empty($data['eci']))
+            $this->setEci($data['eci']);
+
         if(! empty($data['native_apm']))
             $this->setNativeApm($data['native_apm']);
 
@@ -2154,6 +2185,7 @@ class Transaction implements \JsonSerializable
             "initial_scheme_transaction_id" => $this->getInitialSchemeTransactionId(),
             "scheme_id" => $this->getSchemeId(),
             "payment_type" => $this->getPaymentType(),
+            "eci" => $this->getEci(),
             "native_apm" => $this->getNativeApm(),
             "external_details" => $this->getExternalDetails(),
         );
