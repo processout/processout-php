@@ -29,6 +29,12 @@ class InvoiceRisk implements \JsonSerializable
     protected $isLegit;
 
     /**
+     * Skip payment gateway fraud engine rules (on compatible gateways only.)
+     * @var boolean
+     */
+    protected $skipGatewayRules;
+
+    /**
      * InvoiceRisk constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -85,6 +91,28 @@ class InvoiceRisk implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get SkipGatewayRules
+     * Skip payment gateway fraud engine rules (on compatible gateways only.)
+     * @return bool
+     */
+    public function getSkipGatewayRules()
+    {
+        return $this->skipGatewayRules;
+    }
+
+    /**
+     * Set SkipGatewayRules
+     * Skip payment gateway fraud engine rules (on compatible gateways only.)
+     * @param  bool $value
+     * @return $this
+     */
+    public function setSkipGatewayRules($value)
+    {
+        $this->skipGatewayRules = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -99,6 +127,9 @@ class InvoiceRisk implements \JsonSerializable
         if(! empty($data['is_legit']))
             $this->setIsLegit($data['is_legit']);
 
+        if(! empty($data['skip_gateway_rules']))
+            $this->setSkipGatewayRules($data['skip_gateway_rules']);
+
         return $this;
     }
 
@@ -110,6 +141,7 @@ class InvoiceRisk implements \JsonSerializable
         return array(
             "score" => $this->getScore(),
             "is_legit" => $this->getIsLegit(),
+            "skip_gateway_rules" => $this->getSkipGatewayRules(),
         );
     }
 
