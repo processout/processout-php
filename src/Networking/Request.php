@@ -31,7 +31,7 @@ class Request
         $headers = array(
             'API-Version: 1.4.0.0',
             'Content-Type: application/json',
-            'User-Agent: ProcessOut PHP-Bindings/6.29.0'
+            'User-Agent: ProcessOut PHP-Bindings/6.30.0'
         );
         if (! empty($options['idempotencyKey']))
             $headers[] = 'Idempotency-Key: ' . $options['idempotencyKey'];

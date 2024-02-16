@@ -347,6 +347,24 @@ class Transaction implements \JsonSerializable
     protected $refundedAt;
 
     /**
+     * Date at which the transaction was authorized
+     * @var string
+     */
+    protected $authorizedAt;
+
+    /**
+     * Date at which the transaction was captured
+     * @var string
+     */
+    protected $capturedAt;
+
+    /**
+     * Date at which the transaction was voided
+     * @var string
+     */
+    protected $voidedAt;
+
+    /**
      * 3DS data of a transaction if it was authenticated
      * @var object
      */
@@ -1704,6 +1722,72 @@ class Transaction implements \JsonSerializable
     }
     
     /**
+     * Get AuthorizedAt
+     * Date at which the transaction was authorized
+     * @return string
+     */
+    public function getAuthorizedAt()
+    {
+        return $this->authorizedAt;
+    }
+
+    /**
+     * Set AuthorizedAt
+     * Date at which the transaction was authorized
+     * @param  string $value
+     * @return $this
+     */
+    public function setAuthorizedAt($value)
+    {
+        $this->authorizedAt = $value;
+        return $this;
+    }
+    
+    /**
+     * Get CapturedAt
+     * Date at which the transaction was captured
+     * @return string
+     */
+    public function getCapturedAt()
+    {
+        return $this->capturedAt;
+    }
+
+    /**
+     * Set CapturedAt
+     * Date at which the transaction was captured
+     * @param  string $value
+     * @return $this
+     */
+    public function setCapturedAt($value)
+    {
+        $this->capturedAt = $value;
+        return $this;
+    }
+    
+    /**
+     * Get VoidedAt
+     * Date at which the transaction was voided
+     * @return string
+     */
+    public function getVoidedAt()
+    {
+        return $this->voidedAt;
+    }
+
+    /**
+     * Set VoidedAt
+     * Date at which the transaction was voided
+     * @param  string $value
+     * @return $this
+     */
+    public function setVoidedAt($value)
+    {
+        $this->voidedAt = $value;
+        return $this;
+    }
+    
+    /**
      * Get ThreeDS
      * 3DS data of a transaction if it was authenticated
      * @return object
@@ -2088,6 +2172,15 @@ class Transaction implements \JsonSerializable
         if(! empty($data['refunded_at']))
             $this->setRefundedAt($data['refunded_at']);
 
+        if(! empty($data['authorized_at']))
+            $this->setAuthorizedAt($data['authorized_at']);
+
+        if(! empty($data['captured_at']))
+            $this->setCapturedAt($data['captured_at']);
+
+        if(! empty($data['voided_at']))
+            $this->setVoidedAt($data['voided_at']);
+
         if(! empty($data['three_d_s']))
             $this->setThreeDS($data['three_d_s']);
 
@@ -2179,6 +2272,9 @@ class Transaction implements \JsonSerializable
             "created_at" => $this->getCreatedAt(),
             "chargedback_at" => $this->getChargedbackAt(),
             "refunded_at" => $this->getRefundedAt(),
+            "authorized_at" => $this->getAuthorizedAt(),
+            "captured_at" => $this->getCapturedAt(),
+            "voided_at" => $this->getVoidedAt(),
             "three_d_s" => $this->getThreeDS(),
             "cvc_check" => $this->getCvcCheck(),
             "avs_check" => $this->getAvsCheck(),

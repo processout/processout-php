@@ -794,4 +794,29 @@ class Payout implements \JsonSerializable
         return array_values($returnValues)[0];
     }
     
+    /**
+     * Delete the payout along with its payout items
+     * @param string $payoutId
+     * @param array $options
+     * @return bool
+     */
+    public function delete($payoutId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/payouts/" . urlencode($payoutId) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->delete($path, $data, $options);
+        $returnValues = array();
+
+        $returnValues['success'] = $response->isSuccess();
+        
+        return array_values($returnValues)[0];
+    }
+    
 }

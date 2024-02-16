@@ -101,6 +101,12 @@ class Invoice implements \JsonSerializable
     protected $name;
 
     /**
+     * ID of the order for this transaction in merchant's system
+     * @var string
+     */
+    protected $orderId;
+
+    /**
      * Amount to be paid
      * @var decimal
      */
@@ -285,6 +291,12 @@ class Invoice implements \JsonSerializable
      * @var object
      */
     protected $unsupportedFeatureBypass;
+
+    /**
+     * A boolean to indicate if an invoice is a verification invoice. This is used to manually create a verification invoice.
+     * @var boolean
+     */
+    protected $verification;
 
     /**
      * Invoice constructor
@@ -651,6 +663,28 @@ class Invoice implements \JsonSerializable
     public function setName($value)
     {
         $this->name = $value;
+        return $this;
+    }
+    
+    /**
+     * Get OrderId
+     * ID of the order for this transaction in merchant's system
+     * @return string
+     */
+    public function getOrderId()
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * Set OrderId
+     * ID of the order for this transaction in merchant's system
+     * @param  string $value
+     * @return $this
+     */
+    public function setOrderId($value)
+    {
+        $this->orderId = $value;
         return $this;
     }
     
@@ -1392,6 +1426,28 @@ class Invoice implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get Verification
+     * A boolean to indicate if an invoice is a verification invoice. This is used to manually create a verification invoice.
+     * @return bool
+     */
+    public function getVerification()
+    {
+        return $this->verification;
+    }
+
+    /**
+     * Set Verification
+     * A boolean to indicate if an invoice is a verification invoice. This is used to manually create a verification invoice.
+     * @param  bool $value
+     * @return $this
+     */
+    public function setVerification($value)
+    {
+        $this->verification = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1441,6 +1497,9 @@ class Invoice implements \JsonSerializable
 
         if(! empty($data['name']))
             $this->setName($data['name']);
+
+        if(! empty($data['order_id']))
+            $this->setOrderId($data['order_id']);
 
         if(! empty($data['amount']))
             $this->setAmount($data['amount']);
@@ -1535,6 +1594,9 @@ class Invoice implements \JsonSerializable
         if(! empty($data['unsupported_feature_bypass']))
             $this->setUnsupportedFeatureBypass($data['unsupported_feature_bypass']);
 
+        if(! empty($data['verification']))
+            $this->setVerification($data['verification']);
+
         return $this;
     }
 
@@ -1558,6 +1620,7 @@ class Invoice implements \JsonSerializable
             "details" => $this->getDetails(),
             "url" => $this->getUrl(),
             "name" => $this->getName(),
+            "order_id" => $this->getOrderId(),
             "amount" => $this->getAmount(),
             "currency" => $this->getCurrency(),
             "merchant_initiator_type" => $this->getMerchantInitiatorType(),
@@ -1589,6 +1652,7 @@ class Invoice implements \JsonSerializable
             "payment_intent" => $this->getPaymentIntent(),
             "billing" => $this->getBilling(),
             "unsupported_feature_bypass" => $this->getUnsupportedFeatureBypass(),
+            "verification" => $this->getVerification(),
         );
     }
 
@@ -2008,6 +2072,7 @@ class Invoice implements \JsonSerializable
         $data = array(
             "customer_id" => $this->getCustomerId(), 
             "name" => $this->getName(), 
+            "order_id" => $this->getOrderId(), 
             "amount" => $this->getAmount(), 
             "currency" => $this->getCurrency(), 
             "metadata" => $this->getMetadata(), 
@@ -2035,7 +2100,8 @@ class Invoice implements \JsonSerializable
             "tax" => $this->getTax(), 
             "payment_type" => $this->getPaymentType(), 
             "billing" => $this->getBilling(), 
-            "unsupported_feature_bypass" => $this->getUnsupportedFeatureBypass()
+            "unsupported_feature_bypass" => $this->getUnsupportedFeatureBypass(), 
+            "verification" => $this->getVerification()
         );
 
         $response = $request->post($path, $data, $options);
