@@ -92,15 +92,6 @@ class ProcessOut
     }
 	
     /**
-     * Create a new APIRequest instance
-     * @param array|null $prefill array used to prefill the object
-     * @return APIRequest
-     */
-	public function newAPIRequest($prefill = array()) {
-        return new APIRequest($this, $prefill);
-    }
-	
-    /**
      * Create a new APIVersion instance
      * @param array|null $prefill array used to prefill the object
      * @return APIVersion

@@ -14,7 +14,6 @@ include_once(dirname(__FILE__) . "/src/Networking/Response.php");
 
 include_once(dirname(__FILE__) . "/src/Activity.php");
 include_once(dirname(__FILE__) . "/src/Addon.php");
-include_once(dirname(__FILE__) . "/src/APIRequest.php");
 include_once(dirname(__FILE__) . "/src/APIVersion.php");
 include_once(dirname(__FILE__) . "/src/ApplePayAlternativeMerchantCertificates.php");
 include_once(dirname(__FILE__) . "/src/AlternativeMerchantCertificate.php");
