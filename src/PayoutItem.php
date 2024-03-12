@@ -95,6 +95,12 @@ class PayoutItem implements \JsonSerializable
     protected $createdAt;
 
     /**
+     * breakdown of amount for the item
+     * @var object
+     */
+    protected $breakdown;
+
+    /**
      * PayoutItem constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -414,6 +420,35 @@ class PayoutItem implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get Breakdown
+     * breakdown of amount for the item
+     * @return object
+     */
+    public function getBreakdown()
+    {
+        return $this->breakdown;
+    }
+
+    /**
+     * Set Breakdown
+     * breakdown of amount for the item
+     * @param  object $value
+     * @return $this
+     */
+    public function setBreakdown($value)
+    {
+        if (is_object($value))
+            $this->breakdown = $value;
+        else
+        {
+            $obj = new PayoutItemAmountBreakdowns($this->client);
+            $obj->fillWithData($value);
+            $this->breakdown = $obj;
+        }
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -461,6 +496,9 @@ class PayoutItem implements \JsonSerializable
         if(! empty($data['created_at']))
             $this->setCreatedAt($data['created_at']);
 
+        if(! empty($data['breakdown']))
+            $this->setBreakdown($data['breakdown']);
+
         return $this;
     }
 
@@ -483,6 +521,7 @@ class PayoutItem implements \JsonSerializable
             "fees" => $this->getFees(),
             "metadata" => $this->getMetadata(),
             "created_at" => $this->getCreatedAt(),
+            "breakdown" => $this->getBreakdown(),
         );
     }
 

@@ -155,6 +155,15 @@ class ProcessOut
     }
 	
     /**
+     * Create a new Phone instance
+     * @param array|null $prefill array used to prefill the object
+     * @return Phone
+     */
+	public function newPhone($prefill = array()) {
+        return new Phone($this, $prefill);
+    }
+	
+    /**
      * Create a new Coupon instance
      * @param array|null $prefill array used to prefill the object
      * @return Coupon
@@ -371,6 +380,15 @@ class ProcessOut
     }
 	
     /**
+     * Create a new PayoutItemAmountBreakdowns instance
+     * @param array|null $prefill array used to prefill the object
+     * @return PayoutItemAmountBreakdowns
+     */
+	public function newPayoutItemAmountBreakdowns($prefill = array()) {
+        return new PayoutItemAmountBreakdowns($this, $prefill);
+    }
+	
+    /**
      * Create a new Plan instance
      * @param array|null $prefill array used to prefill the object
      * @return Plan
@@ -521,6 +539,51 @@ class ProcessOut
      */
 	public function newWebhookEndpoint($prefill = array()) {
         return new WebhookEndpoint($this, $prefill);
+    }
+	
+    /**
+     * Create a new CardCreateRequest instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CardCreateRequest
+     */
+	public function newCardCreateRequest($prefill = array()) {
+        return new CardCreateRequest($this, $prefill);
+    }
+	
+    /**
+     * Create a new Device instance
+     * @param array|null $prefill array used to prefill the object
+     * @return Device
+     */
+	public function newDevice($prefill = array()) {
+        return new Device($this, $prefill);
+    }
+	
+    /**
+     * Create a new CardContact instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CardContact
+     */
+	public function newCardContact($prefill = array()) {
+        return new CardContact($this, $prefill);
+    }
+	
+    /**
+     * Create a new CardShipping instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CardShipping
+     */
+	public function newCardShipping($prefill = array()) {
+        return new CardShipping($this, $prefill);
+    }
+	
+    /**
+     * Create a new CardUpdateRequest instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CardUpdateRequest
+     */
+	public function newCardUpdateRequest($prefill = array()) {
+        return new CardUpdateRequest($this, $prefill);
     }
 	
     /**
