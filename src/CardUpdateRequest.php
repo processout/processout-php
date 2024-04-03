@@ -160,7 +160,9 @@ class CardUpdateRequest implements \JsonSerializable
         $path    = "/cards/" . urlencode($cardId) . "";
 
         $data = array(
-
+            "update_type" => $this->getUpdateType(), 
+            "update_reason" => $this->getUpdateReason(), 
+            "preferred_scheme" => $this->getPreferredScheme()
         );
 
         $response = $request->put($path, $data, $options);

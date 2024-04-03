@@ -17,7 +17,7 @@ class ProjectSFTPSettings implements \JsonSerializable
     protected $client;
 
     /**
-     * SFTP server endpoint, port is required.
+     * SFTP server endpoint, port is required
      * @var string
      */
     protected $endpoint;
@@ -55,7 +55,7 @@ class ProjectSFTPSettings implements \JsonSerializable
     
     /**
      * Get Endpoint
-     * SFTP server endpoint, port is required.
+     * SFTP server endpoint, port is required
      * @return string
      */
     public function getEndpoint()
@@ -65,7 +65,7 @@ class ProjectSFTPSettings implements \JsonSerializable
 
     /**
      * Set Endpoint
-     * SFTP server endpoint, port is required.
+     * SFTP server endpoint, port is required
      * @param  string $value
      * @return $this
      */

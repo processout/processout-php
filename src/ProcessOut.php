@@ -425,6 +425,15 @@ class ProcessOut
     }
 	
     /**
+     * Create a new ProjectSFTPSettingsPublic instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ProjectSFTPSettingsPublic
+     */
+	public function newProjectSFTPSettingsPublic($prefill = array()) {
+        return new ProjectSFTPSettingsPublic($this, $prefill);
+    }
+	
+    /**
      * Create a new Refund instance
      * @param array|null $prefill array used to prefill the object
      * @return Refund

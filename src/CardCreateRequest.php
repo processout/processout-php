@@ -628,7 +628,23 @@ class CardCreateRequest implements \JsonSerializable
         $path    = "/cards";
 
         $data = array(
-
+            "device" => $this->getDevice(), 
+            "name" => $this->getName(), 
+            "number" => $this->getNumber(), 
+            "exp_day" => $this->getExpDay(), 
+            "exp_month" => $this->getExpMonth(), 
+            "exp_year" => $this->getExpYear(), 
+            "cvc2" => $this->getCvc2(), 
+            "preferred_scheme" => $this->getPreferredScheme(), 
+            "metadata" => $this->getMetadata(), 
+            "token_type" => $this->getTokenType(), 
+            "eci" => $this->getEci(), 
+            "cryptogram" => $this->getCryptogram(), 
+            "applepay_response" => $this->getApplepayResponse(), 
+            "applepay_mid" => $this->getApplepayMid(), 
+            "payment_token" => $this->getPaymentToken(), 
+            "contact" => $this->getContact(), 
+            "shipping" => $this->getShipping()
         );
 
         $response = $request->post($path, $data, $options);
