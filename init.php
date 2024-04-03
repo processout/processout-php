@@ -51,6 +51,7 @@ include_once(dirname(__FILE__) . "/src/Plan.php");
 include_once(dirname(__FILE__) . "/src/Product.php");
 include_once(dirname(__FILE__) . "/src/Project.php");
 include_once(dirname(__FILE__) . "/src/ProjectSFTPSettings.php");
+include_once(dirname(__FILE__) . "/src/ProjectSFTPSettingsPublic.php");
 include_once(dirname(__FILE__) . "/src/Refund.php");
 include_once(dirname(__FILE__) . "/src/Subscription.php");
 include_once(dirname(__FILE__) . "/src/Transaction.php");
