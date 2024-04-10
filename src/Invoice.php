@@ -299,6 +299,12 @@ class Invoice implements \JsonSerializable
     protected $verification;
 
     /**
+     * A timestamp to indicate when an auto capture should take place following an authorization. This takes priority over the value sent in the authorization request.
+     * @var string
+     */
+    protected $autoCaptureAt;
+
+    /**
      * Invoice constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -1448,6 +1454,28 @@ class Invoice implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get AutoCaptureAt
+     * A timestamp to indicate when an auto capture should take place following an authorization. This takes priority over the value sent in the authorization request.
+     * @return string
+     */
+    public function getAutoCaptureAt()
+    {
+        return $this->autoCaptureAt;
+    }
+
+    /**
+     * Set AutoCaptureAt
+     * A timestamp to indicate when an auto capture should take place following an authorization. This takes priority over the value sent in the authorization request.
+     * @param  string $value
+     * @return $this
+     */
+    public function setAutoCaptureAt($value)
+    {
+        $this->autoCaptureAt = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1597,6 +1625,9 @@ class Invoice implements \JsonSerializable
         if(! empty($data['verification']))
             $this->setVerification($data['verification']);
 
+        if(! empty($data['auto_capture_at']))
+            $this->setAutoCaptureAt($data['auto_capture_at']);
+
         return $this;
     }
 
@@ -1653,6 +1684,7 @@ class Invoice implements \JsonSerializable
             "billing" => $this->getBilling(),
             "unsupported_feature_bypass" => $this->getUnsupportedFeatureBypass(),
             "verification" => $this->getVerification(),
+            "auto_capture_at" => $this->getAutoCaptureAt(),
         );
     }
 
@@ -2101,7 +2133,8 @@ class Invoice implements \JsonSerializable
             "payment_type" => $this->getPaymentType(), 
             "billing" => $this->getBilling(), 
             "unsupported_feature_bypass" => $this->getUnsupportedFeatureBypass(), 
-            "verification" => $this->getVerification()
+            "verification" => $this->getVerification(), 
+            "auto_capture_at" => $this->getAutoCaptureAt()
         );
 
         $response = $request->post($path, $data, $options);
