@@ -559,7 +559,8 @@ class Project implements \JsonSerializable
             "name" => $this->getName(), 
             "default_currency" => $this->getDefaultCurrency(), 
             "dunning_configuration" => $this->getDunningConfiguration(), 
-            "applepay_settings" => (!empty($options["applepay_settings"])) ? $options["applepay_settings"] : null
+            "applepay_settings" => (!empty($options["applepay_settings"])) ? $options["applepay_settings"] : null, 
+            "public_metadata" => (!empty($options["public_metadata"])) ? $options["public_metadata"] : null
         );
 
         $response = $request->post($path, $data, $options);

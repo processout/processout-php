@@ -101,6 +101,24 @@ class InvoiceShipping implements \JsonSerializable
     protected $relayStoreName;
 
     /**
+     * First name for the shipment
+     * @var string
+     */
+    protected $firstName;
+
+    /**
+     * Last name for the shipment
+     * @var string
+     */
+    protected $lastName;
+
+    /**
+     * Email for the shipment
+     * @var string
+     */
+    protected $email;
+
+    /**
      * InvoiceShipping constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -428,6 +446,72 @@ class InvoiceShipping implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get FirstName
+     * First name for the shipment
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set FirstName
+     * First name for the shipment
+     * @param  string $value
+     * @return $this
+     */
+    public function setFirstName($value)
+    {
+        $this->firstName = $value;
+        return $this;
+    }
+    
+    /**
+     * Get LastName
+     * Last name for the shipment
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Set LastName
+     * Last name for the shipment
+     * @param  string $value
+     * @return $this
+     */
+    public function setLastName($value)
+    {
+        $this->lastName = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Email
+     * Email for the shipment
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set Email
+     * Email for the shipment
+     * @param  string $value
+     * @return $this
+     */
+    public function setEmail($value)
+    {
+        $this->email = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -478,6 +562,15 @@ class InvoiceShipping implements \JsonSerializable
         if(! empty($data['relay_store_name']))
             $this->setRelayStoreName($data['relay_store_name']);
 
+        if(! empty($data['first_name']))
+            $this->setFirstName($data['first_name']);
+
+        if(! empty($data['last_name']))
+            $this->setLastName($data['last_name']);
+
+        if(! empty($data['email']))
+            $this->setEmail($data['email']);
+
         return $this;
     }
 
@@ -501,6 +594,9 @@ class InvoiceShipping implements \JsonSerializable
             "phone" => $this->getPhone(),
             "expects_shipping_at" => $this->getExpectsShippingAt(),
             "relay_store_name" => $this->getRelayStoreName(),
+            "first_name" => $this->getFirstName(),
+            "last_name" => $this->getLastName(),
+            "email" => $this->getEmail(),
         );
     }
 

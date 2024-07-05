@@ -614,21 +614,21 @@ class ProcessOut
     }
 	
     /**
-     * Create a new NativeAPMTransactionDetailsGateway instance
+     * Create a new InvoicesAuthorizeResponse instance
      * @param array|null $prefill array used to prefill the object
-     * @return NativeAPMTransactionDetailsGateway
+     * @return InvoicesAuthorizeResponse
      */
-	public function newNativeAPMTransactionDetailsGateway($prefill = array()) {
-        return new NativeAPMTransactionDetailsGateway($this, $prefill);
+	public function newInvoicesAuthorizeResponse($prefill = array()) {
+        return new InvoicesAuthorizeResponse($this, $prefill);
     }
 	
     /**
-     * Create a new NativeAPMTransactionDetailsInvoice instance
+     * Create a new InvoicesCaptureResponse instance
      * @param array|null $prefill array used to prefill the object
-     * @return NativeAPMTransactionDetailsInvoice
+     * @return InvoicesCaptureResponse
      */
-	public function newNativeAPMTransactionDetailsInvoice($prefill = array()) {
-        return new NativeAPMTransactionDetailsInvoice($this, $prefill);
+	public function newInvoicesCaptureResponse($prefill = array()) {
+        return new InvoicesCaptureResponse($this, $prefill);
     }
 	
     /**
@@ -647,6 +647,24 @@ class ProcessOut
      */
 	public function newInvoicesProcessNativePaymentResponse($prefill = array()) {
         return new InvoicesProcessNativePaymentResponse($this, $prefill);
+    }
+	
+    /**
+     * Create a new NativeAPMTransactionDetailsGateway instance
+     * @param array|null $prefill array used to prefill the object
+     * @return NativeAPMTransactionDetailsGateway
+     */
+	public function newNativeAPMTransactionDetailsGateway($prefill = array()) {
+        return new NativeAPMTransactionDetailsGateway($this, $prefill);
+    }
+	
+    /**
+     * Create a new NativeAPMTransactionDetailsInvoice instance
+     * @param array|null $prefill array used to prefill the object
+     * @return NativeAPMTransactionDetailsInvoice
+     */
+	public function newNativeAPMTransactionDetailsInvoice($prefill = array()) {
+        return new NativeAPMTransactionDetailsInvoice($this, $prefill);
     }
 	
 }
