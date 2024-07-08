@@ -640,13 +640,4 @@ class ProcessOut
         return new NativeAPMTransactionDetails($this, $prefill);
     }
 	
-    /**
-     * Create a new InvoicesProcessNativePaymentResponse instance
-     * @param array|null $prefill array used to prefill the object
-     * @return InvoicesProcessNativePaymentResponse
-     */
-	public function newInvoicesProcessNativePaymentResponse($prefill = array()) {
-        return new InvoicesProcessNativePaymentResponse($this, $prefill);
-    }
-	
 }

@@ -17,19 +17,7 @@ class CardUpdateRequest implements \JsonSerializable
     protected $client;
 
     /**
-     * Card update type. Possible values: "new-cvc2" or "other"
-     * @var string
-     */
-    protected $updateType;
-
-    /**
-     * Card update reason.
-     * @var string
-     */
-    protected $updateReason;
-
-    /**
-     * Customer preferred scheme, such as carte bancaire vs visa
+     * Customer preferred scheme, such as carte bancaire vs visa. Can be set to none to clear the previous value
      * @var string
      */
     protected $preferredScheme;
@@ -48,52 +36,8 @@ class CardUpdateRequest implements \JsonSerializable
 
     
     /**
-     * Get UpdateType
-     * Card update type. Possible values: "new-cvc2" or "other"
-     * @return string
-     */
-    public function getUpdateType()
-    {
-        return $this->updateType;
-    }
-
-    /**
-     * Set UpdateType
-     * Card update type. Possible values: "new-cvc2" or "other"
-     * @param  string $value
-     * @return $this
-     */
-    public function setUpdateType($value)
-    {
-        $this->updateType = $value;
-        return $this;
-    }
-    
-    /**
-     * Get UpdateReason
-     * Card update reason.
-     * @return string
-     */
-    public function getUpdateReason()
-    {
-        return $this->updateReason;
-    }
-
-    /**
-     * Set UpdateReason
-     * Card update reason.
-     * @param  string $value
-     * @return $this
-     */
-    public function setUpdateReason($value)
-    {
-        $this->updateReason = $value;
-        return $this;
-    }
-    
-    /**
      * Get PreferredScheme
-     * Customer preferred scheme, such as carte bancaire vs visa
+     * Customer preferred scheme, such as carte bancaire vs visa. Can be set to none to clear the previous value
      * @return string
      */
     public function getPreferredScheme()
@@ -103,7 +47,7 @@ class CardUpdateRequest implements \JsonSerializable
 
     /**
      * Set PreferredScheme
-     * Customer preferred scheme, such as carte bancaire vs visa
+     * Customer preferred scheme, such as carte bancaire vs visa. Can be set to none to clear the previous value
      * @param  string $value
      * @return $this
      */
@@ -121,12 +65,6 @@ class CardUpdateRequest implements \JsonSerializable
      */
     public function fillWithData($data)
     {
-        if(! empty($data['update_type']))
-            $this->setUpdateType($data['update_type']);
-
-        if(! empty($data['update_reason']))
-            $this->setUpdateReason($data['update_reason']);
-
         if(! empty($data['preferred_scheme']))
             $this->setPreferredScheme($data['preferred_scheme']);
 
@@ -139,8 +77,6 @@ class CardUpdateRequest implements \JsonSerializable
      */
     public function jsonSerialize() {
         return array(
-            "update_type" => $this->getUpdateType(),
-            "update_reason" => $this->getUpdateReason(),
             "preferred_scheme" => $this->getPreferredScheme(),
         );
     }
@@ -160,8 +96,6 @@ class CardUpdateRequest implements \JsonSerializable
         $path    = "/cards/" . urlencode($cardId) . "";
 
         $data = array(
-            "update_type" => $this->getUpdateType(), 
-            "update_reason" => $this->getUpdateReason(), 
             "preferred_scheme" => $this->getPreferredScheme()
         );
 

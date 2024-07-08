@@ -18,19 +18,19 @@ class InvoiceExternalFraudTools implements \JsonSerializable
 
     /**
      * Forter
-     * @var string
+     * @var object
      */
     protected $forter;
 
     /**
      * Ravelin
-     * @var string
+     * @var object
      */
     protected $ravelin;
 
     /**
      * Signifyd
-     * @var string
+     * @var object
      */
     protected $signifyd;
 
@@ -50,7 +50,7 @@ class InvoiceExternalFraudTools implements \JsonSerializable
     /**
      * Get Forter
      * Forter
-     * @return string
+     * @return object
      */
     public function getForter()
     {
@@ -60,7 +60,7 @@ class InvoiceExternalFraudTools implements \JsonSerializable
     /**
      * Set Forter
      * Forter
-     * @param  string $value
+     * @param  object $value
      * @return $this
      */
     public function setForter($value)
@@ -72,7 +72,7 @@ class InvoiceExternalFraudTools implements \JsonSerializable
     /**
      * Get Ravelin
      * Ravelin
-     * @return string
+     * @return object
      */
     public function getRavelin()
     {
@@ -82,7 +82,7 @@ class InvoiceExternalFraudTools implements \JsonSerializable
     /**
      * Set Ravelin
      * Ravelin
-     * @param  string $value
+     * @param  object $value
      * @return $this
      */
     public function setRavelin($value)
@@ -94,7 +94,7 @@ class InvoiceExternalFraudTools implements \JsonSerializable
     /**
      * Get Signifyd
      * Signifyd
-     * @return string
+     * @return object
      */
     public function getSignifyd()
     {
@@ -104,7 +104,7 @@ class InvoiceExternalFraudTools implements \JsonSerializable
     /**
      * Set Signifyd
      * Signifyd
-     * @param  string $value
+     * @param  object $value
      * @return $this
      */
     public function setSignifyd($value)
