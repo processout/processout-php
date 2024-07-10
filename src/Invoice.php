@@ -95,6 +95,12 @@ class Invoice implements \JsonSerializable
     protected $url;
 
     /**
+     * base64-encoded QR code for the invoice URL
+     * @var string
+     */
+    protected $urlQrcode;
+
+    /**
      * Name of the invoice
      * @var string
      */
@@ -201,6 +207,12 @@ class Invoice implements \JsonSerializable
      * @var string
      */
     protected $createdAt;
+
+    /**
+     * Date at which the invoice will expire
+     * @var string
+     */
+    protected $expiresAt;
 
     /**
      * Risk information
@@ -651,6 +663,28 @@ class Invoice implements \JsonSerializable
     }
     
     /**
+     * Get UrlQrcode
+     * base64-encoded QR code for the invoice URL
+     * @return string
+     */
+    public function getUrlQrcode()
+    {
+        return $this->urlQrcode;
+    }
+
+    /**
+     * Set UrlQrcode
+     * base64-encoded QR code for the invoice URL
+     * @param  string $value
+     * @return $this
+     */
+    public function setUrlQrcode($value)
+    {
+        $this->urlQrcode = $value;
+        return $this;
+    }
+    
+    /**
      * Get Name
      * Name of the invoice
      * @return string
@@ -1043,6 +1077,28 @@ class Invoice implements \JsonSerializable
     public function setCreatedAt($value)
     {
         $this->createdAt = $value;
+        return $this;
+    }
+    
+    /**
+     * Get ExpiresAt
+     * Date at which the invoice will expire
+     * @return string
+     */
+    public function getExpiresAt()
+    {
+        return $this->expiresAt;
+    }
+
+    /**
+     * Set ExpiresAt
+     * Date at which the invoice will expire
+     * @param  string $value
+     * @return $this
+     */
+    public function setExpiresAt($value)
+    {
+        $this->expiresAt = $value;
         return $this;
     }
     
@@ -1523,6 +1579,9 @@ class Invoice implements \JsonSerializable
         if(! empty($data['url']))
             $this->setUrl($data['url']);
 
+        if(! empty($data['url_qrcode']))
+            $this->setUrlQrcode($data['url_qrcode']);
+
         if(! empty($data['name']))
             $this->setName($data['name']);
 
@@ -1576,6 +1635,9 @@ class Invoice implements \JsonSerializable
 
         if(! empty($data['created_at']))
             $this->setCreatedAt($data['created_at']);
+
+        if(! empty($data['expires_at']))
+            $this->setExpiresAt($data['expires_at']);
 
         if(! empty($data['risk']))
             $this->setRisk($data['risk']);
@@ -1650,6 +1712,7 @@ class Invoice implements \JsonSerializable
             "token_id" => $this->getTokenId(),
             "details" => $this->getDetails(),
             "url" => $this->getUrl(),
+            "url_qrcode" => $this->getUrlQrcode(),
             "name" => $this->getName(),
             "order_id" => $this->getOrderId(),
             "amount" => $this->getAmount(),
@@ -1668,6 +1731,7 @@ class Invoice implements \JsonSerializable
             "require_backend_capture" => $this->getRequireBackendCapture(),
             "sandbox" => $this->getSandbox(),
             "created_at" => $this->getCreatedAt(),
+            "expires_at" => $this->getExpiresAt(),
             "risk" => $this->getRisk(),
             "shipping" => $this->getShipping(),
             "device" => $this->getDevice(),
@@ -1725,7 +1789,7 @@ class Invoice implements \JsonSerializable
      * Authorize the invoice using the given source (customer or token)
      * @param string $source
      * @param array $options
-     * @return Transaction
+     * @return array
      */
     public function authorize($source, $options = array())
     {
@@ -1758,15 +1822,21 @@ class Invoice implements \JsonSerializable
         $transaction = new Transaction($this->client);
         $returnValues['transaction'] = $transaction->fillWithData($body);
                 
+        // Handling for field customer_action
+        $body = $response->getBody();
+        $body = $body['customer_action'];
+        $customerAction = new CustomerAction($this->client);
+        $returnValues['customerAction'] = $customerAction->fillWithData($body);
+                
         
-        return array_values($returnValues)[0];
+        return (object) $returnValues;
     }
     
     /**
      * Capture the invoice using the given source (customer or token)
      * @param string $source
      * @param array $options
-     * @return Transaction
+     * @return array
      */
     public function capture($source, $options = array())
     {
@@ -1800,8 +1870,14 @@ class Invoice implements \JsonSerializable
         $transaction = new Transaction($this->client);
         $returnValues['transaction'] = $transaction->fillWithData($body);
                 
+        // Handling for field customer_action
+        $body = $response->getBody();
+        $body = $body['customer_action'];
+        $customerAction = new CustomerAction($this->client);
+        $returnValues['customerAction'] = $customerAction->fillWithData($body);
+                
         
-        return array_values($returnValues)[0];
+        return (object) $returnValues;
     }
     
     /**
@@ -1935,7 +2011,7 @@ class Invoice implements \JsonSerializable
      * Process the Native APM payment flow
      * @param string $invoiceId
      * @param array $options
-     * @return InvoicesProcessNativePaymentResponse
+     * @return array
      */
     public function processNativePayment($invoiceId, $options = array())
     {
@@ -1953,13 +2029,20 @@ class Invoice implements \JsonSerializable
         $returnValues = array();
 
         
-        // Handling for field 
+        // Handling for field transaction
         $body = $response->getBody();
-        $invoicesProcessNativePaymentResponse = new InvoicesProcessNativePaymentResponse($this->client);
-        $returnValues['invoicesProcessNativePaymentResponse'] = $invoicesProcessNativePaymentResponse->fillWithData($body);
+        $body = $body['transaction'];
+        $transaction = new Transaction($this->client);
+        $returnValues['transaction'] = $transaction->fillWithData($body);
+                
+        // Handling for field native_apm
+        $body = $response->getBody();
+        $body = $body['native_apm'];
+        $nativeAPMResponse = new NativeAPMResponse($this->client);
+        $returnValues['nativeAPMResponse'] = $nativeAPMResponse->fillWithData($body);
                 
         
-        return array_values($returnValues)[0];
+        return (object) $returnValues;
     }
     
     /**
@@ -2134,7 +2217,8 @@ class Invoice implements \JsonSerializable
             "billing" => $this->getBilling(), 
             "unsupported_feature_bypass" => $this->getUnsupportedFeatureBypass(), 
             "verification" => $this->getVerification(), 
-            "auto_capture_at" => $this->getAutoCaptureAt()
+            "auto_capture_at" => $this->getAutoCaptureAt(), 
+            "expires_at" => $this->getExpiresAt()
         );
 
         $response = $request->post($path, $data, $options);
@@ -2174,6 +2258,31 @@ class Invoice implements \JsonSerializable
         $body = $response->getBody();
         $body = $body['invoice'];
         $returnValues['find'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Delete an invoice by its ID. Only invoices that have not been used yet can be deleted.
+     * @param string $invoiceId
+     * @param array $options
+     * @return bool
+     */
+    public function delete($invoiceId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/invoices/" . urlencode($invoiceId) . "";
+
+        $data = array(
+
+        );
+
+        $response = $request->delete($path, $data, $options);
+        $returnValues = array();
+
+        $returnValues['success'] = $response->isSuccess();
         
         return array_values($returnValues)[0];
     }

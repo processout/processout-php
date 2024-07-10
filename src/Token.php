@@ -873,7 +873,8 @@ class Token implements \JsonSerializable
             "verify_metadata" => (!empty($options["verify_metadata"])) ? $options["verify_metadata"] : null, 
             "set_default" => (!empty($options["set_default"])) ? $options["set_default"] : null, 
             "verify_statement_descriptor" => (!empty($options["verify_statement_descriptor"])) ? $options["verify_statement_descriptor"] : null, 
-            "invoice_return_url" => (!empty($options["invoice_return_url"])) ? $options["invoice_return_url"] : null
+            "invoice_return_url" => (!empty($options["invoice_return_url"])) ? $options["invoice_return_url"] : null, 
+            "summary" => (!empty($options["summary"])) ? $options["summary"] : null
         );
 
         $response = $request->post($path, $data, $options);

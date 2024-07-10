@@ -2388,6 +2388,40 @@ class Transaction implements \JsonSerializable
     }
     
     /**
+     * Get full transactions data for specified list of ids.
+     * @param array $options
+     * @return array
+     */
+    public function list($options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/transactions";
+
+        $data = array(
+
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field transactions
+        $a    = array();
+        $body = $response->getBody();
+        foreach($body['transactions'] as $v)
+        {
+            $tmp = new Transaction($this->client);
+            $tmp->fillWithData($v);
+            $a[] = $tmp;
+        }
+        $returnValues['Transactions'] = $a;
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
      * Find a transaction by its ID.
      * @param string $transactionId
      * @param array $options

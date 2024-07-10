@@ -59,6 +59,24 @@ class CardShipping implements \JsonSerializable
     protected $phone;
 
     /**
+     * First name of the card shipping
+     * @var string
+     */
+    protected $firstName;
+
+    /**
+     * Last name of the card shipping
+     * @var string
+     */
+    protected $lastName;
+
+    /**
+     * Email of the card shipping
+     * @var string
+     */
+    protected $email;
+
+    /**
      * CardShipping constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -232,6 +250,72 @@ class CardShipping implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get FirstName
+     * First name of the card shipping
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set FirstName
+     * First name of the card shipping
+     * @param  string $value
+     * @return $this
+     */
+    public function setFirstName($value)
+    {
+        $this->firstName = $value;
+        return $this;
+    }
+    
+    /**
+     * Get LastName
+     * Last name of the card shipping
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Set LastName
+     * Last name of the card shipping
+     * @param  string $value
+     * @return $this
+     */
+    public function setLastName($value)
+    {
+        $this->lastName = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Email
+     * Email of the card shipping
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set Email
+     * Email of the card shipping
+     * @param  string $value
+     * @return $this
+     */
+    public function setEmail($value)
+    {
+        $this->email = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -261,6 +345,15 @@ class CardShipping implements \JsonSerializable
         if(! empty($data['phone']))
             $this->setPhone($data['phone']);
 
+        if(! empty($data['first_name']))
+            $this->setFirstName($data['first_name']);
+
+        if(! empty($data['last_name']))
+            $this->setLastName($data['last_name']);
+
+        if(! empty($data['email']))
+            $this->setEmail($data['email']);
+
         return $this;
     }
 
@@ -277,6 +370,9 @@ class CardShipping implements \JsonSerializable
             "country_code" => $this->getCountryCode(),
             "zip" => $this->getZip(),
             "phone" => $this->getPhone(),
+            "first_name" => $this->getFirstName(),
+            "last_name" => $this->getLastName(),
+            "email" => $this->getEmail(),
         );
     }
 
