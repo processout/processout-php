@@ -850,7 +850,7 @@ class Token implements \JsonSerializable
     /**
      * Create a new token for the given customer ID.
      * @param array $options
-     * @return $this
+     * @return array
      */
     public function create($options = array())
     {
@@ -885,8 +885,14 @@ class Token implements \JsonSerializable
         $body = $response->getBody();
         $body = $body['token'];
         $returnValues['create'] = $this->fillWithData($body);
+        // Handling for field customer_action
+        $body = $response->getBody();
+        $body = $body['customer_action'];
+        $customerAction = new CustomerAction($this->client);
+        $returnValues['customerAction'] = $customerAction->fillWithData($body);
+                
         
-        return array_values($returnValues)[0];
+        return (object) $returnValues;
     }
     
     /**
