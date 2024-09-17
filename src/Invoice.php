@@ -1809,6 +1809,8 @@ class Invoice implements \JsonSerializable
             "auto_capture_at" => (!empty($options["auto_capture_at"])) ? $options["auto_capture_at"] : null, 
             "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null, 
             "override_mac_blocking" => (!empty($options["override_mac_blocking"])) ? $options["override_mac_blocking"] : null, 
+            "external_three_d_s" => (!empty($options["external_three_d_s"])) ? $options["external_three_d_s"] : null, 
+            "save_source" => (!empty($options["save_source"])) ? $options["save_source"] : null, 
             "source" => $source
         );
 
@@ -1857,6 +1859,8 @@ class Invoice implements \JsonSerializable
             "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null, 
             "capture_statement_descriptor" => (!empty($options["capture_statement_descriptor"])) ? $options["capture_statement_descriptor"] : null, 
             "override_mac_blocking" => (!empty($options["override_mac_blocking"])) ? $options["override_mac_blocking"] : null, 
+            "external_three_d_s" => (!empty($options["external_three_d_s"])) ? $options["external_three_d_s"] : null, 
+            "save_source" => (!empty($options["save_source"])) ? $options["save_source"] : null, 
             "source" => $source
         );
 

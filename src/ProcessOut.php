@@ -218,6 +218,78 @@ class ProcessOut
     }
 	
     /**
+     * Create a new ExportLayout instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ExportLayout
+     */
+	public function newExportLayout($prefill = array()) {
+        return new ExportLayout($this, $prefill);
+    }
+	
+    /**
+     * Create a new ExportLayoutConfiguration instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ExportLayoutConfiguration
+     */
+	public function newExportLayoutConfiguration($prefill = array()) {
+        return new ExportLayoutConfiguration($this, $prefill);
+    }
+	
+    /**
+     * Create a new ExportLayoutConfigurationColumn instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ExportLayoutConfigurationColumn
+     */
+	public function newExportLayoutConfigurationColumn($prefill = array()) {
+        return new ExportLayoutConfigurationColumn($this, $prefill);
+    }
+	
+    /**
+     * Create a new ExportLayoutConfigurationTime instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ExportLayoutConfigurationTime
+     */
+	public function newExportLayoutConfigurationTime($prefill = array()) {
+        return new ExportLayoutConfigurationTime($this, $prefill);
+    }
+	
+    /**
+     * Create a new ExportLayoutConfigurationAmount instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ExportLayoutConfigurationAmount
+     */
+	public function newExportLayoutConfigurationAmount($prefill = array()) {
+        return new ExportLayoutConfigurationAmount($this, $prefill);
+    }
+	
+    /**
+     * Create a new ExportLayoutConfigurationOptions instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ExportLayoutConfigurationOptions
+     */
+	public function newExportLayoutConfigurationOptions($prefill = array()) {
+        return new ExportLayoutConfigurationOptions($this, $prefill);
+    }
+	
+    /**
+     * Create a new ExportLayoutConfigurationConfigurationOptionsTime instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ExportLayoutConfigurationConfigurationOptionsTime
+     */
+	public function newExportLayoutConfigurationConfigurationOptionsTime($prefill = array()) {
+        return new ExportLayoutConfigurationConfigurationOptionsTime($this, $prefill);
+    }
+	
+    /**
+     * Create a new ExportLayoutConfigurationConfigurationOptionsAmount instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ExportLayoutConfigurationConfigurationOptionsAmount
+     */
+	public function newExportLayoutConfigurationConfigurationOptionsAmount($prefill = array()) {
+        return new ExportLayoutConfigurationConfigurationOptionsAmount($this, $prefill);
+    }
+	
+    /**
      * Create a new Gateway instance
      * @param array|null $prefill array used to prefill the object
      * @return Gateway
@@ -614,6 +686,24 @@ class ProcessOut
     }
 	
     /**
+     * Create a new ExternalThreeDS instance
+     * @param array|null $prefill array used to prefill the object
+     * @return ExternalThreeDS
+     */
+	public function newExternalThreeDS($prefill = array()) {
+        return new ExternalThreeDS($this, $prefill);
+    }
+	
+    /**
+     * Create a new NativeAPMTransactionDetails instance
+     * @param array|null $prefill array used to prefill the object
+     * @return NativeAPMTransactionDetails
+     */
+	public function newNativeAPMTransactionDetails($prefill = array()) {
+        return new NativeAPMTransactionDetails($this, $prefill);
+    }
+	
+    /**
      * Create a new NativeAPMTransactionDetailsGateway instance
      * @param array|null $prefill array used to prefill the object
      * @return NativeAPMTransactionDetailsGateway
@@ -629,15 +719,6 @@ class ProcessOut
      */
 	public function newNativeAPMTransactionDetailsInvoice($prefill = array()) {
         return new NativeAPMTransactionDetailsInvoice($this, $prefill);
-    }
-	
-    /**
-     * Create a new NativeAPMTransactionDetails instance
-     * @param array|null $prefill array used to prefill the object
-     * @return NativeAPMTransactionDetails
-     */
-	public function newNativeAPMTransactionDetails($prefill = array()) {
-        return new NativeAPMTransactionDetails($this, $prefill);
     }
 	
 }
