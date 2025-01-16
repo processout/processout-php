@@ -623,6 +623,24 @@ class ProcessOut
     }
 	
     /**
+     * Create a new CardShipping instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CardShipping
+     */
+	public function newCardShipping($prefill = array()) {
+        return new CardShipping($this, $prefill);
+    }
+	
+    /**
+     * Create a new CardUpdateRequest instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CardUpdateRequest
+     */
+	public function newCardUpdateRequest($prefill = array()) {
+        return new CardUpdateRequest($this, $prefill);
+    }
+	
+    /**
      * Create a new CardCreateRequest instance
      * @param array|null $prefill array used to prefill the object
      * @return CardCreateRequest
@@ -647,24 +665,6 @@ class ProcessOut
      */
 	public function newCardContact($prefill = array()) {
         return new CardContact($this, $prefill);
-    }
-	
-    /**
-     * Create a new CardShipping instance
-     * @param array|null $prefill array used to prefill the object
-     * @return CardShipping
-     */
-	public function newCardShipping($prefill = array()) {
-        return new CardShipping($this, $prefill);
-    }
-	
-    /**
-     * Create a new CardUpdateRequest instance
-     * @param array|null $prefill array used to prefill the object
-     * @return CardUpdateRequest
-     */
-	public function newCardUpdateRequest($prefill = array()) {
-        return new CardUpdateRequest($this, $prefill);
     }
 	
     /**

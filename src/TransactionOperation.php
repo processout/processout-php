@@ -125,6 +125,12 @@ class TransactionOperation implements \JsonSerializable
     protected $errorCode;
 
     /**
+     * Error message returned when attempting the operation, if any
+     * @var string
+     */
+    protected $errorMessage;
+
+    /**
      * Additionnal context saved when processing the transaction on the specific PSP
      * @var dictionary
      */
@@ -159,6 +165,12 @@ class TransactionOperation implements \JsonSerializable
      * @var string
      */
     protected $schemeId;
+
+    /**
+     * Indicates whether the transaction was processed with a network token instead of raw card details
+     * @var boolean
+     */
+    protected $processedWithNetworkToken;
 
     /**
      * Payment type of the transaction
@@ -622,6 +634,28 @@ class TransactionOperation implements \JsonSerializable
     }
     
     /**
+     * Get ErrorMessage
+     * Error message returned when attempting the operation, if any
+     * @return string
+     */
+    public function getErrorMessage()
+    {
+        return $this->errorMessage;
+    }
+
+    /**
+     * Set ErrorMessage
+     * Error message returned when attempting the operation, if any
+     * @param  string $value
+     * @return $this
+     */
+    public function setErrorMessage($value)
+    {
+        $this->errorMessage = $value;
+        return $this;
+    }
+    
+    /**
      * Get GatewayData
      * Additionnal context saved when processing the transaction on the specific PSP
      * @return array
@@ -775,6 +809,28 @@ class TransactionOperation implements \JsonSerializable
     }
     
     /**
+     * Get ProcessedWithNetworkToken
+     * Indicates whether the transaction was processed with a network token instead of raw card details
+     * @return bool
+     */
+    public function getProcessedWithNetworkToken()
+    {
+        return $this->processedWithNetworkToken;
+    }
+
+    /**
+     * Set ProcessedWithNetworkToken
+     * Indicates whether the transaction was processed with a network token instead of raw card details
+     * @param  bool $value
+     * @return $this
+     */
+    public function setProcessedWithNetworkToken($value)
+    {
+        $this->processedWithNetworkToken = $value;
+        return $this;
+    }
+    
+    /**
      * Get PaymentType
      * Payment type of the transaction
      * @return string
@@ -924,6 +980,9 @@ class TransactionOperation implements \JsonSerializable
         if(! empty($data['error_code']))
             $this->setErrorCode($data['error_code']);
 
+        if(! empty($data['error_message']))
+            $this->setErrorMessage($data['error_message']);
+
         if(! empty($data['gateway_data']))
             $this->setGatewayData($data['gateway_data']);
 
@@ -941,6 +1000,9 @@ class TransactionOperation implements \JsonSerializable
 
         if(! empty($data['scheme_id']))
             $this->setSchemeId($data['scheme_id']);
+
+        if(! empty($data['processed_with_network_token']))
+            $this->setProcessedWithNetworkToken($data['processed_with_network_token']);
 
         if(! empty($data['payment_type']))
             $this->setPaymentType($data['payment_type']);
@@ -981,12 +1043,14 @@ class TransactionOperation implements \JsonSerializable
             "gateway_operation_id" => $this->getGatewayOperationId(),
             "arn" => $this->getArn(),
             "error_code" => $this->getErrorCode(),
+            "error_message" => $this->getErrorMessage(),
             "gateway_data" => $this->getGatewayData(),
             "payment_data_three_d_s_request" => $this->getPaymentDataThreeDSRequest(),
             "payment_data_three_d_s_authentication" => $this->getPaymentDataThreeDSAuthentication(),
             "payment_data_network_authentication" => $this->getPaymentDataNetworkAuthentication(),
             "initial_scheme_transaction_id" => $this->getInitialSchemeTransactionId(),
             "scheme_id" => $this->getSchemeId(),
+            "processed_with_network_token" => $this->getProcessedWithNetworkToken(),
             "payment_type" => $this->getPaymentType(),
             "metadata" => $this->getMetadata(),
             "gateway_fee" => $this->getGatewayFee(),
