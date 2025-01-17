@@ -59,7 +59,7 @@ class Token implements \JsonSerializable
     protected $cardId;
 
     /**
-     * Type of the token. Can be card or gateway_token
+     * Type of the token. Can be card, bank_account or gateway_token
      * @var string
      */
     protected $type;
@@ -95,7 +95,7 @@ class Token implements \JsonSerializable
     protected $cancelUrl;
 
     /**
-     * Summary of the customer token, such as a description of the card used or the email of a PayPal account
+     * Summary of the customer token, such as a description of the card used or bank account or the email of a PayPal account
      * @var string
      */
     protected $summary;
@@ -338,7 +338,7 @@ class Token implements \JsonSerializable
     
     /**
      * Get Type
-     * Type of the token. Can be card or gateway_token
+     * Type of the token. Can be card, bank_account or gateway_token
      * @return string
      */
     public function getType()
@@ -348,7 +348,7 @@ class Token implements \JsonSerializable
 
     /**
      * Set Type
-     * Type of the token. Can be card or gateway_token
+     * Type of the token. Can be card, bank_account or gateway_token
      * @param  string $value
      * @return $this
      */
@@ -470,7 +470,7 @@ class Token implements \JsonSerializable
     
     /**
      * Get Summary
-     * Summary of the customer token, such as a description of the card used or the email of a PayPal account
+     * Summary of the customer token, such as a description of the card used or bank account or the email of a PayPal account
      * @return string
      */
     public function getSummary()
@@ -480,7 +480,7 @@ class Token implements \JsonSerializable
 
     /**
      * Set Summary
-     * Summary of the customer token, such as a description of the card used or the email of a PayPal account
+     * Summary of the customer token, such as a description of the card used or bank account or the email of a PayPal account
      * @param  string $value
      * @return $this
      */

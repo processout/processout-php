@@ -2291,4 +2291,65 @@ class Invoice implements \JsonSerializable
         return array_values($returnValues)[0];
     }
     
+    /**
+     * Refresh invoice by its ID with PSP.
+     * @param string $invoiceId
+     * @param array $options
+     * @return $this
+     */
+    public function syncWithPsp($invoiceId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/invoices/" . urlencode($invoiceId) . "/sync-with-psp";
+
+        $data = array(
+
+        );
+
+        $response = $request->put($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field invoice
+        $body = $response->getBody();
+        $body = $body['invoice'];
+        $returnValues['syncWithPsp'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
+    /**
+     * Update invoice by its ID.
+     * @param string $invoiceId
+     * @param array $options
+     * @return $this
+     */
+    public function update($invoiceId, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/invoices/" . urlencode($invoiceId) . "";
+
+        $data = array(
+            "amount" => $this->getAmount(), 
+            "tax" => $this->getTax(), 
+            "details" => $this->getDetails(), 
+            "shipping" => $this->getShipping()
+        );
+
+        $response = $request->put($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field invoice
+        $body = $response->getBody();
+        $body = $body['invoice'];
+        $returnValues['update'] = $this->fillWithData($body);
+        
+        return array_values($returnValues)[0];
+    }
+    
 }

@@ -81,8 +81,8 @@ include_once(dirname(__FILE__) . "/src/CardUpdateRequest.php");
 include_once(dirname(__FILE__) . "/src/ErrorCodes.php");
 include_once(dirname(__FILE__) . "/src/CategoryErrorCodes.php");
 include_once(dirname(__FILE__) . "/src/ExternalThreeDS.php");
-include_once(dirname(__FILE__) . "/src/NativeAPMTransactionDetails.php");
 include_once(dirname(__FILE__) . "/src/NativeAPMTransactionDetailsGateway.php");
 include_once(dirname(__FILE__) . "/src/NativeAPMTransactionDetailsInvoice.php");
+include_once(dirname(__FILE__) . "/src/NativeAPMTransactionDetails.php");
 
 include_once(dirname(__FILE__) . "/src/GatewayRequest.php");

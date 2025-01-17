@@ -95,6 +95,12 @@ class Customer implements \JsonSerializable
     protected $lastName;
 
     /**
+     * Company name of the customer (for business customers only)
+     * @var string
+     */
+    protected $companyName;
+
+    /**
      * Address of the customer
      * @var string
      */
@@ -546,6 +552,28 @@ class Customer implements \JsonSerializable
     }
     
     /**
+     * Get CompanyName
+     * Company name of the customer (for business customers only)
+     * @return string
+     */
+    public function getCompanyName()
+    {
+        return $this->companyName;
+    }
+
+    /**
+     * Set CompanyName
+     * Company name of the customer (for business customers only)
+     * @param  string $value
+     * @return $this
+     */
+    public function setCompanyName($value)
+    {
+        $this->companyName = $value;
+        return $this;
+    }
+    
+    /**
      * Get Address1
      * Address of the customer
      * @return string
@@ -973,6 +1001,9 @@ class Customer implements \JsonSerializable
         if(! empty($data['last_name']))
             $this->setLastName($data['last_name']);
 
+        if(! empty($data['company_name']))
+            $this->setCompanyName($data['company_name']);
+
         if(! empty($data['address1']))
             $this->setAddress1($data['address1']);
 
@@ -1046,6 +1077,7 @@ class Customer implements \JsonSerializable
             "email" => $this->getEmail(),
             "first_name" => $this->getFirstName(),
             "last_name" => $this->getLastName(),
+            "company_name" => $this->getCompanyName(),
             "address1" => $this->getAddress1(),
             "address2" => $this->getAddress2(),
             "city" => $this->getCity(),
@@ -1277,6 +1309,7 @@ class Customer implements \JsonSerializable
             "email" => $this->getEmail(), 
             "first_name" => $this->getFirstName(), 
             "last_name" => $this->getLastName(), 
+            "company_name" => $this->getCompanyName(), 
             "address1" => $this->getAddress1(), 
             "address2" => $this->getAddress2(), 
             "city" => $this->getCity(), 
@@ -1354,6 +1387,7 @@ class Customer implements \JsonSerializable
             "email" => $this->getEmail(), 
             "first_name" => $this->getFirstName(), 
             "last_name" => $this->getLastName(), 
+            "company_name" => $this->getCompanyName(), 
             "address1" => $this->getAddress1(), 
             "address2" => $this->getAddress2(), 
             "city" => $this->getCity(), 

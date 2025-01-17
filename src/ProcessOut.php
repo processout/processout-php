@@ -695,15 +695,6 @@ class ProcessOut
     }
 	
     /**
-     * Create a new NativeAPMTransactionDetails instance
-     * @param array|null $prefill array used to prefill the object
-     * @return NativeAPMTransactionDetails
-     */
-	public function newNativeAPMTransactionDetails($prefill = array()) {
-        return new NativeAPMTransactionDetails($this, $prefill);
-    }
-	
-    /**
      * Create a new NativeAPMTransactionDetailsGateway instance
      * @param array|null $prefill array used to prefill the object
      * @return NativeAPMTransactionDetailsGateway
@@ -719,6 +710,15 @@ class ProcessOut
      */
 	public function newNativeAPMTransactionDetailsInvoice($prefill = array()) {
         return new NativeAPMTransactionDetailsInvoice($this, $prefill);
+    }
+	
+    /**
+     * Create a new NativeAPMTransactionDetails instance
+     * @param array|null $prefill array used to prefill the object
+     * @return NativeAPMTransactionDetails
+     */
+	public function newNativeAPMTransactionDetails($prefill = array()) {
+        return new NativeAPMTransactionDetails($this, $prefill);
     }
 	
 }
