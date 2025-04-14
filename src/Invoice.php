@@ -89,6 +89,12 @@ class Invoice implements \JsonSerializable
     protected $details;
 
     /**
+     * Submerchant data of the invoice
+     * @var object
+     */
+    protected $submerchant;
+
+    /**
      * URL to which you may redirect your customer to proceed with the payment
      * @var string
      */
@@ -636,6 +642,35 @@ class Invoice implements \JsonSerializable
                 $a[] = $obj;
             }
             $this->details = $a;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get Submerchant
+     * Submerchant data of the invoice
+     * @return object
+     */
+    public function getSubmerchant()
+    {
+        return $this->submerchant;
+    }
+
+    /**
+     * Set Submerchant
+     * Submerchant data of the invoice
+     * @param  object $value
+     * @return $this
+     */
+    public function setSubmerchant($value)
+    {
+        if (is_object($value))
+            $this->submerchant = $value;
+        else
+        {
+            $obj = new InvoiceSubmerchant($this->client);
+            $obj->fillWithData($value);
+            $this->submerchant = $obj;
         }
         return $this;
     }
@@ -1576,6 +1611,9 @@ class Invoice implements \JsonSerializable
         if(! empty($data['details']))
             $this->setDetails($data['details']);
 
+        if(! empty($data['submerchant']))
+            $this->setSubmerchant($data['submerchant']);
+
         if(! empty($data['url']))
             $this->setUrl($data['url']);
 
@@ -1711,6 +1749,7 @@ class Invoice implements \JsonSerializable
             "token" => $this->getToken(),
             "token_id" => $this->getTokenId(),
             "details" => $this->getDetails(),
+            "submerchant" => $this->getSubmerchant(),
             "url" => $this->getUrl(),
             "url_qrcode" => $this->getUrlQrcode(),
             "name" => $this->getName(),
@@ -2196,6 +2235,7 @@ class Invoice implements \JsonSerializable
             "currency" => $this->getCurrency(), 
             "metadata" => $this->getMetadata(), 
             "details" => $this->getDetails(), 
+            "submerchant" => $this->getSubmerchant(), 
             "exemption_reason_3ds2" => $this->getExemptionReason3ds2(), 
             "sca_exemption_reason" => $this->getScaExemptionReason(), 
             "challenge_indicator" => $this->getChallengeIndicator(), 
