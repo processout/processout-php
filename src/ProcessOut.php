@@ -416,6 +416,33 @@ class ProcessOut
     }
 	
     /**
+     * Create a new InvoiceSubmerchant instance
+     * @param array|null $prefill array used to prefill the object
+     * @return InvoiceSubmerchant
+     */
+	public function newInvoiceSubmerchant($prefill = array()) {
+        return new InvoiceSubmerchant($this, $prefill);
+    }
+	
+    /**
+     * Create a new SubmerchantPhoneNumber instance
+     * @param array|null $prefill array used to prefill the object
+     * @return SubmerchantPhoneNumber
+     */
+	public function newSubmerchantPhoneNumber($prefill = array()) {
+        return new SubmerchantPhoneNumber($this, $prefill);
+    }
+	
+    /**
+     * Create a new SubmerchantAddress instance
+     * @param array|null $prefill array used to prefill the object
+     * @return SubmerchantAddress
+     */
+	public function newSubmerchantAddress($prefill = array()) {
+        return new SubmerchantAddress($this, $prefill);
+    }
+	
+    /**
      * Create a new CustomerAction instance
      * @param array|null $prefill array used to prefill the object
      * @return CustomerAction

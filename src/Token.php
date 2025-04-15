@@ -149,6 +149,12 @@ class Token implements \JsonSerializable
     protected $canGetBalance;
 
     /**
+     * Custom webhook URL where updates about this specific customer token will be sent, on top of your project-wide URLs
+     * @var string
+     */
+    protected $webhookUrl;
+
+    /**
      * Token constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -673,6 +679,28 @@ class Token implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get WebhookUrl
+     * Custom webhook URL where updates about this specific customer token will be sent, on top of your project-wide URLs
+     * @return string
+     */
+    public function getWebhookUrl()
+    {
+        return $this->webhookUrl;
+    }
+
+    /**
+     * Set WebhookUrl
+     * Custom webhook URL where updates about this specific customer token will be sent, on top of your project-wide URLs
+     * @param  string $value
+     * @return $this
+     */
+    public function setWebhookUrl($value)
+    {
+        $this->webhookUrl = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -747,6 +775,9 @@ class Token implements \JsonSerializable
         if(! empty($data['can_get_balance']))
             $this->setCanGetBalance($data['can_get_balance']);
 
+        if(! empty($data['webhook_url']))
+            $this->setWebhookUrl($data['webhook_url']);
+
         return $this;
     }
 
@@ -778,6 +809,7 @@ class Token implements \JsonSerializable
             "manual_invoice_cancellation" => $this->getManualInvoiceCancellation(),
             "verification_status" => $this->getVerificationStatus(),
             "can_get_balance" => $this->getCanGetBalance(),
+            "webhook_url" => $this->getWebhookUrl(),
         );
     }
 
@@ -866,6 +898,7 @@ class Token implements \JsonSerializable
             "description" => $this->getDescription(), 
             "invoice_id" => $this->getInvoiceId(), 
             "manual_invoice_cancellation" => $this->getManualInvoiceCancellation(), 
+            "webhook_url" => $this->getWebhookUrl(), 
             "source" => (!empty($options["source"])) ? $options["source"] : null, 
             "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
             "device" => (!empty($options["device"])) ? $options["device"] : null, 

@@ -41,7 +41,7 @@ class Refund implements \JsonSerializable
     protected $amount;
 
     /**
-     * Reason for the refund. Either customer_request, duplicate or fraud
+     * Reason for the refund. Either customer_request, duplicate, fraud or other
      * @var string
      */
     protected $reason;
@@ -192,7 +192,7 @@ class Refund implements \JsonSerializable
     
     /**
      * Get Reason
-     * Reason for the refund. Either customer_request, duplicate or fraud
+     * Reason for the refund. Either customer_request, duplicate, fraud or other
      * @return string
      */
     public function getReason()
@@ -202,7 +202,7 @@ class Refund implements \JsonSerializable
 
     /**
      * Set Reason
-     * Reason for the refund. Either customer_request, duplicate or fraud
+     * Reason for the refund. Either customer_request, duplicate, fraud or other
      * @param  string $value
      * @return $this
      */
