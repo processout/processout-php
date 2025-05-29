@@ -104,9 +104,11 @@ class AlternativeMerchantCertificate implements \JsonSerializable
         
         // Handling for field alternative_merchant_certificate
         $body = $response->getBody();
-        $body = $body['alternative_merchant_certificate'];
-        $alternativeMerchantCertificate = new AlternativeMerchantCertificate($this->client);
-        $returnValues['alternativeMerchantCertificate'] = $alternativeMerchantCertificate->fillWithData($body);
+        if (isset($body['alternative_merchant_certificate'])) {
+            $body = $body['alternative_merchant_certificate'];
+            $alternativeMerchantCertificate = new AlternativeMerchantCertificate($this->client);
+            $returnValues['alternativeMerchantCertificate'] = $alternativeMerchantCertificate->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];

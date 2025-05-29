@@ -584,8 +584,10 @@ class Addon implements \JsonSerializable
         
         // Handling for field addon
         $body = $response->getBody();
-        $body = $body['addon'];
-        $returnValues['create'] = $this->fillWithData($body);
+        if (isset($body['addon'])) {
+            $body = $body['addon'];
+            $returnValues['create'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -614,8 +616,10 @@ class Addon implements \JsonSerializable
         
         // Handling for field addon
         $body = $response->getBody();
-        $body = $body['addon'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['addon'])) {
+            $body = $body['addon'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -651,8 +655,10 @@ class Addon implements \JsonSerializable
         
         // Handling for field addon
         $body = $response->getBody();
-        $body = $body['addon'];
-        $returnValues['save'] = $this->fillWithData($body);
+        if (isset($body['addon'])) {
+            $body = $body['addon'];
+            $returnValues['save'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

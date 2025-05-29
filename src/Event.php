@@ -372,8 +372,10 @@ class Event implements \JsonSerializable
         
         // Handling for field event
         $body = $response->getBody();
-        $body = $body['event'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['event'])) {
+            $body = $body['event'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

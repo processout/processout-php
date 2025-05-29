@@ -1291,9 +1291,11 @@ class Subscription implements \JsonSerializable
         
         // Handling for field addon
         $body = $response->getBody();
-        $body = $body['addon'];
-        $addon = new Addon($this->client);
-        $returnValues['addon'] = $addon->fillWithData($body);
+        if (isset($body['addon'])) {
+            $body = $body['addon'];
+            $addon = new Addon($this->client);
+            $returnValues['addon'] = $addon->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -1348,9 +1350,11 @@ class Subscription implements \JsonSerializable
         
         // Handling for field customer
         $body = $response->getBody();
-        $body = $body['customer'];
-        $customer = new Customer($this->client);
-        $returnValues['customer'] = $customer->fillWithData($body);
+        if (isset($body['customer'])) {
+            $body = $body['customer'];
+            $customer = new Customer($this->client);
+            $returnValues['customer'] = $customer->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -1413,9 +1417,11 @@ class Subscription implements \JsonSerializable
         
         // Handling for field discount
         $body = $response->getBody();
-        $body = $body['discount'];
-        $discount = new Discount($this->client);
-        $returnValues['discount'] = $discount->fillWithData($body);
+        if (isset($body['discount'])) {
+            $body = $body['discount'];
+            $discount = new Discount($this->client);
+            $returnValues['discount'] = $discount->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -1548,8 +1554,10 @@ class Subscription implements \JsonSerializable
         
         // Handling for field subscription
         $body = $response->getBody();
-        $body = $body['subscription'];
-        $returnValues['create'] = $this->fillWithData($body);
+        if (isset($body['subscription'])) {
+            $body = $body['subscription'];
+            $returnValues['create'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -1577,8 +1585,10 @@ class Subscription implements \JsonSerializable
         
         // Handling for field subscription
         $body = $response->getBody();
-        $body = $body['subscription'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['subscription'])) {
+            $body = $body['subscription'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -1615,8 +1625,10 @@ class Subscription implements \JsonSerializable
         
         // Handling for field subscription
         $body = $response->getBody();
-        $body = $body['subscription'];
-        $returnValues['save'] = $this->fillWithData($body);
+        if (isset($body['subscription'])) {
+            $body = $body['subscription'];
+            $returnValues['save'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -1645,8 +1657,10 @@ class Subscription implements \JsonSerializable
         
         // Handling for field subscription
         $body = $response->getBody();
-        $body = $body['subscription'];
-        $returnValues['cancel'] = $this->fillWithData($body);
+        if (isset($body['subscription'])) {
+            $body = $body['subscription'];
+            $returnValues['cancel'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

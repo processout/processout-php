@@ -183,8 +183,10 @@ class ExportLayoutConfigurationOptions implements \JsonSerializable
         
         // Handling for field export_layout_configuration_options
         $body = $response->getBody();
-        $body = $body['export_layout_configuration_options'];
-        $returnValues['fetch'] = $this->fillWithData($body);
+        if (isset($body['export_layout_configuration_options'])) {
+            $body = $body['export_layout_configuration_options'];
+            $returnValues['fetch'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

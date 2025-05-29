@@ -203,6 +203,12 @@ class Customer implements \JsonSerializable
     protected $dateOfBirth;
 
     /**
+     * Merchant reference ID, custom ID for this Customer provided by the API caller. At most 80 characters. Allowed only 1-byte ASCII characters from range 33 (inclusive) to 126 (inclusive) - non-whitespace, non-DEL characters.
+     * @var string
+     */
+    protected $referenceId;
+
+    /**
      * Customer constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -954,6 +960,28 @@ class Customer implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get ReferenceId
+     * Merchant reference ID, custom ID for this Customer provided by the API caller. At most 80 characters. Allowed only 1-byte ASCII characters from range 33 (inclusive) to 126 (inclusive) - non-whitespace, non-DEL characters.
+     * @return string
+     */
+    public function getReferenceId()
+    {
+        return $this->referenceId;
+    }
+
+    /**
+     * Set ReferenceId
+     * Merchant reference ID, custom ID for this Customer provided by the API caller. At most 80 characters. Allowed only 1-byte ASCII characters from range 33 (inclusive) to 126 (inclusive) - non-whitespace, non-DEL characters.
+     * @param  string $value
+     * @return $this
+     */
+    public function setReferenceId($value)
+    {
+        $this->referenceId = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1055,6 +1083,9 @@ class Customer implements \JsonSerializable
         if(! empty($data['date_of_birth']))
             $this->setDateOfBirth($data['date_of_birth']);
 
+        if(! empty($data['reference_id']))
+            $this->setReferenceId($data['reference_id']);
+
         return $this;
     }
 
@@ -1095,6 +1126,7 @@ class Customer implements \JsonSerializable
             "created_at" => $this->getCreatedAt(),
             "registered_at" => $this->getRegisteredAt(),
             "date_of_birth" => $this->getDateOfBirth(),
+            "reference_id" => $this->getReferenceId(),
         );
     }
 
@@ -1190,9 +1222,11 @@ class Customer implements \JsonSerializable
         
         // Handling for field token
         $body = $response->getBody();
-        $body = $body['token'];
-        $token = new Token($this->client);
-        $returnValues['token'] = $token->fillWithData($body);
+        if (isset($body['token'])) {
+            $body = $body['token'];
+            $token = new Token($this->client);
+            $returnValues['token'] = $token->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -1324,6 +1358,7 @@ class Customer implements \JsonSerializable
             "sex" => $this->getSex(), 
             "metadata" => $this->getMetadata(), 
             "id" => $this->getId(), 
+            "reference_id" => $this->getReferenceId(), 
             "registered_at" => $this->getRegisteredAt(), 
             "phone_number" => $this->getPhoneNumber()
         );
@@ -1334,8 +1369,10 @@ class Customer implements \JsonSerializable
         
         // Handling for field customer
         $body = $response->getBody();
-        $body = $body['customer'];
-        $returnValues['create'] = $this->fillWithData($body);
+        if (isset($body['customer'])) {
+            $body = $body['customer'];
+            $returnValues['create'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -1363,8 +1400,10 @@ class Customer implements \JsonSerializable
         
         // Handling for field customer
         $body = $response->getBody();
-        $body = $body['customer'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['customer'])) {
+            $body = $body['customer'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -1411,8 +1450,10 @@ class Customer implements \JsonSerializable
         
         // Handling for field customer
         $body = $response->getBody();
-        $body = $body['customer'];
-        $returnValues['save'] = $this->fillWithData($body);
+        if (isset($body['customer'])) {
+            $body = $body['customer'];
+            $returnValues['save'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

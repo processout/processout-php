@@ -338,8 +338,10 @@ class Activity implements \JsonSerializable
         
         // Handling for field activity
         $body = $response->getBody();
-        $body = $body['activity'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['activity'])) {
+            $body = $body['activity'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

@@ -169,8 +169,10 @@ class ProjectSFTPSettingsPublic implements \JsonSerializable
         
         // Handling for field sftp_settings
         $body = $response->getBody();
-        $body = $body['sftp_settings'];
-        $returnValues['fetchSftpSettings'] = $this->fillWithData($body);
+        if (isset($body['sftp_settings'])) {
+            $body = $body['sftp_settings'];
+            $returnValues['fetchSftpSettings'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

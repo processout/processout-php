@@ -450,8 +450,10 @@ class Project implements \JsonSerializable
         
         // Handling for field project
         $body = $response->getBody();
-        $body = $body['project'];
-        $returnValues['fetch'] = $this->fillWithData($body);
+        if (isset($body['project'])) {
+            $body = $body['project'];
+            $returnValues['fetch'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -478,8 +480,10 @@ class Project implements \JsonSerializable
         
         // Handling for field project
         $body = $response->getBody();
-        $body = $body['project'];
-        $returnValues['save'] = $this->fillWithData($body);
+        if (isset($body['project'])) {
+            $body = $body['project'];
+            $returnValues['save'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -569,8 +573,10 @@ class Project implements \JsonSerializable
         
         // Handling for field project
         $body = $response->getBody();
-        $body = $body['project'];
-        $returnValues['createSupervised'] = $this->fillWithData($body);
+        if (isset($body['project'])) {
+            $body = $body['project'];
+            $returnValues['createSupervised'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

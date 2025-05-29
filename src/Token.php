@@ -873,8 +873,10 @@ class Token implements \JsonSerializable
         
         // Handling for field token
         $body = $response->getBody();
-        $body = $body['token'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['token'])) {
+            $body = $body['token'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -899,6 +901,7 @@ class Token implements \JsonSerializable
             "invoice_id" => $this->getInvoiceId(), 
             "manual_invoice_cancellation" => $this->getManualInvoiceCancellation(), 
             "webhook_url" => $this->getWebhookUrl(), 
+            "gateway_configuration_id" => $this->getGatewayConfigurationId(), 
             "source" => (!empty($options["source"])) ? $options["source"] : null, 
             "settings" => (!empty($options["settings"])) ? $options["settings"] : null, 
             "device" => (!empty($options["device"])) ? $options["device"] : null, 
@@ -916,13 +919,17 @@ class Token implements \JsonSerializable
         
         // Handling for field token
         $body = $response->getBody();
-        $body = $body['token'];
-        $returnValues['create'] = $this->fillWithData($body);
+        if (isset($body['token'])) {
+            $body = $body['token'];
+            $returnValues['create'] = $this->fillWithData($body);
+        }
         // Handling for field customer_action
         $body = $response->getBody();
-        $body = $body['customer_action'];
-        $customerAction = new CustomerAction($this->client);
-        $returnValues['customerAction'] = $customerAction->fillWithData($body);
+        if (isset($body['customer_action'])) {
+            $body = $body['customer_action'];
+            $customerAction = new CustomerAction($this->client);
+            $returnValues['customerAction'] = $customerAction->fillWithData($body);
+        }
                 
         
         return (object) $returnValues;
@@ -948,7 +955,8 @@ class Token implements \JsonSerializable
             "verify_metadata" => (!empty($options["verify_metadata"])) ? $options["verify_metadata"] : null, 
             "set_default" => (!empty($options["set_default"])) ? $options["set_default"] : null, 
             "verify_statement_descriptor" => (!empty($options["verify_statement_descriptor"])) ? $options["verify_statement_descriptor"] : null, 
-            "invoice_return_url" => (!empty($options["invoice_return_url"])) ? $options["invoice_return_url"] : null
+            "invoice_return_url" => (!empty($options["invoice_return_url"])) ? $options["invoice_return_url"] : null, 
+            "gateway_configuration_id" => (!empty($options["gateway_configuration_id"])) ? $options["gateway_configuration_id"] : null
         );
 
         $response = $request->put($path, $data, $options);

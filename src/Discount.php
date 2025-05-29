@@ -580,8 +580,10 @@ class Discount implements \JsonSerializable
         
         // Handling for field discount
         $body = $response->getBody();
-        $body = $body['discount'];
-        $returnValues['create'] = $this->fillWithData($body);
+        if (isset($body['discount'])) {
+            $body = $body['discount'];
+            $returnValues['create'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -610,8 +612,10 @@ class Discount implements \JsonSerializable
         
         // Handling for field discount
         $body = $response->getBody();
-        $body = $body['discount'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['discount'])) {
+            $body = $body['discount'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

@@ -537,8 +537,10 @@ class GatewayConfiguration implements \JsonSerializable
         
         // Handling for field gateway_configuration
         $body = $response->getBody();
-        $body = $body['gateway_configuration'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['gateway_configuration'])) {
+            $body = $body['gateway_configuration'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -572,8 +574,10 @@ class GatewayConfiguration implements \JsonSerializable
         
         // Handling for field gateway_configuration
         $body = $response->getBody();
-        $body = $body['gateway_configuration'];
-        $returnValues['save'] = $this->fillWithData($body);
+        if (isset($body['gateway_configuration'])) {
+            $body = $body['gateway_configuration'];
+            $returnValues['save'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -632,8 +636,10 @@ class GatewayConfiguration implements \JsonSerializable
         
         // Handling for field gateway_configuration
         $body = $response->getBody();
-        $body = $body['gateway_configuration'];
-        $returnValues['create'] = $this->fillWithData($body);
+        if (isset($body['gateway_configuration'])) {
+            $body = $body['gateway_configuration'];
+            $returnValues['create'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

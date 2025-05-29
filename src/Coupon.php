@@ -536,8 +536,10 @@ class Coupon implements \JsonSerializable
         
         // Handling for field coupon
         $body = $response->getBody();
-        $body = $body['coupon'];
-        $returnValues['create'] = $this->fillWithData($body);
+        if (isset($body['coupon'])) {
+            $body = $body['coupon'];
+            $returnValues['create'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -565,8 +567,10 @@ class Coupon implements \JsonSerializable
         
         // Handling for field coupon
         $body = $response->getBody();
-        $body = $body['coupon'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['coupon'])) {
+            $body = $body['coupon'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -593,8 +597,10 @@ class Coupon implements \JsonSerializable
         
         // Handling for field coupon
         $body = $response->getBody();
-        $body = $body['coupon'];
-        $returnValues['save'] = $this->fillWithData($body);
+        if (isset($body['coupon'])) {
+            $body = $body['coupon'];
+            $returnValues['save'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

@@ -569,8 +569,10 @@ class Plan implements \JsonSerializable
         
         // Handling for field plan
         $body = $response->getBody();
-        $body = $body['plan'];
-        $returnValues['create'] = $this->fillWithData($body);
+        if (isset($body['plan'])) {
+            $body = $body['plan'];
+            $returnValues['create'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -598,8 +600,10 @@ class Plan implements \JsonSerializable
         
         // Handling for field plan
         $body = $response->getBody();
-        $body = $body['plan'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['plan'])) {
+            $body = $body['plan'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -630,8 +634,10 @@ class Plan implements \JsonSerializable
         
         // Handling for field plan
         $body = $response->getBody();
-        $body = $body['plan'];
-        $returnValues['save'] = $this->fillWithData($body);
+        if (isset($body['plan'])) {
+            $body = $body['plan'];
+            $returnValues['save'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
