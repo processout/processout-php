@@ -148,9 +148,11 @@ class ApplePayAlternativeMerchantCertificates implements \JsonSerializable
         
         // Handling for field applepay_certificates
         $body = $response->getBody();
-        $body = $body['applepay_certificates'];
-        $applePayAlternativeMerchantCertificates = new ApplePayAlternativeMerchantCertificates($this->client);
-        $returnValues['applePayAlternativeMerchantCertificates'] = $applePayAlternativeMerchantCertificates->fillWithData($body);
+        if (isset($body['applepay_certificates'])) {
+            $body = $body['applepay_certificates'];
+            $applePayAlternativeMerchantCertificates = new ApplePayAlternativeMerchantCertificates($this->client);
+            $returnValues['applePayAlternativeMerchantCertificates'] = $applePayAlternativeMerchantCertificates->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];

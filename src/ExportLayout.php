@@ -377,8 +377,10 @@ class ExportLayout implements \JsonSerializable
         
         // Handling for field export_layout
         $body = $response->getBody();
-        $body = $body['export_layout'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['export_layout'])) {
+            $body = $body['export_layout'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -406,8 +408,10 @@ class ExportLayout implements \JsonSerializable
         
         // Handling for field export_layout
         $body = $response->getBody();
-        $body = $body['export_layout'];
-        $returnValues['findDefault'] = $this->fillWithData($body);
+        if (isset($body['export_layout'])) {
+            $body = $body['export_layout'];
+            $returnValues['findDefault'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -437,8 +441,10 @@ class ExportLayout implements \JsonSerializable
         
         // Handling for field export_layout
         $body = $response->getBody();
-        $body = $body['export_layout'];
-        $returnValues['create'] = $this->fillWithData($body);
+        if (isset($body['export_layout'])) {
+            $body = $body['export_layout'];
+            $returnValues['create'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -468,8 +474,10 @@ class ExportLayout implements \JsonSerializable
         
         // Handling for field export_layout
         $body = $response->getBody();
-        $body = $body['export_layout'];
-        $returnValues['update'] = $this->fillWithData($body);
+        if (isset($body['export_layout'])) {
+            $body = $body['export_layout'];
+            $returnValues['update'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

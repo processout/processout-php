@@ -788,8 +788,10 @@ class Payout implements \JsonSerializable
         
         // Handling for field payout
         $body = $response->getBody();
-        $body = $body['payout'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['payout'])) {
+            $body = $body['payout'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

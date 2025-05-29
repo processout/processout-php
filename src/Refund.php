@@ -497,8 +497,10 @@ class Refund implements \JsonSerializable
         
         // Handling for field refund
         $body = $response->getBody();
-        $body = $body['refund'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['refund'])) {
+            $body = $body['refund'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

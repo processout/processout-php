@@ -297,8 +297,10 @@ class CardInformation implements \JsonSerializable
         
         // Handling for field card_information
         $body = $response->getBody();
-        $body = $body['card_information'];
-        $returnValues['fetch'] = $this->fillWithData($body);
+        if (isset($body['card_information'])) {
+            $body = $body['card_information'];
+            $returnValues['fetch'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

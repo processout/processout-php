@@ -137,6 +137,15 @@ class ProcessOut
     }
 	
     /**
+     * Create a new BalancesCustomerAction instance
+     * @param array|null $prefill array used to prefill the object
+     * @return BalancesCustomerAction
+     */
+	public function newBalancesCustomerAction($prefill = array()) {
+        return new BalancesCustomerAction($this, $prefill);
+    }
+	
+    /**
      * Create a new Card instance
      * @param array|null $prefill array used to prefill the object
      * @return Card
@@ -650,15 +659,6 @@ class ProcessOut
     }
 	
     /**
-     * Create a new CardCreateRequest instance
-     * @param array|null $prefill array used to prefill the object
-     * @return CardCreateRequest
-     */
-	public function newCardCreateRequest($prefill = array()) {
-        return new CardCreateRequest($this, $prefill);
-    }
-	
-    /**
      * Create a new Device instance
      * @param array|null $prefill array used to prefill the object
      * @return Device
@@ -692,6 +692,15 @@ class ProcessOut
      */
 	public function newCardUpdateRequest($prefill = array()) {
         return new CardUpdateRequest($this, $prefill);
+    }
+	
+    /**
+     * Create a new CardCreateRequest instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CardCreateRequest
+     */
+	public function newCardCreateRequest($prefill = array()) {
+        return new CardCreateRequest($this, $prefill);
     }
 	
     /**

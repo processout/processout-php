@@ -1177,8 +1177,10 @@ class Card implements \JsonSerializable
         
         // Handling for field card
         $body = $response->getBody();
-        $body = $body['card'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['card'])) {
+            $body = $body['card'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

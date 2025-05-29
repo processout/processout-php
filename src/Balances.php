@@ -23,6 +23,18 @@ class Balances implements \JsonSerializable
     protected $vouchers;
 
     /**
+     * Available balance of the customer
+     * @var object
+     */
+    protected $availableBalance;
+
+    /**
+     * Customer action to be performed, such as redirecting to a URL
+     * @var object
+     */
+    protected $customerAction;
+
+    /**
      * Balances constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -69,6 +81,64 @@ class Balances implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get AvailableBalance
+     * Available balance of the customer
+     * @return object
+     */
+    public function getAvailableBalance()
+    {
+        return $this->availableBalance;
+    }
+
+    /**
+     * Set AvailableBalance
+     * Available balance of the customer
+     * @param  object $value
+     * @return $this
+     */
+    public function setAvailableBalance($value)
+    {
+        if (is_object($value))
+            $this->availableBalance = $value;
+        else
+        {
+            $obj = new Balance($this->client);
+            $obj->fillWithData($value);
+            $this->availableBalance = $obj;
+        }
+        return $this;
+    }
+    
+    /**
+     * Get CustomerAction
+     * Customer action to be performed, such as redirecting to a URL
+     * @return object
+     */
+    public function getCustomerAction()
+    {
+        return $this->customerAction;
+    }
+
+    /**
+     * Set CustomerAction
+     * Customer action to be performed, such as redirecting to a URL
+     * @param  object $value
+     * @return $this
+     */
+    public function setCustomerAction($value)
+    {
+        if (is_object($value))
+            $this->customerAction = $value;
+        else
+        {
+            $obj = new BalancesCustomerAction($this->client);
+            $obj->fillWithData($value);
+            $this->customerAction = $obj;
+        }
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -80,6 +150,12 @@ class Balances implements \JsonSerializable
         if(! empty($data['vouchers']))
             $this->setVouchers($data['vouchers']);
 
+        if(! empty($data['available_balance']))
+            $this->setAvailableBalance($data['available_balance']);
+
+        if(! empty($data['customer_action']))
+            $this->setCustomerAction($data['customer_action']);
+
         return $this;
     }
 
@@ -90,6 +166,8 @@ class Balances implements \JsonSerializable
     public function jsonSerialize() {
         return array(
             "vouchers" => $this->getVouchers(),
+            "available_balance" => $this->getAvailableBalance(),
+            "customer_action" => $this->getCustomerAction(),
         );
     }
 
@@ -117,9 +195,11 @@ class Balances implements \JsonSerializable
         
         // Handling for field balances
         $body = $response->getBody();
-        $body = $body['balances'];
-        $balances = new Balances($this->client);
-        $returnValues['balances'] = $balances->fillWithData($body);
+        if (isset($body['balances'])) {
+            $body = $body['balances'];
+            $balances = new Balances($this->client);
+            $returnValues['balances'] = $balances->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];

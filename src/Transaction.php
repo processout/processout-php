@@ -2345,9 +2345,11 @@ class Transaction implements \JsonSerializable
         
         // Handling for field refund
         $body = $response->getBody();
-        $body = $body['refund'];
-        $refund = new Refund($this->client);
-        $returnValues['refund'] = $refund->fillWithData($body);
+        if (isset($body['refund'])) {
+            $body = $body['refund'];
+            $refund = new Refund($this->client);
+            $returnValues['refund'] = $refund->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -2444,8 +2446,10 @@ class Transaction implements \JsonSerializable
         
         // Handling for field transaction
         $body = $response->getBody();
-        $body = $body['transaction'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['transaction'])) {
+            $body = $body['transaction'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

@@ -463,9 +463,11 @@ class Product implements \JsonSerializable
         
         // Handling for field invoice
         $body = $response->getBody();
-        $body = $body['invoice'];
-        $invoice = new Invoice($this->client);
-        $returnValues['invoice'] = $invoice->fillWithData($body);
+        if (isset($body['invoice'])) {
+            $body = $body['invoice'];
+            $invoice = new Invoice($this->client);
+            $returnValues['invoice'] = $invoice->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -532,8 +534,10 @@ class Product implements \JsonSerializable
         
         // Handling for field product
         $body = $response->getBody();
-        $body = $body['product'];
-        $returnValues['create'] = $this->fillWithData($body);
+        if (isset($body['product'])) {
+            $body = $body['product'];
+            $returnValues['create'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -561,8 +565,10 @@ class Product implements \JsonSerializable
         
         // Handling for field product
         $body = $response->getBody();
-        $body = $body['product'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['product'])) {
+            $body = $body['product'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -594,8 +600,10 @@ class Product implements \JsonSerializable
         
         // Handling for field product
         $body = $response->getBody();
-        $body = $body['product'];
-        $returnValues['save'] = $this->fillWithData($body);
+        if (isset($body['product'])) {
+            $body = $body['product'];
+            $returnValues['save'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }

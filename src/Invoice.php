@@ -323,6 +323,12 @@ class Invoice implements \JsonSerializable
     protected $autoCaptureAt;
 
     /**
+     * Merchant reference ID, custom ID for this Invoice provided by the API caller. At most 80 characters. Allowed only 1-byte ASCII characters from range 33 (inclusive) to 126 (inclusive) - non-whitespace, non-DEL characters.
+     * @var string
+     */
+    protected $referenceId;
+
+    /**
      * Invoice constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -1567,6 +1573,28 @@ class Invoice implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get ReferenceId
+     * Merchant reference ID, custom ID for this Invoice provided by the API caller. At most 80 characters. Allowed only 1-byte ASCII characters from range 33 (inclusive) to 126 (inclusive) - non-whitespace, non-DEL characters.
+     * @return string
+     */
+    public function getReferenceId()
+    {
+        return $this->referenceId;
+    }
+
+    /**
+     * Set ReferenceId
+     * Merchant reference ID, custom ID for this Invoice provided by the API caller. At most 80 characters. Allowed only 1-byte ASCII characters from range 33 (inclusive) to 126 (inclusive) - non-whitespace, non-DEL characters.
+     * @param  string $value
+     * @return $this
+     */
+    public function setReferenceId($value)
+    {
+        $this->referenceId = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1728,6 +1756,9 @@ class Invoice implements \JsonSerializable
         if(! empty($data['auto_capture_at']))
             $this->setAutoCaptureAt($data['auto_capture_at']);
 
+        if(! empty($data['reference_id']))
+            $this->setReferenceId($data['reference_id']);
+
         return $this;
     }
 
@@ -1788,6 +1819,7 @@ class Invoice implements \JsonSerializable
             "unsupported_feature_bypass" => $this->getUnsupportedFeatureBypass(),
             "verification" => $this->getVerification(),
             "auto_capture_at" => $this->getAutoCaptureAt(),
+            "reference_id" => $this->getReferenceId(),
         );
     }
 
@@ -1816,9 +1848,11 @@ class Invoice implements \JsonSerializable
         
         // Handling for field transaction
         $body = $response->getBody();
-        $body = $body['transaction'];
-        $transaction = new Transaction($this->client);
-        $returnValues['transaction'] = $transaction->fillWithData($body);
+        if (isset($body['transaction'])) {
+            $body = $body['transaction'];
+            $transaction = new Transaction($this->client);
+            $returnValues['transaction'] = $transaction->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -1859,15 +1893,19 @@ class Invoice implements \JsonSerializable
         
         // Handling for field transaction
         $body = $response->getBody();
-        $body = $body['transaction'];
-        $transaction = new Transaction($this->client);
-        $returnValues['transaction'] = $transaction->fillWithData($body);
+        if (isset($body['transaction'])) {
+            $body = $body['transaction'];
+            $transaction = new Transaction($this->client);
+            $returnValues['transaction'] = $transaction->fillWithData($body);
+        }
                 
         // Handling for field customer_action
         $body = $response->getBody();
-        $body = $body['customer_action'];
-        $customerAction = new CustomerAction($this->client);
-        $returnValues['customerAction'] = $customerAction->fillWithData($body);
+        if (isset($body['customer_action'])) {
+            $body = $body['customer_action'];
+            $customerAction = new CustomerAction($this->client);
+            $returnValues['customerAction'] = $customerAction->fillWithData($body);
+        }
                 
         
         return (object) $returnValues;
@@ -1909,15 +1947,19 @@ class Invoice implements \JsonSerializable
         
         // Handling for field transaction
         $body = $response->getBody();
-        $body = $body['transaction'];
-        $transaction = new Transaction($this->client);
-        $returnValues['transaction'] = $transaction->fillWithData($body);
+        if (isset($body['transaction'])) {
+            $body = $body['transaction'];
+            $transaction = new Transaction($this->client);
+            $returnValues['transaction'] = $transaction->fillWithData($body);
+        }
                 
         // Handling for field customer_action
         $body = $response->getBody();
-        $body = $body['customer_action'];
-        $customerAction = new CustomerAction($this->client);
-        $returnValues['customerAction'] = $customerAction->fillWithData($body);
+        if (isset($body['customer_action'])) {
+            $body = $body['customer_action'];
+            $customerAction = new CustomerAction($this->client);
+            $returnValues['customerAction'] = $customerAction->fillWithData($body);
+        }
                 
         
         return (object) $returnValues;
@@ -1945,9 +1987,11 @@ class Invoice implements \JsonSerializable
         
         // Handling for field customer
         $body = $response->getBody();
-        $body = $body['customer'];
-        $customer = new Customer($this->client);
-        $returnValues['customer'] = $customer->fillWithData($body);
+        if (isset($body['customer'])) {
+            $body = $body['customer'];
+            $customer = new Customer($this->client);
+            $returnValues['customer'] = $customer->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -1976,9 +2020,11 @@ class Invoice implements \JsonSerializable
         
         // Handling for field customer
         $body = $response->getBody();
-        $body = $body['customer'];
-        $customer = new Customer($this->client);
-        $returnValues['customer'] = $customer->fillWithData($body);
+        if (isset($body['customer'])) {
+            $body = $body['customer'];
+            $customer = new Customer($this->client);
+            $returnValues['customer'] = $customer->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -2010,9 +2056,11 @@ class Invoice implements \JsonSerializable
         
         // Handling for field transaction
         $body = $response->getBody();
-        $body = $body['transaction'];
-        $transaction = new Transaction($this->client);
-        $returnValues['transaction'] = $transaction->fillWithData($body);
+        if (isset($body['transaction'])) {
+            $body = $body['transaction'];
+            $transaction = new Transaction($this->client);
+            $returnValues['transaction'] = $transaction->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -2042,9 +2090,11 @@ class Invoice implements \JsonSerializable
         
         // Handling for field native_apm
         $body = $response->getBody();
-        $body = $body['native_apm'];
-        $nativeAPMTransactionDetails = new NativeAPMTransactionDetails($this->client);
-        $returnValues['nativeAPMTransactionDetails'] = $nativeAPMTransactionDetails->fillWithData($body);
+        if (isset($body['native_apm'])) {
+            $body = $body['native_apm'];
+            $nativeAPMTransactionDetails = new NativeAPMTransactionDetails($this->client);
+            $returnValues['nativeAPMTransactionDetails'] = $nativeAPMTransactionDetails->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -2074,15 +2124,19 @@ class Invoice implements \JsonSerializable
         
         // Handling for field transaction
         $body = $response->getBody();
-        $body = $body['transaction'];
-        $transaction = new Transaction($this->client);
-        $returnValues['transaction'] = $transaction->fillWithData($body);
+        if (isset($body['transaction'])) {
+            $body = $body['transaction'];
+            $transaction = new Transaction($this->client);
+            $returnValues['transaction'] = $transaction->fillWithData($body);
+        }
                 
         // Handling for field native_apm
         $body = $response->getBody();
-        $body = $body['native_apm'];
-        $nativeAPMResponse = new NativeAPMResponse($this->client);
-        $returnValues['nativeAPMResponse'] = $nativeAPMResponse->fillWithData($body);
+        if (isset($body['native_apm'])) {
+            $body = $body['native_apm'];
+            $nativeAPMResponse = new NativeAPMResponse($this->client);
+            $returnValues['nativeAPMResponse'] = $nativeAPMResponse->fillWithData($body);
+        }
                 
         
         return (object) $returnValues;
@@ -2112,9 +2166,11 @@ class Invoice implements \JsonSerializable
         
         // Handling for field customer_action
         $body = $response->getBody();
-        $body = $body['customer_action'];
-        $customerAction = new CustomerAction($this->client);
-        $returnValues['customerAction'] = $customerAction->fillWithData($body);
+        if (isset($body['customer_action'])) {
+            $body = $body['customer_action'];
+            $customerAction = new CustomerAction($this->client);
+            $returnValues['customerAction'] = $customerAction->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -2142,9 +2198,11 @@ class Invoice implements \JsonSerializable
         
         // Handling for field transaction
         $body = $response->getBody();
-        $body = $body['transaction'];
-        $transaction = new Transaction($this->client);
-        $returnValues['transaction'] = $transaction->fillWithData($body);
+        if (isset($body['transaction'])) {
+            $body = $body['transaction'];
+            $transaction = new Transaction($this->client);
+            $returnValues['transaction'] = $transaction->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -2173,9 +2231,11 @@ class Invoice implements \JsonSerializable
         
         // Handling for field transaction
         $body = $response->getBody();
-        $body = $body['transaction'];
-        $transaction = new Transaction($this->client);
-        $returnValues['transaction'] = $transaction->fillWithData($body);
+        if (isset($body['transaction'])) {
+            $body = $body['transaction'];
+            $transaction = new Transaction($this->client);
+            $returnValues['transaction'] = $transaction->fillWithData($body);
+        }
                 
         
         return array_values($returnValues)[0];
@@ -2236,6 +2296,7 @@ class Invoice implements \JsonSerializable
             "metadata" => $this->getMetadata(), 
             "details" => $this->getDetails(), 
             "submerchant" => $this->getSubmerchant(), 
+            "reference_id" => $this->getReferenceId(), 
             "exemption_reason_3ds2" => $this->getExemptionReason3ds2(), 
             "sca_exemption_reason" => $this->getScaExemptionReason(), 
             "challenge_indicator" => $this->getChallengeIndicator(), 
@@ -2271,8 +2332,10 @@ class Invoice implements \JsonSerializable
         
         // Handling for field invoice
         $body = $response->getBody();
-        $body = $body['invoice'];
-        $returnValues['create'] = $this->fillWithData($body);
+        if (isset($body['invoice'])) {
+            $body = $body['invoice'];
+            $returnValues['create'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -2300,8 +2363,10 @@ class Invoice implements \JsonSerializable
         
         // Handling for field invoice
         $body = $response->getBody();
-        $body = $body['invoice'];
-        $returnValues['find'] = $this->fillWithData($body);
+        if (isset($body['invoice'])) {
+            $body = $body['invoice'];
+            $returnValues['find'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -2354,8 +2419,10 @@ class Invoice implements \JsonSerializable
         
         // Handling for field invoice
         $body = $response->getBody();
-        $body = $body['invoice'];
-        $returnValues['syncWithPsp'] = $this->fillWithData($body);
+        if (isset($body['invoice'])) {
+            $body = $body['invoice'];
+            $returnValues['syncWithPsp'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
@@ -2386,8 +2453,10 @@ class Invoice implements \JsonSerializable
         
         // Handling for field invoice
         $body = $response->getBody();
-        $body = $body['invoice'];
-        $returnValues['update'] = $this->fillWithData($body);
+        if (isset($body['invoice'])) {
+            $body = $body['invoice'];
+            $returnValues['update'] = $this->fillWithData($body);
+        }
         
         return array_values($returnValues)[0];
     }
