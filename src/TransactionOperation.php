@@ -179,6 +179,12 @@ class TransactionOperation implements \JsonSerializable
     protected $paymentType;
 
     /**
+     * Capture type of the transaction
+     * @var string
+     */
+    protected $captureType;
+
+    /**
      * Metadata related to the operation, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -853,6 +859,28 @@ class TransactionOperation implements \JsonSerializable
     }
     
     /**
+     * Get CaptureType
+     * Capture type of the transaction
+     * @return string
+     */
+    public function getCaptureType()
+    {
+        return $this->captureType;
+    }
+
+    /**
+     * Set CaptureType
+     * Capture type of the transaction
+     * @param  string $value
+     * @return $this
+     */
+    public function setCaptureType($value)
+    {
+        $this->captureType = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the operation, in the form of a dictionary (key-value pair)
      * @return array
@@ -1007,6 +1035,9 @@ class TransactionOperation implements \JsonSerializable
         if(! empty($data['payment_type']))
             $this->setPaymentType($data['payment_type']);
 
+        if(! empty($data['capture_type']))
+            $this->setCaptureType($data['capture_type']);
+
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
 
@@ -1021,9 +1052,9 @@ class TransactionOperation implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "id" => $this->getId(),
             "transaction" => $this->getTransaction(),
@@ -1052,6 +1083,7 @@ class TransactionOperation implements \JsonSerializable
             "scheme_id" => $this->getSchemeId(),
             "processed_with_network_token" => $this->getProcessedWithNetworkToken(),
             "payment_type" => $this->getPaymentType(),
+            "capture_type" => $this->getCaptureType(),
             "metadata" => $this->getMetadata(),
             "gateway_fee" => $this->getGatewayFee(),
             "created_at" => $this->getCreatedAt(),

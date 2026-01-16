@@ -390,9 +390,9 @@ class Refund implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "id" => $this->getId(),
             "transaction" => $this->getTransaction(),
@@ -427,6 +427,7 @@ class Refund implements \JsonSerializable
             "reason" => $this->getReason(), 
             "information" => $this->getInformation(), 
             "invoice_detail_ids" => $this->getInvoiceDetailIds(), 
+            "split_allocations" => $this->getSplitAllocations(), 
             "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null
         );
 
@@ -522,6 +523,7 @@ class Refund implements \JsonSerializable
             "reason" => $this->getReason(), 
             "information" => $this->getInformation(), 
             "invoice_detail_ids" => $this->getInvoiceDetailIds(), 
+            "split_allocations" => $this->getSplitAllocations(), 
             "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null
         );
 

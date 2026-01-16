@@ -9,7 +9,7 @@ This package provides bindings to the ProcessOut API.
 Dependencies
 ------------
 
-* PHP 5.4 or above
+* PHP 8.0 or above
 * cURL PHP extension
 
 Installation
@@ -20,7 +20,7 @@ The package's installation is done using composer. Simply add these lines to you
 ```json
 {
     "require": {
-        "processout/processout-php": "^7.4.0"
+        "processout/processout-php": "^8.0.0"
     }
 }
 ```
@@ -41,7 +41,7 @@ cloning the directory into your project
 git clone https://github.com/processout/processout-php
 ```
 
-or downloading the latest release at 
+or downloading the latest release at
 [github.com/ProcessOut/processout-php/releases](https://github.com/ProcessOut/processout-php/releases)
 and including the ProcessOut init file
 

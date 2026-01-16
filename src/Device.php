@@ -35,6 +35,18 @@ class Device implements \JsonSerializable
     protected $channel;
 
     /**
+     * Preferred 3DS SDK type for authentication. Possible values: "web", "ios", "android", "other". This is the recommended field to use instead of channel for 3DS SDK selection
+     * @var string
+     */
+    protected $threedsSdk;
+
+    /**
+     * Platform of the device for analytics and metadata. Possible values: "web", "ios", "android", "other"
+     * @var string
+     */
+    protected $platform;
+
+    /**
      * Device IP address. Use if request origin is "backend"
      * @var string
      */
@@ -170,6 +182,50 @@ class Device implements \JsonSerializable
     public function setChannel($value)
     {
         $this->channel = $value;
+        return $this;
+    }
+    
+    /**
+     * Get ThreedsSdk
+     * Preferred 3DS SDK type for authentication. Possible values: "web", "ios", "android", "other". This is the recommended field to use instead of channel for 3DS SDK selection
+     * @return string
+     */
+    public function getThreedsSdk()
+    {
+        return $this->threedsSdk;
+    }
+
+    /**
+     * Set ThreedsSdk
+     * Preferred 3DS SDK type for authentication. Possible values: "web", "ios", "android", "other". This is the recommended field to use instead of channel for 3DS SDK selection
+     * @param  string $value
+     * @return $this
+     */
+    public function setThreedsSdk($value)
+    {
+        $this->threedsSdk = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Platform
+     * Platform of the device for analytics and metadata. Possible values: "web", "ios", "android", "other"
+     * @return string
+     */
+    public function getPlatform()
+    {
+        return $this->platform;
+    }
+
+    /**
+     * Set Platform
+     * Platform of the device for analytics and metadata. Possible values: "web", "ios", "android", "other"
+     * @param  string $value
+     * @return $this
+     */
+    public function setPlatform($value)
+    {
+        $this->platform = $value;
         return $this;
     }
     
@@ -410,6 +466,12 @@ class Device implements \JsonSerializable
         if(! empty($data['channel']))
             $this->setChannel($data['channel']);
 
+        if(! empty($data['threeds_sdk']))
+            $this->setThreedsSdk($data['threeds_sdk']);
+
+        if(! empty($data['platform']))
+            $this->setPlatform($data['platform']);
+
         if(! empty($data['ip_address']))
             $this->setIpAddress($data['ip_address']);
 
@@ -445,13 +507,15 @@ class Device implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "request_origin" => $this->getRequestOrigin(),
             "id" => $this->getId(),
             "channel" => $this->getChannel(),
+            "threeds_sdk" => $this->getThreedsSdk(),
+            "platform" => $this->getPlatform(),
             "ip_address" => $this->getIpAddress(),
             "user_agent" => $this->getUserAgent(),
             "header_accept" => $this->getHeaderAccept(),

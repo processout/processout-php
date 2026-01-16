@@ -116,9 +116,9 @@ class ApplePayAlternativeMerchantCertificates implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "count" => $this->getCount(),
             "alternative_merchant_certificates" => $this->getAlternativeMerchantCertificates(),

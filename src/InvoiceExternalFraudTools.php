@@ -35,6 +35,12 @@ class InvoiceExternalFraudTools implements \JsonSerializable
     protected $signifyd;
 
     /**
+     * Riskified
+     * @var object
+     */
+    protected $riskified;
+
+    /**
      * InvoiceExternalFraudTools constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -113,6 +119,28 @@ class InvoiceExternalFraudTools implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get Riskified
+     * Riskified
+     * @return object
+     */
+    public function getRiskified()
+    {
+        return $this->riskified;
+    }
+
+    /**
+     * Set Riskified
+     * Riskified
+     * @param  object $value
+     * @return $this
+     */
+    public function setRiskified($value)
+    {
+        $this->riskified = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -130,18 +158,22 @@ class InvoiceExternalFraudTools implements \JsonSerializable
         if(! empty($data['signifyd']))
             $this->setSignifyd($data['signifyd']);
 
+        if(! empty($data['riskified']))
+            $this->setRiskified($data['riskified']);
+
         return $this;
     }
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "forter" => $this->getForter(),
             "ravelin" => $this->getRavelin(),
             "signifyd" => $this->getSignifyd(),
+            "riskified" => $this->getRiskified(),
         );
     }
 

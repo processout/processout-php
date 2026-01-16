@@ -159,9 +159,9 @@ class NativeAPMResponse implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "state" => $this->getState(),
             "parameter_definitions" => $this->getParameterDefinitions(),

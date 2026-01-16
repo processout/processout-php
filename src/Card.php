@@ -215,6 +215,18 @@ class Card implements \JsonSerializable
     protected $createdAt;
 
     /**
+     * Preferred card type for combo cards, such as credit or debit
+     * @var string
+     */
+    protected $preferredCardType;
+
+    /**
+     * ID of the Vault that the card resides in
+     * @var string
+     */
+    protected $vaultId;
+
+    /**
      * Card constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -967,6 +979,50 @@ class Card implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get PreferredCardType
+     * Preferred card type for combo cards, such as credit or debit
+     * @return string
+     */
+    public function getPreferredCardType()
+    {
+        return $this->preferredCardType;
+    }
+
+    /**
+     * Set PreferredCardType
+     * Preferred card type for combo cards, such as credit or debit
+     * @param  string $value
+     * @return $this
+     */
+    public function setPreferredCardType($value)
+    {
+        $this->preferredCardType = $value;
+        return $this;
+    }
+    
+    /**
+     * Get VaultId
+     * ID of the Vault that the card resides in
+     * @return string
+     */
+    public function getVaultId()
+    {
+        return $this->vaultId;
+    }
+
+    /**
+     * Set VaultId
+     * ID of the Vault that the card resides in
+     * @param  string $value
+     * @return $this
+     */
+    public function setVaultId($value)
+    {
+        $this->vaultId = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1074,14 +1130,20 @@ class Card implements \JsonSerializable
         if(! empty($data['created_at']))
             $this->setCreatedAt($data['created_at']);
 
+        if(! empty($data['preferred_card_type']))
+            $this->setPreferredCardType($data['preferred_card_type']);
+
+        if(! empty($data['vault_id']))
+            $this->setVaultId($data['vault_id']);
+
         return $this;
     }
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "id" => $this->getId(),
             "project" => $this->getProject(),
@@ -1116,6 +1178,8 @@ class Card implements \JsonSerializable
             "expires_soon" => $this->getExpiresSoon(),
             "sandbox" => $this->getSandbox(),
             "created_at" => $this->getCreatedAt(),
+            "preferred_card_type" => $this->getPreferredCardType(),
+            "vault_id" => $this->getVaultId(),
         );
     }
 

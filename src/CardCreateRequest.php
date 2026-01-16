@@ -65,6 +65,12 @@ class CardCreateRequest implements \JsonSerializable
     protected $preferredScheme;
 
     /**
+     * Preferred card type for combo cards
+     * @var string
+     */
+    protected $preferredCardType;
+
+    /**
      * Metadata related to the card, in the form of a dictionary (key-value pair)
      * @var dictionary
      */
@@ -315,6 +321,28 @@ class CardCreateRequest implements \JsonSerializable
     }
     
     /**
+     * Get PreferredCardType
+     * Preferred card type for combo cards
+     * @return string
+     */
+    public function getPreferredCardType()
+    {
+        return $this->preferredCardType;
+    }
+
+    /**
+     * Set PreferredCardType
+     * Preferred card type for combo cards
+     * @param  string $value
+     * @return $this
+     */
+    public function setPreferredCardType($value)
+    {
+        $this->preferredCardType = $value;
+        return $this;
+    }
+    
+    /**
      * Get Metadata
      * Metadata related to the card, in the form of a dictionary (key-value pair)
      * @return array
@@ -558,6 +586,9 @@ class CardCreateRequest implements \JsonSerializable
         if(! empty($data['preferred_scheme']))
             $this->setPreferredScheme($data['preferred_scheme']);
 
+        if(! empty($data['preferred_card_type']))
+            $this->setPreferredCardType($data['preferred_card_type']);
+
         if(! empty($data['metadata']))
             $this->setMetadata($data['metadata']);
 
@@ -590,9 +621,9 @@ class CardCreateRequest implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "device" => $this->getDevice(),
             "name" => $this->getName(),
@@ -602,6 +633,7 @@ class CardCreateRequest implements \JsonSerializable
             "exp_year" => $this->getExpYear(),
             "cvc2" => $this->getCvc2(),
             "preferred_scheme" => $this->getPreferredScheme(),
+            "preferred_card_type" => $this->getPreferredCardType(),
             "metadata" => $this->getMetadata(),
             "token_type" => $this->getTokenType(),
             "eci" => $this->getEci(),
@@ -636,6 +668,7 @@ class CardCreateRequest implements \JsonSerializable
             "exp_year" => $this->getExpYear(), 
             "cvc2" => $this->getCvc2(), 
             "preferred_scheme" => $this->getPreferredScheme(), 
+            "preferred_card_type" => $this->getPreferredCardType(), 
             "metadata" => $this->getMetadata(), 
             "token_type" => $this->getTokenType(), 
             "eci" => $this->getEci(), 
@@ -644,7 +677,8 @@ class CardCreateRequest implements \JsonSerializable
             "applepay_mid" => $this->getApplepayMid(), 
             "payment_token" => $this->getPaymentToken(), 
             "contact" => $this->getContact(), 
-            "shipping" => $this->getShipping()
+            "shipping" => $this->getShipping(), 
+            "scheme_transaction" => $this->getSchemeTransaction()
         );
 
         $response = $request->post($path, $data, $options);

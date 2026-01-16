@@ -259,9 +259,9 @@ class SubmerchantAddress implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "line1" => $this->getLine1(),
             "line2" => $this->getLine2(),

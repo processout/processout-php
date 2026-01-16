@@ -192,9 +192,9 @@ class NativeAPMTransactionDetails implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "gateway" => $this->getGateway(),
             "invoice" => $this->getInvoice(),

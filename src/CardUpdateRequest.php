@@ -23,6 +23,12 @@ class CardUpdateRequest implements \JsonSerializable
     protected $preferredScheme;
 
     /**
+     * Preferred card type for combo cards, such as credit or debit.
+     * @var string
+     */
+    protected $preferredCardType;
+
+    /**
      * CardUpdateRequest constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -57,6 +63,28 @@ class CardUpdateRequest implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get PreferredCardType
+     * Preferred card type for combo cards, such as credit or debit.
+     * @return string
+     */
+    public function getPreferredCardType()
+    {
+        return $this->preferredCardType;
+    }
+
+    /**
+     * Set PreferredCardType
+     * Preferred card type for combo cards, such as credit or debit.
+     * @param  string $value
+     * @return $this
+     */
+    public function setPreferredCardType($value)
+    {
+        $this->preferredCardType = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -68,16 +96,20 @@ class CardUpdateRequest implements \JsonSerializable
         if(! empty($data['preferred_scheme']))
             $this->setPreferredScheme($data['preferred_scheme']);
 
+        if(! empty($data['preferred_card_type']))
+            $this->setPreferredCardType($data['preferred_card_type']);
+
         return $this;
     }
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "preferred_scheme" => $this->getPreferredScheme(),
+            "preferred_card_type" => $this->getPreferredCardType(),
         );
     }
 
@@ -96,7 +128,8 @@ class CardUpdateRequest implements \JsonSerializable
         $path    = "/cards/" . urlencode($cardId) . "";
 
         $data = array(
-            "preferred_scheme" => $this->getPreferredScheme()
+            "preferred_scheme" => $this->getPreferredScheme(), 
+            "scheme_transaction" => $this->getSchemeTransaction()
         );
 
         $response = $request->put($path, $data, $options);

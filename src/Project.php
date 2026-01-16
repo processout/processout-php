@@ -409,9 +409,9 @@ class Project implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "id" => $this->getId(),
             "supervisor_project" => $this->getSupervisorProject(),
@@ -508,75 +508,6 @@ class Project implements \JsonSerializable
         $returnValues = array();
 
         $returnValues['success'] = $response->isSuccess();
-        
-        return array_values($returnValues)[0];
-    }
-    
-    /**
-     * Get all the supervised projects.
-     * @param array $options
-     * @return array
-     */
-    public function fetchSupervised($options = array())
-    {
-        $this->fillWithData($options);
-
-        $request = new Request($this->client);
-        $path    = "/supervised-projects";
-
-        $data = array(
-
-        );
-
-        $response = $request->get($path, $data, $options);
-        $returnValues = array();
-
-        
-        // Handling for field projects
-        $a    = array();
-        $body = $response->getBody();
-        foreach($body['projects'] as $v)
-        {
-            $tmp = new Project($this->client);
-            $tmp->fillWithData($v);
-            $a[] = $tmp;
-        }
-        $returnValues['Projects'] = $a;
-        
-        return array_values($returnValues)[0];
-    }
-    
-    /**
-     * Create a new supervised project.
-     * @param array $options
-     * @return $this
-     */
-    public function createSupervised($options = array())
-    {
-        $this->fillWithData($options);
-
-        $request = new Request($this->client);
-        $path    = "/supervised-projects";
-
-        $data = array(
-            "id" => $this->getId(), 
-            "name" => $this->getName(), 
-            "default_currency" => $this->getDefaultCurrency(), 
-            "dunning_configuration" => $this->getDunningConfiguration(), 
-            "applepay_settings" => (!empty($options["applepay_settings"])) ? $options["applepay_settings"] : null, 
-            "public_metadata" => (!empty($options["public_metadata"])) ? $options["public_metadata"] : null
-        );
-
-        $response = $request->post($path, $data, $options);
-        $returnValues = array();
-
-        
-        // Handling for field project
-        $body = $response->getBody();
-        if (isset($body['project'])) {
-            $body = $body['project'];
-            $returnValues['createSupervised'] = $this->fillWithData($body);
-        }
         
         return array_values($returnValues)[0];
     }

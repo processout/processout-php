@@ -59,18 +59,6 @@ class Transaction implements \JsonSerializable
     protected $customerId;
 
     /**
-     * Subscription to which this transaction belongs
-     * @var object
-     */
-    protected $subscription;
-
-    /**
-     * ID of the subscription to which the transaction belongs, if any
-     * @var string
-     */
-    protected $subscriptionId;
-
-    /**
      * Token that was used to capture the payment of the transaction, if any
      * @var object
      */
@@ -419,6 +407,12 @@ class Transaction implements \JsonSerializable
     protected $externalDetails;
 
     /**
+     * The origin of the transaction, can be either 'api' - processed in the ProcessOut or 'pulling' - processed outside and pulled into the system.
+     * @var string
+     */
+    protected $origin;
+
+    /**
      * Transaction constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -603,57 +597,6 @@ class Transaction implements \JsonSerializable
     public function setCustomerId($value)
     {
         $this->customerId = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Subscription
-     * Subscription to which this transaction belongs
-     * @return object
-     */
-    public function getSubscription()
-    {
-        return $this->subscription;
-    }
-
-    /**
-     * Set Subscription
-     * Subscription to which this transaction belongs
-     * @param  object $value
-     * @return $this
-     */
-    public function setSubscription($value)
-    {
-        if (is_object($value))
-            $this->subscription = $value;
-        else
-        {
-            $obj = new Subscription($this->client);
-            $obj->fillWithData($value);
-            $this->subscription = $obj;
-        }
-        return $this;
-    }
-    
-    /**
-     * Get SubscriptionId
-     * ID of the subscription to which the transaction belongs, if any
-     * @return string
-     */
-    public function getSubscriptionId()
-    {
-        return $this->subscriptionId;
-    }
-
-    /**
-     * Set SubscriptionId
-     * ID of the subscription to which the transaction belongs, if any
-     * @param  string $value
-     * @return $this
-     */
-    public function setSubscriptionId($value)
-    {
-        $this->subscriptionId = $value;
         return $this;
     }
     
@@ -1999,6 +1942,28 @@ class Transaction implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get Origin
+     * The origin of the transaction, can be either 'api' - processed in the ProcessOut or 'pulling' - processed outside and pulled into the system.
+     * @return string
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
+
+    /**
+     * Set Origin
+     * The origin of the transaction, can be either 'api' - processed in the ProcessOut or 'pulling' - processed outside and pulled into the system.
+     * @param  string $value
+     * @return $this
+     */
+    public function setOrigin($value)
+    {
+        $this->origin = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -2027,12 +1992,6 @@ class Transaction implements \JsonSerializable
 
         if(! empty($data['customer_id']))
             $this->setCustomerId($data['customer_id']);
-
-        if(! empty($data['subscription']))
-            $this->setSubscription($data['subscription']);
-
-        if(! empty($data['subscription_id']))
-            $this->setSubscriptionId($data['subscription_id']);
 
         if(! empty($data['token']))
             $this->setToken($data['token']);
@@ -2208,14 +2167,17 @@ class Transaction implements \JsonSerializable
         if(! empty($data['external_details']))
             $this->setExternalDetails($data['external_details']);
 
+        if(! empty($data['origin']))
+            $this->setOrigin($data['origin']);
+
         return $this;
     }
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "id" => $this->getId(),
             "project" => $this->getProject(),
@@ -2224,8 +2186,6 @@ class Transaction implements \JsonSerializable
             "invoice_id" => $this->getInvoiceId(),
             "customer" => $this->getCustomer(),
             "customer_id" => $this->getCustomerId(),
-            "subscription" => $this->getSubscription(),
-            "subscription_id" => $this->getSubscriptionId(),
             "token" => $this->getToken(),
             "token_id" => $this->getTokenId(),
             "card" => $this->getCard(),
@@ -2284,6 +2244,7 @@ class Transaction implements \JsonSerializable
             "eci" => $this->getEci(),
             "native_apm" => $this->getNativeApm(),
             "external_details" => $this->getExternalDetails(),
+            "origin" => $this->getOrigin(),
         );
     }
 

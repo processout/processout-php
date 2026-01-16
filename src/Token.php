@@ -155,6 +155,12 @@ class Token implements \JsonSerializable
     protected $webhookUrl;
 
     /**
+     * ID of the Vault that customer token resides in
+     * @var string
+     */
+    protected $vaultId;
+
+    /**
      * Token constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -701,6 +707,28 @@ class Token implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get VaultId
+     * ID of the Vault that customer token resides in
+     * @return string
+     */
+    public function getVaultId()
+    {
+        return $this->vaultId;
+    }
+
+    /**
+     * Set VaultId
+     * ID of the Vault that customer token resides in
+     * @param  string $value
+     * @return $this
+     */
+    public function setVaultId($value)
+    {
+        $this->vaultId = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -778,14 +806,17 @@ class Token implements \JsonSerializable
         if(! empty($data['webhook_url']))
             $this->setWebhookUrl($data['webhook_url']);
 
+        if(! empty($data['vault_id']))
+            $this->setVaultId($data['vault_id']);
+
         return $this;
     }
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "id" => $this->getId(),
             "customer" => $this->getCustomer(),
@@ -810,6 +841,7 @@ class Token implements \JsonSerializable
             "verification_status" => $this->getVerificationStatus(),
             "can_get_balance" => $this->getCanGetBalance(),
             "webhook_url" => $this->getWebhookUrl(),
+            "vault_id" => $this->getVaultId(),
         );
     }
 

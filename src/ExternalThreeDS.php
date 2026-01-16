@@ -259,9 +259,9 @@ class ExternalThreeDS implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "xid" => $this->getXid(),
             "trans_status" => $this->getTransStatus(),

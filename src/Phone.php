@@ -104,9 +104,9 @@ class Phone implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "number" => $this->getNumber(),
             "dialing_code" => $this->getDialingCode(),

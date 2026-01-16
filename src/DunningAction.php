@@ -104,9 +104,9 @@ class DunningAction implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "action" => $this->getAction(),
             "delay_in_days" => $this->getDelayInDays(),
