@@ -135,9 +135,9 @@ class ProjectSFTPSettingsPublic implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "enabled" => $this->getEnabled(),
             "endpoint" => $this->getEndpoint(),

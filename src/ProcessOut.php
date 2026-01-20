@@ -74,24 +74,6 @@ class ProcessOut
 
     
     /**
-     * Create a new Activity instance
-     * @param array|null $prefill array used to prefill the object
-     * @return Activity
-     */
-	public function newActivity($prefill = array()) {
-        return new Activity($this, $prefill);
-    }
-	
-    /**
-     * Create a new Addon instance
-     * @param array|null $prefill array used to prefill the object
-     * @return Addon
-     */
-	public function newAddon($prefill = array()) {
-        return new Addon($this, $prefill);
-    }
-	
-    /**
      * Create a new APIVersion instance
      * @param array|null $prefill array used to prefill the object
      * @return APIVersion
@@ -173,15 +155,6 @@ class ProcessOut
     }
 	
     /**
-     * Create a new Coupon instance
-     * @param array|null $prefill array used to prefill the object
-     * @return Coupon
-     */
-	public function newCoupon($prefill = array()) {
-        return new Coupon($this, $prefill);
-    }
-	
-    /**
      * Create a new Customer instance
      * @param array|null $prefill array used to prefill the object
      * @return Customer
@@ -206,15 +179,6 @@ class ProcessOut
      */
 	public function newToken($prefill = array()) {
         return new Token($this, $prefill);
-    }
-	
-    /**
-     * Create a new Discount instance
-     * @param array|null $prefill array used to prefill the object
-     * @return Discount
-     */
-	public function newDiscount($prefill = array()) {
-        return new Discount($this, $prefill);
     }
 	
     /**
@@ -497,15 +461,6 @@ class ProcessOut
     }
 	
     /**
-     * Create a new Plan instance
-     * @param array|null $prefill array used to prefill the object
-     * @return Plan
-     */
-	public function newPlan($prefill = array()) {
-        return new Plan($this, $prefill);
-    }
-	
-    /**
      * Create a new Product instance
      * @param array|null $prefill array used to prefill the object
      * @return Product
@@ -548,15 +503,6 @@ class ProcessOut
      */
 	public function newRefund($prefill = array()) {
         return new Refund($this, $prefill);
-    }
-	
-    /**
-     * Create a new Subscription instance
-     * @param array|null $prefill array used to prefill the object
-     * @return Subscription
-     */
-	public function newSubscription($prefill = array()) {
-        return new Subscription($this, $prefill);
     }
 	
     /**
@@ -659,6 +605,24 @@ class ProcessOut
     }
 	
     /**
+     * Create a new CardUpdateRequest instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CardUpdateRequest
+     */
+	public function newCardUpdateRequest($prefill = array()) {
+        return new CardUpdateRequest($this, $prefill);
+    }
+	
+    /**
+     * Create a new CardCreateRequest instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CardCreateRequest
+     */
+	public function newCardCreateRequest($prefill = array()) {
+        return new CardCreateRequest($this, $prefill);
+    }
+	
+    /**
      * Create a new Device instance
      * @param array|null $prefill array used to prefill the object
      * @return Device
@@ -683,24 +647,6 @@ class ProcessOut
      */
 	public function newCardShipping($prefill = array()) {
         return new CardShipping($this, $prefill);
-    }
-	
-    /**
-     * Create a new CardUpdateRequest instance
-     * @param array|null $prefill array used to prefill the object
-     * @return CardUpdateRequest
-     */
-	public function newCardUpdateRequest($prefill = array()) {
-        return new CardUpdateRequest($this, $prefill);
-    }
-	
-    /**
-     * Create a new CardCreateRequest instance
-     * @param array|null $prefill array used to prefill the object
-     * @return CardCreateRequest
-     */
-	public function newCardCreateRequest($prefill = array()) {
-        return new CardCreateRequest($this, $prefill);
     }
 	
     /**

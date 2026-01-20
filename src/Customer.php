@@ -53,12 +53,6 @@ class Customer implements \JsonSerializable
     protected $tokens;
 
     /**
-     * List of the customer subscriptions
-     * @var list
-     */
-    protected $subscriptions;
-
-    /**
      * List of the customer transactions
      * @var list
      */
@@ -207,6 +201,12 @@ class Customer implements \JsonSerializable
      * @var string
      */
     protected $referenceId;
+
+    /**
+     * ID of the Vault that customer resides in
+     * @var string
+     */
+    protected $vaultId;
 
     /**
      * Customer constructor
@@ -375,40 +375,6 @@ class Customer implements \JsonSerializable
                 $a[] = $obj;
             }
             $this->tokens = $a;
-        }
-        return $this;
-    }
-    
-    /**
-     * Get Subscriptions
-     * List of the customer subscriptions
-     * @return array
-     */
-    public function getSubscriptions()
-    {
-        return $this->subscriptions;
-    }
-
-    /**
-     * Set Subscriptions
-     * List of the customer subscriptions
-     * @param  array $value
-     * @return $this
-     */
-    public function setSubscriptions($value)
-    {
-        if (count($value) > 0 && is_object($value[0]))
-            $this->subscriptions = $value;
-        else
-        {
-            $a = array();
-            foreach ($value as $v)
-            {
-                $obj = new Subscription($this->client);
-                $obj->fillWithData($v);
-                $a[] = $obj;
-            }
-            $this->subscriptions = $a;
         }
         return $this;
     }
@@ -982,6 +948,28 @@ class Customer implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get VaultId
+     * ID of the Vault that customer resides in
+     * @return string
+     */
+    public function getVaultId()
+    {
+        return $this->vaultId;
+    }
+
+    /**
+     * Set VaultId
+     * ID of the Vault that customer resides in
+     * @param  string $value
+     * @return $this
+     */
+    public function setVaultId($value)
+    {
+        $this->vaultId = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1007,9 +995,6 @@ class Customer implements \JsonSerializable
 
         if(! empty($data['tokens']))
             $this->setTokens($data['tokens']);
-
-        if(! empty($data['subscriptions']))
-            $this->setSubscriptions($data['subscriptions']);
 
         if(! empty($data['transactions']))
             $this->setTransactions($data['transactions']);
@@ -1086,14 +1071,17 @@ class Customer implements \JsonSerializable
         if(! empty($data['reference_id']))
             $this->setReferenceId($data['reference_id']);
 
+        if(! empty($data['vault_id']))
+            $this->setVaultId($data['vault_id']);
+
         return $this;
     }
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "id" => $this->getId(),
             "project" => $this->getProject(),
@@ -1101,7 +1089,6 @@ class Customer implements \JsonSerializable
             "default_token" => $this->getDefaultToken(),
             "default_token_id" => $this->getDefaultTokenId(),
             "tokens" => $this->getTokens(),
-            "subscriptions" => $this->getSubscriptions(),
             "transactions" => $this->getTransactions(),
             "balance" => $this->getBalance(),
             "currency" => $this->getCurrency(),
@@ -1127,43 +1114,10 @@ class Customer implements \JsonSerializable
             "registered_at" => $this->getRegisteredAt(),
             "date_of_birth" => $this->getDateOfBirth(),
             "reference_id" => $this->getReferenceId(),
+            "vault_id" => $this->getVaultId(),
         );
     }
 
-    
-    /**
-     * Get the subscriptions belonging to the customer.
-     * @param array $options
-     * @return array
-     */
-    public function fetchSubscriptions($options = array())
-    {
-        $this->fillWithData($options);
-
-        $request = new Request($this->client);
-        $path    = "/customers/" . urlencode($this->getId()) . "/subscriptions";
-
-        $data = array(
-
-        );
-
-        $response = $request->get($path, $data, $options);
-        $returnValues = array();
-
-        
-        // Handling for field subscriptions
-        $a    = array();
-        $body = $response->getBody();
-        foreach($body['subscriptions'] as $v)
-        {
-            $tmp = new Subscription($this->client);
-            $tmp->fillWithData($v);
-            $a[] = $tmp;
-        }
-        $returnValues['Subscriptions'] = $a;
-        
-        return array_values($returnValues)[0];
-    }
     
     /**
      * Get the customer's tokens.

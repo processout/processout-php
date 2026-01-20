@@ -240,9 +240,9 @@ class NativeAPMParameterDefinition implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "key" => $this->getKey(),
             "type" => $this->getType(),

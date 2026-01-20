@@ -104,9 +104,9 @@ class SubmerchantPhoneNumber implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "dialing_code" => $this->getDialingCode(),
             "number" => $this->getNumber(),

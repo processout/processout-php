@@ -359,9 +359,9 @@ class CardShipping implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "address1" => $this->getAddress1(),
             "address2" => $this->getAddress2(),

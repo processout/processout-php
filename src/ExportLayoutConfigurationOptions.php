@@ -149,9 +149,9 @@ class ExportLayoutConfigurationOptions implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "columns" => $this->getColumns(),
             "time" => $this->getTime(),

@@ -161,9 +161,9 @@ class Balances implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "vouchers" => $this->getVouchers(),
             "available_balance" => $this->getAvailableBalance(),

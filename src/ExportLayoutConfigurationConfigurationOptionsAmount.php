@@ -104,9 +104,9 @@ class ExportLayoutConfigurationConfigurationOptionsAmount implements \JsonSerial
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "precision" => $this->getPrecision(),
             "separator" => $this->getSeparator(),

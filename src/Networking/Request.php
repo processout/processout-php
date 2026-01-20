@@ -27,11 +27,11 @@ class Request
      */
     protected function prepare($options, $len = null)
     {
-        $request = curl_init(); 
+        $request = curl_init();
         $headers = array(
             'API-Version: 1.4.0.0',
             'Content-Type: application/json',
-            'User-Agent: ProcessOut PHP-Bindings/7.4.0'
+            'User-Agent: ProcessOut PHP-Bindings/8.0.0'
         );
         if (! empty($options['idempotencyKey']))
             $headers[] = 'Idempotency-Key: ' . $options['idempotencyKey'];
@@ -39,16 +39,16 @@ class Request
             $headers[] = 'Disable-Logging' . $options['disableLogging'] ? 'true' : '';
         if ($len != null)
             $headers[] = 'Content-Length' . ((string) $len);
-        
+
         curl_setopt($request, CURLOPT_USERPWD, $this->client->getProjectID().':'.
             $this->client->getProjectSecret());
-        curl_setopt($request, CURLOPT_HTTPHEADER, $headers); 
+        curl_setopt($request, CURLOPT_HTTPHEADER, $headers);
 
         curl_setopt($request, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         curl_setopt($request, CURLOPT_TIMEOUT, 65);
-        curl_setopt($request, CURLOPT_MAXREDIRS, 4); 
-        curl_setopt($request, CURLOPT_RETURNTRANSFER, true); 
-        curl_setopt($request, CURLOPT_FOLLOWLOCATION, true); 
+        curl_setopt($request, CURLOPT_MAXREDIRS, 4);
+        curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($request, CURLOPT_FOLLOWLOCATION, true);
 
         return $request;
     }
@@ -110,14 +110,13 @@ class Request
     {
         $req = $this->prepare($options);
         curl_setopt($req, CURLOPT_URL, $this->client->getHost() . $path . '?' .
-            $this->httpBuildQuery($this->getData($data, $options))); 
-        $r = curl_exec($req); 
+            $this->httpBuildQuery($this->getData($data, $options)));
+        $r = curl_exec($req);
         if (!$r)
             throw new \Exception('curl exception: '.curl_error($req).
                 ', code: '.curl_errno($req));
 
-        $status = curl_getinfo($req, CURLINFO_HTTP_CODE); 
-        curl_close($req);
+        $status = curl_getinfo($req, CURLINFO_HTTP_CODE);
 
         return new Response($r, $status);
     }
@@ -137,14 +136,13 @@ class Request
         curl_setopt($req, CURLOPT_POST, true);
         curl_setopt($req, CURLOPT_POSTFIELDS, $body);
 
-        curl_setopt($req, CURLOPT_URL, $this->client->getHost() . $path); 
-        $r = curl_exec($req); 
+        curl_setopt($req, CURLOPT_URL, $this->client->getHost() . $path);
+        $r = curl_exec($req);
         if (!$r)
             throw new \Exception('curl exception: '.curl_error($req).
                 ', code: '.curl_errno($req));
 
-        $status = curl_getinfo($req, CURLINFO_HTTP_CODE); 
-        curl_close($req);
+        $status = curl_getinfo($req, CURLINFO_HTTP_CODE);
 
         return new Response($r, $status);
     }
@@ -164,14 +162,13 @@ class Request
         curl_setopt($req, CURLOPT_CUSTOMREQUEST, 'PUT');
         curl_setopt($req, CURLOPT_POSTFIELDS, $body);
 
-        curl_setopt($req, CURLOPT_URL, $this->client->getHost() . $path); 
-        $r = curl_exec($req); 
+        curl_setopt($req, CURLOPT_URL, $this->client->getHost() . $path);
+        $r = curl_exec($req);
         if (!$r)
             throw new \Exception('curl exception: '.curl_error($req).
                 ', code: '.curl_errno($req));
 
-        $status = curl_getinfo($req, CURLINFO_HTTP_CODE); 
-        curl_close($req);
+        $status = curl_getinfo($req, CURLINFO_HTTP_CODE);
 
         return new Response($r, $status);
     }
@@ -188,14 +185,13 @@ class Request
         $req = $this->prepare($options);
         curl_setopt($req, CURLOPT_CUSTOMREQUEST, 'DELETE');
         curl_setopt($req, CURLOPT_URL, $this->client->getHost() . $path . '?' .
-            http_build_query($this->getData($data, $options))); 
-        $r = curl_exec($req); 
+            http_build_query($this->getData($data, $options)));
+        $r = curl_exec($req);
         if (!$r)
             throw new \Exception('curl exception: '.curl_error($req).
                 ', code: '.curl_errno($req));
 
-        $status = curl_getinfo($req, CURLINFO_HTTP_CODE); 
-        curl_close($req);
+        $status = curl_getinfo($req, CURLINFO_HTTP_CODE);
 
         return new Response($r, $status);
     }

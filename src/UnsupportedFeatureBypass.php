@@ -23,6 +23,12 @@ class UnsupportedFeatureBypass implements \JsonSerializable
     protected $incrementalAuthorization;
 
     /**
+     * Indicates whether to fallback to normal payment if split payments are not supported
+     * @var boolean
+     */
+    protected $splitPayments;
+
+    /**
      * UnsupportedFeatureBypass constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -57,6 +63,28 @@ class UnsupportedFeatureBypass implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get SplitPayments
+     * Indicates whether to fallback to normal payment if split payments are not supported
+     * @return bool
+     */
+    public function getSplitPayments()
+    {
+        return $this->splitPayments;
+    }
+
+    /**
+     * Set SplitPayments
+     * Indicates whether to fallback to normal payment if split payments are not supported
+     * @param  bool $value
+     * @return $this
+     */
+    public function setSplitPayments($value)
+    {
+        $this->splitPayments = $value;
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -68,16 +96,20 @@ class UnsupportedFeatureBypass implements \JsonSerializable
         if(! empty($data['incremental_authorization']))
             $this->setIncrementalAuthorization($data['incremental_authorization']);
 
+        if(! empty($data['split_payments']))
+            $this->setSplitPayments($data['split_payments']);
+
         return $this;
     }
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "incremental_authorization" => $this->getIncrementalAuthorization(),
+            "split_payments" => $this->getSplitPayments(),
         );
     }
 

@@ -59,18 +59,6 @@ class Invoice implements \JsonSerializable
     protected $customerId;
 
     /**
-     * Subscription to which the invoice is linked to, if any
-     * @var object
-     */
-    protected $subscription;
-
-    /**
-     * ID of the subscription to which the invoice is linked to, if any
-     * @var string
-     */
-    protected $subscriptionId;
-
-    /**
      * Token used to pay the invoice, if any
      * @var object
      */
@@ -513,57 +501,6 @@ class Invoice implements \JsonSerializable
     public function setCustomerId($value)
     {
         $this->customerId = $value;
-        return $this;
-    }
-    
-    /**
-     * Get Subscription
-     * Subscription to which the invoice is linked to, if any
-     * @return object
-     */
-    public function getSubscription()
-    {
-        return $this->subscription;
-    }
-
-    /**
-     * Set Subscription
-     * Subscription to which the invoice is linked to, if any
-     * @param  object $value
-     * @return $this
-     */
-    public function setSubscription($value)
-    {
-        if (is_object($value))
-            $this->subscription = $value;
-        else
-        {
-            $obj = new Subscription($this->client);
-            $obj->fillWithData($value);
-            $this->subscription = $obj;
-        }
-        return $this;
-    }
-    
-    /**
-     * Get SubscriptionId
-     * ID of the subscription to which the invoice is linked to, if any
-     * @return string
-     */
-    public function getSubscriptionId()
-    {
-        return $this->subscriptionId;
-    }
-
-    /**
-     * Set SubscriptionId
-     * ID of the subscription to which the invoice is linked to, if any
-     * @param  string $value
-     * @return $this
-     */
-    public function setSubscriptionId($value)
-    {
-        $this->subscriptionId = $value;
         return $this;
     }
     
@@ -1624,12 +1561,6 @@ class Invoice implements \JsonSerializable
         if(! empty($data['customer_id']))
             $this->setCustomerId($data['customer_id']);
 
-        if(! empty($data['subscription']))
-            $this->setSubscription($data['subscription']);
-
-        if(! empty($data['subscription_id']))
-            $this->setSubscriptionId($data['subscription_id']);
-
         if(! empty($data['token']))
             $this->setToken($data['token']);
 
@@ -1764,9 +1695,9 @@ class Invoice implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "id" => $this->getId(),
             "project" => $this->getProject(),
@@ -1775,8 +1706,6 @@ class Invoice implements \JsonSerializable
             "transaction_id" => $this->getTransactionId(),
             "customer" => $this->getCustomer(),
             "customer_id" => $this->getCustomerId(),
-            "subscription" => $this->getSubscription(),
-            "subscription_id" => $this->getSubscriptionId(),
             "token" => $this->getToken(),
             "token_id" => $this->getTokenId(),
             "details" => $this->getDetails(),
@@ -1823,6 +1752,62 @@ class Invoice implements \JsonSerializable
         );
     }
 
+    
+    /**
+     * Autheticate the invoice using the given source (customer or token)
+     * @param string $source
+     * @param array $options
+     * @return array
+     */
+    public function authenticate($source, $options = array())
+    {
+        $this->fillWithData($options);
+
+        $request = new Request($this->client);
+        $path    = "/invoices/:invoice_id/authenticate";
+
+        $data = array(
+            "device" => $this->getDevice(), 
+            "incremental" => $this->getIncremental(), 
+            "capture_type" => $this->getCaptureType(), 
+            "split_allocations" => $this->getSplitAllocations(), 
+            "installment_plan_id" => $this->getInstallmentPlanId(), 
+            "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
+            "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
+            "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
+            "enable_three_d_s_2" => (!empty($options["enable_three_d_s_2"])) ? $options["enable_three_d_s_2"] : null, 
+            "allow_fallback_to_sale" => (!empty($options["allow_fallback_to_sale"])) ? $options["allow_fallback_to_sale"] : null, 
+            "auto_capture_at" => (!empty($options["auto_capture_at"])) ? $options["auto_capture_at"] : null, 
+            "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null, 
+            "override_mac_blocking" => (!empty($options["override_mac_blocking"])) ? $options["override_mac_blocking"] : null, 
+            "external_three_d_s" => (!empty($options["external_three_d_s"])) ? $options["external_three_d_s"] : null, 
+            "save_source" => (!empty($options["save_source"])) ? $options["save_source"] : null, 
+            "source" => $source
+        );
+
+        $response = $request->post($path, $data, $options);
+        $returnValues = array();
+
+        
+        // Handling for field transaction
+        $body = $response->getBody();
+        if (isset($body['transaction'])) {
+            $body = $body['transaction'];
+            $transaction = new Transaction($this->client);
+            $returnValues['transaction'] = $transaction->fillWithData($body);
+        }
+                
+        // Handling for field customer_action
+        $body = $response->getBody();
+        if (isset($body['customer_action'])) {
+            $body = $body['customer_action'];
+            $customerAction = new CustomerAction($this->client);
+            $returnValues['customerAction'] = $customerAction->fillWithData($body);
+        }
+                
+        
+        return (object) $returnValues;
+    }
     
     /**
      * Create an incremental authorization
@@ -1874,6 +1859,9 @@ class Invoice implements \JsonSerializable
         $data = array(
             "device" => $this->getDevice(), 
             "incremental" => $this->getIncremental(), 
+            "capture_type" => $this->getCaptureType(), 
+            "split_allocations" => $this->getSplitAllocations(), 
+            "installment_plan_id" => $this->getInstallmentPlanId(), 
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
             "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
@@ -1926,7 +1914,9 @@ class Invoice implements \JsonSerializable
 
         $data = array(
             "device" => $this->getDevice(), 
+            "authenticate_only" => $this->getAuthenticateOnly(), 
             "incremental" => $this->getIncremental(), 
+            "installment_plan_id" => $this->getInstallmentPlanId(), 
             "authorize_only" => (!empty($options["authorize_only"])) ? $options["authorize_only"] : null, 
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
@@ -2046,6 +2036,7 @@ class Invoice implements \JsonSerializable
 
         $data = array(
             "force_gateway_configuration_id" => (!empty($options["force_gateway_configuration_id"])) ? $options["force_gateway_configuration_id"] : null, 
+            "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null, 
             "gateway_configuration_id" => $gatewayConfigurationId, 
             "source" => $source
         );
@@ -2323,7 +2314,8 @@ class Invoice implements \JsonSerializable
             "unsupported_feature_bypass" => $this->getUnsupportedFeatureBypass(), 
             "verification" => $this->getVerification(), 
             "auto_capture_at" => $this->getAutoCaptureAt(), 
-            "expires_at" => $this->getExpiresAt()
+            "expires_at" => $this->getExpiresAt(), 
+            "split_allocations" => $this->getSplitAllocations()
         );
 
         $response = $request->post($path, $data, $options);

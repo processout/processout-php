@@ -23,6 +23,12 @@ class InvoiceDevice implements \JsonSerializable
     protected $channel;
 
     /**
+     * Platform of the device for analytics and metadata. Possible values: "web", "ios", "android", "other"
+     * @var string
+     */
+    protected $platform;
+
+    /**
      * IP address of the device
      * @var string
      */
@@ -66,6 +72,28 @@ class InvoiceDevice implements \JsonSerializable
     public function setChannel($value)
     {
         $this->channel = $value;
+        return $this;
+    }
+    
+    /**
+     * Get Platform
+     * Platform of the device for analytics and metadata. Possible values: "web", "ios", "android", "other"
+     * @return string
+     */
+    public function getPlatform()
+    {
+        return $this->platform;
+    }
+
+    /**
+     * Set Platform
+     * Platform of the device for analytics and metadata. Possible values: "web", "ios", "android", "other"
+     * @param  string $value
+     * @return $this
+     */
+    public function setPlatform($value)
+    {
+        $this->platform = $value;
         return $this;
     }
     
@@ -124,6 +152,9 @@ class InvoiceDevice implements \JsonSerializable
         if(! empty($data['channel']))
             $this->setChannel($data['channel']);
 
+        if(! empty($data['platform']))
+            $this->setPlatform($data['platform']);
+
         if(! empty($data['ip_address']))
             $this->setIpAddress($data['ip_address']);
 
@@ -135,11 +166,12 @@ class InvoiceDevice implements \JsonSerializable
 
     /**
      * Implements the JsonSerializable interface
-     * @return object
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return array(
             "channel" => $this->getChannel(),
+            "platform" => $this->getPlatform(),
             "ip_address" => $this->getIpAddress(),
             "id" => $this->getId(),
         );
