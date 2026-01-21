@@ -1769,9 +1769,6 @@ class Invoice implements \JsonSerializable
         $data = array(
             "device" => $this->getDevice(), 
             "incremental" => $this->getIncremental(), 
-            "capture_type" => $this->getCaptureType(), 
-            "split_allocations" => $this->getSplitAllocations(), 
-            "installment_plan_id" => $this->getInstallmentPlanId(), 
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
             "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
@@ -1859,9 +1856,6 @@ class Invoice implements \JsonSerializable
         $data = array(
             "device" => $this->getDevice(), 
             "incremental" => $this->getIncremental(), 
-            "capture_type" => $this->getCaptureType(), 
-            "split_allocations" => $this->getSplitAllocations(), 
-            "installment_plan_id" => $this->getInstallmentPlanId(), 
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
             "capture_amount" => (!empty($options["capture_amount"])) ? $options["capture_amount"] : null, 
@@ -1914,9 +1908,7 @@ class Invoice implements \JsonSerializable
 
         $data = array(
             "device" => $this->getDevice(), 
-            "authenticate_only" => $this->getAuthenticateOnly(), 
             "incremental" => $this->getIncremental(), 
-            "installment_plan_id" => $this->getInstallmentPlanId(), 
             "authorize_only" => (!empty($options["authorize_only"])) ? $options["authorize_only"] : null, 
             "synchronous" => (!empty($options["synchronous"])) ? $options["synchronous"] : null, 
             "retry_drop_liability_shift" => (!empty($options["retry_drop_liability_shift"])) ? $options["retry_drop_liability_shift"] : null, 
@@ -2314,8 +2306,7 @@ class Invoice implements \JsonSerializable
             "unsupported_feature_bypass" => $this->getUnsupportedFeatureBypass(), 
             "verification" => $this->getVerification(), 
             "auto_capture_at" => $this->getAutoCaptureAt(), 
-            "expires_at" => $this->getExpiresAt(), 
-            "split_allocations" => $this->getSplitAllocations()
+            "expires_at" => $this->getExpiresAt()
         );
 
         $response = $request->post($path, $data, $options);
