@@ -427,7 +427,6 @@ class Refund implements \JsonSerializable
             "reason" => $this->getReason(), 
             "information" => $this->getInformation(), 
             "invoice_detail_ids" => $this->getInvoiceDetailIds(), 
-            "split_allocations" => $this->getSplitAllocations(), 
             "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null
         );
 
@@ -523,7 +522,6 @@ class Refund implements \JsonSerializable
             "reason" => $this->getReason(), 
             "information" => $this->getInformation(), 
             "invoice_detail_ids" => $this->getInvoiceDetailIds(), 
-            "split_allocations" => $this->getSplitAllocations(), 
             "metadata" => (!empty($options["metadata"])) ? $options["metadata"] : null
         );
 
