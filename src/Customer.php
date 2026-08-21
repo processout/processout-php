@@ -203,12 +203,6 @@ class Customer implements \JsonSerializable
     protected $referenceId;
 
     /**
-     * ID of the Vault that customer resides in
-     * @var string
-     */
-    protected $vaultId;
-
-    /**
      * Customer constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -948,28 +942,6 @@ class Customer implements \JsonSerializable
         return $this;
     }
     
-    /**
-     * Get VaultId
-     * ID of the Vault that customer resides in
-     * @return string
-     */
-    public function getVaultId()
-    {
-        return $this->vaultId;
-    }
-
-    /**
-     * Set VaultId
-     * ID of the Vault that customer resides in
-     * @param  string $value
-     * @return $this
-     */
-    public function setVaultId($value)
-    {
-        $this->vaultId = $value;
-        return $this;
-    }
-    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1071,9 +1043,6 @@ class Customer implements \JsonSerializable
         if(! empty($data['reference_id']))
             $this->setReferenceId($data['reference_id']);
 
-        if(! empty($data['vault_id']))
-            $this->setVaultId($data['vault_id']);
-
         return $this;
     }
 
@@ -1114,7 +1083,6 @@ class Customer implements \JsonSerializable
             "registered_at" => $this->getRegisteredAt(),
             "date_of_birth" => $this->getDateOfBirth(),
             "reference_id" => $this->getReferenceId(),
-            "vault_id" => $this->getVaultId(),
         );
     }
 

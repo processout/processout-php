@@ -380,6 +380,24 @@ class ProcessOut
     }
 	
     /**
+     * Create a new PaymentProcessingConfiguration instance
+     * @param array|null $prefill array used to prefill the object
+     * @return PaymentProcessingConfiguration
+     */
+	public function newPaymentProcessingConfiguration($prefill = array()) {
+        return new PaymentProcessingConfiguration($this, $prefill);
+    }
+	
+    /**
+     * Create a new APMPaymentProcessingConfiguration instance
+     * @param array|null $prefill array used to prefill the object
+     * @return APMPaymentProcessingConfiguration
+     */
+	public function newAPMPaymentProcessingConfiguration($prefill = array()) {
+        return new APMPaymentProcessingConfiguration($this, $prefill);
+    }
+	
+    /**
      * Create a new InvoiceDetail instance
      * @param array|null $prefill array used to prefill the object
      * @return InvoiceDetail
@@ -506,6 +524,24 @@ class ProcessOut
     }
 	
     /**
+     * Create a new Submerchant instance
+     * @param array|null $prefill array used to prefill the object
+     * @return Submerchant
+     */
+	public function newSubmerchant($prefill = array()) {
+        return new Submerchant($this, $prefill);
+    }
+	
+    /**
+     * Create a new SubmerchantMapping instance
+     * @param array|null $prefill array used to prefill the object
+     * @return SubmerchantMapping
+     */
+	public function newSubmerchantMapping($prefill = array()) {
+        return new SubmerchantMapping($this, $prefill);
+    }
+	
+    /**
      * Create a new Transaction instance
      * @param array|null $prefill array used to prefill the object
      * @return Transaction
@@ -620,6 +656,15 @@ class ProcessOut
      */
 	public function newCardCreateRequest($prefill = array()) {
         return new CardCreateRequest($this, $prefill);
+    }
+	
+    /**
+     * Create a new CardSchemeDetails instance
+     * @param array|null $prefill array used to prefill the object
+     * @return CardSchemeDetails
+     */
+	public function newCardSchemeDetails($prefill = array()) {
+        return new CardSchemeDetails($this, $prefill);
     }
 	
     /**

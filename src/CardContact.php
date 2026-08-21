@@ -41,10 +41,16 @@ class CardContact implements \JsonSerializable
     protected $state;
 
     /**
-     * Country code of the card holder (ISO-3166, 2 characters format)
+     * Deprecated alias for billing_country_code. Billing country of the card holder (ISO-3166, 2 characters format). Kept for backward compatibility; prefer billing_country_code.
      * @var string
      */
     protected $countryCode;
+
+    /**
+     * Billing country of the card holder (ISO-3166, 2 characters format). Takes precedence over country_code when both are supplied.
+     * @var string
+     */
+    protected $billingCountryCode;
 
     /**
      * ZIP code of the card holder
@@ -155,7 +161,7 @@ class CardContact implements \JsonSerializable
     
     /**
      * Get CountryCode
-     * Country code of the card holder (ISO-3166, 2 characters format)
+     * Deprecated alias for billing_country_code. Billing country of the card holder (ISO-3166, 2 characters format). Kept for backward compatibility; prefer billing_country_code.
      * @return string
      */
     public function getCountryCode()
@@ -165,13 +171,35 @@ class CardContact implements \JsonSerializable
 
     /**
      * Set CountryCode
-     * Country code of the card holder (ISO-3166, 2 characters format)
+     * Deprecated alias for billing_country_code. Billing country of the card holder (ISO-3166, 2 characters format). Kept for backward compatibility; prefer billing_country_code.
      * @param  string $value
      * @return $this
      */
     public function setCountryCode($value)
     {
         $this->countryCode = $value;
+        return $this;
+    }
+    
+    /**
+     * Get BillingCountryCode
+     * Billing country of the card holder (ISO-3166, 2 characters format). Takes precedence over country_code when both are supplied.
+     * @return string
+     */
+    public function getBillingCountryCode()
+    {
+        return $this->billingCountryCode;
+    }
+
+    /**
+     * Set BillingCountryCode
+     * Billing country of the card holder (ISO-3166, 2 characters format). Takes precedence over country_code when both are supplied.
+     * @param  string $value
+     * @return $this
+     */
+    public function setBillingCountryCode($value)
+    {
+        $this->billingCountryCode = $value;
         return $this;
     }
     
@@ -220,6 +248,9 @@ class CardContact implements \JsonSerializable
         if(! empty($data['country_code']))
             $this->setCountryCode($data['country_code']);
 
+        if(! empty($data['billing_country_code']))
+            $this->setBillingCountryCode($data['billing_country_code']);
+
         if(! empty($data['zip']))
             $this->setZip($data['zip']);
 
@@ -237,6 +268,7 @@ class CardContact implements \JsonSerializable
             "city" => $this->getCity(),
             "state" => $this->getState(),
             "country_code" => $this->getCountryCode(),
+            "billing_country_code" => $this->getBillingCountryCode(),
             "zip" => $this->getZip(),
         );
     }

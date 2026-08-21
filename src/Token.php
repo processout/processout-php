@@ -155,10 +155,10 @@ class Token implements \JsonSerializable
     protected $webhookUrl;
 
     /**
-     * ID of the Vault that customer token resides in
-     * @var string
+     * Sticky preference controlling network token provisioning for this token. Null when unset (default behaviour applies), false to opt out, true to opt in
+     * @var boolean
      */
-    protected $vaultId;
+    protected $provisionNetworkToken;
 
     /**
      * Token constructor
@@ -708,24 +708,24 @@ class Token implements \JsonSerializable
     }
     
     /**
-     * Get VaultId
-     * ID of the Vault that customer token resides in
-     * @return string
+     * Get ProvisionNetworkToken
+     * Sticky preference controlling network token provisioning for this token. Null when unset (default behaviour applies), false to opt out, true to opt in
+     * @return bool
      */
-    public function getVaultId()
+    public function getProvisionNetworkToken()
     {
-        return $this->vaultId;
+        return $this->provisionNetworkToken;
     }
 
     /**
-     * Set VaultId
-     * ID of the Vault that customer token resides in
-     * @param  string $value
+     * Set ProvisionNetworkToken
+     * Sticky preference controlling network token provisioning for this token. Null when unset (default behaviour applies), false to opt out, true to opt in
+     * @param  bool $value
      * @return $this
      */
-    public function setVaultId($value)
+    public function setProvisionNetworkToken($value)
     {
-        $this->vaultId = $value;
+        $this->provisionNetworkToken = $value;
         return $this;
     }
     
@@ -806,8 +806,8 @@ class Token implements \JsonSerializable
         if(! empty($data['webhook_url']))
             $this->setWebhookUrl($data['webhook_url']);
 
-        if(! empty($data['vault_id']))
-            $this->setVaultId($data['vault_id']);
+        if(! empty($data['provision_network_token']))
+            $this->setProvisionNetworkToken($data['provision_network_token']);
 
         return $this;
     }
@@ -841,7 +841,7 @@ class Token implements \JsonSerializable
             "verification_status" => $this->getVerificationStatus(),
             "can_get_balance" => $this->getCanGetBalance(),
             "webhook_url" => $this->getWebhookUrl(),
-            "vault_id" => $this->getVaultId(),
+            "provision_network_token" => $this->getProvisionNetworkToken(),
         );
     }
 
@@ -942,7 +942,8 @@ class Token implements \JsonSerializable
             "set_default" => (!empty($options["set_default"])) ? $options["set_default"] : null, 
             "verify_statement_descriptor" => (!empty($options["verify_statement_descriptor"])) ? $options["verify_statement_descriptor"] : null, 
             "invoice_return_url" => (!empty($options["invoice_return_url"])) ? $options["invoice_return_url"] : null, 
-            "summary" => (!empty($options["summary"])) ? $options["summary"] : null
+            "summary" => (!empty($options["summary"])) ? $options["summary"] : null, 
+            "provision_network_token" => (!empty($options["provision_network_token"])) ? $options["provision_network_token"] : null
         );
 
         $response = $request->post($path, $data, $options);
@@ -988,7 +989,8 @@ class Token implements \JsonSerializable
             "set_default" => (!empty($options["set_default"])) ? $options["set_default"] : null, 
             "verify_statement_descriptor" => (!empty($options["verify_statement_descriptor"])) ? $options["verify_statement_descriptor"] : null, 
             "invoice_return_url" => (!empty($options["invoice_return_url"])) ? $options["invoice_return_url"] : null, 
-            "gateway_configuration_id" => (!empty($options["gateway_configuration_id"])) ? $options["gateway_configuration_id"] : null
+            "gateway_configuration_id" => (!empty($options["gateway_configuration_id"])) ? $options["gateway_configuration_id"] : null, 
+            "provision_network_token" => (!empty($options["provision_network_token"])) ? $options["provision_network_token"] : null
         );
 
         $response = $request->put($path, $data, $options);

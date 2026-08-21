@@ -125,6 +125,12 @@ class CardCreateRequest implements \JsonSerializable
     protected $shipping;
 
     /**
+     * Scheme details for transaction chaining (e.g. scheme transaction ID)
+     * @var object
+     */
+    protected $schemeDetails;
+
+    /**
      * CardCreateRequest constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -554,6 +560,35 @@ class CardCreateRequest implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get SchemeDetails
+     * Scheme details for transaction chaining (e.g. scheme transaction ID)
+     * @return object
+     */
+    public function getSchemeDetails()
+    {
+        return $this->schemeDetails;
+    }
+
+    /**
+     * Set SchemeDetails
+     * Scheme details for transaction chaining (e.g. scheme transaction ID)
+     * @param  object $value
+     * @return $this
+     */
+    public function setSchemeDetails($value)
+    {
+        if (is_object($value))
+            $this->schemeDetails = $value;
+        else
+        {
+            $obj = new CardSchemeDetails($this->client);
+            $obj->fillWithData($value);
+            $this->schemeDetails = $obj;
+        }
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -616,6 +651,9 @@ class CardCreateRequest implements \JsonSerializable
         if(! empty($data['shipping']))
             $this->setShipping($data['shipping']);
 
+        if(! empty($data['scheme_details']))
+            $this->setSchemeDetails($data['scheme_details']);
+
         return $this;
     }
 
@@ -643,6 +681,7 @@ class CardCreateRequest implements \JsonSerializable
             "payment_token" => $this->getPaymentToken(),
             "contact" => $this->getContact(),
             "shipping" => $this->getShipping(),
+            "scheme_details" => $this->getSchemeDetails(),
         );
     }
 
@@ -678,7 +717,7 @@ class CardCreateRequest implements \JsonSerializable
             "payment_token" => $this->getPaymentToken(), 
             "contact" => $this->getContact(), 
             "shipping" => $this->getShipping(), 
-            "scheme_transaction" => $this->getSchemeTransaction()
+            "scheme_details" => $this->getSchemeDetails()
         );
 
         $response = $request->post($path, $data, $options);

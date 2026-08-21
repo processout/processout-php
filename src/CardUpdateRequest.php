@@ -29,6 +29,12 @@ class CardUpdateRequest implements \JsonSerializable
     protected $preferredCardType;
 
     /**
+     * Scheme details for transaction chaining (e.g. scheme transaction ID)
+     * @var object
+     */
+    protected $schemeDetails;
+
+    /**
      * CardUpdateRequest constructor
      * @param ProcessOut\ProcessOut $client
      * @param array|null $prefill
@@ -85,6 +91,35 @@ class CardUpdateRequest implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get SchemeDetails
+     * Scheme details for transaction chaining (e.g. scheme transaction ID)
+     * @return object
+     */
+    public function getSchemeDetails()
+    {
+        return $this->schemeDetails;
+    }
+
+    /**
+     * Set SchemeDetails
+     * Scheme details for transaction chaining (e.g. scheme transaction ID)
+     * @param  object $value
+     * @return $this
+     */
+    public function setSchemeDetails($value)
+    {
+        if (is_object($value))
+            $this->schemeDetails = $value;
+        else
+        {
+            $obj = new CardSchemeDetails($this->client);
+            $obj->fillWithData($value);
+            $this->schemeDetails = $obj;
+        }
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -99,6 +134,9 @@ class CardUpdateRequest implements \JsonSerializable
         if(! empty($data['preferred_card_type']))
             $this->setPreferredCardType($data['preferred_card_type']);
 
+        if(! empty($data['scheme_details']))
+            $this->setSchemeDetails($data['scheme_details']);
+
         return $this;
     }
 
@@ -110,6 +148,7 @@ class CardUpdateRequest implements \JsonSerializable
         return array(
             "preferred_scheme" => $this->getPreferredScheme(),
             "preferred_card_type" => $this->getPreferredCardType(),
+            "scheme_details" => $this->getSchemeDetails(),
         );
     }
 
@@ -129,7 +168,7 @@ class CardUpdateRequest implements \JsonSerializable
 
         $data = array(
             "preferred_scheme" => $this->getPreferredScheme(), 
-            "scheme_transaction" => $this->getSchemeTransaction()
+            "scheme_details" => $this->getSchemeDetails()
         );
 
         $response = $request->put($path, $data, $options);
