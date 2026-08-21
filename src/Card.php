@@ -155,10 +155,16 @@ class Card implements \JsonSerializable
     protected $zip;
 
     /**
-     * Country code of the card holder (ISO-3166, 2 characters format)
+     * Country where the card was issued, derived from the IIN/BIN lookup (ISO-3166, 2 characters format)
      * @var string
      */
     protected $countryCode;
+
+    /**
+     * Billing country of the card holder (ISO-3166, 2 characters format), as supplied on the card's contact
+     * @var string
+     */
+    protected $billingCountryCode;
 
     /**
      * IP address of the card (IPv4 or IPv6)
@@ -221,10 +227,16 @@ class Card implements \JsonSerializable
     protected $preferredCardType;
 
     /**
-     * ID of the Vault that the card resides in
+     * Initial scheme transaction ID associated with the card for transaction chaining
      * @var string
      */
-    protected $vaultId;
+    protected $initialSchemeTransactionId;
+
+    /**
+     * Payment Account Reference (PAR) of the card, a unique identifier associating the card with the underlying account across tokens
+     * @var string
+     */
+    protected $paymentAccountReference;
 
     /**
      * Card constructor
@@ -761,7 +773,7 @@ class Card implements \JsonSerializable
     
     /**
      * Get CountryCode
-     * Country code of the card holder (ISO-3166, 2 characters format)
+     * Country where the card was issued, derived from the IIN/BIN lookup (ISO-3166, 2 characters format)
      * @return string
      */
     public function getCountryCode()
@@ -771,13 +783,35 @@ class Card implements \JsonSerializable
 
     /**
      * Set CountryCode
-     * Country code of the card holder (ISO-3166, 2 characters format)
+     * Country where the card was issued, derived from the IIN/BIN lookup (ISO-3166, 2 characters format)
      * @param  string $value
      * @return $this
      */
     public function setCountryCode($value)
     {
         $this->countryCode = $value;
+        return $this;
+    }
+    
+    /**
+     * Get BillingCountryCode
+     * Billing country of the card holder (ISO-3166, 2 characters format), as supplied on the card's contact
+     * @return string
+     */
+    public function getBillingCountryCode()
+    {
+        return $this->billingCountryCode;
+    }
+
+    /**
+     * Set BillingCountryCode
+     * Billing country of the card holder (ISO-3166, 2 characters format), as supplied on the card's contact
+     * @param  string $value
+     * @return $this
+     */
+    public function setBillingCountryCode($value)
+    {
+        $this->billingCountryCode = $value;
         return $this;
     }
     
@@ -1002,24 +1036,46 @@ class Card implements \JsonSerializable
     }
     
     /**
-     * Get VaultId
-     * ID of the Vault that the card resides in
+     * Get InitialSchemeTransactionId
+     * Initial scheme transaction ID associated with the card for transaction chaining
      * @return string
      */
-    public function getVaultId()
+    public function getInitialSchemeTransactionId()
     {
-        return $this->vaultId;
+        return $this->initialSchemeTransactionId;
     }
 
     /**
-     * Set VaultId
-     * ID of the Vault that the card resides in
+     * Set InitialSchemeTransactionId
+     * Initial scheme transaction ID associated with the card for transaction chaining
      * @param  string $value
      * @return $this
      */
-    public function setVaultId($value)
+    public function setInitialSchemeTransactionId($value)
     {
-        $this->vaultId = $value;
+        $this->initialSchemeTransactionId = $value;
+        return $this;
+    }
+    
+    /**
+     * Get PaymentAccountReference
+     * Payment Account Reference (PAR) of the card, a unique identifier associating the card with the underlying account across tokens
+     * @return string
+     */
+    public function getPaymentAccountReference()
+    {
+        return $this->paymentAccountReference;
+    }
+
+    /**
+     * Set PaymentAccountReference
+     * Payment Account Reference (PAR) of the card, a unique identifier associating the card with the underlying account across tokens
+     * @param  string $value
+     * @return $this
+     */
+    public function setPaymentAccountReference($value)
+    {
+        $this->paymentAccountReference = $value;
         return $this;
     }
     
@@ -1103,6 +1159,9 @@ class Card implements \JsonSerializable
         if(! empty($data['country_code']))
             $this->setCountryCode($data['country_code']);
 
+        if(! empty($data['billing_country_code']))
+            $this->setBillingCountryCode($data['billing_country_code']);
+
         if(! empty($data['ip_address']))
             $this->setIpAddress($data['ip_address']);
 
@@ -1133,8 +1192,11 @@ class Card implements \JsonSerializable
         if(! empty($data['preferred_card_type']))
             $this->setPreferredCardType($data['preferred_card_type']);
 
-        if(! empty($data['vault_id']))
-            $this->setVaultId($data['vault_id']);
+        if(! empty($data['initial_scheme_transaction_id']))
+            $this->setInitialSchemeTransactionId($data['initial_scheme_transaction_id']);
+
+        if(! empty($data['payment_account_reference']))
+            $this->setPaymentAccountReference($data['payment_account_reference']);
 
         return $this;
     }
@@ -1169,6 +1231,7 @@ class Card implements \JsonSerializable
             "state" => $this->getState(),
             "zip" => $this->getZip(),
             "country_code" => $this->getCountryCode(),
+            "billing_country_code" => $this->getBillingCountryCode(),
             "ip_address" => $this->getIpAddress(),
             "fingerprint" => $this->getFingerprint(),
             "token_type" => $this->getTokenType(),
@@ -1179,7 +1242,8 @@ class Card implements \JsonSerializable
             "sandbox" => $this->getSandbox(),
             "created_at" => $this->getCreatedAt(),
             "preferred_card_type" => $this->getPreferredCardType(),
-            "vault_id" => $this->getVaultId(),
+            "initial_scheme_transaction_id" => $this->getInitialSchemeTransactionId(),
+            "payment_account_reference" => $this->getPaymentAccountReference(),
         );
     }
 

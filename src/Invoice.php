@@ -83,6 +83,12 @@ class Invoice implements \JsonSerializable
     protected $submerchant;
 
     /**
+     * ID of the submerchant linked to the invoice, if any
+     * @var string
+     */
+    protected $submerchantId;
+
+    /**
      * URL to which you may redirect your customer to proceed with the payment
      * @var string
      */
@@ -315,6 +321,12 @@ class Invoice implements \JsonSerializable
      * @var string
      */
     protected $referenceId;
+
+    /**
+     * Configuration related to payment processing of the invoice.
+     * @var object
+     */
+    protected $paymentProcessingConfig;
 
     /**
      * Invoice constructor
@@ -615,6 +627,28 @@ class Invoice implements \JsonSerializable
             $obj->fillWithData($value);
             $this->submerchant = $obj;
         }
+        return $this;
+    }
+    
+    /**
+     * Get SubmerchantId
+     * ID of the submerchant linked to the invoice, if any
+     * @return string
+     */
+    public function getSubmerchantId()
+    {
+        return $this->submerchantId;
+    }
+
+    /**
+     * Set SubmerchantId
+     * ID of the submerchant linked to the invoice, if any
+     * @param  string $value
+     * @return $this
+     */
+    public function setSubmerchantId($value)
+    {
+        $this->submerchantId = $value;
         return $this;
     }
     
@@ -1532,6 +1566,35 @@ class Invoice implements \JsonSerializable
         return $this;
     }
     
+    /**
+     * Get PaymentProcessingConfig
+     * Configuration related to payment processing of the invoice.
+     * @return object
+     */
+    public function getPaymentProcessingConfig()
+    {
+        return $this->paymentProcessingConfig;
+    }
+
+    /**
+     * Set PaymentProcessingConfig
+     * Configuration related to payment processing of the invoice.
+     * @param  object $value
+     * @return $this
+     */
+    public function setPaymentProcessingConfig($value)
+    {
+        if (is_object($value))
+            $this->paymentProcessingConfig = $value;
+        else
+        {
+            $obj = new PaymentProcessingConfiguration($this->client);
+            $obj->fillWithData($value);
+            $this->paymentProcessingConfig = $obj;
+        }
+        return $this;
+    }
+    
 
     /**
      * Fills the current object with the new values pulled from the data
@@ -1572,6 +1635,9 @@ class Invoice implements \JsonSerializable
 
         if(! empty($data['submerchant']))
             $this->setSubmerchant($data['submerchant']);
+
+        if(! empty($data['submerchant_id']))
+            $this->setSubmerchantId($data['submerchant_id']);
 
         if(! empty($data['url']))
             $this->setUrl($data['url']);
@@ -1690,6 +1756,9 @@ class Invoice implements \JsonSerializable
         if(! empty($data['reference_id']))
             $this->setReferenceId($data['reference_id']);
 
+        if(! empty($data['payment_processing_config']))
+            $this->setPaymentProcessingConfig($data['payment_processing_config']);
+
         return $this;
     }
 
@@ -1710,6 +1779,7 @@ class Invoice implements \JsonSerializable
             "token_id" => $this->getTokenId(),
             "details" => $this->getDetails(),
             "submerchant" => $this->getSubmerchant(),
+            "submerchant_id" => $this->getSubmerchantId(),
             "url" => $this->getUrl(),
             "url_qrcode" => $this->getUrlQrcode(),
             "name" => $this->getName(),
@@ -1749,6 +1819,7 @@ class Invoice implements \JsonSerializable
             "verification" => $this->getVerification(),
             "auto_capture_at" => $this->getAutoCaptureAt(),
             "reference_id" => $this->getReferenceId(),
+            "payment_processing_config" => $this->getPaymentProcessingConfig(),
         );
     }
 
@@ -1779,6 +1850,9 @@ class Invoice implements \JsonSerializable
             "override_mac_blocking" => (!empty($options["override_mac_blocking"])) ? $options["override_mac_blocking"] : null, 
             "external_three_d_s" => (!empty($options["external_three_d_s"])) ? $options["external_three_d_s"] : null, 
             "save_source" => (!empty($options["save_source"])) ? $options["save_source"] : null, 
+            "provision_network_token" => (!empty($options["provision_network_token"])) ? $options["provision_network_token"] : null, 
+            "invoice_line_items" => (!empty($options["invoice_line_items"])) ? $options["invoice_line_items"] : null, 
+            "transaction_link_id" => (!empty($options["transaction_link_id"])) ? $options["transaction_link_id"] : null, 
             "source" => $source
         );
 
@@ -1866,6 +1940,9 @@ class Invoice implements \JsonSerializable
             "override_mac_blocking" => (!empty($options["override_mac_blocking"])) ? $options["override_mac_blocking"] : null, 
             "external_three_d_s" => (!empty($options["external_three_d_s"])) ? $options["external_three_d_s"] : null, 
             "save_source" => (!empty($options["save_source"])) ? $options["save_source"] : null, 
+            "provision_network_token" => (!empty($options["provision_network_token"])) ? $options["provision_network_token"] : null, 
+            "invoice_line_items" => (!empty($options["invoice_line_items"])) ? $options["invoice_line_items"] : null, 
+            "transaction_link_id" => (!empty($options["transaction_link_id"])) ? $options["transaction_link_id"] : null, 
             "source" => $source
         );
 
@@ -1889,6 +1966,7 @@ class Invoice implements \JsonSerializable
             $returnValues['customerAction'] = $customerAction->fillWithData($body);
         }
                 
+        // Handling for field outcome
         
         return (object) $returnValues;
     }
@@ -1920,6 +1998,8 @@ class Invoice implements \JsonSerializable
             "override_mac_blocking" => (!empty($options["override_mac_blocking"])) ? $options["override_mac_blocking"] : null, 
             "external_three_d_s" => (!empty($options["external_three_d_s"])) ? $options["external_three_d_s"] : null, 
             "save_source" => (!empty($options["save_source"])) ? $options["save_source"] : null, 
+            "provision_network_token" => (!empty($options["provision_network_token"])) ? $options["provision_network_token"] : null, 
+            "transaction_link_id" => (!empty($options["transaction_link_id"])) ? $options["transaction_link_id"] : null, 
             "source" => $source
         );
 
@@ -1943,6 +2023,7 @@ class Invoice implements \JsonSerializable
             $returnValues['customerAction'] = $customerAction->fillWithData($body);
         }
                 
+        // Handling for field outcome
         
         return (object) $returnValues;
     }
@@ -2279,6 +2360,7 @@ class Invoice implements \JsonSerializable
             "metadata" => $this->getMetadata(), 
             "details" => $this->getDetails(), 
             "submerchant" => $this->getSubmerchant(), 
+            "submerchant_id" => $this->getSubmerchantId(), 
             "reference_id" => $this->getReferenceId(), 
             "exemption_reason_3ds2" => $this->getExemptionReason3ds2(), 
             "sca_exemption_reason" => $this->getScaExemptionReason(), 
