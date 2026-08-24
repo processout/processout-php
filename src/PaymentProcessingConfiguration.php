@@ -23,7 +23,7 @@ class PaymentProcessingConfiguration implements \JsonSerializable
     protected $bypassUnsupportedSplitPayments;
 
     /**
-     * Alternative Payment Method (APM) specific payment processing cofiguration.
+     * Alternative Payment Method (APM) specific payment processing configuration.
      * @var object
      */
     protected $apmPaymentConfig;
@@ -65,7 +65,7 @@ class PaymentProcessingConfiguration implements \JsonSerializable
     
     /**
      * Get ApmPaymentConfig
-     * Alternative Payment Method (APM) specific payment processing cofiguration.
+     * Alternative Payment Method (APM) specific payment processing configuration.
      * @return object
      */
     public function getApmPaymentConfig()
@@ -75,7 +75,7 @@ class PaymentProcessingConfiguration implements \JsonSerializable
 
     /**
      * Set ApmPaymentConfig
-     * Alternative Payment Method (APM) specific payment processing cofiguration.
+     * Alternative Payment Method (APM) specific payment processing configuration.
      * @param  object $value
      * @return $this
      */
