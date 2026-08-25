@@ -23,6 +23,12 @@ class InvoiceDevice implements \JsonSerializable
     protected $channel;
 
     /**
+     * Preferred 3DS SDK type for authentication. This is the recommended field to use instead of channel for 3DS SDK selection
+     * @var string
+     */
+    protected $threedsSdk;
+
+    /**
      * Platform of the device for analytics and metadata. Possible values: "web", "ios", "android", "other"
      * @var string
      */
@@ -72,6 +78,28 @@ class InvoiceDevice implements \JsonSerializable
     public function setChannel($value)
     {
         $this->channel = $value;
+        return $this;
+    }
+    
+    /**
+     * Get ThreedsSdk
+     * Preferred 3DS SDK type for authentication. This is the recommended field to use instead of channel for 3DS SDK selection
+     * @return string
+     */
+    public function getThreedsSdk()
+    {
+        return $this->threedsSdk;
+    }
+
+    /**
+     * Set ThreedsSdk
+     * Preferred 3DS SDK type for authentication. This is the recommended field to use instead of channel for 3DS SDK selection
+     * @param  string $value
+     * @return $this
+     */
+    public function setThreedsSdk($value)
+    {
+        $this->threedsSdk = $value;
         return $this;
     }
     
@@ -152,6 +180,9 @@ class InvoiceDevice implements \JsonSerializable
         if(! empty($data['channel']))
             $this->setChannel($data['channel']);
 
+        if(! empty($data['threeds_sdk']))
+            $this->setThreedsSdk($data['threeds_sdk']);
+
         if(! empty($data['platform']))
             $this->setPlatform($data['platform']);
 
@@ -171,6 +202,7 @@ class InvoiceDevice implements \JsonSerializable
     public function jsonSerialize(): array {
         return array(
             "channel" => $this->getChannel(),
+            "threeds_sdk" => $this->getThreedsSdk(),
             "platform" => $this->getPlatform(),
             "ip_address" => $this->getIpAddress(),
             "id" => $this->getId(),
